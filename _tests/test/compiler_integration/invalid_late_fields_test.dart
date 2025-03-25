@@ -28,7 +28,7 @@ void main() {
 
   test('should refuse to compile non-nullable single child query', () async {
     await compilesExpecting("""
-      import 'dart:html';
+      import 'package:web/web.dart';
       import '$ngImport';
 
       @Component(
@@ -48,7 +48,7 @@ void main() {
 
   test('should refuse to compile late fields with a child query', () async {
     await compilesExpecting("""
-      import 'dart:html';
+      import 'package:web/web.dart';
       import '$ngImport';
 
       @Component(
@@ -68,7 +68,7 @@ void main() {
 
   test('should refuse to compile late fields with a children query', () async {
     await compilesExpecting("""
-      import 'dart:html';
+      import 'package:web/web.dart';
       import '$ngImport';
 
       @Component(
@@ -88,7 +88,7 @@ void main() {
 
   test('should compile non-nullable fields with a children query', () async {
     await compilesNormally("""
-      import 'dart:html';
+      import 'package:web/web.dart';
       import '$ngImport';
 
       @Component(

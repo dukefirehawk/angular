@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:web/web.dart';
 
 import 'package:meta/meta.dart';
 import 'package:ngdart/src/di/injector.dart' show Injector;

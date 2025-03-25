@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:web/web.dart';
 
 /// This class should not be used directly by an application developer. Instead, use
 /// [Location].

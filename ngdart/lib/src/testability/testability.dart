@@ -3,7 +3,7 @@ library angular.src.testability;
 
 import 'dart:async';
 import 'dart:html' show Element;
-import 'dart:html';
+import 'package:web/web.dart';
 
 import 'package:js/js.dart';
 import 'package:meta/meta.dart';

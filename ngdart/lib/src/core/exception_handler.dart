@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:web/web.dart';
 
 /// Provides a hook for receiving unhandled errors/exceptions.
 ///

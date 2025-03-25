@@ -2,7 +2,7 @@
 library angular.test.bootstrap.run_app_test;
 
 import 'dart:async';
-import 'dart:html';
+import 'package:web/web.dart';
 
 import 'package:js/js.dart';
 import 'package:test/test.dart';

@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:web/web.dart';
 import 'dart:js';
 
 import 'package:test/test.dart';

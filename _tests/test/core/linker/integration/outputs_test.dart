@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:html';
+import 'package:web/web.dart';
 
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';

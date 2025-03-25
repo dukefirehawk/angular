@@ -6,7 +6,7 @@ version: 8.0.0-dev.2
 repository: https://github.com/angulardart-community/angular
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: '>=3.6.0 <4.0.0'
 
 dependencies:
   analyzer: ^5.4.0
@@ -23,4 +23,4 @@ dependencies:
   stream_transform: ^2.1.0
 
 dev_dependencies:
-  lints: ^2.0.1
+  lints: ^5.0.0

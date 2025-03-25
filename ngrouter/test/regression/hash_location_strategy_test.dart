@@ -1,6 +1,6 @@
 // @dart=2.9
 
-import 'dart:html';
+import 'package:web/web.dart';
 
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';

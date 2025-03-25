@@ -1,6 +1,6 @@
 @TestOn('browser')
 
-import 'dart:html';
+import 'package:web/web.dart';
 
 import 'package:ngtest/angular_test.dart';
 import 'package:ngdart/src/security/dom_sanitization_service.dart';

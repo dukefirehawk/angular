@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:web/web.dart';
 
 final _urlParsingNode = AnchorElement();
 Element? _baseElement;

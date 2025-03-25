@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:ngdart/src/core/linker/app_view_utils.dart';

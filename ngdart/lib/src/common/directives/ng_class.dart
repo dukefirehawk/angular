@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:web/web.dart';
 
 import 'package:ngdart/src/core/change_detection/differs/default_iterable_differ.dart';
 import 'package:ngdart/src/core/change_detection/differs/default_keyvalue_differ.dart';

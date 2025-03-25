@@ -13,3 +13,6 @@ pubspec.lock
 
 # melos
 # pubspec_overrides.yaml
+.idea
+.metals
+.vscode

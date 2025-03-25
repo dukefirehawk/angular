@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:web/web.dart';
 
 import 'package:ngdart/src/meta.dart';
 import 'package:ngdart/src/utilities.dart';

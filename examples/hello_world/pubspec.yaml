@@ -1,7 +1,7 @@
 name: examples_hello_world
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: '>=3.6.0 <4.0.0'
 
 dependencies:
   # No strict dependencies, we always use dependency_overrides.
@@ -10,4 +10,4 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.3.3
   build_web_compilers: ^3.2.7
-  lints: ^2.0.1
+  lints: ^5.0.0
