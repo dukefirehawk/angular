@@ -6,7 +6,7 @@ import 'analyzer.dart';
 import 'outliner/collect_type_parameters.dart';
 
 const _angularImports = '''
-import 'dart:html' as _html;
+import 'package:web/web.dart' as _html;
 import 'package:ngdart/angular.dart' as _ng;
 import 'package:ngdart/src/core/change_detection/directive_change_detector.dart' as _ng;
 import 'package:ngdart/src/core/linker/views/component_view.dart' as _ng;
