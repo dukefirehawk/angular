@@ -1,11 +1,10 @@
 @JS()
-library angular.src.testability;
+library;
 
 import 'dart:async';
-import 'dart:html' show Element;
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
-import 'package:js/js.dart';
 import 'package:meta/meta.dart';
 
 import '../../di.dart';

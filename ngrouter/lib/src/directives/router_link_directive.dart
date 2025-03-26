@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:html'
+import 'package:web/web.dart'
     show AnchorElement, Element, Event, KeyboardEvent, KeyCode, MouseEvent;
 
 import 'package:ngdart/angular.dart';

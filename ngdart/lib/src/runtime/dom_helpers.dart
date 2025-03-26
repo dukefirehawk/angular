@@ -2,12 +2,14 @@
 /// imports `dart:html` and `runtime.dart` is currently used on libraries
 /// that expect to only run on the command-line VM.
 @JS()
-library angular.src.runtime.dom_helpers;
+library;
 
-import 'dart:html' hide document;
+import 'dart:js_interop';
+import 'package:web/web.dart' hide document;
 
-import 'package:js/js.dart';
-import 'package:js/js_util.dart' as js;
+//import 'dart:html' hide document;
+//import 'package:js/js.dart';
+//import 'package:js/js_util.dart' as js;
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:ngdart/src/utilities.dart';
 
@@ -44,9 +46,9 @@ var domRootRendererIsDirty = false;
 @dart2js.noInline
 void updateClassBinding(HtmlElement element, String className, bool isAdd) {
   if (isAdd) {
-    element.classes.add(className);
+    element.classList.add(className);
   } else {
-    element.classes.remove(className);
+    element.classList.remove(className);
   }
 }
 
@@ -60,9 +62,9 @@ void updateClassBinding(HtmlElement element, String className, bool isAdd) {
 @dart2js.noInline
 void updateClassBindingNonHtml(Element element, String className, bool isAdd) {
   if (isAdd) {
-    element.classes.add(className);
+    element.classList.add(className);
   } else {
-    element.classes.remove(className);
+    element.classList.remove(className);
   }
 }
 
@@ -200,7 +202,7 @@ Comment appendAnchor(Node parent) {
 ///
 /// This is an optimization to reduce code size for a common operation.
 @dart2js.noInline
-DivElement appendDiv(Document doc, Node parent) {
+HTMLDivElement appendDiv(Document doc, Node parent) {
   return unsafeCast(parent.append(doc.createElement('div')));
 }
 
@@ -208,7 +210,7 @@ DivElement appendDiv(Document doc, Node parent) {
 ///
 /// This is an optimization to reduce code size for a common operation.
 @dart2js.noInline
-SpanElement appendSpan(Document doc, Node parent) {
+HTMLSpanElement appendSpan(Document doc, Node parent) {
   return unsafeCast(parent.append(doc.createElement('span')));
 }
 
@@ -253,9 +255,12 @@ void appendNodes(List<Node> nodes, Node parent) {
 /// Removes [nodes] from the DOM.
 @dart2js.noInline
 void removeNodes(List<Node> nodes) {
+  /* 
   for (var i = 0, l = nodes.length; i < l; i++) {
-    nodes[i].remove();
+    nodes.delete();
   }
+  */
+  nodes.removeRange(0, nodes.length);
 }
 
 /// Appends [nodes] into the DOM as siblings of [sibling] node.
@@ -267,7 +272,9 @@ void insertNodesAsSibling(List<Node> nodes, Node sibling) {
   if (nodes.isEmpty || parentOfSibling == null) {
     return;
   }
-  final nextSibling = sibling.nextNode;
+
+  //final nextSibling = sibling.nextNode;
+  final nextSibling = sibling.nextSibling;
   if (nextSibling == null) {
     appendNodes(nodes, parentOfSibling);
   } else {

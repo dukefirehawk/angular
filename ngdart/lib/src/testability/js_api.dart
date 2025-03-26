@@ -1,9 +1,9 @@
 @JS()
-library angular.src.testability.js_api;
+library;
+
+import 'dart:js_interop';
 
 import 'package:web/web.dart';
-
-import 'package:js/js.dart';
 
 /// A JavaScript interface for interacting with AngularDart's `Testability` API.
 ///

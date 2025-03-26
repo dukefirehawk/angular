@@ -1,6 +1,5 @@
-import 'dart:html' show Element, NodeTreeSanitizer;
-
 import 'package:ngdart/angular.dart';
+import 'package:web/web.dart' show Element, NodeTreeSanitizer;
 
 import 'dom_sanitization_service.dart' show SafeHtml;
 

@@ -1,3 +1,5 @@
+import 'dart:js_interop_unsafe';
+
 import 'package:web/web.dart';
 
 import 'package:ngdart/src/meta.dart';
@@ -85,9 +87,13 @@ class NgStyle implements DoCheck {
   }
 
   void _setProperty(KeyValueChangeRecord record) {
+    /*
     _ngElement.style.setProperty(
       unsafeCast(record.key),
       unsafeCast(record.currentValue),
     );
+    */
+    _ngElement.setProperty(
+        unsafeCast(record.key), unsafeCast(record.currentValue));
   }
 }

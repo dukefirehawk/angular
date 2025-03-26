@@ -1,5 +1,4 @@
-import 'dart:html' as html;
-
+import 'package:web/web.dart' as html;
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/src/devtools.dart';

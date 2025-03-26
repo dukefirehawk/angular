@@ -1,4 +1,4 @@
-import 'dart:html' show window;
+import 'package:web/web.dart' show WindowEventGetters, window;
 
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';

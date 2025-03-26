@@ -1,4 +1,5 @@
-import 'dart:html' as html;
+//import 'dart:html' as html;
+import 'package:web/web.dart' as html;
 
 import 'package:ngdart/angular.dart' show Injectable, Inject, Optional;
 

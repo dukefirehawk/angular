@@ -1,4 +1,4 @@
-import 'dart:html' show DocumentFragment, NodeTreeSanitizer;
+import 'package:web/web.dart' show DocumentFragment, NodeTreeSanitizer;
 
 import 'package:ngdart/src/core/application_tokens.dart' as tokens show appId;
 import 'package:ngdart/src/runtime/dom_events.dart' show EventManager;
@@ -25,3 +25,5 @@ DocumentFragment createTrustedHtml(String trustedHtml) {
     treeSanitizer: NodeTreeSanitizer.trusted,
   );
 }
+
+class NodeTreeSanitizer {}

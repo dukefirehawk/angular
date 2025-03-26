@@ -1,9 +1,10 @@
 @JS()
-library angular.src.devtools;
+library;
 
-import 'dart:html' as html;
-
-import 'package:js/js.dart';
+//import 'dart:html' as html;
+//import 'package:js/js.dart';
+import 'dart:js_interop';
+import 'package:web/web.dart' as html;
 
 import 'devtools/inspector.dart';
 import 'utilities.dart';
@@ -23,12 +24,17 @@ bool _isDevToolsEnabled = false;
 void enableDevTools() {
   if (isDevMode) {
     _isDevToolsEnabled = true;
+    /*
     _getComponentElement = allowInterop(
       Inspector.instance.getComponentElement,
     );
+    
     _getComponentIdForNode = allowInterop(
       Inspector.instance.getComponentIdForNode,
     );
+    */
+    _getComponentElement = Inspector.instance.getComponentElement;
+    _getComponentIdForNode = Inspector.instance.getComponentIdForNode;
   }
 }
 

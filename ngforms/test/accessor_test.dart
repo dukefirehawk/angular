@@ -1,5 +1,5 @@
 import 'package:web/web.dart';
-import 'dart:js_util' as js_util;
+//import 'dart:js_util' as js_util;
 
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';

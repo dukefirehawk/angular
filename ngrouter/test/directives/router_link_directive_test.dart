@@ -1,5 +1,5 @@
-import 'dart:html' hide Location;
-import 'dart:js';
+import 'package:web/web.dart' hide Location;
+import 'dart:js_interop';
 
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
@@ -33,7 +33,7 @@ void main() {
     ).addInjector(addInjector).create(beforeChangeDetection: (comp) {
       comp.routerLink = '/users/bob';
     });
-    final anchor = fixture.rootElement.querySelector('a') as AnchorElement;
+    final anchor = fixture.rootElement.querySelector('a') as HTMLAnchorElement;
     expect(anchor.pathname, '/users/bob');
     expect(fakeRouter.lastNavigatedPath, isNull);
     await fixture.update((_) => anchor.click());
@@ -58,7 +58,7 @@ void main() {
     ).addInjector(addInjector).create(beforeChangeDetection: (comp) {
       comp.routerLink = '/users/bob?param1=one&param2=2#frag';
     });
-    final anchor = fixture.rootElement.querySelector('a') as AnchorElement;
+    final anchor = fixture.rootElement.querySelector('a') as HTMLAnchorElement;
     expect(anchor.pathname, '/users/bob');
     await fixture.update((_) => anchor.click());
     expect(fakeRouter.lastNavigatedPath, '/users/bob');
@@ -75,7 +75,7 @@ void main() {
     ).addInjector(addInjector).create(beforeChangeDetection: (comp) {
       comp.routerLink = '/users/bob';
     });
-    final anchor = fixture.rootElement.querySelector('a') as AnchorElement;
+    final anchor = fixture.rootElement.querySelector('a') as HTMLAnchorElement;
     expect(anchor.pathname, '/users/bob');
     expect(anchor.target, '_parent');
     await fixture.update((_) => anchor.click());

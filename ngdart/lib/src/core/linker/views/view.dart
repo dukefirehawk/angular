@@ -1,4 +1,5 @@
-import 'dart:html' show Element;
+//import 'dart:html' show Element;
+import 'package:web/web.dart' show Element;
 
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:meta/meta.dart';
