@@ -21,6 +21,7 @@ dependencies:
   ngast: ^3.0.0-dev.0
   ngcompiler: ^3.0.0-dev.1
   stream_transform: ^2.1.0
+  web: ^1.1.1
 
 dev_dependencies:
   lints: ^5.0.0
