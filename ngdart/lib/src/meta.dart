@@ -1,5 +1,5 @@
 // **DO NOT CHANGE**. The analyzer looks for this _specific name_.
-library angular.meta;
+library;
 
 export 'meta/change_detection_constants.dart';
 export 'meta/change_detection_link.dart';
