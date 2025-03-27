@@ -25,9 +25,10 @@ const numberValueAccessor = ExistingProvider.forToken(
 class NumberValueAccessor extends Object
     with TouchHandler, ChangeHandler<double?>
     implements ControlValueAccessor<Object?> {
-  final InputElement _element;
+  final HTMLInputElement _element;
 
-  NumberValueAccessor(HtmlElement element) : _element = element as InputElement;
+  NumberValueAccessor(HtmlElement element)
+      : _element = element as HTMLInputElement;
 
   @HostListener('change', ['\$event.target.value'])
   @HostListener('input', ['\$event.target.value'])

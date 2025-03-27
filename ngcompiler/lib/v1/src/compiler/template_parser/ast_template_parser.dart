@@ -975,7 +975,7 @@ class _ParseContext {
   int? findNgContentIndex(CssSelector selector) {
     if (_ngContentIndexMatcher == null) return _wildcardNgContentIndex;
     var ngContentIndices = <int>[];
-    _ngContentIndexMatcher!.match(selector, (selector, ngContentIndex) {
+    _ngContentIndexMatcher.match(selector, (selector, ngContentIndex) {
       matchedNgContentSelectors.add(selector);
       ngContentIndices.add(ngContentIndex);
     });

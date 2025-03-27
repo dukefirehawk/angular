@@ -66,9 +66,9 @@ class _SyntheticInterpolationAst extends SyntheticTemplateAst
   _SyntheticInterpolationAst(this.value);
 
   _SyntheticInterpolationAst.from(
-    TemplateAst origin,
+    TemplateAst super.origin,
     this.value,
-  ) : super.from(origin);
+  ) : super.from();
 
   @override
   final String value;

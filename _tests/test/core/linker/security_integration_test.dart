@@ -16,7 +16,7 @@ void main() {
     const unsafeUrl = 'javascript:alert(1)';
     final testBed = NgTestBed(ng.createUnsafeAttributeComponentFactory());
     final testFixture = await testBed.create();
-    final a = testFixture.rootElement.querySelector('a') as AnchorElement;
+    final a = testFixture.rootElement.querySelector('a') as HTMLAnchorElement;
     expect(a.href, matches(r'.*/hello$'));
     await testFixture.update((component) {
       component.href = unsafeUrl;
@@ -27,7 +27,7 @@ void main() {
   test('should not escape values marked as trusted', () async {
     final testBed = NgTestBed(ng.createTrustedValueComponentFactory());
     final testFixture = await testBed.create();
-    final a = testFixture.rootElement.querySelector('a') as AnchorElement;
+    final a = testFixture.rootElement.querySelector('a') as HTMLAnchorElement;
     expect(a.href, 'javascript:alert(1)');
   });
 

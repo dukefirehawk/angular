@@ -1,4 +1,4 @@
-library golden;
+library;
 
 import 'package:ngdart/angular.dart';
 

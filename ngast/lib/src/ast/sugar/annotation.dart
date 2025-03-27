@@ -116,6 +116,7 @@ class _SyntheticAnnotationAst extends SyntheticTemplateAst with AnnotationAst {
 
   _SyntheticAnnotationAst(this.name, [this.value]);
 
-  _SyntheticAnnotationAst.from(TemplateAst origin, this.name, [this.value])
-      : super.from(origin);
+  _SyntheticAnnotationAst.from(TemplateAst super.origin, this.name,
+      [this.value])
+      : super.from();
 }

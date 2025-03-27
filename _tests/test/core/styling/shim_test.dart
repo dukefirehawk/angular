@@ -1,4 +1,4 @@
-library angular2.test.common.styling.shim_test;
+library;
 
 import 'package:web/web.dart';
 

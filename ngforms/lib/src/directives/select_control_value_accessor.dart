@@ -40,13 +40,13 @@ String _extractId(String valueString) => valueString.split(':')[0];
 class SelectControlValueAccessor extends Object
     with TouchHandler, ChangeHandler<dynamic>
     implements ControlValueAccessor<Object?> {
-  final SelectElement _element;
+  final HTMLSelectElement _element;
   Object? value;
   final Map<String, Object?> _optionMap = <String, Object?>{};
   num _idCounter = 0;
 
   SelectControlValueAccessor(HtmlElement element)
-      : _element = element as SelectElement;
+      : _element = element as HTMLSelectElement;
 
   @HostListener('change', ['\$event.target.value'])
   void handleChange(String value) {
@@ -91,12 +91,12 @@ class SelectControlValueAccessor extends Object
   selector: 'option',
 )
 class NgSelectOption implements OnDestroy {
-  final OptionElement _element;
+  final HTMLOptionElement _element;
   final SelectControlValueAccessor? _select;
   late final String id;
   NgSelectOption(HtmlElement element, @Optional() @Host() this._select)
-      : _element = element as OptionElement {
-    if (_select != null) id = _select!._registerOption();
+      : _element = element as HTMLOptionElement {
+    if (_select != null) id = _select._registerOption();
   }
 
   @Input('ngValue')

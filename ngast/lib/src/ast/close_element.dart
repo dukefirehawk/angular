@@ -78,9 +78,9 @@ class _SyntheticCloseElementAst extends SyntheticTemplateAst
   );
 
   _SyntheticCloseElementAst.from(
-    TemplateAst origin,
+    TemplateAst super.origin,
     this.name,
-  ) : super.from(origin);
+  ) : super.from();
 
   @override
   final String name;

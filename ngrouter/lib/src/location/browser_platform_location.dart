@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart' show Injectable;
@@ -22,22 +24,22 @@ class BrowserPlatformLocation extends PlatformLocation {
 
   @override
   void onPopState(EventListener fn) {
-    window.addEventListener('popstate', fn, false);
+    window.addEventListener('popstate', fn, false.toJS);
   }
 
   @override
   void onHashChange(EventListener fn) {
-    window.addEventListener('hashchange', fn, false);
+    window.addEventListener('hashchange', fn, false.toJS);
   }
 
   @override
   String get pathname {
-    return location.pathname!;
+    return location.pathname;
   }
 
   @override
   String get search {
-    return location.search!;
+    return location.search;
   }
 
   @override
@@ -51,12 +53,12 @@ class BrowserPlatformLocation extends PlatformLocation {
 
   @override
   void pushState(Object? state, String title, String? url) {
-    _history.pushState(state, title, url);
+    _history.pushState(state.jsify(), title, url);
   }
 
   @override
   void replaceState(Object? state, String title, String? url) {
-    _history.replaceState(state, title, url);
+    _history.replaceState(state.jsify(), title, url);
   }
 
   @override

@@ -167,7 +167,7 @@ class ComponentStyles {
       target.add('/* From: $_componentUrl*/');
     }
     final styles = _flattenStyles(_styles, target, _componentId).join();
-    final styleElement = StyleElement()..text = styles;
+    final styleElement = HTMLStyleElement()..text = styles;
     if (isDevMode) {
       // Remove style element from the DOM on hot restart.
       debugOnClear(() {
@@ -180,9 +180,9 @@ class ComponentStyles {
 
 class _UnscopedComponentStyles extends ComponentStyles {
   _UnscopedComponentStyles(
-    List<Object> styles,
-    String? componentUrl,
-  ) : super._(styles, componentUrl);
+    super.styles,
+    super.componentUrl,
+  ) : super._();
 
   @override
   void addContentShimClass(Element element) {

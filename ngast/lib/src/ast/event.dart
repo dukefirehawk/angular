@@ -172,9 +172,9 @@ class _SyntheticEventAst extends SyntheticTemplateAst with EventAst {
   ]);
 
   _SyntheticEventAst.from(
-    TemplateAst origin,
+    TemplateAst super.origin,
     this.name,
     this.value, [
     this.reductions = const [],
-  ]) : super.from(origin);
+  ]) : super.from();
 }

@@ -148,11 +148,11 @@ class _SyntheticEmbeddedContentAst extends SyntheticTemplateAst
   }
 
   _SyntheticEmbeddedContentAst.from(
-    TemplateAst origin, [
+    TemplateAst super.origin, [
     this.selector = '*',
     this.ngProjectAs,
     this.reference,
-  ]) : super.from(origin) {
+  ]) : super.from() {
     closeComplement = CloseElementAst('ng-content');
   }
 }

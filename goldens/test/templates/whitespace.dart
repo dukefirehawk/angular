@@ -1,7 +1,7 @@
 @JS()
-library golden;
+library;
 
-import 'package:js/js.dart';
+import 'dart:js_interop';
 import 'package:ngdart/angular.dart';
 
 import 'whitespace.template.dart' as ng;

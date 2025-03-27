@@ -137,10 +137,10 @@ class _SyntheticStarAst extends SyntheticTemplateAst with StarAst {
   ]);
 
   _SyntheticStarAst.from(
-    TemplateAst origin,
+    TemplateAst super.origin,
     this.name, [
     this.value,
-  ]) : super.from(origin);
+  ]) : super.from();
 
   @override
   final String name;

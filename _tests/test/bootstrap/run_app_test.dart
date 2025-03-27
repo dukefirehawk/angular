@@ -1,10 +1,11 @@
 @JS()
-library angular.test.bootstrap.run_app_test;
+library;
 
 import 'dart:async';
+import 'dart:js_interop';
+//import 'package:web/helpers.dart';
 import 'package:web/web.dart';
 
-import 'package:js/js.dart';
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 
@@ -51,7 +52,7 @@ void main() {
   }
 
   setUp(() {
-    rootDomContainer = DivElement()..id = 'test-root-dom';
+    rootDomContainer = HTMLDivElement()..id = 'test-root-dom';
     rootDomContainer.append(Element.tag('hello-world'));
     document.body!.append(rootDomContainer);
     HelloWorldComponent.name = 'World';

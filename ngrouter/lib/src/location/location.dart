@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:ngdart/angular.dart' show Injectable;
-
 import 'location_strategy.dart' show LocationStrategy;
+import 'dart:js_interop';
 
 /// `Location` is a service that applications can use to interact with a
 /// browser's URL.
@@ -47,7 +47,7 @@ class Location {
       : _baseHref = _sanitizeBaseHref(locationStrategy) {
     locationStrategy.onPopState((ev) {
       _subject.add({'url': path(), 'pop': true, 'type': ev.type});
-    });
+    }.toJS);
   }
 
   static String _sanitizeBaseHref(LocationStrategy platformStrategy) {

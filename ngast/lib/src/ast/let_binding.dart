@@ -143,8 +143,8 @@ class _SyntheticLetBindingAst extends SyntheticTemplateAst with LetBindingAst {
   _SyntheticLetBindingAst(this.name, [this.value]);
 
   _SyntheticLetBindingAst.from(
-    TemplateAst? origin,
+    super.origin,
     this.name, [
     this.value,
-  ]) : super.from(origin);
+  ]) : super.from();
 }

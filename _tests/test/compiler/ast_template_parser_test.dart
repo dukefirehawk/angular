@@ -2636,7 +2636,7 @@ CompileDirectiveMetadata createCompileDirectiveMetadata({
 }) {
   final inputsMap = <String, String>{};
   final inputTypeMap = <String, CompileTypeMetadata>{};
-  inputs?.forEach((input) {
+  inputs.forEach((input) {
     final inputParts = input.split(';');
     final inputName = inputParts[0];
     final bindingParts = splitAtColon(inputName, [inputName, inputName]);
@@ -2647,7 +2647,7 @@ CompileDirectiveMetadata createCompileDirectiveMetadata({
   });
 
   final outputsMap = <String, String>{};
-  outputs?.forEach((output) {
+  outputs.forEach((output) {
     final bindingParts = splitAtColon(output, [output, output]);
     outputsMap[bindingParts[0]] = bindingParts[1];
   });

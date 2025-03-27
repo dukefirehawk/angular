@@ -270,7 +270,7 @@ class _SyntheticElementAst extends SyntheticTemplateAst with ElementAst {
   });
 
   _SyntheticElementAst.from(
-    TemplateAst origin,
+    TemplateAst super.origin,
     this.name,
     this.closeComplement, {
     this.attributes = const [],
@@ -281,7 +281,7 @@ class _SyntheticElementAst extends SyntheticTemplateAst with ElementAst {
     this.bananas = const [],
     this.stars = const [],
     this.annotations = const [],
-  }) : super.from(origin);
+  }) : super.from();
 
   @override
   final String name;

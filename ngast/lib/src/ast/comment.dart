@@ -70,7 +70,7 @@ class _SyntheticCommentAst extends SyntheticTemplateAst with CommentAst {
   _SyntheticCommentAst(this.value);
 
   _SyntheticCommentAst.from(
-    TemplateAst origin,
+    TemplateAst super.origin,
     this.value,
-  ) : super.from(origin);
+  ) : super.from();
 }

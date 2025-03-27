@@ -26,10 +26,10 @@ const checkboxValueAccessor = ExistingProvider.forToken(
 class CheckboxControlValueAccessor extends Object
     with TouchHandler, ChangeHandler<bool>
     implements ControlValueAccessor<bool> {
-  final InputElement _element;
+  final HTMLInputElement _element;
 
   CheckboxControlValueAccessor(HtmlElement element)
-      : _element = element as InputElement;
+      : _element = element as HTMLInputElement;
 
   @HostListener('change', ['\$event.target.checked'])
   void handleChange(bool checked) {

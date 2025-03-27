@@ -188,12 +188,12 @@ class _SyntheticPropertyAst extends SyntheticTemplateAst with PropertyAst {
   ]);
 
   _SyntheticPropertyAst.from(
-    TemplateAst? origin,
+    super.origin,
     this.name, [
     this.value,
     this.postfix,
     this.unit,
-  ]) : super.from(origin);
+  ]) : super.from();
 
   @override
   final String name;

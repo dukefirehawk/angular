@@ -367,7 +367,7 @@ void main() {
           ng.createTestExternalContentRootsFactory()
               as ComponentFactory<TestExternalContentRoots>);
       final testFixture = await testBed.create();
-      final childContainer = html.DivElement();
+      final childContainer = html.HTMLDivElement();
       final parentContainer = testFixture.rootElement.parent!
         ..append(childContainer);
       registerContentRoot(childContainer);
@@ -742,7 +742,7 @@ void main() {
           ng.createTestExternalContentRootsFactory()
               as ComponentFactory<TestExternalContentRoots>);
       final testFixture = await testBed.create();
-      final childContainer = html.DivElement();
+      final childContainer = html.HTMLDivElement();
       final parentContainer = testFixture.rootElement.parent!
         ..append(childContainer);
       registerContentRoot(childContainer);
@@ -988,7 +988,7 @@ void main() {
 }
 
 html.Element createContentRoot({html.Element? parent}) {
-  final root = html.DivElement();
+  final root = html.HTMLDivElement();
   (parent ?? html.document.body!).append(root);
   registerContentRoot(root);
   return root;

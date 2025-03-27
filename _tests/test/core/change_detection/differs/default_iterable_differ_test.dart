@@ -1,4 +1,4 @@
-library angular2.test.core.change_detection.differs.default_iterable_differ_test;
+library;
 
 import 'dart:collection';
 

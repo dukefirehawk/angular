@@ -91,7 +91,7 @@ class NgControlNameTest {
   NgControlName? controlName;
 
   @ViewChild('input')
-  InputElement? inputElement;
+  HTMLInputElement? inputElement;
 
   String? loginValue;
 

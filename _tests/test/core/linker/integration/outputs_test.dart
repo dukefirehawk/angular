@@ -58,8 +58,10 @@ void main() {
     final testBed = NgTestBed<TestPreventDefaultComponent>(
         ng.createTestPreventDefaultComponentFactory());
     final testFixture = await testBed.create();
-    final inputPrevent = testFixture.rootElement.children[0] as InputElement;
-    final inputNoPrevent = testFixture.rootElement.children[1] as InputElement;
+    final inputPrevent =
+        testFixture.rootElement.children[0] as HTMLInputElement;
+    final inputNoPrevent =
+        testFixture.rootElement.children[1] as HTMLInputElement;
     final clickPrevent = MouseEvent('click');
     final clickNoPrevent = MouseEvent('click');
     inputPrevent.dispatchEvent(clickPrevent);

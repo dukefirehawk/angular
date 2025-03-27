@@ -306,7 +306,7 @@ void main() {
   });
 
   group('root Injector overrides', () {
-    void _testOverrideExceptionHandler(Injector appInjector) {
+    void testOverrideExceptionHandler(Injector appInjector) {
       // Normally errors here are forwarded to the ExceptionHandler.
       //
       // In the case of #1227, we accidentally always used the default
@@ -323,7 +323,7 @@ void main() {
 
     // This is relied on by internal clients until we introduce a sharding API.
     test('rootInjector should allow overriding ExceptionHandler', () {
-      _testOverrideExceptionHandler(
+      testOverrideExceptionHandler(
         rootInjector((parent) {
           return Injector.map({
             ExceptionHandler: _CustomExceptionHandler(),

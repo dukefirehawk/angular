@@ -142,8 +142,8 @@ class _SyntheticBananaAst extends SyntheticTemplateAst with BananaAst {
   _SyntheticBananaAst(this.name, [this.value]);
 
   _SyntheticBananaAst.from(
-    TemplateAst origin,
+    TemplateAst super.origin,
     this.name, [
     this.value,
-  ]) : super.from(origin);
+  ]) : super.from();
 }

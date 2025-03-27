@@ -1,4 +1,4 @@
-library ngast.src.token.tokens;
+library;
 
 part 'lexeme.dart';
 part 'token_types.dart';

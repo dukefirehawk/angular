@@ -8,7 +8,7 @@ import 'dart:js_interop';
 import 'package:web/web.dart' hide document;
 
 //import 'dart:html' hide document;
-//import 'package:js/js.dart';
+//import 'dart:js_interop';
 //import 'package:js/js_util.dart' as js;
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:ngdart/src/utilities.dart';

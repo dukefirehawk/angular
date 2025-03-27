@@ -2,7 +2,7 @@
 library;
 
 //import 'dart:html' as html;
-//import 'package:js/js.dart';
+//import 'dart:js_interop';
 import 'dart:js_interop';
 import 'package:web/web.dart' as html;
 

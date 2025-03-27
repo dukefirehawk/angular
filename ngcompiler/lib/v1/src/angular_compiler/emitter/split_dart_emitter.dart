@@ -10,10 +10,9 @@ class SplitDartEmitter extends DartEmitter {
 
   SplitDartEmitter(
     this._writeImports, {
-    Allocator allocator = Allocator.none,
+    super.allocator,
     bool emitNullSafeSyntax = false,
   }) : super(
-          allocator: allocator,
           orderDirectives: false,
           useNullSafetySyntax: emitNullSafeSyntax,
         );

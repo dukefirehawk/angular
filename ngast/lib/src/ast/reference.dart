@@ -138,10 +138,10 @@ class _SyntheticReferenceAst extends SyntheticTemplateAst with ReferenceAst {
   _SyntheticReferenceAst(this.variable, [this.identifier]);
 
   _SyntheticReferenceAst.from(
-    TemplateAst origin,
+    TemplateAst super.origin,
     this.variable, [
     this.identifier,
-  ]) : super.from(origin);
+  ]) : super.from();
 
   @override
   final String? identifier;

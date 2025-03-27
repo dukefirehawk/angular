@@ -19,7 +19,7 @@ void main() {
   });
 
   test('should support moving embedded views', () async {
-    final template = TemplateElement()..append(DivElement());
+    final template = HTMLTemplateElement()..append(HTMLDivElement());
     final testBed = NgTestBed<MovesEmbeddedViewComponent>(
       ng.createMovesEmbeddedViewComponentFactory(),
     ).addInjector(
@@ -173,7 +173,7 @@ class SomeImperativeViewport {
   ViewContainerRef vc;
   TemplateRef templateRef;
   EmbeddedViewRef? view;
-  TemplateElement anchor;
+  HTMLTemplateElement anchor;
 
   SomeImperativeViewport(
       this.vc, this.templateRef, @Inject(ANCHOR_ELEMENT) this.anchor);

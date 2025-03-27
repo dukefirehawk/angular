@@ -222,7 +222,7 @@ class _SyntheticEmbeddedTemplateAst extends SyntheticTemplateAst
   }) : closeComplement = CloseElementAst('template');
 
   _SyntheticEmbeddedTemplateAst.from(
-    TemplateAst origin, {
+    TemplateAst super.origin, {
     this.annotations = const [],
     this.attributes = const [],
     this.childNodes = const [],
@@ -231,7 +231,7 @@ class _SyntheticEmbeddedTemplateAst extends SyntheticTemplateAst
     this.references = const [],
     this.letBindings = const [],
   })  : closeComplement = CloseElementAst('template'),
-        super.from(origin);
+        super.from();
 
   @override
   final List<AnnotationAst> annotations;

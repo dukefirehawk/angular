@@ -29,7 +29,7 @@ void main() {
     final testFixture = await testBed.create();
     expect(
       testFixture.assertOnlyInstance.captured!.reference,
-      const TypeMatcher<DivElement>(),
+      const TypeMatcher<HTMLDivElement>(),
     );
   });
 

@@ -167,9 +167,9 @@ class _SyntheticAttributeAst extends SyntheticTemplateAst with AttributeAst {
   _SyntheticAttributeAst(this.name, [this.value, this.mustaches]);
 
   _SyntheticAttributeAst.from(
-    TemplateAst origin,
+    TemplateAst super.origin,
     this.name, [
     this.value,
     this.mustaches,
-  ]) : super.from(origin);
+  ]) : super.from();
 }

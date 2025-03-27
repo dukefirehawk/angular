@@ -1,4 +1,4 @@
-library angular2.test.common.directives.for_test;
+library;
 
 import 'dart:async';
 
