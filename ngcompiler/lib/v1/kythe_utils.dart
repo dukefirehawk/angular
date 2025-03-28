@@ -27,7 +27,9 @@ Future<AngularArtifacts?>? angularArtifactsForKythe(LibraryElement element,
         assetId,
         policyExceptions: {},
         policyExceptionsInPackages: {},
-        isNullSafe: element.isNonNullableByDefault,
+        // TODO: Migration to 3.6
+        // isNullSafe: element.isNonNullableByDefault,
+        isNullSafe: !element.hasJS,
         enableDevTools: false,
       ), () async {
     try {

@@ -250,7 +250,7 @@ class AstTemplateParser {
 /// compiler types, which includes transformation of internationalized nodes.
 class _BindDirectivesVisitor
     implements ast.TemplateAstVisitor<ng.TemplateAst?, _ParseContext> {
-  /// A count of how many <ng-content> elements have been seen so far.
+  /// A count of how many `<ng-content>` elements have been seen so far.
   ///
   /// This is necessary so that we can assign a unique index to each one as we
   /// visit it.

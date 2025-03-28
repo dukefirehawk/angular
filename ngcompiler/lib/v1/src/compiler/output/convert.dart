@@ -20,7 +20,7 @@ o.OutputType? fromDartType(DartType? dartType, {bool resolveBounds = true}) {
     // an explicit type, such as a generic type parameter bound.
     return null;
   }
-  if (dartType.isVoid) {
+  if (dartType is VoidType) {
     return o.voidType;
   }
   if (dartType.isDartCoreNull) {
@@ -42,7 +42,7 @@ o.OutputType? fromDartType(DartType? dartType, {bool resolveBounds = true}) {
   }
   // Note this check for dynamic should come after the check for a type
   // parameter, since a type parameter could resolve to dynamic.
-  if (dartType.isDynamic) {
+  if (dartType is DynamicType) {
     return o.dynamicType;
   }
   final typeArguments = <o.OutputType>[];

@@ -13,6 +13,8 @@ import 'package:web/web.dart' hide document;
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:ngdart/src/utilities.dart';
 
+import 'dom_helpers.dart' as js;
+
 /// https://developer.mozilla.org/en-US/docs/Web/API/Document/createTextNode
 Text _createTextNode(String text) => Text(text);
 

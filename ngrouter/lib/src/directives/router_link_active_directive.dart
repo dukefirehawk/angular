@@ -80,6 +80,9 @@ class RouterLinkActive implements AfterViewInit, OnDestroy {
         break;
       }
     }
-    _element.classes.toggleAll(_classes, isActive);
+    //_element.classList.toggleAll(_classes, isActive);
+    for (var clazz in _classes) {
+      _element.classList.toggle(clazz, isActive);
+    }
   }
 }

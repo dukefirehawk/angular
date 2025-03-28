@@ -8,8 +8,16 @@ final _inertFragment = DocumentFragment();
 /// This function uses the builtin Dart innerHTML sanitization provided by
 /// NodeTreeSanitizer on an inert element.
 String? sanitizeHtmlInternal(String value) {
-  final inertFragment = _inertFragment..innerHtml = value;
-  final safeHtml = inertFragment.innerHtml;
-  inertFragment.children.clear();
+  //final inertFragment = _inertFragment..innerHtml = value;
+  //final safeHtml = inertFragment.innerHtml;
+  //inertFragment.children.clear();
+
+  final inertFragment = _inertFragment..textContent = value;
+  final safeHtml = inertFragment.textContent;
+  var list = inertFragment.children;
+  for (var i = list.length; i > 0; i--) {
+    list.item(i)?.remove();
+  }
+
   return safeHtml;
 }

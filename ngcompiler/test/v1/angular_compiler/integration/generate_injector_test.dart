@@ -10,7 +10,8 @@ void main() {
   CompileContext.overrideForTesting();
 
   group('should generate injector with', () {
-    final dartfmt = DartFormatter();
+    final dartfmt =
+        DartFormatter(languageVersion: DartFormatter.latestLanguageVersion);
     EqualsDart.format = dartfmt.format;
     late InjectorEmitter emitter;
     late List<InjectorReader> injectors;

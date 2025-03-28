@@ -25,6 +25,7 @@ abstract class LocationStrategy {
       Object? state, String title, String url, String queryParams);
   void forward();
   void back();
+  //void onPopState(void Function(Event event) fn);
   void onPopState(EventListener fn);
   String getBaseHref();
 }

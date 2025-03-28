@@ -12,7 +12,8 @@ class Compiler implements Generator {
   // Note: Use an absurdly long line width in order to speed up the formatter.
   // We still get a lot of other formatting, such as forced line breaks (after
   // semicolons for instance), spaces in argument lists, etc.
-  static final _formatter = DartFormatter(pageWidth: 1000000);
+  static final _formatter = DartFormatter(
+      languageVersion: DartFormatter.latestLanguageVersion, pageWidth: 1000000);
 
   // Ideally this would be part of this generator, and not delegated to an
   // external function, but today much of the AngularDart compiler still lives
@@ -29,7 +30,8 @@ class Compiler implements Generator {
 
   @override
   Future<String> generate(LibraryReader library, BuildStep buildStep) {
-    final isNullSafe = library.element.isNonNullableByDefault;
+    //final isNullSafe = library.element.isNonNullableByDefault;
+    final isNullSafe = !library.element.hasJS;
     return runWithContext(
       CompileContext(
         buildStep.inputId,
@@ -46,7 +48,7 @@ class Compiler implements Generator {
   Builder asBuilder({String extension = '.template.dart'}) {
     return LibraryBuilder(
       this,
-      formatOutput: (s) => _formatter.format(s),
+      formatOutput: (s, v) => _formatter.format(s),
       generatedExtension: extension,
       header: '',
     );

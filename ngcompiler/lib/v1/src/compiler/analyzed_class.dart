@@ -94,7 +94,7 @@ bool isString(ast.AST expression, AnalyzedClass analyzedClass) {
 }
 
 String typeToCode(DartType type) {
-  if (type.isDynamic) {
+  if (type is DynamicType) {
     return 'dynamic';
   } else if (type is InterfaceType) {
     var typeArguments = type.typeArguments;
@@ -106,7 +106,7 @@ String typeToCode(DartType type) {
     }
   } else if (type is TypeParameterType) {
     return type.element.name;
-  } else if (type.isVoid) {
+  } else if (type is VoidType) {
     return 'void';
   } else {
     throw UnimplementedError('(${type.runtimeType}) $type');
@@ -116,7 +116,7 @@ String typeToCode(DartType type) {
 PropertyInducingElement? _getField(AnalyzedClass clazz, String name) {
   var getter =
       clazz.classElement.lookUpGetter(name, clazz.classElement.library);
-  return getter?.variable;
+  return getter?.variable2;
 }
 
 MethodElement? _getMethod(AnalyzedClass clazz, String name) {

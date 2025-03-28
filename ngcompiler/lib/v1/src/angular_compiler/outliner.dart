@@ -85,7 +85,8 @@ class TemplateOutliner implements Builder {
     // Unlike the main compiler, we do not do an allow-list check here; this is
     // both to speed up the outliner (reducing duplicate checks) and because we
     // do not have a configured CompileContext when the outliner is run.
-    final emitNullSafeCode = library.isNonNullableByDefault;
+    //final emitNullSafeCode = library.isNonNullableByDefault;
+    final emitNullSafeCode = !library.hasJS;
     final languageVersion = emitNullSafeCode ? '' : '// @dart=2.9\n\n';
     final output = StringBuffer('$languageVersion$_analyzerIgnores\n');
     if (exportUserCodeFromTemplate) {
@@ -108,7 +109,7 @@ class TemplateOutliner implements Builder {
     }
 
     output.writeln('// Required for "type inference" (scoping).');
-    for (final l in library.libraryImports) {
+    for (final l in library.definingCompilationUnit.libraryImports) {
       if (l.prefix is! DeferredImportElementPrefix) {
         var directive = "import '${l.uri}'";
         if (l.prefix != null) {

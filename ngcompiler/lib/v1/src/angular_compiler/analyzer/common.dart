@@ -63,7 +63,7 @@ DartType typeArgumentOf(DartObject object, [int index = 0]) {
 String? typeToCode(DartType? type) {
   if (type == null) {
     return null;
-  } else if (type.isDynamic) {
+  } else if (type is DynamicType) {
     return 'dynamic';
   } else if (type is InterfaceType) {
     var typeArguments = type.typeArguments;
@@ -75,7 +75,7 @@ String? typeToCode(DartType? type) {
     }
   } else if (type is TypeParameterType) {
     return type.element.name;
-  } else if (type.isVoid) {
+  } else if (type is VoidType) {
     return 'void';
   } else {
     throw UnimplementedError('(${type.runtimeType}) $type');
@@ -93,7 +93,9 @@ Uri urlOf(Element? element, [String? name]) {
   }
 
   var fragment = name ?? element!.name;
-  final enclosing = element!.enclosingElement;
+
+  // ORI: final enclosing = element!.enclosingElement;
+  final enclosing = element!.enclosingElement3;
   if (enclosing is ClassElement) {
     fragment = '${enclosing.name}.$fragment';
   }

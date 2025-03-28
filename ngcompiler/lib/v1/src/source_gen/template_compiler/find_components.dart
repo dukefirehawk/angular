@@ -1,7 +1,10 @@
+import 'dart:js_interop';
+
 import 'package:analyzer/dart/ast/ast.dart' hide Directive;
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:analyzer/dart/element/type_system.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:analyzer/src/dart/element/element.dart';
 import 'package:ngdart/src/meta.dart';
@@ -182,7 +185,7 @@ class _NormalizedComponentVisitor extends RecursiveElementVisitor<void> {
 
   static bool _isUnresolvedOrNotAnExpression(CollectionElement e) {
     if (e is Expression) {
-      return e.staticType?.isDynamic != false;
+      return (e.staticType is DynamicType) != false;
     } else {
       return true;
     }
@@ -317,7 +320,12 @@ class _ComponentVisitor
           final propertyType = setter.parameters.first.type;
           final dynamicType = setter.library.typeProvider.dynamicType;
           // Resolves unspecified or bounded generic type parameters.
+
+          // TODO: Migration to 3.6
           final resolvedType = propertyType.resolveToBound(dynamicType);
+          //final resolvedType =
+          //    (propertyType as TypeSystem).resolveToBound(dynamicType);
+
           final typeName = getTypeName(resolvedType);
           _addPropertyBindingTo(
               isField ? _fieldInputs : _setterInputs, annotation, element,
@@ -545,7 +553,7 @@ class _ComponentVisitor
     var bindTo = ast.PropertyRead(ast.ImplicitReceiver(), element.name!);
     if (element is PropertyAccessorElement && element.isStatic ||
         element is FieldElement && element.isStatic) {
-      if (element.enclosingElement != _directiveClassElement) {
+      if (element.enclosingElement3 != _directiveClassElement) {
         // We do not want to inherit static members.
         // https://github.com/angulardart/angular/issues/1272
         return;
@@ -590,7 +598,7 @@ class _ComponentVisitor
     final propertyName = element.displayName;
     final bindingName =
         coerceString(value, 'bindingPropertyName', defaultTo: propertyName)!;
-    _prohibitBindingChange(element.enclosingElement as InterfaceElement?,
+    _prohibitBindingChange(element.enclosingElement3 as InterfaceElement?,
         propertyName, bindingName, immutableBindings ?? bindings);
     bindings[propertyName] = bindingName;
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'dart:js_interop';
 //import 'dart:html' show EventListener, PopStateEvent;
-import 'package:web/web.dart' show EventListener, PopStateEvent;
+import 'package:web/web.dart' show Event, EventListener, PopStateEvent;
 
 import 'package:ngdart/angular.dart' show Injectable;
 import 'package:ngrouter/src/location/location_strategy.dart'
@@ -58,6 +59,7 @@ class MockLocationStrategy extends LocationStrategy {
 
   @override
   void onPopState(EventListener fn) {
+    //TODO: Migration to 3.6. To be fixed
     _subject.stream.listen(fn);
   }
 

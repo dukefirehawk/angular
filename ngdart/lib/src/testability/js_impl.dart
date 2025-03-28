@@ -22,10 +22,15 @@ class _JSTestabilityProxy implements _TestabilityProxy {
     if (registries == null) {
       registries = <JsTestabilityRegistry>[];
       _ngJsTestabilityRegistries = registries;
+      /*
       _jsGetAngularTestability = allowInterop(_getAngularTestability);
       _jsGetAllAngularTestabilities = allowInterop(_getAllAngularTestabilities);
       (_jsFrameworkStabilizers ??= <Object?>[])
           .add(allowInterop(_whenAllStable));
+      */
+      _jsGetAngularTestability = _getAngularTestability;
+      _jsGetAllAngularTestabilities = _getAllAngularTestabilities;
+      (_jsFrameworkStabilizers ??= <Object?>[]).add(_whenAllStable);
     }
     registries.add(registry.asJsApi());
   }
@@ -73,7 +78,8 @@ class _JSTestabilityProxy implements _TestabilityProxy {
     }
 
     for (var i = 0; i < testabilities.length; i++) {
-      testabilities[i].whenStable(allowInterop(decrement));
+      //testabilities[i].whenStable(allowInterop(decrement));
+      testabilities[i].whenStable(decrement);
     }
   }
 }
@@ -81,8 +87,10 @@ class _JSTestabilityProxy implements _TestabilityProxy {
 extension on Testability {
   JsTestability asJsApi() {
     return JsTestability(
-      isStable: allowInterop(() => isStable),
-      whenStable: allowInterop(whenStable),
+      //isStable: allowInterop(() => isStable),
+      //whenStable: allowInterop(whenStable),
+      isStable: () => isStable,
+      whenStable: whenStable,
     );
   }
 }
@@ -101,8 +109,10 @@ extension on TestabilityRegistry {
     }
 
     return JsTestabilityRegistry(
-      getAngularTestability: allowInterop(getAngularTestability),
-      getAllAngularTestabilities: allowInterop(getAllAngularTestabilities),
+      //getAngularTestability: allowInterop(getAngularTestability),
+      //getAllAngularTestabilities: allowInterop(getAllAngularTestabilities),
+      getAngularTestability: getAngularTestability,
+      getAllAngularTestabilities: getAllAngularTestabilities,
     );
   }
 }

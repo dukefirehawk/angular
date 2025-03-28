@@ -28,7 +28,7 @@ DartType _resolveBounds(DartType type) {
 /// Returns a [TypeLink] to the given statically analyzed [DartType].
 TypeLink linkTypeOf(DartType type) {
   // Return void or Null types.
-  if (type.isVoid) {
+  if (type is VoidType) {
     return TypeLink.$void;
   }
   if (type.isDartCoreNull) {
@@ -40,7 +40,7 @@ TypeLink linkTypeOf(DartType type) {
   // that does not come from a typedef, it is the type of a top-level function
   // and that type was not inferred previously by the analyzer. A more proper
   // fix from Angular would be to support function types (for now dynamic only).
-  if (type.isDynamic) {
+  if (type is DynamicType) {
     return TypeLink.$dynamic;
   }
   type = _resolveBounds(type);

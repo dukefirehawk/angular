@@ -47,6 +47,11 @@ class HashLocationStrategy extends LocationStrategy {
   void onPopState(html.EventListener fn) {
     _platformLocation.onPopState(fn);
   }
+  /*
+  void onPopState(void Function(Event event) fn) {
+    _platformLocation.onPopState(fn);
+  }
+  */
 
   @override
   String getBaseHref() {

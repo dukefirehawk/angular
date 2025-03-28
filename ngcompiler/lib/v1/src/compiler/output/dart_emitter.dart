@@ -409,8 +409,8 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
         return '.addAll';
       case o.BuiltinMethod.subscribeObservable:
         return 'listen';
-      default:
-        throw StateError('Unknown builtin method: $method');
+      //default:
+      //  throw StateError('Unknown builtin method: $method');
     }
   }
 
@@ -621,8 +621,8 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
       case o.BuiltinTypeName.voidName:
         typeStr = 'void';
         break;
-      default:
-        throw StateError('Unsupported builtin type ${type.name}');
+      //default:
+      //  throw StateError('Unsupported builtin type ${type.name}');
     }
     if (type.modifiers.contains(o.TypeModifier.nullableModifier)) {
       final suffix = emitNullSafeSyntax ? '?' : '/*?*/';

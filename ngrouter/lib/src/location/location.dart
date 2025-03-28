@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'dart:js_interop';
 
 import 'package:ngdart/angular.dart' show Injectable;
 import 'location_strategy.dart' show LocationStrategy;
-import 'dart:js_interop';
 
 /// `Location` is a service that applications can use to interact with a
 /// browser's URL.

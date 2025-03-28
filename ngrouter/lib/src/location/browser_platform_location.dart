@@ -1,6 +1,5 @@
-import 'dart:js_interop';
-
 import 'package:web/web.dart';
+import 'dart:js_interop';
 
 import 'package:ngdart/angular.dart' show Injectable;
 
