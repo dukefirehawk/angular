@@ -89,7 +89,10 @@ class _KeyEventsHandler {
     element.addEventListener(
         parsed.domEventName,
         (Event event) {
-          if (event is KeyboardEvent && parsed.matches(event)) {
+          // TODO: Migrate to 3.6 (Need review)
+          //if (event is KeyboardEvent && parsed.matches(event)) {
+          if (event.isA<KeyboardEvent>() &&
+              parsed.matches(event as KeyboardEvent)) {
             callback(event);
           }
         }.toJS);

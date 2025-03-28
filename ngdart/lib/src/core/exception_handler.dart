@@ -1,3 +1,6 @@
+import 'dart:js_interop';
+
+import 'package:web/helpers.dart';
 import 'package:web/web.dart';
 
 /// Provides a hook for receiving unhandled errors/exceptions.
@@ -64,10 +67,10 @@ class ExceptionHandler {
     Object? stackTrace,
     @Deprecated('No longer supported. Remove this argument.') String? reason,
   ]) {
-    window.console.error(ExceptionHandler.exceptionToString(
+    console.error(ExceptionHandler.exceptionToString(
       exception,
       stackTrace,
       reason,
-    ));
+    ).toJS);
   }
 }

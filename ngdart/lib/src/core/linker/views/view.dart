@@ -125,7 +125,9 @@ abstract class View implements ChangeDetectorRef {
 
   @override
   void markChildForCheck(Object child) {
-    assert(child is! Element, 'Expected a component instance');
+    // TODO: Migrate to 3.6 (Need review)
+    // assert(child is! Element , 'Expected a component instance');
+    assert(child == Element, 'Expected a component instance');
     queryChangeDetectorRefs[child]?.markForCheck();
   }
 
