@@ -7,7 +7,7 @@ import '../visitor.dart';
 /// Represents a bound text element to an expression.
 ///
 /// Clients should not extend, implement, or mix-in this class.
-abstract class InterpolationAst implements StandaloneTemplateAst {
+abstract mixin class InterpolationAst implements StandaloneTemplateAst {
   /// Create a new synthetic [InterpolationAst] with a bound [expression].
   factory InterpolationAst(
     String value,
@@ -36,7 +36,7 @@ abstract class InterpolationAst implements StandaloneTemplateAst {
   String get value;
 
   @override
-  bool operator ==(Object? other) {
+  bool operator ==(Object other) {
     return other is InterpolationAst && other.value == value;
   }
 

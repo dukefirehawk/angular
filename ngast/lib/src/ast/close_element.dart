@@ -7,7 +7,7 @@ import '../visitor.dart';
 /// Represents the closing DOM element that was parsed.
 ///
 /// Clients should not extend, implement, or mix-in this class.
-abstract class CloseElementAst implements TemplateAst {
+abstract mixin class CloseElementAst implements TemplateAst {
   /// Creates a synthetic close element AST.
   factory CloseElementAst(
     String name,
@@ -29,7 +29,7 @@ abstract class CloseElementAst implements TemplateAst {
   }) = ParsedCloseElementAst;
 
   @override
-  bool operator ==(Object? other) {
+  bool operator ==(Object other) {
     return other is CloseElementAst && name == other.name;
   }
 

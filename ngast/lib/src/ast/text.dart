@@ -7,7 +7,7 @@ import '../visitor.dart';
 /// Represents a block of static text (i.e. not bound to a directive).
 ///
 /// Clients should not extend, implement, or mix-in this class.
-abstract class TextAst implements StandaloneTemplateAst {
+abstract mixin class TextAst implements StandaloneTemplateAst {
   /// Create a new synthetic [TextAst] with a string [value].
   factory TextAst(String value) = _SyntheticTextAst;
 
@@ -24,7 +24,7 @@ abstract class TextAst implements StandaloneTemplateAst {
   ) = _ParsedTextAst;
 
   @override
-  bool operator ==(Object? other) {
+  bool operator ==(Object other) {
     return other is TextAst && value == other.value;
   }
 

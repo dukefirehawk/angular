@@ -12,7 +12,7 @@ const _listEquals = ListEquality();
 /// This is a logical container that has no effect on layout in the DOM.
 ///
 /// Clients should not extend, implement, or mix-in this class.
-abstract class ContainerAst implements StandaloneTemplateAst {
+abstract mixin class ContainerAst implements StandaloneTemplateAst {
   factory ContainerAst({
     List<AnnotationAst> annotations,
     List<StandaloneTemplateAst> childNodes,
@@ -52,7 +52,7 @@ abstract class ContainerAst implements StandaloneTemplateAst {
   }
 
   @override
-  bool operator ==(Object? other) {
+  bool operator ==(Object other) {
     return other is ContainerAst &&
         _listEquals.equals(childNodes, other.childNodes) &&
         _listEquals.equals(stars, other.stars) &&

@@ -10,7 +10,7 @@ import '../../visitor.dart';
 /// useful for tooling, but not useful for compilers).
 ///
 /// Clients should not extend, implement, or mix-in this class.
-abstract class BananaAst implements TemplateAst {
+abstract mixin class BananaAst implements TemplateAst {
   /// Create a new synthetic [BananaAst] with a string [field].
   factory BananaAst(
     String name, [
@@ -40,7 +40,7 @@ abstract class BananaAst implements TemplateAst {
   }
 
   @override
-  bool operator ==(Object? other) {
+  bool operator ==(Object other) {
     return other is BananaAst && name == other.name && value == other.value;
   }
 

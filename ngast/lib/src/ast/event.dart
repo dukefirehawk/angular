@@ -11,7 +11,7 @@ const _listEquals = ListEquality<dynamic>();
 /// element.
 ///
 /// Clients should not extend, implement, or mix-in this class.
-abstract class EventAst implements TemplateAst {
+abstract mixin class EventAst implements TemplateAst {
   /// Create a new synthetic [EventAst] listening to [name].
   factory EventAst(
     String name,
@@ -38,7 +38,7 @@ abstract class EventAst implements TemplateAst {
   ]) = ParsedEventAst;
 
   @override
-  bool operator ==(Object? other) {
+  bool operator ==(Object other) {
     return other is EventAst &&
         name == other.name &&
         _listEquals.equals(reductions, other.reductions);

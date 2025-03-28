@@ -14,7 +14,7 @@ const _listEquals = ListEquality<dynamic>();
 /// [references].
 ///
 /// Clients should not extend, implement, or mix-in this class.
-abstract class EmbeddedTemplateAst implements StandaloneTemplateAst {
+abstract mixin class EmbeddedTemplateAst implements StandaloneTemplateAst {
   factory EmbeddedTemplateAst({
     List<AnnotationAst> annotations,
     List<AttributeAst> attributes,
@@ -88,7 +88,7 @@ abstract class EmbeddedTemplateAst implements StandaloneTemplateAst {
   set closeComplement(CloseElementAst? closeComplement);
 
   @override
-  bool operator ==(Object? other) {
+  bool operator ==(Object other) {
     return other is EmbeddedTemplateAst &&
         closeComplement == other.closeComplement &&
         _listEquals.equals(annotations, other.annotations) &&

@@ -9,7 +9,7 @@ import '../visitor.dart';
 /// for a [EmbeddedTemplateAst].
 ///
 /// Clients should not extend, implement, or mix-in this class.
-abstract class LetBindingAst implements TemplateAst {
+abstract mixin class LetBindingAst implements TemplateAst {
   /// Create a new synthetic [LetBindingAst] listening to [name].
   /// [value] is an optional parameter, which indicates that the variable is
   /// bound to a the value '$implicit'.
@@ -38,7 +38,7 @@ abstract class LetBindingAst implements TemplateAst {
   ]) = ParsedLetBindingAst;
 
   @override
-  bool operator ==(Object? other) {
+  bool operator ==(Object other) {
     return other is LetBindingAst && name == other.name && value == other.value;
   }
 
