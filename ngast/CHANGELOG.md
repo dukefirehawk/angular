@@ -1,11 +1,20 @@
+# Change Log
+
+## 4.0.0-dev.1
+
+- Minimum SDK > 3.6
+- Updated dependencies
+- Migrate `dart:html` to `package:web/web`
+- Migrate `dart:js` to `dart:js_interop`
+
 ## 3.0.0-dev.0
 
- - Migrate to Analyzer v5 and bump minimum SDK to 2.18
+- Migrate to Analyzer v5 and bump minimum SDK to 2.18
 
 ## 2.1.4
 
- - **FIX**: bring back original import file for compatibility.
- - **DOCS**: add notices to improve pub score.
+- **FIX**: bring back original import file for compatibility.
+- **DOCS**: add notices to improve pub score.
 
 ## 2.1.3
 
@@ -218,7 +227,7 @@ plugin.
 ## 0.4.0-alpha+1
 
 - New code location! angular_ast is now part of the angular mono-repo on
-  https://github.com/angulardart/angular.
+  <https://github.com/angulardart/angular>.
 
 ### Bug fix
 
