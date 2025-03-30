@@ -36,7 +36,10 @@ class NgTestFixture<T> {
   Future<void> dispose() async {
     await update();
     // Remove the test bed's host element.
-    _rootComponentRef.location.parent!.remove();
+
+    // TODO: Migrate to Dart 3.6 (Need to review)
+    //_rootComponentRef.location.node!.remove();
+    _rootComponentRef.location.remove();
     _applicationRef.dispose();
     if (isDevMode) {
       debugClearComponentStyles();
@@ -78,7 +81,7 @@ class NgTestFixture<T> {
   /// All text nodes within the fixture.
   ///
   /// Provided as a convenience to do simple `expect` matchers.
-  String? get text => rootElement.text;
+  String? get text => rootElement.textContent;
 
   /// A component instance to use for read-only operations (expect, assert)
   /// ONLY.

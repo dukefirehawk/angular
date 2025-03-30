@@ -11,8 +11,11 @@ void main() {
   late Element testRoot;
 
   setUp(() {
-    docRoot = Element.tag('doc-root');
-    testRoot = Element.tag('ng-test-bed-example-test');
+    // TODO: Migrate to 3.6 (Need review)
+    //docRoot = Element.tag('doc-root');
+    //testRoot = Element.tag('ng-test-bed-example-test');
+    docRoot = document.createElement('doc-root');
+    testRoot = document.createElement('ng-test-bed-example-test');
     docRoot.append(testRoot);
   });
 
@@ -27,12 +30,12 @@ void main() {
       host: testRoot,
     );
     final NgTestFixture<AngularLifecycle> fixture = await testBed.create();
-    expect(docRoot.text, isEmpty);
+    expect(docRoot.textContent, isEmpty);
     await fixture.update((c) => c.value = 'New value');
-    expect(docRoot.text, 'New value');
+    expect(docRoot.textContent, 'New value');
     await fixture.dispose();
-    print(docRoot.innerHtml);
-    expect(docRoot.text, isEmpty);
+    print(docRoot.textContent);
+    expect(docRoot.textContent, isEmpty);
   });
 
   test('should invoke ngAfterChanges, then ngOnInit', () async {
