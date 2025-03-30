@@ -317,7 +317,7 @@ class _ComponentVisitor
           if (setter == null) {
             return;
           }
-          final propertyType = setter.parameters.first.type;
+          DartType propertyType = setter.parameters.first.type;
           final dynamicType = setter.library.typeProvider.dynamicType;
           // Resolves unspecified or bounded generic type parameters.
 
