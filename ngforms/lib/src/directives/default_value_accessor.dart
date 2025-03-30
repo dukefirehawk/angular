@@ -28,7 +28,7 @@ const defaultValueAccessor = ExistingProvider.forToken(
 class DefaultValueAccessor extends Object
     with TouchHandler, ChangeHandler<String>
     implements ControlValueAccessor<dynamic> {
-  final HtmlElement _element;
+  final HtmlElement? _element;
 
   DefaultValueAccessor(this._element);
 
@@ -43,7 +43,7 @@ class DefaultValueAccessor extends Object
 
     // TODO: Migrate to 3.6 (Need review)
     //js_util.setProperty(_element, 'value', normalizedValue);
-    _element.textContent = normalizedValue.toString();
+    _element?.textContent = normalizedValue.toString();
   }
 
   @override

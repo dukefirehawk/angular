@@ -70,7 +70,7 @@ class NgControlGroup extends ControlContainer<AbstractControlGroup>
 
   NgControlGroup(
     @SkipSelf() this._parent,
-    @Optional() @Self() @Inject(ngValidators) List<dynamic> validators,
+    @Optional() @Self() @Inject(ngValidators) List<dynamic>? validators,
   ) : validator = composeValidators(validators);
 
   @Input('ngControlGroup')
