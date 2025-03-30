@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:async';
 
 import 'package:logging/logging.dart';
@@ -77,12 +75,12 @@ void main() {
       type: CompileTypeMetadata(moduleUrl: someModuleUrl, name: 'Root'),
       metadataType: CompileDirectiveMetadataType.component);
 
-  ParseTemplate parseTemplate;
+  late ParseTemplate parseTemplate;
 
   List<TemplateAst> parse(
     String template, [
-    List<CompileDirectiveMetadata> directive,
-    List<CompilePipeMetadata> pipes,
+    List<CompileDirectiveMetadata> directive = const [],
+    List<CompilePipeMetadata> pipes = const [],
   ]) {
     return runZoned(() => parseTemplate(template, directive, pipes),
         zoneValues: {
@@ -91,8 +89,8 @@ void main() {
   }
 
   void setUpParser({
-    ElementSchemaRegistry elementSchemaRegistry,
-    CompilerFlags compilerFlags,
+    ElementSchemaRegistry? elementSchemaRegistry,
+    CompilerFlags? compilerFlags,
   }) {
     elementSchemaRegistry ??= MockSchemaRegistry(
       {'invalidProp': false},
@@ -103,12 +101,12 @@ void main() {
       ExpressionParser(),
       compilerFlags ?? CompilerFlags(),
     );
-    parseTemplate = (template, [directives, pipes]) {
+    parseTemplate = (template, [directives = const [], pipes = const []]) {
       return parser.parse(
         component,
         template,
-        directives ?? [],
-        pipes ?? [],
+        directives,
+        pipes,
         'TestComp',
         'path://to/test-comp',
       );
@@ -607,7 +605,7 @@ void main() {
       });
 
       group('providers', () {
-        int nextProviderId;
+        late int nextProviderId;
         CompileTokenMetadata createToken(String value) {
           CompileTokenMetadata token;
           if (value.startsWith('type:')) {
@@ -663,8 +661,8 @@ void main() {
         }
 
         CompileDirectiveMetadata createDir(String selector,
-            {List<CompileProviderMetadata> providers,
-            List<CompileProviderMetadata> viewProviders,
+            {List<CompileProviderMetadata> providers = const [],
+            List<CompileProviderMetadata> viewProviders = const [],
             List<String> deps = const [],
             List<String> queries = const []}) {
           var isComponent = !selector.startsWith('[');
@@ -905,8 +903,8 @@ void main() {
         test('should change missing @Self() that are optional to nulls', () {
           var dirA = createDir('[dirA]', deps: ['optional:self:provider0']);
           var elAst = parse('<div dirA></div>', [dirA])[0] as ElementAst;
-          expect(elAst.providers[0].providers[0].deps[0].isValue, true);
-          expect(elAst.providers[0].providers[0].deps[0].value, isNull);
+          expect(elAst.providers[0].providers[0].deps?[0]?.isValue, true);
+          expect(elAst.providers[0].providers[0].deps?[0]?.value, isNull);
         });
 
         test('should report missing @Host() deps as errors', () {
@@ -924,8 +922,8 @@ void main() {
         test('should change missing @Host() that are optional to nulls', () {
           var dirA = createDir('[dirA]', deps: ['optional:host:provider0']);
           var elAst = parse('<div dirA></div>', [dirA])[0] as ElementAst;
-          expect(elAst.providers[0].providers[0].deps[0].isValue, true);
-          expect(elAst.providers[0].providers[0].deps[0].value, isNull);
+          expect(elAst.providers[0].providers[0].deps?[0]?.isValue, true);
+          expect(elAst.providers[0].providers[0].deps?[0]?.value, isNull);
         });
 
         test('should report cyclic dependencies as errors', () {
@@ -1734,7 +1732,7 @@ void main() {
     });
 
     group('content projection', () {
-      int compCounter;
+      late int compCounter;
       setUp(() {
         compCounter = 0;
       });
@@ -2622,21 +2620,21 @@ void main() {
 }
 
 CompileDirectiveMetadata createCompileDirectiveMetadata({
-  CompileTypeMetadata type,
+  CompileTypeMetadata? type,
   CompileDirectiveMetadataType metadataType =
       CompileDirectiveMetadataType.directive,
-  String selector,
-  String exportAs,
-  List<String> inputs,
-  List<String> outputs,
+  String? selector,
+  String? exportAs,
+  List<String> inputs = const [],
+  List<String> outputs = const [],
   List<CompileProviderMetadata> providers = const [],
   List<CompileProviderMetadata> viewProviders = const [],
   List<CompileQueryMetadata> queries = const [],
-  CompileTemplateMetadata template,
+  CompileTemplateMetadata? template,
 }) {
   final inputsMap = <String, String>{};
   final inputTypeMap = <String, CompileTypeMetadata>{};
-  inputs.forEach((input) {
+  for (var input in inputs) {
     final inputParts = input.split(';');
     final inputName = inputParts[0];
     final bindingParts = splitAtColon(inputName, [inputName, inputName]);
@@ -2644,13 +2642,13 @@ CompileDirectiveMetadata createCompileDirectiveMetadata({
     if (inputParts.length > 1) {
       inputTypeMap[bindingParts[0]] = CompileTypeMetadata(name: inputParts[1]);
     }
-  });
+  }
 
   final outputsMap = <String, String>{};
-  outputs.forEach((output) {
+  for (var output in outputs) {
     final bindingParts = splitAtColon(output, [output, output]);
     outputsMap[bindingParts[0]] = bindingParts[1];
-  });
+  }
 
   return CompileDirectiveMetadata(
     type: type,

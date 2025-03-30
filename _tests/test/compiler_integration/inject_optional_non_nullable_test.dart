@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:build/build.dart';
 import 'package:test/test.dart';
 import 'package:_tests/compiler.dart';
@@ -195,7 +193,7 @@ void main() {
 
   group('should allow opted-out to use opted-in import w/o error', () {
     final clientLibSource = """
-      // @dart=2.9
+      
       import '$ngImport';
       import 'opted_in_library.dart';
 

@@ -38,7 +38,7 @@ void main() {
           ng.createTestNestedNgForQueriesListFactory());
       final fixture = await testBed.create();
       expect(
-        fixture.assertOnlyInstance.taggedDivs!.map((e) => e.text),
+        fixture.assertOnlyInstance.taggedDivs!.map((e) => e.textContent),
         ['1', '2', '3'],
       );
     });
@@ -49,7 +49,7 @@ void main() {
           ng.createTestNestedAndStaticNgForQueriesListFactory());
       final fixture = await testBed.create();
       expect(
-        fixture.assertOnlyInstance.taggedDivs!.map((e) => e.text),
+        fixture.assertOnlyInstance.taggedDivs!.map((e) => e.textContent),
         ['1', '2', '3', '4', '5', '6', '7'],
       );
     });

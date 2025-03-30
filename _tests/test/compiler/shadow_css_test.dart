@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'dart:async';
 
 import 'package:logging/logging.dart';
@@ -55,7 +53,7 @@ String normalizeCSS(String css) {
 
 /// Shims [css] and compares to the [expected] output for both current and
 /// legacy encapsulation.
-void shimAndExpect(String css, String expected, {String expectedLegacy}) {
+void shimAndExpect(String css, String expected, {String? expectedLegacy}) {
   runZoned(() {
     var actual = shimShadowCss(css, content, host);
     var actualLegacy =

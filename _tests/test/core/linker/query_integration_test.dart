@@ -227,7 +227,7 @@ void main() {
 
       while (divIt.moveNext()) {
         itemIt.moveNext();
-        expect(divIt.current.text, itemIt.current);
+        expect(divIt.current.textContent, itemIt.current);
       }
 
       expect(itemIt.moveNext(), false);
@@ -250,7 +250,7 @@ void main() {
       await testFixture.update((component) {
         component.showEmbeddedViews = true;
       });
-      expect(testFixture.assertOnlyInstance.div?.text, 'First');
+      expect(testFixture.assertOnlyInstance.div?.textContent, 'First');
     });
   });
 }

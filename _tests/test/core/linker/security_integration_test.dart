@@ -19,7 +19,7 @@ void main() {
     final a = testFixture.rootElement.querySelector('a') as HTMLAnchorElement;
     expect(a.href, matches(r'.*/hello$'));
     await testFixture.update((component) {
-      component.href = unsafeUrl;
+      (component as HTMLAnchorElement).href = unsafeUrl;
     });
     expect(a.href, equals('unsafe:$unsafeUrl'));
   });
@@ -39,8 +39,8 @@ void main() {
   test('should escape unsafe styles', () async {
     final testBed = NgTestBed(ng.createUnsafeStyleComponentFactory());
     final testFixture = await testBed.create();
-    final div = testFixture.rootElement.querySelector('div');
-    expect(div?.style.background, matches('red'));
+    final div = testFixture.rootElement.querySelector('div') as HTMLDivElement;
+    expect(div.style.background, matches('red'));
     await testFixture.update((component) {
       component.backgroundStyle = 'url(javascript:evil())';
     });
@@ -51,24 +51,24 @@ void main() {
     final testBed = NgTestBed(ng.createUnsafeHtmlComponentFactory());
     final testFixture = await testBed.create();
     final div = testFixture.rootElement.querySelector('div');
-    expect(div?.innerHtml, 'some <p>text</p>');
+    expect(div?.innerHTML, 'some <p>text</p>');
     await testFixture.update((component) {
       var c = component;
       c.html = 'ha <script>evil()</script>';
     });
-    expect(div?.innerHtml, 'ha ');
+    expect(div?.innerHTML, 'ha ');
     await testFixture.update((component) {
       var c = component;
       c.html = 'also <img src="x" onerror="evil()"> evil';
     });
-    expect(div?.innerHtml, 'also <img src="x"> evil');
+    expect(div?.innerHTML, 'also <img src="x"> evil');
     await testFixture.update((component) {
       final srcdoc = '<div></div><script></script>';
       var c = component;
       c.html = 'also <iframe srcdoc="$srcdoc"> content</iframe>';
     });
     expect(
-      div?.innerHtml,
+      div?.innerHTML,
       'also <iframe> content</iframe>',
     );
   });

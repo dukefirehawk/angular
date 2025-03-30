@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:test/test.dart';
@@ -95,29 +93,29 @@ void main() {
   });
 }
 
-Future<AnalyzedClass> analyzeClass(String source) async {
+Future<AnalyzedClass?> analyzeClass(String source) async {
   final library = await resolve(source);
   final visitor = AnalyzedClassVisitor();
-  return library.accept(visitor);
+  return library.accept<AnalyzedClass>(visitor);
 }
 
 class AnalyzedClassVisitor extends RecursiveElementVisitor<AnalyzedClass> {
   @override
-  AnalyzedClass visitClassElement(ClassElement element) {
+  AnalyzedClass? visitClassElement(ClassElement element) {
     return AnalyzedClass(element);
   }
 
   @override
-  AnalyzedClass visitCompilationUnitElement(CompilationUnitElement element) {
+  AnalyzedClass? visitCompilationUnitElement(CompilationUnitElement element) {
     return _visitAll(element.classes);
   }
 
   @override
-  AnalyzedClass visitLibraryElement(LibraryElement element) {
+  AnalyzedClass? visitLibraryElement(LibraryElement element) {
     return _visitAll(element.units);
   }
 
-  AnalyzedClass _visitAll(List<Element> elements) {
+  AnalyzedClass? _visitAll(List<Element> elements) {
     for (var element in elements) {
       final analyzedClass = element.accept(this);
       if (analyzedClass != null) return analyzedClass;

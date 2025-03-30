@@ -29,11 +29,11 @@ void main() {
     );
     final testFixture = await testBed.create();
     final viewport = testFixture.assertOnlyInstance.viewport!;
-    expect(viewport.anchor.text, '');
+    expect(viewport.anchor.textContent, '');
     await testFixture.update((component) => component.ctxBoolProp = true);
-    expect(viewport.anchor.text, 'hello');
+    expect(viewport.anchor.textContent, 'hello');
     await testFixture.update((component) => component.ctxBoolProp = false);
-    expect(viewport.anchor.text, '');
+    expect(viewport.anchor.textContent, '');
   });
 
   group('property bindings', () {
@@ -50,8 +50,9 @@ void main() {
         ng.createOverriddenPropertyComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final span = testFixture.rootElement.querySelector('span');
-      expect(span!.title, isEmpty);
+      final span =
+          testFixture.rootElement.querySelector('span') as HTMLSpanElement;
+      expect(span.title, isEmpty);
     });
 
     test('should allow directive host property to update DOM', () async {
@@ -59,8 +60,9 @@ void main() {
         ng.createDirectiveUpdatesDomComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final span = testFixture.rootElement.querySelector('span');
-      expect(span!.title, 'TITLE');
+      final span =
+          testFixture.rootElement.querySelector('span') as HTMLSpanElement;
+      expect(span.title, 'TITLE');
     });
   });
 
@@ -82,8 +84,8 @@ void main() {
       await testFixture.update((component) {
         component.directive!.myAttr = 'bar';
       });
-      final directiveElement = testFixture.rootElement.children.first;
-      expect(directiveElement.attributes, containsPair('my-attr', 'bar'));
+      final directiveElement = testFixture.rootElement.children.item(0);
+      expect(directiveElement?.attributes, containsPair('my-attr', 'bar'));
     });
 
     test('should support @Output', () async {
@@ -105,8 +107,8 @@ void main() {
       final testFixture = await testBed.create();
       final directive = testFixture.assertOnlyInstance.directive!;
       expect(directive.target, isNull);
-      final directiveElement = testFixture.rootElement.children.first;
-      directiveElement.dispatchEvent(MouseEvent('click'));
+      final directiveElement = testFixture.rootElement.children.item(0);
+      directiveElement?.dispatchEvent(MouseEvent('click'));
       await testFixture.update();
       expect(directive.target, directiveElement);
     });
@@ -116,18 +118,23 @@ void main() {
     final testBed = NgTestBed<SvgElementsComponent>(
       ng.createSvgElementsComponentFactory(),
     );
+
+    // TODO: Migrate to 3.6 (Need review)
     final testFixture = await testBed.create();
-    final svg = testFixture.rootElement.querySelector('svg')!;
-    expect(svg.namespaceUri, 'http://www.w3.org/2000/svg');
-    final use = testFixture.rootElement.querySelector('use')!;
-    expect(use.namespaceUri, 'http://www.w3.org/2000/svg');
-    final foreignObject =
-        testFixture.rootElement.querySelector('foreignObject')!;
-    expect(foreignObject.namespaceUri, 'http://www.w3.org/2000/svg');
-    final div = testFixture.rootElement.querySelector('div')!;
-    expect(div.namespaceUri, 'http://www.w3.org/1999/xhtml');
-    final p = testFixture.rootElement.querySelector('p')!;
-    expect(p.namespaceUri, 'http://www.w3.org/1999/xhtml');
+    final svg =
+        testFixture.rootElement.querySelector('svg')! as HTMLImageElement;
+    expect(svg.namespaceURI, 'http://www.w3.org/2000/svg');
+    final use =
+        testFixture.rootElement.querySelector('use')! as HTMLImageElement;
+    expect(use.namespaceURI, 'http://www.w3.org/2000/svg');
+    final foreignObject = testFixture.rootElement
+        .querySelector('foreignObject')! as HTMLObjectElement;
+    expect(foreignObject.namespaceURI, 'http://www.w3.org/2000/svg');
+    final div = testFixture.rootElement.querySelector('div')! as HTMLDivElement;
+    expect(div.namespaceURI, 'http://www.w3.org/1999/xhtml');
+    final p =
+        testFixture.rootElement.querySelector('p')! as HTMLParagraphElement;
+    expect(p.namespaceURI, 'http://www.w3.org/1999/xhtml');
   });
 
   group('namespace attributes', () {

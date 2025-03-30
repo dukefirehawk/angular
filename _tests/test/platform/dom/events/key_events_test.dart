@@ -1,3 +1,5 @@
+import 'dart:js_interop_unsafe';
+
 import 'package:web/web.dart';
 import 'dart:js_interop';
 
@@ -205,13 +207,15 @@ Event createKeyboardEvent(
   bool shiftKey = false,
   bool metaKey = false,
 }) {
-  if (!context.hasProperty(CREATE_KEYBOARD_EVENT_NAME)) {
+  if (globalContext
+      .getProperty(CREATE_KEYBOARD_EVENT_NAME)
+      .isDefinedAndNotNull) {
     var script = document.createElement('script')
       ..setAttribute('type', 'text/javascript')
       ..text = CREATE_KEYBOARD_EVENT_SCRIPT;
     document.body!.append(script);
   }
-  return context.callMethod(CREATE_KEYBOARD_EVENT_NAME, [
+  return globalContext.callMethod(CREATE_KEYBOARD_EVENT_NAME, [
     type,
     keyCode,
     ctrlKey,

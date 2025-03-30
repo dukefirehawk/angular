@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:test/test.dart';
 import 'package:_tests/test_util.dart';
 import 'package:ngcompiler/v1/src/compiler/attribute_matcher.dart';
@@ -8,10 +6,10 @@ import 'package:ngcompiler/v1/src/compiler/selector.dart'
 
 void main() {
   group('SelectorMatcher', () {
-    SelectorMatcher<int> matcher;
-    void Function(CssSelector, int) selectableCollector;
-    List<CssSelector> s1, s2, s3, s4;
-    List<dynamic> matched;
+    late SelectorMatcher<int> matcher;
+    late void Function(CssSelector, int) selectableCollector;
+    late List<CssSelector> s1, s2, s3, s4;
+    late List<dynamic> matched;
     void reset() {
       matched = [];
     }

@@ -3,7 +3,6 @@ library;
 
 import 'dart:async';
 import 'dart:js_interop';
-//import 'package:web/helpers.dart';
 import 'package:web/web.dart';
 
 import 'package:test/test.dart';
@@ -28,7 +27,7 @@ void main() {
 
   /// Verify that the DOM of the page represents the component.
   void verifyDomAndStyles({String innerText = 'Hello World!'}) {
-    expect(rootDomContainer.text, innerText);
+    expect(rootDomContainer.textContent, innerText);
     final h1 = rootDomContainer.querySelector('h1');
     expect(h1!.getComputedStyle().height, '100px');
   }
@@ -39,21 +38,21 @@ void main() {
   void verifyTestability() {
     expect(component.injector.get(Testability), isNotNull);
     var jsTestability = getAngularTestability(
-      rootDomContainer.children.first,
+      rootDomContainer.children.item(0),
     );
     expect(getAllAngularTestabilities(), isNot(hasLength(0)));
     expect(jsTestability.isStable(), isTrue, reason: 'Expected stability');
-    jsTestability.whenStable(allowInterop(expectAsync0(() {
+    jsTestability.whenStable(expectAsync0(() {
       Future(expectAsync0(() {
         verifyDomAndStyles(innerText: 'Hello Universe!');
       }));
-    })));
+    }));
     runInApp(() => HelloWorldComponent.doAsyncTaskAndThenRename('Universe'));
   }
 
   setUp(() {
     rootDomContainer = HTMLDivElement()..id = 'test-root-dom';
-    rootDomContainer.append(Element.tag('hello-world'));
+    rootDomContainer.append(document.createElement('hello-world'));
     document.body!.append(rootDomContainer);
     HelloWorldComponent.name = 'World';
   });

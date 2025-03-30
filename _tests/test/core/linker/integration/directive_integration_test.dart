@@ -204,7 +204,7 @@ class UnboundDirectiveInputComponent {}
 )
 class DuplicateDir {
   DuplicateDir(HtmlElement element) {
-    element.text = '${element.text}noduplicate';
+    element.text = '${element.textContent}noduplicate';
   }
 }
 

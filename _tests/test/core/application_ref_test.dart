@@ -55,11 +55,12 @@ void main() {
 
   group('bootstrap should', () {
     test('replace an existing element if in the DOM', () {
-      final existing = Element.tag('hello-component')..text = 'Loading...';
+      final existing = document.createElement('hello-component')
+        ..text = 'Loading...';
       document.body!.append(existing);
       final comp =
           appRef.bootstrap<HelloComponent>(ng.createHelloComponentFactory());
-      expect(comp.location.text, 'Hello World');
+      expect(comp.location.textContent, 'Hello World');
       expect(
         document.body!.querySelector('hello-component'),
         same(comp.location),
@@ -69,7 +70,7 @@ void main() {
     test('create a new element if missing from the DOM', () {
       final comp =
           appRef.bootstrap<HelloComponent>(ng.createHelloComponentFactory());
-      expect(comp.location.text, 'Hello World');
+      expect(comp.location.textContent, 'Hello World');
       expect(
         document.body!.querySelector('hello-component'),
         same(comp.location),

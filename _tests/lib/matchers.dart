@@ -1,6 +1,6 @@
+import 'package:test/test.dart';
 import 'package:web/web.dart';
 
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 
 /// Matches textual content of an element including children.
@@ -35,6 +35,9 @@ class _HasTextContent extends Matcher {
 }
 
 String? _elementText(Object? n) {
+  if (n == null) {
+    return '';
+  }
   if (n is Iterable) {
     return n.map(_elementText).join('');
   } else if (n is Node) {
@@ -47,14 +50,14 @@ String? _elementText(Object? n) {
     }
 
     if (n is Element && n.shadowRoot != null) {
-      return _elementText(n.shadowRoot!.nodes);
+      return _elementText(n.shadowRoot!.childNodes);
     }
 
-    if (n.nodes.isNotEmpty) {
-      return _elementText(n.nodes);
+    if (n.childNodes.isDefinedAndNotNull) {
+      return _elementText(n.childNodes);
     }
 
-    return n.text;
+    return n.textContent;
   } else {
     return '$n';
   }

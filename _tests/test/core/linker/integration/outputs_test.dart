@@ -48,9 +48,9 @@ void main() {
     final testBed = NgTestBed<ElementWithDomEventComponent>(
         ng.createElementWithDomEventComponentFactory());
     final testFixture = await testBed.create();
-    final div = testFixture.rootElement.children.first;
+    final div = testFixture.rootElement.children.item(0);
     final listener = testFixture.assertOnlyInstance.listener;
-    await testFixture.update((_) => div.dispatchEvent(Event('click')));
+    await testFixture.update((_) => div?.dispatchEvent(Event('click')));
     expect(listener!.eventTypes, ['click']);
   });
 
@@ -59,9 +59,9 @@ void main() {
         ng.createTestPreventDefaultComponentFactory());
     final testFixture = await testBed.create();
     final inputPrevent =
-        testFixture.rootElement.children[0] as HTMLInputElement;
+        testFixture.rootElement.children.item(0) as HTMLInputElement;
     final inputNoPrevent =
-        testFixture.rootElement.children[1] as HTMLInputElement;
+        testFixture.rootElement.children.item(1) as HTMLInputElement;
     final clickPrevent = MouseEvent('click');
     final clickNoPrevent = MouseEvent('click');
     inputPrevent.dispatchEvent(clickPrevent);
