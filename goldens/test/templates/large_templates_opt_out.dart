@@ -1,7 +1,6 @@
 // Intentionally opt-out to review code compared to "large_templates.dart".
-// @dart=2.9
 @JS()
-library golden;
+library;
 
 // This code is roughly intended to reflect large-internal clients, i.e.
 // https://source.corp.google.com/piper///depot/google3/ads/awapps2/cm/client/overview/root/lib/overview.template.dart

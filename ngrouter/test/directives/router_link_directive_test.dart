@@ -1,3 +1,5 @@
+import 'dart:js_interop_unsafe';
+
 import 'package:web/web.dart' hide Location;
 import 'dart:js_interop';
 
@@ -174,12 +176,19 @@ Event createKeyboardEvent(
   bool shiftKey = false,
   bool metaKey = false,
 }) {
-  if (!context.hasProperty(_createKeyboardEventName)) {
+  // TODO: Migrate to 3.6 (Need review)
+  //if (!context.hasProperty(_createKeyboardEventName)) {
+  if (globalContext
+      .getProperty(_createKeyboardEventName.toJS)
+      .isDefinedAndNotNull) {
     final script = document.createElement('script')
       ..setAttribute('type', 'text/javascript')
       ..text = _createKeyboardEventScript;
     document.body!.append(script);
   }
+
+  // TODO: Migrate to 3.6 (Need review)
+  /*
   return context.callMethod(
     _createKeyboardEventName,
     [
@@ -190,5 +199,17 @@ Event createKeyboardEvent(
       shiftKey,
       metaKey,
     ],
+  ) as Event;
+  */
+  return globalContext.callMethod(
+    _createKeyboardEventName.toJS,
+    [
+      type,
+      keyCode,
+      ctrlKey,
+      altKey,
+      shiftKey,
+      metaKey,
+    ].toJSBox,
   ) as Event;
 }

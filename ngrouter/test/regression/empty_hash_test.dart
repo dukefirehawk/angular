@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:ngrouter/ngrouter.dart';
@@ -7,8 +5,8 @@ import 'package:ngrouter/ngrouter.dart';
 class MockPlatformLocation extends Mock implements PlatformLocation {}
 
 void main() {
-  LocationStrategy locationStrategy;
-  MockPlatformLocation platformLocation;
+  late LocationStrategy locationStrategy;
+  late MockPlatformLocation platformLocation;
 
   group("empty URL doesn't overwrite query parameters", () {
     setUp(() {
@@ -19,13 +17,13 @@ void main() {
     });
 
     test('on push', () {
-      locationStrategy.pushState(null, null, '', '');
-      verify(platformLocation.pushState(null, null, '/foo?bar=baz'));
+      locationStrategy.pushState(null, '', '', '');
+      verify(platformLocation.pushState(null, '', '/foo?bar=baz'));
     });
 
     test('on replace', () {
-      locationStrategy.replaceState(null, null, '', '');
-      verify(platformLocation.replaceState(null, null, '/foo?bar=baz'));
+      locationStrategy.replaceState(null, '', '', '');
+      verify(platformLocation.replaceState(null, '', '/foo?bar=baz'));
     });
   });
 }

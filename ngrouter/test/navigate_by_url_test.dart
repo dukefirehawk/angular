@@ -1,5 +1,3 @@
-// @dart=2.9
-
 import 'package:collection/collection.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -10,11 +8,10 @@ import 'package:ngtest/angular_test.dart';
 
 void main() {
   tearDown(disposeAnyRunningTest);
+  late Router mockRouter;
+  late Router router;
 
   group('navigateByUrl', () {
-    Router mockRouter;
-    Router router;
-
     setUp(() {
       mockRouter = MockRouter();
       router = DelegatingRouter(mockRouter);
@@ -24,7 +21,7 @@ void main() {
       router.navigateByUrl('/to/path');
       expect(
         verify(mockRouter.navigate(
-          captureAny,
+          captureAny ?? '',
           captureAny,
         )).captured,
         ['/to/path', navigationParams()],
@@ -35,7 +32,7 @@ void main() {
       router.navigateByUrl('/to/path?q=hello%20world');
       expect(
         verify(mockRouter.navigate(
-          captureAny,
+          captureAny ?? '',
           captureAny,
         )).captured,
         [
@@ -49,7 +46,7 @@ void main() {
       router.navigateByUrl('/to/path#with-fragment');
       expect(
         verify(mockRouter.navigate(
-          captureAny,
+          captureAny ?? '',
           captureAny,
         )).captured,
         [
@@ -63,7 +60,7 @@ void main() {
       router.navigateByUrl('/to/path', reload: true);
       expect(
         verify(mockRouter.navigate(
-          captureAny,
+          captureAny ?? '',
           captureAny,
         )).captured,
         [
@@ -77,7 +74,7 @@ void main() {
       router.navigateByUrl('/to/path', replace: true);
       expect(
         verify(mockRouter.navigate(
-          captureAny,
+          captureAny ?? '',
           captureAny,
         )).captured,
         [
@@ -100,7 +97,7 @@ class DelegatingRouter extends RouterImpl {
   @override
   Future<NavigationResult> navigate(
     String path, [
-    NavigationParams navigationParams,
+    NavigationParams? navigationParams,
   ]) =>
       _delegate.navigate(path, navigationParams);
 }
@@ -144,7 +141,7 @@ class NavigationParamsMatcher extends Matcher {
   Description describeMismatch(
     item,
     Description mismatchDescription,
-    Map<Object, Object> matchState,
+    Map<dynamic, dynamic> matchState,
     bool verbose,
   ) {
     if (item is NavigationParams) {
