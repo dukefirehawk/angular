@@ -17,7 +17,7 @@ void main() {
     }) async {
       final lib = await resolve(
         '''
-        ${enableNullSafety ? '// @dart=2.9' : ''}
+        $enableNullSafety
         dynamic topLevelField;
         ''',
         includeAngularDeps: false,
@@ -78,7 +78,7 @@ void main() {
       test('a legacy type should not be explicitly anything', () async {
         final lib = await resolve(
           '''
-          // @dart=2.9
+          
           String topLevelField;
           ''',
           includeAngularDeps: false,
@@ -91,7 +91,7 @@ void main() {
       test('a legacy FutureOr should not explicitly anything', () async {
         final lib = await resolve(
           '''
-          // @dart=2.9
+          
           import 'dart:async';
           FutureOr<String> topLevelField;
           ''',

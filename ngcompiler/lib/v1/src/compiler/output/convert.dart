@@ -1,5 +1,6 @@
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:analyzer/dart/element/type_system.dart';
 import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:ngcompiler/v1/src/source_gen/common/url_resolver.dart';
 import 'package:source_gen/source_gen.dart';
@@ -38,6 +39,7 @@ o.OutputType? fromDartType(DartType? dartType, {bool resolveBounds = true}) {
   if (dartType is TypeParameterType && resolveBounds) {
     // Resolve generic type to its bound or dynamic if it has none.
     final dynamicType = dartType.element.library!.typeProvider.dynamicType;
+
     dartType = dartType.resolveToBound(dynamicType);
   }
   // Note this check for dynamic should come after the check for a type

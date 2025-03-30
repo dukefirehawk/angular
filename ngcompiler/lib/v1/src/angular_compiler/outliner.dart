@@ -87,7 +87,7 @@ class TemplateOutliner implements Builder {
     // do not have a configured CompileContext when the outliner is run.
     //final emitNullSafeCode = library.isNonNullableByDefault;
     final emitNullSafeCode = !library.hasJS;
-    final languageVersion = emitNullSafeCode ? '' : '// @dart=2.9\n\n';
+    final languageVersion = emitNullSafeCode ? '' : '\n\n';
     final output = StringBuffer('$languageVersion$_analyzerIgnores\n');
     if (exportUserCodeFromTemplate) {
       output

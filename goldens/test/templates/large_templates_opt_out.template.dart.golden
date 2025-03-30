@@ -2,7 +2,7 @@
 // Generator: AngularDart Compiler
 // **************************************************************************
 
-// @dart=2.9
+
 
 import 'large_templates_opt_out.dart';
 import 'package:ngdart/src/core/linker/views/component_view.dart' as import0;

@@ -12,8 +12,7 @@ String buildGeneratedCode(
   String sourceFile,
   CompilerFlags flags,
 ) {
-  final languageVersion =
-      CompileContext.current.emitNullSafeCode ? '' : '// @dart=2.9\n\n';
+  final languageVersion = CompileContext.current.emitNullSafeCode;
   final buffer = StringBuffer(languageVersion);
 
   // Generated code.

@@ -3,7 +3,7 @@ import 'package:web/web.dart' show Element;
 
 import 'dom_sanitization_service.dart' show SafeHtml;
 
-/// Sets [Element.innerHtml] _without_ sanitizing the HTML output.
+/// Sets [Element.innerHTML] _without_ sanitizing the HTML output.
 ///
 /// Requires use of a [SafeHtml] wrapper created by [DomSanitizationService]:
 ///     var safeHtml = domSanitizationService.bypassSecurityTrustHtml('...');
@@ -49,7 +49,7 @@ class SafeInnerHtmlDirective {
       //);
       _element.textContent = safeInnerHtml.changingThisWillBypassSecurityTrust;
       // print('$safeInnerHtml is SafeHtml!');
-      // print(_element.innerHtml);
+      // print(_element.innerHTML);
     } else if (safeInnerHtml == null) {
       //_element.setInnerHtml('');
       _element.textContent = '';
