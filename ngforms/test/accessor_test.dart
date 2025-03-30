@@ -1,4 +1,7 @@
+import 'dart:js_interop';
+
 import 'package:web/web.dart';
+import 'dart:js_interop_unsafe' as js_util;
 //import 'dart:js_util' as js_util;
 
 import 'package:test/test.dart';
@@ -90,8 +93,11 @@ class IntValueAccessor implements ControlValueAccessor<dynamic>, Validator {
 
   @override
   void writeValue(dynamic value) {
-    var normalizedValue = value!.toString();
-    js_util.setProperty(_elementRef, 'value', normalizedValue);
+    // TODO: Migrate to 3.6 (Need review)
+    //var normalizedValue = value!.toString();
+    //js_util.setProperty(_elementRef, 'value', normalizedValue);
+    var normalizedValue = value?.toString() ?? '';
+    _elementRef.setProperty('value'.toJS, normalizedValue.toJS);
   }
 
   @override

@@ -1,3 +1,6 @@
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+
 import 'package:web/web.dart';
 //import 'dart:js_util' as js_util;
 
@@ -108,7 +111,9 @@ class RadioControlValueAccessor extends Object
   void writeValue(RadioButtonState? value) {
     _state = value;
     if (value?.checked ?? false) {
-      js_util.setProperty(_element, 'checked', true);
+      // TODO: Migrate to 3.6 (Need review)
+      //js_util.setProperty(_element, 'checked', true);
+      _element.setProperty('checked'.toJS, true.toJS);
     }
   }
 

@@ -1,3 +1,6 @@
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+
 import 'package:web/web.dart';
 //import 'dart:js_util' as js_util;
 
@@ -57,10 +60,8 @@ void _throwError(AbstractControlDirective? dir, String message) {
 }
 
 ValidatorFn? composeValidators(List<dynamic>? validators) {
-  return validators != null
-      ? Validators.compose(
-          validators.map<ValidatorFn>(normalizeValidator).toList())
-      : null;
+  return Validators.compose(
+      validators?.map<ValidatorFn>(normalizeValidator).toList());
 }
 
 ControlValueAccessor<dynamic>? selectValueAccessor(
@@ -95,6 +96,8 @@ ControlValueAccessor<dynamic>? selectValueAccessor(
   return null;
 }
 
-void setElementDisabled(HtmlElement element, bool isDisabled) {
-  js_util.setProperty(element, 'disabled', isDisabled);
+void setElementDisabled(HtmlElement? element, bool isDisabled) {
+  // TODO: Migrate to 3.6 (Need review)
+  //js_util.setProperty(element, 'disabled', isDisabled);
+  element?.setProperty('disabled'.toJS, isDisabled.toJS);
 }

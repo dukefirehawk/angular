@@ -9,7 +9,9 @@ import 'package:ngtest/angular_test.dart';
 import 'integration_test.template.dart' as ng;
 
 void dispatchEvent(Element element, String eventType) {
-  element.dispatchEvent(Event(eventType, canBubble: true));
+  // TODO: Migrate to 3.6 (Need review)
+  //element.dispatchEvent(Event(eventType, canBubble: true));
+  element.dispatchEvent(Event(eventType, EventInit(bubbles: true)));
 }
 
 void main() {
@@ -356,7 +358,7 @@ void main() {
         });
         var select =
             fixture.rootElement.querySelector('select') as HTMLSelectElement;
-        var nycOption = fixture.rootElement.querySelectorAll('option')[1]
+        var nycOption = fixture.rootElement.querySelectorAll('option').item(1)
             as HTMLOptionElement;
         expect(select.value, '1: Object');
         expect(nycOption.selected, true);
@@ -386,7 +388,7 @@ void main() {
         });
         var select =
             fixture.rootElement.querySelector('select') as HTMLSelectElement;
-        var buffalo = fixture.rootElement.querySelectorAll('option')[2]
+        var buffalo = fixture.rootElement.querySelectorAll('option').item(2)
             as HTMLOptionElement;
         expect(select.value, '2: Object');
         expect(buffalo.selected, true);
@@ -426,7 +428,7 @@ void main() {
         });
         var select =
             fixture.rootElement.querySelector('select') as HTMLSelectElement;
-        var buffalo = fixture.rootElement.querySelectorAll('option')[1]
+        var buffalo = fixture.rootElement.querySelectorAll('option').item(1)
             as HTMLOptionElement;
         expect(select.value, '1: Buffalo');
         expect(buffalo.selected, true);
@@ -449,7 +451,7 @@ void main() {
         });
         var select =
             fixture.rootElement.querySelector('select') as HTMLSelectElement;
-        var firstSF = fixture.rootElement.querySelectorAll('option')[1]
+        var firstSF = fixture.rootElement.querySelectorAll('option').item(1)
             as HTMLOptionElement;
         expect(select.value, '1: Object');
         expect(firstSF.selected, true);
@@ -473,7 +475,7 @@ void main() {
         });
         var select =
             fixture.rootElement.querySelector('select') as HTMLSelectElement;
-        var secondNYC = fixture.rootElement.querySelectorAll('option')[2]
+        var secondNYC = fixture.rootElement.querySelectorAll('option').item(2)
             as HTMLOptionElement;
         expect(select.value, '2: Object');
         expect(secondNYC.selected, true);

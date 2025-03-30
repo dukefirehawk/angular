@@ -33,11 +33,8 @@ analyzer:
 
 linter:
   rules:
-    - iterable_contains_unrelated_type
-    - list_remove_unrelated_type
     - always_declare_return_types
     - prefer_single_quotes
     - sort_child_properties_last
     - unawaited_futures
-    - unsafe_html
     - use_full_hex_values_for_flutter_colors

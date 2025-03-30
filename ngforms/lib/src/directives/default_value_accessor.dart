@@ -40,7 +40,10 @@ class DefaultValueAccessor extends Object
   @override
   void writeValue(value) {
     var normalizedValue = value ?? '';
-    js_util.setProperty(_element, 'value', normalizedValue);
+
+    // TODO: Migrate to 3.6 (Need review)
+    //js_util.setProperty(_element, 'value', normalizedValue);
+    _element.textContent = normalizedValue.toString();
   }
 
   @override

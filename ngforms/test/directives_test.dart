@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:ngforms/ngforms.dart';
@@ -22,7 +21,7 @@ class DummyControlValueAccessor implements ControlValueAccessor<dynamic> {
 
 class CustomValidatorDirective implements Validator {
   @override
-  Map<String, dynamic> validate(AbstractControl c) {
+  Map<String, dynamic>? validate(AbstractControl c) {
     return {'custom': true};
   }
 }
@@ -34,7 +33,7 @@ Future<void> flushMicrotasks() async => await Future.microtask(() => null);
 
 void main() {
   group('Shared selectValueAccessor', () {
-    DefaultValueAccessor defaultAccessor;
+    late DefaultValueAccessor defaultAccessor;
     setUp(() {
       defaultAccessor = DefaultValueAccessor(null);
     });
@@ -83,12 +82,13 @@ void main() {
       Map<String, dynamic> dummy1(_) => {'dummy1': true};
       Map<String, dynamic> dummy2(_) => {'dummy2': true};
       var v = composeValidators([dummy1, dummy2]);
-      expect(v(Control('')), {'dummy1': true, 'dummy2': true});
+
+      expect(v!(Control('')), {'dummy1': true, 'dummy2': true});
     });
     test('should compose validator directives', () {
       Map<String, dynamic> dummy1(_) => {'dummy1': true};
       var v = composeValidators([dummy1, CustomValidatorDirective()]);
-      expect(v(Control('')), {'dummy1': true, 'custom': true});
+      expect(v!(Control('')), {'dummy1': true, 'custom': true});
     });
   });
 }

@@ -45,7 +45,7 @@ class SelectControlValueAccessor extends Object
   final Map<String, Object?> _optionMap = <String, Object?>{};
   num _idCounter = 0;
 
-  SelectControlValueAccessor(HtmlElement element)
+  SelectControlValueAccessor(HtmlElement? element)
       : _element = element as HTMLSelectElement;
 
   @HostListener('change', ['\$event.target.value'])
