@@ -8,14 +8,30 @@ import 'style_encapsulation_test.template.dart' as ng;
 
 void main() {
   tearDown(() {
-    document.head!.querySelectorAll('style').forEach((e) => e.remove());
+    // TODO: Migrate to dart 3.6 (Need to review)
+    //document.head!.querySelectorAll('style').forEach((e) => e.remove());
+    var el = document.head!.querySelectorAll('style');
+    for (var i = el.length; i > 0; i--) {
+      var item = el.item(i) as HTMLElement;
+      item.remove();
+    }
+
     return disposeAnyRunningTest();
   });
 
   String failureReason(Element target) {
+    // TODO: Migrate to dart 3.6 (Need to review)
     final lastStyles = document.head!.querySelectorAll('style');
-    final styleText = lastStyles.map((e) => e.text).join('\n');
-    return 'HTML:\n\n${target.outerHtml}\nCSS:\n\n$styleText';
+    //final styleText = lastStyles.map((e) => e.text).join('\n');
+    var list = [];
+    for (var i = 0; i < lastStyles.length; i++) {
+      var item = lastStyles.item(i) as HTMLElement;
+      list.add(item);
+    }
+    final styleText = list.join('\n');
+
+    var t = target as HTMLElement;
+    return 'HTML:\n\n${t.outerHTML}\nCSS:\n\n$styleText';
   }
 
   test('should encapsulate usages of [class]=', () async {
@@ -24,7 +40,7 @@ void main() {
     final fixture = await testBed.create();
     final element = fixture.rootElement.querySelector('div')!;
     expect(
-      element.getComputedStyle().position,
+      window.getComputedStyle(element).position,
       'absolute',
       reason: failureReason(element),
     );
@@ -34,9 +50,17 @@ void main() {
     final testBed = NgTestBed<TestSetClassAttribute>(
         ng.createTestSetClassAttributeFactory());
     final fixture = await testBed.create();
-    final element = fixture.rootElement.querySelector('div')!;
+    final element = fixture.rootElement.querySelector('div') as HTMLDivElement;
+    /*
     expect(
       element.getComputedStyle().position,
+      'absolute',
+      reason: failureReason(element),
+    );
+    */
+
+    expect(
+      element.style.backgroundPosition,
       'absolute',
       reason: failureReason(element),
     );
@@ -48,7 +72,7 @@ void main() {
     final fixture = await testBed.create();
     final element = fixture.rootElement.querySelector('button')!;
     expect(
-      element.getComputedStyle().textTransform,
+      window.getComputedStyle(element).textTransform,
       isNot('uppercase'),
       reason: failureReason(element),
     );

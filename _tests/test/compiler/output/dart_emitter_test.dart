@@ -20,8 +20,8 @@ void main() {
   //   Dart exports everything that has no `_` in its name.
   // - return types for function expressions
   group('DartEmitter', () {
-    DartEmitter emitter;
-    o.ReadVarExpr someVar;
+    late DartEmitter emitter;
+    late o.ReadVarExpr someVar;
     setUp(() {
       emitter = DartEmitter();
       someVar = o.variable('someVar');
@@ -380,7 +380,7 @@ void main() {
       expect(emitStmt(o.ThrowStmt(someVar)), 'throw someVar;');
     });
     group('classes', () {
-      o.Statement callSomeMethod;
+      late o.Statement callSomeMethod;
       setUp(() {
         callSomeMethod = o.thisExpr.callMethod('someMethod', []).toStmt();
       });

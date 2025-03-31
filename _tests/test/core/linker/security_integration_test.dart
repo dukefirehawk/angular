@@ -41,10 +41,14 @@ void main() {
     final testFixture = await testBed.create();
     final div = testFixture.rootElement.querySelector('div') as HTMLDivElement;
     expect(div.style.background, matches('red'));
+
+    // TODO: Migrate to 3.6 (need review)
     await testFixture.update((component) {
-      component.backgroundStyle = 'url(javascript:evil())';
+      //component.backgroundStyle = 'url(javascript:evil())';
+      var c = component as HTMLElement;
+      c.style.background = 'url(javascript:evil())';
     });
-    expect(div?.style.background, isNot(contains('javascript')));
+    expect(div.style.background, isNot(contains('javascript')));
   });
 
   test('should escape unsafe HTML', () async {
@@ -53,19 +57,19 @@ void main() {
     final div = testFixture.rootElement.querySelector('div');
     expect(div?.innerHTML, 'some <p>text</p>');
     await testFixture.update((component) {
-      var c = component;
-      c.html = 'ha <script>evil()</script>';
+      var c = component as HTMLElement;
+      c.innerHTML = 'ha <script>evil()</script>';
     });
     expect(div?.innerHTML, 'ha ');
     await testFixture.update((component) {
-      var c = component;
-      c.html = 'also <img src="x" onerror="evil()"> evil';
+      var c = component as HTMLElement;
+      c.innerHTML = 'also <img src="x" onerror="evil()"> evil';
     });
     expect(div?.innerHTML, 'also <img src="x"> evil');
     await testFixture.update((component) {
       final srcdoc = '<div></div><script></script>';
-      var c = component;
-      c.html = 'also <iframe srcdoc="$srcdoc"> content</iframe>';
+      var c = component as HTMLElement;
+      c.innerHTML = 'also <iframe srcdoc="$srcdoc"> content</iframe>';
     });
     expect(
       div?.innerHTML,

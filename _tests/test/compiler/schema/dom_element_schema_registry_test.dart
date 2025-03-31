@@ -5,7 +5,7 @@ import 'package:ngcompiler/v1/src/compiler/security.dart';
 
 void main() {
   group('DOMElementSchema', () {
-    DomElementSchemaRegistry registry;
+    late DomElementSchemaRegistry registry;
     setUp(() {
       registry = DomElementSchemaRegistry();
     });

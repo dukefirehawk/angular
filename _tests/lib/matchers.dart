@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:test/test.dart';
 import 'package:web/web.dart';
 
@@ -35,15 +37,11 @@ class _HasTextContent extends Matcher {
 }
 
 String? _elementText(Object? n) {
-  if (n == null) {
-    return '';
-  }
+  // TODO: Migrate to 3.6 (Need review)
+  /*
   if (n is Iterable) {
     return n.map(_elementText).join('');
   } else if (n is Node) {
-    if (n is Comment) {
-      return '';
-    }
 
     if (n is ContentElement) {
       return _elementText(n.getDistributedNodes());
@@ -55,6 +53,36 @@ String? _elementText(Object? n) {
 
     if (n.childNodes.isDefinedAndNotNull) {
       return _elementText(n.childNodes);
+    }
+
+    return n.textContent;
+  } else {
+    return '$n';
+  }
+  */
+
+  if (n == null) {
+    return '';
+  }
+
+  if (n is Iterable) {
+    return n.map(_elementText).join('');
+  } else if (n == Node) {
+    var node = n as Node;
+
+    //if (node is ContentElement) {
+    //  return _elementText(n.getDistributedNodes());
+    //}
+
+    if (node.isA<Element>()) {
+      var el = n as Element;
+      if (el.shadowRoot != null) {
+        return _elementText(el.shadowRoot!.childNodes);
+      }
+    }
+
+    if (node.childNodes.isDefinedAndNotNull) {
+      return _elementText(node.childNodes);
     }
 
     return n.textContent;

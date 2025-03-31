@@ -78,8 +78,8 @@ void main() {
       var div2 = document.createElement('div');
       div2.className = 'redStyle';
       mainEl.append(div2);
-      expect(div1?.getComputedStyle().color, 'rgb(255, 0, 0)');
-      expect(div2.getComputedStyle().color, 'rgb(255, 0, 0)');
+      expect(window.getComputedStyle(div1).color, 'rgb(255, 0, 0)');
+      expect(window.getComputedStyle(div2).color, 'rgb(255, 0, 0)');
     });
 
     test('should support emulated style encapsulation', () async {
@@ -91,8 +91,8 @@ void main() {
       var div2 = document.createElement('div');
       div2.className = 'blueStyle';
       mainEl.append(div2);
-      expect(div1.getComputedStyle().color, 'rgb(0, 0, 255)');
-      expect(div2.getComputedStyle().color, 'rgb(0, 0, 0)');
+      expect(window.getComputedStyle(div1).color, 'rgb(0, 0, 255)');
+      expect(window.getComputedStyle(div2).color, 'rgb(0, 0, 0)');
     });
 
     test('should project ng-content using select query', () async {

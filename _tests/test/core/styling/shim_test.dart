@@ -278,13 +278,13 @@ class ChildComponent {}
 class SvgComponentTest {}
 
 void expectColor(Element element, String color) {
-  var elementColor = element.getComputedStyle().color;
+  var elementColor = window.getComputedStyle(element).color;
   elementColor = colorToHex(elementColor);
   expect(elementColor, color);
 }
 
 void expectBackgroundColor(Element element, String color) {
-  var elementColor = element.getComputedStyle().backgroundColor;
+  var elementColor = window.getComputedStyle(element).backgroundColor;
   elementColor = colorToHex(elementColor);
   expect(elementColor, color);
 }

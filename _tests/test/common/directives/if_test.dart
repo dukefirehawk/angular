@@ -50,31 +50,31 @@ void main() {
         component.booleanCondition = false;
       });
       expect(element.querySelectorAll('copy-me'), hasLength(0));
-      expect(element.innerHTML!.contains('hello'), false);
+      expect(element.innerHTML.toString().contains('hello'), false);
 
       await testFixture.update((NgIfNestedTestComponent component) {
         component.booleanCondition = true;
       });
       expect(element.querySelectorAll('copy-me'), hasLength(1));
-      expect(element.innerHTML!.contains('hello'), true);
+      expect(element.innerHTML.toString().contains('hello'), true);
 
       await testFixture.update((NgIfNestedTestComponent component) {
         component.nestedBooleanCondition = false;
       });
       expect(element.querySelectorAll('copy-me'), hasLength(0));
-      expect(element.innerHTML!.contains('hello'), false);
+      expect(element.innerHTML.toString().contains('hello'), false);
 
       await testFixture.update((NgIfNestedTestComponent component) {
         component.nestedBooleanCondition = true;
       });
       expect(element.querySelectorAll('copy-me'), hasLength(1));
-      expect(element.innerHTML!.contains('hello'), true);
+      expect(element.innerHTML.toString().contains('hello'), true);
 
       await testFixture.update((NgIfNestedTestComponent component) {
         component.booleanCondition = false;
       });
       expect(element.querySelectorAll('copy-me'), hasLength(0));
-      expect(element.innerHTML!.contains('hello'), false);
+      expect(element.innerHTML.toString().contains('hello'), false);
     });
 
     test('should update multiple bindings', () async {
