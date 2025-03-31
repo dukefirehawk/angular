@@ -28,8 +28,9 @@ void main() {
   /// Verify that the DOM of the page represents the component.
   void verifyDomAndStyles({String innerText = 'Hello World!'}) {
     expect(rootDomContainer.textContent, innerText);
-    final h1 = rootDomContainer.querySelector('h1');
-    expect(h1!.getComputedStyle().height, '100px');
+    final h1 = rootDomContainer.querySelector('h1') as HTMLHeadingElement;
+    //expect(h1.getComputedStyle().height, '100px');
+    expect(h1.style.height, '100px');
   }
 
   /// Verify the `Testability` interface is working for this application.

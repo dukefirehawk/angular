@@ -1,4 +1,5 @@
 @TestOn('browser')
+library;
 
 import 'package:ngtest/angular_test.dart';
 import 'package:test/test.dart';

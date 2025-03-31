@@ -171,6 +171,7 @@ class SimpleImperativeViewComponent {
   }
 }
 
+// ignore: constant_identifier_names
 const ANCHOR_ELEMENT = OpaqueToken('AnchorElement');
 
 @Directive(

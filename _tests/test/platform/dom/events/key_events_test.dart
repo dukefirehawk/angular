@@ -174,7 +174,9 @@ class ModifiersListener {
   bool receivedModifiers = false;
 }
 
+// ignore: constant_identifier_names
 const CREATE_KEYBOARD_EVENT_NAME = '__dart_createKeyboardEvent';
+// ignore: constant_identifier_names
 const CREATE_KEYBOARD_EVENT_SCRIPT = '''
 window['$CREATE_KEYBOARD_EVENT_NAME'] = function(
     type, keyCode, ctrlKey, altKey, shiftKey, metaKey) {

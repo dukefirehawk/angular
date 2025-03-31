@@ -1,4 +1,5 @@
 @TestOn('browser')
+library;
 
 import 'package:test/test.dart';
 import 'package:ngdart/src/security/dom_sanitization_service.dart';
