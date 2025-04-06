@@ -25,12 +25,18 @@ final packageConfigFuture = Platform
 /// Returns the resolved library as `package:test_lib/test_lib.dart`.
 Future<LibraryElement> resolveLibrary(String source) async {
   final packageConfig = await packageConfigFuture;
+
+  var inputSource = '''
+      library _test;
+      import '$angular';
+
+      $source
+    ''';
+
+  //print(inputSource);
   return withEnabledExperiments(
     () => resolveSource(
-      '''
-      library _test;
-      import '$angular';\n\n$source
-    ''',
+      inputSource,
       (resolver) async => (await resolver.findLibraryByName('_test'))!,
       inputId: AssetId('test_lib', 'lib/test_lib.dart'),
       packageConfig: packageConfig,

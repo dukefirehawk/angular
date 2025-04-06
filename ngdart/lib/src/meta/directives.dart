@@ -148,7 +148,7 @@ class Directive {
 ///
 /// [LCH]: https://webdev.dartlang.org/angular/guide/lifecycle-hooks
 @Target({TargetKind.classType})
-class Component extends Directive {
+class Component {
   /// Defines the used change detection strategy.
   ///
   /// When a component is instantiated, Angular creates a change detector, which
@@ -206,10 +206,13 @@ class Component extends Directive {
   ///     )
   ///     class Example {}
   ///
-  final List<Object?> exports;
+  final List<Object> exports;
 
   final String? templateUrl;
   final String? template;
+  final String? exportAs;
+
+  final bool standalone;
 
   /// Removes all whitespace except `&ngsp;` and `&nbsp;` from template if set
   /// to false.
@@ -230,11 +233,16 @@ class Component extends Directive {
   final List<Object> pipes;
   final ViewEncapsulation encapsulation;
 
+  final String selector;
+  final List<Object> providers;
+  final Visibility visibility;
+
   const Component({
-    required super.selector,
-    super.exportAs,
-    super.providers = const [],
-    super.visibility = Visibility.local,
+    required this.selector,
+    this.exportAs,
+    this.providers = const [],
+    this.visibility = Visibility.local,
+    this.standalone = false,
     this.viewProviders = const [],
     this.exports = const [],
     this.changeDetection = ChangeDetectionStrategy.checkAlways,

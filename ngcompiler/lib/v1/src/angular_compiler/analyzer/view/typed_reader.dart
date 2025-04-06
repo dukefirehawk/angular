@@ -99,7 +99,8 @@ class TypedReader {
   TypedElement _parseTyped(DartObject typedObject, {bool root = false}) {
     final type = typeArgumentOf(typedObject);
     if (type is ParameterizedType && type.typeArguments.isNotEmpty) {
-      if (root && !$Directive.hasAnnotationOf(type.element!)) {
+      var hasTypeElement = $Directive.hasAnnotationOf(type.element!);
+      if (root && !hasTypeElement) {
         throw BuildError.withoutContext(
           'Expected a "Typed" expression with a "Component" or "Directive" '
           'annotated type, but got "Typed<${type.name}>"',

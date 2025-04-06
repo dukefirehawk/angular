@@ -17,7 +17,6 @@ void main() {
     }) async {
       final lib = await resolve(
         '''
-        $enableNullSafety
         dynamic topLevelField;
         ''',
         includeAngularDeps: false,

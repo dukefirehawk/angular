@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:analyzer/dart/ast/ast.dart' hide Directive;
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
@@ -321,10 +319,12 @@ class _ComponentVisitor
           final dynamicType = setter.library.typeProvider.dynamicType;
           // Resolves unspecified or bounded generic type parameters.
 
-          // TODO: Migration to 3.6
-          final resolvedType = propertyType.resolveToBound(dynamicType);
-          //final resolvedType =
-          //    (propertyType as TypeSystem).resolveToBound(dynamicType);
+          // TODO: Migration to 3.6 (Need review)
+          //final resolvedType = propertyType.resolveToBound(dynamicType);
+          print('=== ResolveToBound(propertyType) ===');
+          print(propertyType);
+          final resolvedType =
+              (propertyType as TypeSystem).resolveToBound(dynamicType);
 
           final typeName = getTypeName(resolvedType);
           _addPropertyBindingTo(

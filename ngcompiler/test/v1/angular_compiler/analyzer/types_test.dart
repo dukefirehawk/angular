@@ -1,8 +1,14 @@
 import 'package:analyzer/dart/element/element.dart';
+import 'package:ngcompiler/v1/src/angular_compiler/analyzer/types.dart';
 import 'package:test/test.dart';
-import 'package:ngcompiler/v1/angular_compiler.dart';
 
 import '../src/resolve.dart';
+
+//const $Directive = TypeChecker.fromUrl('package:ngdart/angular.dart#Directive');
+//const $Component = TypeChecker.fromUrl('package:ngdart/angular.dart#Component');
+//const $Service = TypeChecker.fromUrl('package:ngdart/angular.dart#Service');
+//const $Injectable =
+//    TypeChecker.fromUrl('package:ngdart/angular.dart#Injectable');
 
 void main() {
   group('should resolve', () {
@@ -10,6 +16,7 @@ void main() {
 
     setUpAll(() async {
       testLib = await resolveLibrary(r'''
+
         @Directive()
         class ADirective {}
 

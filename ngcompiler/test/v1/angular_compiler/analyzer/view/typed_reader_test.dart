@@ -17,8 +17,9 @@ Future<TypedElement> parse(String source) async {
 
     $source
   ''';
-  final element = (await resolveClass(amendedSource, 'Example'))!;
-  final typedReader = TypedReader(element);
+  final element = await resolveClass(amendedSource, 'Example');
+
+  final typedReader = TypedReader(element!);
   final typedValue = element.metadata
       .firstWhere((annotation) => annotation.element!.name == 'typed')
       .computeConstantValue()!;
@@ -35,17 +36,20 @@ void main() {
           @typed
           class Example {}
         ''');
+
+        var expectedResult = TypedElement(
+          TypeLink(
+            'GenericComponent',
+            testImport,
+            generics: [
+              TypeLink('String', 'dart:core'),
+            ],
+          ),
+        );
+
         expect(
           typedElement,
-          TypedElement(
-            TypeLink(
-              'GenericComponent',
-              testImport,
-              generics: [
-                TypeLink('String', 'dart:core'),
-              ],
-            ),
-          ),
+          expectedResult,
         );
       });
       test('with multiple concrete type arguments', () async {

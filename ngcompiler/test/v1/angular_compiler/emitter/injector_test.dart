@@ -27,8 +27,11 @@ void main() {
 
   group('createClass should return a class', () {
     test('empty case', () {
+      var result = emitter.createClass();
+
+      print(result);
       expect(
-        emitter.createClass(),
+        result,
         equalsDart(r'''
         class FooInjector extends HierarchicalInjector implements Injector {
           FooInjector._(Injector parent) : super(parent);
@@ -61,8 +64,11 @@ void main() {
         ],
         false,
       );
+
+      var result = emitter.createClass();
+      print(result);
       expect(
-        emitter.createClass(),
+        result,
         equalsDart(r'''
         class FooInjector extends HierarchicalInjector implements Injector {
           FooInjector._(Injector parent) : super(parent);
@@ -134,8 +140,14 @@ void main() {
         ],
         false,
       );
+
+      var result = emitter.createClass();
+      print('============');
+      print(result);
+      print('============');
+
       expect(
-        emitter.createClass(),
+        result,
         equalsDart(r'''
         class FooInjector extends HierarchicalInjector implements Injector {
           FooInjector._(Injector parent) : super(parent);
