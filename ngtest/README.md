@@ -1,3 +1,5 @@
+# ngtest
+
 [![Pub package](https://img.shields.io/pub/v/ngtest.svg)](https://pub.dev/packages/ngtest)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/angulardart-community/angular/dart.yml?branch=master)](https://github.com/angulardart-community/angular/actions/workflows/dart.yml)
 [![Gitter](https://img.shields.io/gitter/room/angulardart/community)](https://gitter.im/angulardart/community)
@@ -5,21 +7,19 @@
 Testing infrastructure for [AngularDart][webdev_angular], used with the
 [`build_runner` package][build_runner].
 
-See https://github.com/angulardart-community for current updates on this project.
+See <https://github.com/angulardart-community> for current updates on this project.
 
 Documentation and examples:
 
 * [`_tests/test/`][test_folder] (tests for the main dart-lang/angular package)
 
-[pub_ngtest]: https://pub.dev/packages/ngtest
-[pub_test]: https://pub.dev/packages/test
 [build_runner]: https://pub.dev/packages/build_runner
 [test_folder]: https://github.com/angulardart-community/angular/tree/master/_tests/test
 [webdev_angular]: https://pub.dev/packages/ngdart
 
 Additional resources:
 
-*   Community/support: [Gitter chat room]
+* Community/support: [Gitter chat room]
 
 [Gitter chat room]: https://gitter.im/angulardart/community
 
@@ -71,4 +71,4 @@ pub run build_runner test -- -p chrome
 ```
 
 For more information using `pub run build_runner test`, see the documentation:
-https://github.com/dart-lang/build/tree/master/build_runner#built-in-commands
+<https://github.com/dart-lang/build/tree/master/build_runner#built-in-commands>

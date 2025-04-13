@@ -1,3 +1,5 @@
+# README
+
 <!-- Badges -->
 
 [![Pub Package](https://img.shields.io/pub/v/ngdart.svg)](https://pub.dev/packages/ngdart)
@@ -31,28 +33,26 @@ a set of [community contributed tutorials][comm].
 [tutorial]: https://angulardart.xyz/angular/tutorial
 [codelabs]: https://angulardart.xyz/codelabs
 [comm]: https://dart.academy/tag/angular/
-[webdev_components]: https://gallery.angulardart.xyz
 
 ## Resources
 
- * Pub packages:
+* Pub packages:
    [angular][pub_angular],
    [angular_components][pub_angular_components],
    [angular_forms][pub_angular_forms],
    [angular_router][pub_angular_router],
    [angular_test][pub_angular_test],
- * GitHub repo (dart-lang/angular):
+* GitHub repo (dart-lang/angular):
    [source code](https://github.com/dart-lang/angular),
    [issues](https://github.com/dart-lang/angular/issues),
    [contributor guidelines][contribute]
- * Community/support:
+* Community/support:
    [mailing list](https://groups.google.com/a/dartlang.org/forum/#!forum/web),
    [Gitter chat room](https://gitter.im/angulardart/community)
- * [Logo](https://github.com/dart-lang/logos/tree/master/angular/)
- * [Documentation][angulardart]
+* [Logo](https://github.com/dart-lang/logos/tree/master/angular/)
+* [Documentation][angulardart]
 
 [angulardart]: https://angulardart.xyz
-[dart_web]: https://dart.dev/web
 [pub_angular]: https://pub.dev/packages/ngdart
 [pub_angular_components]: https://pub.dev/packages/ngcomponents
 [pub_angular_forms]: https://pub.dev/packages/ngforms
