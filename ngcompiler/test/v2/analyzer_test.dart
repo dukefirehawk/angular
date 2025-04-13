@@ -85,7 +85,7 @@ void main() {
         final field = lib.library.topLevelElements.last as VariableElement;
         expect(field.type.isExplicitlyNullable, isFalse);
         expect(field.type.isExplicitlyNonNullable, isFalse);
-      });
+      }, skip: 'Legacy type is no longer supported');
 
       test('a legacy FutureOr should not explicitly anything', () async {
         final lib = await resolve(
@@ -99,7 +99,7 @@ void main() {
         final field = lib.library.topLevelElements.last as VariableElement;
         expect(field.type.isExplicitlyNullable, isFalse);
         expect(field.type.isExplicitlyNonNullable, isFalse);
-      });
+      }, skip: 'Legacy type is no longer supported');
     });
   });
 }
