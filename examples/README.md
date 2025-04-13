@@ -1,1 +1,3 @@
+# README
+
 Various canonical example applications for AngularDart.
