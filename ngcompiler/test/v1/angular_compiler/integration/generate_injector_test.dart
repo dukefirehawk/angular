@@ -49,7 +49,9 @@ void main() {
             Object _field0;
 
             Object _getObject$0() => _field0 ??= createFooDynamicDependency(this.get(dynamic));
+
             Injector _getInjector$1() => this;
+            
             @override
             Object injectFromSelfOptional(
               Object token, [

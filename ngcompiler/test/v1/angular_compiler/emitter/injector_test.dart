@@ -11,6 +11,43 @@ void main() {
   TokenElement dummyToken = TypeTokenElement(TypeLink('Token', null));
   late InjectorEmitter emitter;
 
+  /*
+  void printClass(Class clazz) {
+    print('Class: ${clazz.name}');
+
+    if (clazz.extend != null) {
+      print('extends: ${clazz.extend?.symbol}');
+    }
+
+    if (clazz.implements.isNotEmpty) {
+      print('implements: ');
+      for (var c in clazz.implements) {
+        print('- ${c.symbol}');
+      }
+    }
+
+    if (clazz.constructors.isNotEmpty) {
+      print('constructors: ');
+      for (var c in clazz.constructors) {
+        print('- ${c.name}');
+      }
+    }
+
+    if (clazz.methods.isNotEmpty) {
+      print('methods: ');
+      for (var m in clazz.methods) {
+        if (m.annotations.isNotEmpty) {
+          print('  annotations: ');
+          for (var a in m.annotations) {
+            print('  - ${(a as Reference).symbol}');
+          }
+        }
+        print('  name: ${m.name}');
+      }
+    }
+  }
+  */
+
   setUp(() {
     emitter = InjectorEmitter()..visitMeta('FooInjector', 'fooInjector');
   });
@@ -29,7 +66,6 @@ void main() {
     test('empty case', () {
       var result = emitter.createClass();
 
-      print(result);
       expect(
         result,
         equalsDart(r'''
@@ -66,7 +102,6 @@ void main() {
       );
 
       var result = emitter.createClass();
-      print(result);
       expect(
         result,
         equalsDart(r'''
@@ -79,6 +114,7 @@ void main() {
             this.get(Dep1),
             this.get(Dep2),
           );
+
           @override
           Object injectFromSelfOptional(
             Object token, [
@@ -111,6 +147,7 @@ void main() {
           FooInjector._(Injector parent) : super(parent);
 
           Foo _getExisting$0() => this.get(Foo);
+
           @override
           Object injectFromSelfOptional(
             Object token, [
@@ -158,6 +195,7 @@ void main() {
             this.get(Dep1),
             this.get(Dep2),
           );
+
           @override
           Object injectFromSelfOptional(
             Object token, [
@@ -190,6 +228,7 @@ void main() {
           FooInjector._(Injector parent) : super(parent);
 
           Foo _getFoo$0() => const Foo();
+
           @override
           Object injectFromSelfOptional(
             Object token, [
@@ -239,7 +278,9 @@ void main() {
           FooInjector._(Injector parent) : super(parent);
 
           int _getint$0() => 1;
+
           int _getint$1() => 2;
+
           @override
           Object injectFromSelfOptional(
             Object token, [
