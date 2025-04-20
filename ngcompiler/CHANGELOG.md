@@ -1,5 +1,12 @@
 # Change Log
 
+## 4.0.0-dev.1
+
+- Minimum SDK > 3.6
+- Updated dependencies
+- Migrate `dart:html` to `package:web/web`
+- Migrate `dart:js` to `dart:js_interop`
+
 ## 3.0.0-dev.1
 
 > Note: This release has breaking changes.
