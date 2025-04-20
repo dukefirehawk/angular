@@ -179,9 +179,6 @@ void main() {
       );
 
       var result = emitter.createClass();
-      print('============');
-      print(result);
-      print('============');
 
       expect(
         result,

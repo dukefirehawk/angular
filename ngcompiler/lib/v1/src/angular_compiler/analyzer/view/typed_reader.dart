@@ -100,6 +100,13 @@ class TypedReader {
     final type = typeArgumentOf(typedObject);
     if (type is ParameterizedType && type.typeArguments.isNotEmpty) {
       var hasTypeElement = $Directive.hasAnnotationOf(type.element!);
+      // TODO: Migrated to dart 3.6 (Need to review)
+      //       Check if the 'typedObject' has component annotation if
+      //       there is no directive annotation
+      if (!hasTypeElement) {
+        hasTypeElement = $Component.hasAnnotationOf(type.element!);
+      }
+
       if (root && !hasTypeElement) {
         throw BuildError.withoutContext(
           'Expected a "Typed" expression with a "Component" or "Directive" '

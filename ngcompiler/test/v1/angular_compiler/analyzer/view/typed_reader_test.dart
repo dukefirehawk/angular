@@ -30,7 +30,7 @@ void main() {
   group('parses', () {
     group('Typed()', () {
       test('with single concrete type argument', () async {
-        final typedElement = await parse('''
+        final typedElement = await parse(r'''
           const typed = Typed<GenericComponent<String>>();
 
           @typed
@@ -53,7 +53,7 @@ void main() {
         );
       });
       test('with multiple concrete type arguments', () async {
-        final typedElement = await parse('''
+        final typedElement = await parse(r'''
           const typed = Typed<GenericDirective<String, Object>>();
 
           @typed
