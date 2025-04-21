@@ -12,8 +12,7 @@ String buildGeneratedCode(
   String sourceFile,
   CompilerFlags flags,
 ) {
-  final languageVersion = CompileContext.current.emitNullSafeCode;
-  final buffer = StringBuffer(languageVersion);
+  final buffer = StringBuffer();
 
   // Generated code.
   final allocator = Allocator.simplePrefixing();
