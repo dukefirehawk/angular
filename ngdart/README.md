@@ -6,15 +6,10 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/angulardart-community/angular/dart.yml?branch=master)](https://github.com/angulardart-community/angular/actions/workflows/dart.yml)
 [![Gitter](https://img.shields.io/gitter/room/angulardart/community)](https://gitter.im/angulardart/community)
 
-[AngularDart][angulardart] is an open-source web framework focused on
-productivity, performance, and stability. Originally developed by Google,
-AngularDart has powered sophisticated, mission-critical apps that serve millions
-of users. It is built on [Dart](https://dart.dev/web) and has been used
-extensively in production, including but not limited to Google AdWords, Google
+[AngularDart][angulardart] is an open-source web framework focused on productivity, performance, and stability. Originally developed by Google, AngularDart has powered sophisticated, mission-critical apps that serve millions of users. It is built on [Dart](https://dart.dev/web) and has been used extensively in production, including but not limited to Google AdWords, Google
 Fiber, Wrike, etc.
 
-**Disclaimer**: This project is now maintained by the AngularDart Community.
-This is not a Google product in any way, official or unofficial.
+**Disclaimer**: This project is now maintained by the AngularDart Community. This is not a Google product in any way, official or unofficial.
 
 ## New to AngularDart?
 

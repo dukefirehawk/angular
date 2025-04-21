@@ -37,7 +37,7 @@ main() {
 }
 ```
 
-Additional flags can be passed to change the behavior of the parser: 
+Additional flags can be passed to change the behavior of the parser:
 
 | Data type | Name | Description | Default Value |
 |------------|------------|--------------|---------------|
@@ -46,9 +46,7 @@ Additional flags can be passed to change the behavior of the parser:
 | `bool` | _parseExpressions_ | Parses Dart expressions raises exceptions if occurred. | true |
 | `ExceptionHandler` | _exceptionHandler_ | Switch to 'new RecoveringExceptionHandler()' to enable error recovery. | ThrowingExceptionHandler |
 
-When using RecoveringExceptionHandler, the accumulated exceptions can be
-accessed through the RecoveringExceptionHandler object. Refer to the following
-example:
+When using RecoveringExceptionHandler, the accumulated exceptions can be accessed through the RecoveringExceptionHandler object. Refer to the following example:
 
 ```dart
 void parse(String content, String sourceUrl) {
