@@ -2,9 +2,9 @@ import 'package:analyzer/dart/ast/ast.dart' hide Directive;
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/dart/element/type_system.dart';
 import 'package:analyzer/dart/element/visitor.dart';
 import 'package:analyzer/src/dart/element/element.dart';
+
 import 'package:ngdart/src/meta.dart';
 import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:ngcompiler/v1/src/compiler/analyzed_class.dart';
@@ -315,16 +315,15 @@ class _ComponentVisitor
           if (setter == null) {
             return;
           }
-          DartType propertyType = setter.parameters.first.type;
+          //DartType propertyType = setter.parameters.first.type;
           final dynamicType = setter.library.typeProvider.dynamicType;
-          // Resolves unspecified or bounded generic type parameters.
+          var propertyType = setter.parameters.first.library2?.typeSystem;
 
+          // Resolves unspecified or bounded generic type parameters.
           // TODO: Migration to 3.6 (Need review)
+          //print('=== ResolveToBound(propertyType) ===');
           //final resolvedType = propertyType.resolveToBound(dynamicType);
-          print('=== ResolveToBound(propertyType) ===');
-          print(propertyType);
-          final resolvedType =
-              (propertyType as TypeSystem).resolveToBound(dynamicType);
+          final resolvedType = propertyType?.resolveToBound(dynamicType);
 
           final typeName = getTypeName(resolvedType);
           _addPropertyBindingTo(
@@ -337,7 +336,7 @@ class _ComponentVisitor
             } else {
               // Convert any generic type parameters from the input's type to
               // our internal output AST.
-              var typeArguments = resolvedType.alias?.typeArguments;
+              var typeArguments = resolvedType?.alias?.typeArguments;
               if (typeArguments == null) {
                 if (resolvedType is InterfaceType) {
                   typeArguments = resolvedType.typeArguments;

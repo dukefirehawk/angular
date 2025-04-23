@@ -20,8 +20,8 @@ String getTypeImport(DartType type) {
 }
 
 /// Forwards and backwards-compatible method of getting the "name" of [type].
-String? getTypeName(DartType type) {
-  var aliasElement = type.alias?.element;
+String? getTypeName(DartType? type) {
+  var aliasElement = type?.alias?.element;
   if (aliasElement != null) {
     return aliasElement.name;
   }
