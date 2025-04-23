@@ -38,19 +38,24 @@ class Testability {
 
   Testability(this._ngZone);
 
-  List<void Function()>? _callWhenStable;
+  //List<void Function()>? _callWhenStable;
+  List<JSFunction>? _callWhenStable;
 
   /// Registers [callback] to be invoked when change detection is completed.
   ///
   /// This is commonly referred to as _stable_, that-is that the DOM
   /// representation of the app is synchronized with the Dart data and template
   /// models, and no more changes are (currently) epected.
-  void whenStable(void Function() callback) {
+  //void whenStable(void Function() callback) {
+  //  _storeCallback(callback);
+  //  _runCallbacksIfStable();
+  //}
+  void whenStable(JSFunction callback) {
     _storeCallback(callback);
     _runCallbacksIfStable();
   }
 
-  void _storeCallback(void Function() callback) {
+  void _storeCallback(JSFunction callback) {
     var callWhenStable = _callWhenStable;
     if (callWhenStable == null) {
       _callWhenStable = [callback];
@@ -82,7 +87,8 @@ class Testability {
   void _runCallbacks() {
     var callWhenStable = _callWhenStable!;
     while (callWhenStable.isNotEmpty) {
-      callWhenStable.removeLast()();
+      //callWhenStable.removeLast()();
+      callWhenStable.removeLast().callAsFunction();
     }
   }
 }

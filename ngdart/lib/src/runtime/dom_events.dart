@@ -34,7 +34,7 @@ class EventManager {
     // If the view compiler knows that a given event is a DOM event (i.e.
     // "click"), it will never be called into EventManager. But of course the
     // browser APIs change, so this is the final fallback.
-    element.addEventListener(name, callback.toJS);
+    element.addEventListener(name, ((Event event) => callback(event)).toJS);
   }
 }
 
