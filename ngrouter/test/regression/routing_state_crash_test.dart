@@ -147,7 +147,7 @@ class AppComponent {
 
     // Then wait for an async completion.
     final completer = Completer<void>();
-    _testability.whenStable(completer.complete);
+    _testability.whenStable(completer.complete.toJS);
     return completer.future;
   }
 

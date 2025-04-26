@@ -59,11 +59,11 @@ class MockLocationStrategy extends LocationStrategy {
 
   @override
   void onPopState(EventListener fn) {
-    //TODO: Migrate to 3.6. (Need review)
+    //TODO: Migrate to 3.6. (Need to review)
     //_subject.stream.listen(fn);
-    //_subject.stream.listen((Event ev) {
-    // TODO: Need to figure out the implementation of "fn"
-    //});
+    _subject.stream.listen((PopStateEvent event) {
+      fn.callAsFunction(event);
+    });
   }
 
   @override
