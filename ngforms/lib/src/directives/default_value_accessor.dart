@@ -30,7 +30,7 @@ class DefaultValueAccessor extends Object
     implements ControlValueAccessor<dynamic> {
   final HtmlElement? _element;
 
-  DefaultValueAccessor(this._element);
+  DefaultValueAccessor(@Optional() this._element);
 
   @HostListener('input', ['\$event.target.value'])
   void handleChange(String value) {
