@@ -6,6 +6,6 @@ void main() => runApp<HelloWorldComponent>(ng.HelloWorldComponentNgFactory);
 
 @Component(
   selector: 'hello-world',
-  template: 'Hello World',
+  template: '<h1>Hello World</h1>',
 )
 class HelloWorldComponent {}
