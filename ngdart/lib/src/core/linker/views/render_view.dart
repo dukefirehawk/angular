@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
@@ -128,12 +129,21 @@ abstract class RenderView extends View {
   ///   * Calls [markForCheck] on this view to ensure it gets change detected
   ///   during the next change detection cycle, in case it uses a non-default
   ///   change detection strategy.
+  // TODO: Migrated to dart 3.6 (Need to review)
+  JSFunction? eventHandler0(void Function() handler) {
+    return () {
+      markForCheck();
+      appViewUtils.eventManager.zone.runGuarded(handler);
+    }.toJS;
+  }
+  /*
   void Function(E) eventHandler0<E>(void Function() handler) {
     return (E event) {
       markForCheck();
       appViewUtils.eventManager.zone.runGuarded(handler);
     };
   }
+  */
 
   /// The same as [eventHandler0], but [handler] is passed an event parameter.
   ///

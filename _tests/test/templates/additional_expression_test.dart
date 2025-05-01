@@ -140,7 +140,7 @@ class TestNonRootAssignment {
   ],
   exports: [
     lib.ExternalStaticClass,
-    lib.nullString,
+    //lib.nullString,
   ],
   template: r'''
     Local MODEL:            "{{model?.getName()}}"

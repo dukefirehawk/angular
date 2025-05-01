@@ -19,14 +19,21 @@ class EventManager {
   void addEventListener(
     Element element,
     String name,
-    void Function(Object) callback,
+    // void Function(Object) callback,
+    JSFunction callback,
   ) {
     if (_keyEvents.supports(name)) {
       // Run the actual DOM event (i.e. "keydown" or "keyup") outside of the
       // NgZone, so we can ignore change detection until the correct key(s) are
       // actually hit, then re-enter the zone.
       zone.runOutsideAngular(() {
-        _keyEvents.addEventListener(element, name, callback);
+        //_keyEvents.addEventListener(element, name, callback);
+        _keyEvents.addEventListener(
+            element,
+            name,
+            ((Event event) {
+              callback.callAsFunction(event);
+            }).toJS);
       });
       return;
     }
@@ -34,7 +41,11 @@ class EventManager {
     // If the view compiler knows that a given event is a DOM event (i.e.
     // "click"), it will never be called into EventManager. But of course the
     // browser APIs change, so this is the final fallback.
-    element.addEventListener(name, ((Event event) => callback(event)).toJS);
+    element.addEventListener(
+        name,
+        ((Event event) {
+          callback.callAsFunction(event);
+        }).toJS);
   }
 }
 
@@ -76,7 +87,8 @@ class _KeyEventsHandler {
   void addEventListener(
     Element element,
     String name,
-    void Function(Object) callback,
+    //void Function(Object) callback,
+    JSFunction callback,
   ) {
     assert(_supports(name), 'Should never be called before "supports".');
     final parsed = _cache[name];
@@ -93,7 +105,7 @@ class _KeyEventsHandler {
           //if (event is KeyboardEvent && parsed.matches(event)) {
           if (event.isA<KeyboardEvent>() &&
               parsed.matches(event as KeyboardEvent)) {
-            callback(event);
+            callback.callAsFunction(event);
           }
         }.toJS);
   }
