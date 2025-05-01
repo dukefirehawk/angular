@@ -296,7 +296,7 @@ class Identifiers {
   static final svgElement =
       CompileIdentifierMetadata(name: 'SVGElement', moduleUrl: 'dart:svg');
   static final anchorElement = CompileIdentifierMetadata(
-      name: 'AnchorElement', moduleUrl: 'package:web/web.dart');
+      name: 'HTMLAnchorElement', moduleUrl: 'package:web/web.dart');
   static final divElement = CompileIdentifierMetadata(
       name: 'HTMLDivElement', moduleUrl: 'package:web/web.dart');
   static final areaElement = CompileIdentifierMetadata(
@@ -310,13 +310,13 @@ class Identifiers {
   static final formElement = CompileIdentifierMetadata(
       name: 'HTMLFormElement', moduleUrl: 'package:web/web.dart');
   static final iframeElement = CompileIdentifierMetadata(
-      name: 'IFrameElement', moduleUrl: 'package:web/web.dart');
+      name: 'HTMLIFrameElement', moduleUrl: 'package:web/web.dart');
   static final imageElement = CompileIdentifierMetadata(
       name: 'ImageElement', moduleUrl: 'package:web/web.dart');
   static final inputElement = CompileIdentifierMetadata(
       name: 'HTMLInputElement', moduleUrl: 'package:web/web.dart');
   static final textareaElement = CompileIdentifierMetadata(
-      name: 'TextAreaElement', moduleUrl: 'package:web/web.dart');
+      name: 'HTMLTextAreaElement', moduleUrl: 'package:web/web.dart');
   static final mediaElement = CompileIdentifierMetadata(
       name: 'HTMLMediaElement', moduleUrl: 'package:web/web.dart');
   static final menuElement = CompileIdentifierMetadata(
