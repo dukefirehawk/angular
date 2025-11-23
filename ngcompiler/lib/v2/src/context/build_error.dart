@@ -48,8 +48,8 @@ abstract class BuildError extends Error {
     final annotation = context as ElementAnnotationImpl;
     final astNode = annotation.annotationAst;
     final file = SourceFile.fromString(
-      annotation.source.contents.data,
-      url: annotation.source.uri,
+      annotation.libraryFragment.source.contents.data,
+      url: annotation.libraryFragment.source.uri,
     );
     return BuildError.forSourceSpan(
       file.span(astNode.offset, astNode.offset + astNode.length),

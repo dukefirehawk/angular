@@ -110,7 +110,7 @@ o.OutputType fromTypeLink(TypeLink? typeLink, LibraryReader library) {
 o.FunctionType fromFunctionType(FunctionType functionType) {
   final returnType = fromDartType(functionType.returnType);
   final paramTypes = <o.OutputType>[];
-  for (var parameter in functionType.parameters) {
+  for (var parameter in functionType.formalParameters) {
     paramTypes.add(fromDartType(parameter.type)!);
   }
   var outputType = o.FunctionType(returnType, paramTypes);

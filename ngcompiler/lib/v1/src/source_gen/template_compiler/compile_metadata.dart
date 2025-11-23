@@ -2,7 +2,7 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/dart/element/visitor.dart';
+import 'package:analyzer/dart/element/visitor2.dart';
 import 'package:analyzer/src/dart/constant/value.dart';
 import 'package:analyzer/src/dart/element/element.dart';
 import 'package:analyzer/src/generated/utilities_dart.dart';
@@ -22,7 +22,7 @@ import 'dart_object_utils.dart' as dart_objects;
 import 'provider_inference.dart';
 
 class CompileTypeMetadataVisitor
-    extends SimpleElementVisitor<CompileTypeMetadata> {
+    extends SimpleElementVisitor2<CompileTypeMetadata> {
   final LibraryReader _library;
   final IndexedAnnotation _indexedAnnotation;
   final ComponentVisitorExceptionHandler _exceptionHandler;
@@ -54,7 +54,7 @@ class CompileTypeMetadataVisitor
     }
 
     constructor = constructors.firstWhere(
-      (constructor) => constructor.name.isEmpty,
+      (constructor) => constructor.displayName.isEmpty,
       orElse: () => constructors.first,
     );
 
@@ -69,7 +69,7 @@ class CompileTypeMetadataVisitor
       );
       return null;
     }
-    if (element.constructors.length > 1 && constructor.name.isEmpty) {
+    if (element.constructors.length > 1 && constructor.displayName.isEmpty) {
       // No use in being a warning, as it's not something they need to fix
       // until we add a way to be able to "pick" the constructor to use.
       logFine(
@@ -260,17 +260,17 @@ class CompileTypeMetadataVisitor
     for (final typeParameter in element.typeParameters) {
       typeParameters.add(
         o.TypeParameter(
-          typeParameter.name,
+          typeParameter.displayName,
           bound: fromDartType(typeParameter.bound, resolveBounds: false),
         ),
       );
     }
     return CompileTypeMetadata(
       moduleUrl: moduleUrl(element),
-      name: element.name,
+      name: element.displayName,
       diDeps: _getCompileDiDependencyMetadata(
         enforceClassCanBeCreated
-            ? unnamedConstructor(element)?.parameters ?? []
+            ? unnamedConstructor(element)?.formalParameters ?? []
             : [],
         element,
       ),
@@ -304,13 +304,13 @@ class CompileTypeMetadataVisitor
   }
 
   List<CompileDiDependencyMetadata> _getCompileDiDependencyMetadata(
-    List<ParameterElement> parameters,
+    List<FormalParameterElement> parameters,
     Element element,
   ) {
     var deps = <CompileDiDependencyMetadata>[];
     for (final param in parameters) {
       // ignore: deprecated_member_use, no migration path
-      if (param.parameterKind == ParameterKind.NAMED) {
+      if (param.isNamed) {
         // No use being a warning, since this is not prohibited; just skip.
         continue;
       }
@@ -320,7 +320,7 @@ class CompileTypeMetadataVisitor
   }
 
   CompileDiDependencyMetadata _createCompileDiDependencyMetadata(
-    ParameterElement p,
+    FormalParameterElement p,
   ) {
     final parameterInfo = ParameterInfo(p, _exceptionHandler);
     try {
@@ -344,7 +344,7 @@ class CompileTypeMetadataVisitor
       // dead code or is not actually used via DI. We can ignore for now.
       logWarning(
         ''
-        'Could not resolve token for $p on ${p.enclosingElement3} in '
+        'Could not resolve token for $p on ${p.enclosingElement} in '
         '${p.library?.identifier}',
       );
       return CompileDiDependencyMetadata();
@@ -427,7 +427,8 @@ class CompileTypeMetadataVisitor
       return _tokenForType(token.toTypeValue()!);
     } else if (token.type is InterfaceType) {
       // TODO(het): allow this to be any const invocation
-      var invocation = (token as DartObjectImpl).getInvocation();
+      var invocation =
+          (token as DartObjectImpl).constructorInvocation; //.getInvocation();
       if (invocation != null) {
         if (invocation.positionalArguments.isNotEmpty ||
             invocation.namedArguments.isNotEmpty) {
@@ -575,30 +576,28 @@ class CompileTypeMetadataVisitor
     final id = _idFor(token.type!);
     final type = o.importExpr(id);
 
-    final invocation = (token as DartObjectImpl).getInvocation();
+    final invocation =
+        (token as DartObjectImpl).constructorInvocation; //.getInvocation();
     if (invocation == null) return type;
 
     var params = invocation.positionalArguments
         .map(_useValueExpression)
         .toList();
     var namedParams = <o.NamedExpr>[];
-    invocation.namedArguments.forEach((name, expr) {
+    invocation.namedArguments.forEach((String name, DartObject? expr) {
       namedParams.add(o.NamedExpr(name, _useValueExpression(expr)));
     });
     params.addAll(namedParams);
     var importType = o.importType(id, null, [o.TypeModifier.constModifier]);
 
-    if (invocation.constructor.name.isNotEmpty) {
-      if (invocation.constructor.name.startsWith('_')) {
+    var conName = invocation.constructor.name;
+    if (conName != null && conName.isNotEmpty) {
+      if (conName.startsWith('_')) {
         throw _PrivateConstructorException(
           '${id.name}.${invocation.constructor.name}',
         );
       }
-      return o.InstantiateExpr(
-        type.prop(invocation.constructor.name),
-        params,
-        type: importType,
-      );
+      return o.InstantiateExpr(type.prop(conName), params, type: importType);
     }
     return type.instantiate(params, type: importType);
   }
@@ -607,8 +606,8 @@ class CompileTypeMetadataVisitor
     FunctionTypedElement function,
   ) {
     String? prefix;
-    if (function.enclosingElement3 is ClassElement) {
-      prefix = function.enclosingElement3!.name;
+    if (function.enclosingElement is ClassElement) {
+      prefix = function.enclosingElement!.name;
     }
     return CompileIdentifierMetadata(
       name: function.name!,
@@ -623,8 +622,8 @@ class CompileTypeMetadataVisitor
     List<DartObject> typesOrTokens,
   ) {
     String? prefix;
-    if (function.enclosingElement3 is ClassElement) {
-      prefix = function.enclosingElement3!.name;
+    if (function.enclosingElement is ClassElement) {
+      prefix = function.enclosingElement!.name;
     }
     return CompileFactoryMetadata(
       name: function.name!,
@@ -633,7 +632,10 @@ class CompileTypeMetadataVisitor
       emitPrefix: true,
       diDeps: typesOrTokens.isNotEmpty
           ? typesOrTokens.map(_factoryDiDep).toList()
-          : _getCompileDiDependencyMetadata(function.parameters, function),
+          : _getCompileDiDependencyMetadata(
+              function.formalParameters,
+              function,
+            ),
     );
   }
 
@@ -686,7 +688,7 @@ class CompileTypeMetadataVisitor
     final field = _enumValues(
       token,
     ).singleWhere((field) => field.computeConstantValue() == token);
-    return o.importExpr(_idFor(token.type!)).prop(field.name);
+    return o.importExpr(_idFor(token.type!)).prop(field.displayName);
   }
 
   Iterable<FieldElement> _enumValues(DartObject token) {
@@ -725,7 +727,7 @@ class _PrivateConstructorException extends Error {
 }
 
 class ParameterInfo {
-  final ParameterElement _parameter;
+  final FormalParameterElement _parameter;
   final ComponentVisitorExceptionHandler _exceptionHandler;
 
   DartObject? attribute;
@@ -744,7 +746,7 @@ class ParameterInfo {
 
   bool get isPositional =>
       // ignore: deprecated_member_use, no migration path
-      _parameter.parameterKind == ParameterKind.POSITIONAL;
+      _parameter.isPositional;
 
   DartType get type => _parameter.type;
   String get libraryIdentifier => _parameter.library!.identifier;
@@ -752,10 +754,10 @@ class ParameterInfo {
   ParameterInfo(this._parameter, this._exceptionHandler) {
     for (
       var annotationIndex = 0;
-      annotationIndex < _parameter.metadata.length;
+      annotationIndex < _parameter.metadata.annotations.length;
       annotationIndex++
     ) {
-      final annotation = _parameter.metadata[annotationIndex];
+      final annotation = _parameter.metadata.annotations[annotationIndex];
       final annotationValue = annotation.computeConstantValue();
       final indexedAnnotation = IndexedAnnotation(
         _parameter,

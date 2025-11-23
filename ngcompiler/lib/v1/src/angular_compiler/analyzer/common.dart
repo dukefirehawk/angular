@@ -8,13 +8,17 @@ import 'package:source_gen/src/utils.dart';
 String getTypeImport(DartType type) {
   var aliasElement = type.alias?.element;
   if (aliasElement != null) {
-    return normalizeUrl(aliasElement.library.source.uri).toString();
+    return normalizeUrl(
+      aliasElement.library.firstFragment.source.uri,
+    ).toString();
   }
   if (type is DynamicType) {
     return 'dart:core';
   }
   if (type is InterfaceType) {
-    return normalizeUrl(type.element.library.source.uri).toString();
+    return normalizeUrl(
+      type.element.library.firstFragment.source.uri,
+    ).toString();
   }
   throw UnimplementedError('(${type.runtimeType}) $type');
 }
@@ -88,19 +92,21 @@ String? typeToCode(DartType? type) {
 ///  * `List` would be `'dart:core#List'`,
 ///  * `Duration.zero` would be `'dart:core#Duration.zero'`.
 Uri urlOf(Element? element, [String? name]) {
-  if (element?.source == null) {
+  if (element?.library?.firstFragment.source == null) {
     return Uri(scheme: 'dart', path: 'core', fragment: 'dynamic');
   }
 
   var fragment = name ?? element!.name;
 
   // ORI: final enclosing = element!.enclosingElement;
-  final enclosing = element!.enclosingElement3;
+  final enclosing = element!.enclosingElement;
   if (enclosing is ClassElement) {
     fragment = '${enclosing.name}.$fragment';
   }
 
   // NOTE: element.source.uri might be a file that is not importable (i.e. is
   // a "part"), while element.library.source.uri is always importable.
-  return normalizeUrl(element.library!.source.uri).replace(fragment: fragment);
+  return normalizeUrl(
+    element.library!.firstFragment.source.uri,
+  ).replace(fragment: fragment);
 }

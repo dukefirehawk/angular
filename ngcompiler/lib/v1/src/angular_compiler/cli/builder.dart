@@ -33,7 +33,7 @@ class Compiler implements Generator {
   @override
   Future<String> generate(LibraryReader library, BuildStep buildStep) {
     //final isNullSafe = library.element.isNonNullableByDefault;
-    final isNullSafe = !library.element.hasJS;
+    final isNullSafe = !library.element.metadata.hasJS;
     return runWithContext(
       CompileContext(
         buildStep.inputId,

@@ -67,10 +67,10 @@ AnnotationInformation<T>? annotationWhere<T extends Element>(
 ) {
   for (
     var annotationIndex = 0;
-    annotationIndex < element.metadata.length;
+    annotationIndex < element.metadata.annotations.length;
     annotationIndex++
   ) {
-    final annotation = element.metadata[annotationIndex];
+    final annotation = element.metadata.annotations[annotationIndex];
 
     final annotationInfo = AnnotationInformation(
       element,

@@ -16,7 +16,8 @@ String? moduleUrl(Element element) {
   if (element.kind == ElementKind.TYPE_PARAMETER) {
     return null;
   }
-  var source = element.librarySource ?? element.source;
+  //var source = element.librarySource ?? element.source;
+  var source = element.library?.firstFragment.source;
   var uri = source?.uri.toString();
   if (uri == null) return null;
   if (Uri.parse(uri).scheme == 'dart') return uri;

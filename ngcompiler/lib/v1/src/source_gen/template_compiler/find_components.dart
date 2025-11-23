@@ -2,7 +2,7 @@ import 'package:analyzer/dart/ast/ast.dart' hide Directive;
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/dart/element/visitor.dart';
+import 'package:analyzer/dart/element/visitor2.dart';
 import 'package:analyzer/src/dart/element/element.dart';
 
 import 'package:ngdart/src/meta.dart';
@@ -47,7 +47,7 @@ AngularArtifacts findComponentsAndDirectives(
 }
 
 /// Collects components and directives within a library.
-class _NormalizedComponentVisitor extends RecursiveElementVisitor<void> {
+class _NormalizedComponentVisitor extends RecursiveElementVisitor2<void> {
   final List<NormalizedComponentWithViewDirectives> components = [];
   final List<CompileDirectiveMetadata> directives = [];
   final LibraryReader _library;
@@ -219,7 +219,7 @@ class _NormalizedComponentVisitor extends RecursiveElementVisitor<void> {
 }
 
 class _ComponentVisitor
-    extends RecursiveElementVisitor<CompileDirectiveMetadata> {
+    extends RecursiveElementVisitor2<CompileDirectiveMetadata> {
   final _fieldInputs = <String, String>{};
   final _setterInputs = <String, String>{};
   final _inputs = <String, String>{};
@@ -343,7 +343,7 @@ class _ComponentVisitor
           }
           //DartType propertyType = setter.parameters.first.type;
           final dynamicType = setter.library.typeProvider.dynamicType;
-          var propertyType = setter.parameters.first.library2?.typeSystem;
+          var propertyType = setter.formalParameters.first.library2?.typeSystem;
 
           // Resolves unspecified or bounded generic type parameters.
           // TODO: Migration to 3.6 (Need review)
@@ -402,7 +402,7 @@ class _ComponentVisitor
           if (setter == null) {
             return;
           }
-          final queryType = setter.parameters.first.type;
+          final queryType = setter.formalParameters.first.type;
           final contentQuery = _getQuery(
             annotationInfo,
             // Avoid emitting the '=' part of the setter.
@@ -428,7 +428,7 @@ class _ComponentVisitor
           if (setter == null) {
             return;
           }
-          final queryType = setter.parameters.first.type;
+          final queryType = setter.formalParameters.first.type;
           final viewQuery = _getQuery(
             annotationInfo,
             // Avoid emitting the '=' part of the setter.
@@ -495,11 +495,11 @@ class _ComponentVisitor
   PropertyAccessorElement? _setterFor(Element element) {
     final dclass = _directiveClassElement!;
     // Resolves specified generic type parameters.
-    final setter = dclass.thisType.lookUpSetter2(
+    final setter = dclass.thisType.lookUpSetter(
       element.displayName,
       dclass.library,
     )!;
-    if (setter.parameters.isEmpty) {
+    if (setter.formalParameters.isEmpty) {
       CompileContext.current.reportAndRecover(
         BuildError.forElement(
           element,
@@ -608,7 +608,7 @@ class _ComponentVisitor
     var bindTo = ast.PropertyRead(ast.ImplicitReceiver(), element.name!);
     if (element is PropertyAccessorElement && element.isStatic ||
         element is FieldElement && element.isStatic) {
-      if (element.enclosingElement3 != _directiveClassElement) {
+      if (element.enclosingElement != _directiveClassElement) {
         // We do not want to inherit static members.
         // https://github.com/angulardart/angular/issues/1272
         return;
@@ -627,7 +627,7 @@ class _ComponentVisitor
     var eventName = coerceString(value, 'eventName')!;
     var methodName = element.name;
     var methodArgs = coerceStringList(value, 'args');
-    if (methodArgs.isEmpty && element.parameters.length == 1) {
+    if (methodArgs.isEmpty && element.formalParameters.length == 1) {
       // Infer $event.
       methodArgs = const [r'$event'];
     }
@@ -658,7 +658,7 @@ class _ComponentVisitor
       defaultTo: propertyName,
     )!;
     _prohibitBindingChange(
-      element.enclosingElement3 as InterfaceElement?,
+      element.enclosingElement as InterfaceElement?,
       propertyName,
       bindingName,
       immutableBindings ?? bindings,
@@ -952,7 +952,7 @@ class _ComponentVisitor
     // There is an implicit "export" for the directive class itself
     exports.add(
       CompileIdentifierMetadata(
-        name: element.name,
+        name: element.displayName,
         moduleUrl: moduleUrl(element.library),
         analyzedClass: AnalyzedClass(element),
       ),
@@ -1026,7 +1026,7 @@ class _ComponentVisitor
         UnresolvedExpressionError(
           unresolvedExports,
           _directiveClassElement!,
-          annotation.compilationUnit,
+          annotation.libraryFragment,
         ),
       );
     }

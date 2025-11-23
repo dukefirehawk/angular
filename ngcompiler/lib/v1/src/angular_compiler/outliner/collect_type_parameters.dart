@@ -36,7 +36,7 @@ Future<Map<String, String>> collectTypeParameters(
   final assetsToParse = <AssetId>{};
   final resolver = buildStep.resolver;
   for (final directive in directives) {
-    typeParameters[directive.name] = '';
+    typeParameters[directive.displayName] = '';
     assetsToParse.add(await resolver.assetIdForElement(directive));
   }
   // Avoid parsing source if there are no directives with generic type

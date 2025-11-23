@@ -55,7 +55,7 @@ DartType getExpressionType(ast.AST expression, AnalyzedClass analyzedClass) {
 /// Returns null otherwise.
 DartType? getIterableElementType(DartType dartType, LibraryElement lib) =>
     dartType is InterfaceType
-    ? dartType.lookUpGetter2('single', lib)?.returnType
+    ? dartType.lookUpGetter('single', lib)?.returnType
     : null;
 
 /// Returns an int type using the [analyzedClass]'s context.
@@ -102,13 +102,13 @@ String typeToCode(DartType type) {
   } else if (type is InterfaceType) {
     var typeArguments = type.typeArguments;
     if (typeArguments.isEmpty) {
-      return type.element.name;
+      return type.element.displayName;
     } else {
       final typeArgumentsStr = typeArguments.map(typeToCode).join(', ');
       return '${type.element.name}<$typeArgumentsStr>';
     }
   } else if (type is TypeParameterType) {
-    return type.element.name;
+    return type.element.displayName;
   } else if (type is VoidType) {
     return 'void';
   } else {
@@ -118,15 +118,15 @@ String typeToCode(DartType type) {
 
 PropertyInducingElement? _getField(AnalyzedClass clazz, String name) {
   var getter = clazz.classElement.lookUpGetter(
-    name,
-    clazz.classElement.library,
+    name: name,
+    library: clazz.classElement.library,
   );
-  return getter?.variable2;
+  return getter?.variable;
 }
 
 MethodElement? _getMethod(AnalyzedClass clazz, String name) {
   var element = clazz.classElement;
-  return element.lookUpMethod(name, element.library);
+  return element.lookUpMethod(name: name, library: element.library);
 }
 
 // TODO(het): Make this work with chained expressions.
@@ -197,7 +197,7 @@ ast.ASTWithSource rewriteTearOff(
 
   if (unwrappedExpression is ast.PropertyRead) {
     // Find the method, either on "this." or "super.".
-    final method = analyzedClass.classElement.thisType.lookUpMethod2(
+    final method = analyzedClass.classElement.thisType.lookUpMethod(
       unwrappedExpression.name,
       analyzedClass.classElement.library,
     );
@@ -210,7 +210,9 @@ ast.ASTWithSource rewriteTearOff(
     // If we have no positional parameters (optional or otherwise), then we
     // translate the call into "foo()". If we have at least one, we translate
     // the call into "foo($event)".
-    final positionalParameters = method.parameters.where((p) => !p.isNamed);
+    final positionalParameters = method.formalParameters.where(
+      (p) => !p.isNamed,
+    );
     if (positionalParameters.isEmpty) {
       return ast.ASTWithSource.from(
         original,
@@ -378,7 +380,7 @@ class _TypeResolver extends ast.AstVisitor<DartType, dynamic> {
   /// Returns dynamic if [receiverType] has no [getterName].
   DartType _lookupGetterReturnType(DartType receiverType, String getterName) {
     if (receiverType is InterfaceType) {
-      var getter = receiverType.lookUpGetter2(
+      var getter = receiverType.lookUpGetter(
         getterName,
         receiverType.element.library,
       );
@@ -392,7 +394,7 @@ class _TypeResolver extends ast.AstVisitor<DartType, dynamic> {
   /// Returns dynamic if [receiverType] has no [methodName].
   DartType _lookupMethodReturnType(DartType receiverType, String methodName) {
     if (receiverType is InterfaceType) {
-      var method = receiverType.lookUpMethod2(
+      var method = receiverType.lookUpMethod(
         methodName,
         receiverType.element.library,
       );
