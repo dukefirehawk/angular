@@ -20,13 +20,17 @@ class DirectiveConverter {
       ir.Directive(
         name: directiveMeta.identifier!.name,
         typeParameters: directiveMeta.originType!.typeParameters,
-        hostProperties:
-            _hostProperties(directiveMeta.hostProperties, directiveMeta),
+        hostProperties: _hostProperties(
+          directiveMeta.hostProperties,
+          directiveMeta,
+        ),
         metadata: directiveMeta,
       );
 
-  List<ir.Binding> _hostProperties(Map<String, ast.AST> hostProps,
-      CompileDirectiveMetadata? compileDirectiveMetadata) {
+  List<ir.Binding> _hostProperties(
+    Map<String, ast.AST> hostProps,
+    CompileDirectiveMetadata? compileDirectiveMetadata,
+  ) {
     // TODO(b/130184376): Create better HostProperties representation in
     //  CompileMetadata.
     final hostProperties = hostProps.entries.map((entry) {
@@ -41,8 +45,10 @@ class DirectiveConverter {
       );
     }).toList();
 
-    return convertAllToBinding(hostProperties,
-        compileDirectiveMetadata: compileDirectiveMetadata);
+    return convertAllToBinding(
+      hostProperties,
+      compileDirectiveMetadata: compileDirectiveMetadata,
+    );
   }
 
   static const _securityContextElementName = 'div';

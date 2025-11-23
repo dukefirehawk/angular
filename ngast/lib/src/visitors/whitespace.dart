@@ -79,8 +79,10 @@ class MinimizeWhitespaceVisitor extends RecursiveTemplateAstVisitor<bool> {
   }
 
   @override
-  TemplateAst visitEmbeddedTemplate(EmbeddedTemplateAst astNode,
-      [bool? context]) {
+  TemplateAst visitEmbeddedTemplate(
+    EmbeddedTemplateAst astNode, [
+    bool? context,
+  ]) {
     if (_bailOutToPreserveWhitespace(astNode)) {
       return astNode;
     }
@@ -101,10 +103,7 @@ class MinimizeWhitespaceVisitor extends RecursiveTemplateAstVisitor<bool> {
 
   @override
   TemplateAst visitText(TextAst astNode, [bool? context]) {
-    return TextAst.from(
-      astNode,
-      astNode.value.replaceAll(_ngsp, ' '),
-    );
+    return TextAst.from(astNode, astNode.value.replaceAll(_ngsp, ' '));
   }
 
   /// Returns [text], with all significant whitespace reduced to a single space.
@@ -240,10 +239,7 @@ class MinimizeWhitespaceVisitor extends RecursiveTemplateAstVisitor<bool> {
       // Sometimes collapse adjacent to another element if not inline.
       astNode is ElementAst && !_isPotentiallyInline(astNode) ||
       // Sometimes collapse adjacent to a template or container node.
-      _shouldCollapseWrapperNode(
-        astNode,
-        lastNode: lastNode,
-      );
+      _shouldCollapseWrapperNode(astNode, lastNode: lastNode);
 
   // Determining how to collapse next to a template/container is more complex.
   //

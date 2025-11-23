@@ -73,32 +73,35 @@ void main() {
       test('from a list (implicit module)', () {
         expect(
           reader.parseModule($listModule),
-          ModuleElement(provide: [
-            UseClassProviderElement(
-              TypeTokenElement(linkTypeOf($Example.thisType)),
-              null,
-              linkTypeOf($Example.thisType),
-              dependencies: DependencyInvocation(
-                $Example.unnamedConstructor!,
-                const [],
+          ModuleElement(
+            provide: [
+              UseClassProviderElement(
+                TypeTokenElement(linkTypeOf($Example.thisType)),
+                null,
+                linkTypeOf($Example.thisType),
+                dependencies: DependencyInvocation(
+                  $Example.unnamedConstructor!,
+                  const [],
+                ),
               ),
-            )
-          ], include: [
-            ModuleElement(
-              provide: [
-                UseClassProviderElement(
-                  TypeTokenElement(linkTypeOf($Dependency.thisType)),
-                  null,
-                  linkTypeOf($Dependency.thisType),
-                  dependencies: DependencyInvocation(
-                    $Dependency.unnamedConstructor!,
-                    const [],
+            ],
+            include: [
+              ModuleElement(
+                provide: [
+                  UseClassProviderElement(
+                    TypeTokenElement(linkTypeOf($Dependency.thisType)),
+                    null,
+                    linkTypeOf($Dependency.thisType),
+                    dependencies: DependencyInvocation(
+                      $Dependency.unnamedConstructor!,
+                      const [],
+                    ),
                   ),
-                )
-              ],
-              include: [],
-            )
-          ]),
+                ],
+                include: [],
+              ),
+            ],
+          ),
         );
       });
 
@@ -116,7 +119,7 @@ void main() {
                     $Dependency.unnamedConstructor!,
                     const [],
                   ),
-                )
+                ),
               ],
               include: [],
             ),
@@ -139,7 +142,7 @@ void main() {
                     $Example.unnamedConstructor!,
                     const [],
                   ),
-                )
+                ),
               ],
               include: [
                 ModuleElement(
@@ -152,10 +155,10 @@ void main() {
                         $Dependency.unnamedConstructor!,
                         const [],
                       ),
-                    )
+                    ),
                   ],
                   include: [],
-                )
+                ),
               ],
             ),
           );
@@ -177,13 +180,15 @@ void main() {
     final extractProviderObjects = const ModuleReader().extractProviderObjects;
     String extractProviderStrings(DartObject value) {
       final result = extractProviderObjects(value);
-      return result.map((o) {
-        var value = o.toTypeValue();
-        if (value != null) {
-          return value.name;
-        }
-        return o.getField('token')!.toTypeValue()!.name;
-      }).join(', ');
+      return result
+          .map((o) {
+            var value = o.toTypeValue();
+            if (value != null) {
+              return value.name;
+            }
+            return o.getField('token')!.toTypeValue()!.name;
+          })
+          .join(', ');
     }
 
     late DartObject aListOfProviders;
@@ -231,34 +236,27 @@ void main() {
         class B {}
         class C {}
       ''');
-      final testObjects = List<DartObject>.from(testLib
-          .getClass('Example')!
-          .metadata
-          .map((e) => e.computeConstantValue()));
+      final testObjects = List<DartObject>.from(
+        testLib
+            .getClass('Example')!
+            .metadata
+            .map((e) => e.computeConstantValue()),
+      );
       aListOfProviders = testObjects[0];
       aModuleOfProviders = testObjects[1];
       nestedListsAndModules = testObjects[2];
     });
 
     test('should read a list of providers', () {
-      expect(
-        extractProviderStrings(aListOfProviders),
-        'A, B, C',
-      );
+      expect(extractProviderStrings(aListOfProviders), 'A, B, C');
     });
 
     test('should read a module of providers', () {
-      expect(
-        extractProviderStrings(aModuleOfProviders),
-        'C, A, B',
-      );
+      expect(extractProviderStrings(aModuleOfProviders), 'C, A, B');
     });
 
     test('should read a combination of lists and modules', () {
-      expect(
-        extractProviderStrings(nestedListsAndModules),
-        'A, B, C, C, A, B',
-      );
+      expect(extractProviderStrings(nestedListsAndModules), 'A, B, C, C, A, B');
     });
   });
 }

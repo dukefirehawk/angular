@@ -4,8 +4,9 @@ import 'package:test/test.dart';
 import 'package:ngcompiler/v1/angular_compiler.dart';
 
 void main() {
-  final dartfmt =
-      DartFormatter(languageVersion: DartFormatter.latestLanguageVersion);
+  final dartfmt = DartFormatter(
+    languageVersion: DartFormatter.latestLanguageVersion,
+  );
   EqualsDart.format = dartfmt.format;
 
   TokenElement dummyToken = TypeTokenElement(TypeLink('Token', null));

@@ -5,8 +5,11 @@ part of 'tokens.dart';
 /// For example, a `text` is (almost) any arbitrary string.
 class _LexemeNgSimpleToken extends NgSimpleToken {
   const _LexemeNgSimpleToken(
-      int offset, this.lexeme, this.length, NgSimpleTokenType type)
-      : super._(type, offset);
+    int offset,
+    this.lexeme,
+    this.length,
+    NgSimpleTokenType type,
+  ) : super._(type, offset);
 
   @override
   bool operator ==(Object other) {
@@ -34,11 +37,7 @@ class _LexemeNgToken extends NgToken {
     this.lexeme,
     NgTokenType type, {
     bool errorSynthetic = false,
-  }) : super._(
-          type,
-          offset,
-          errorSynthetic: errorSynthetic,
-        );
+  }) : super._(type, offset, errorSynthetic: errorSynthetic);
 
   @override
   bool operator ==(Object other) {

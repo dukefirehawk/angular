@@ -40,27 +40,28 @@ abstract class RecursiveTemplateVisitor<C>
   @override
   @mustCallSuper
   TemplateAst visitElement(ElementAst ast, C? context) => ElementAst(
-      ast.name,
-      visitAll(ast.attrs, context),
-      visitAll(ast.inputs, context),
-      visitAll(ast.outputs, context),
-      visitAll(ast.references, context),
-      visitAll(ast.directives, context),
-      visitAll(ast.providers, context),
-      ast.elementProviderUsage,
-      visitAll(ast.children, context),
-      ast.ngContentIndex,
-      ast.sourceSpan,
-      ast.matchedNgContentSelectors);
+    ast.name,
+    visitAll(ast.attrs, context),
+    visitAll(ast.inputs, context),
+    visitAll(ast.outputs, context),
+    visitAll(ast.references, context),
+    visitAll(ast.directives, context),
+    visitAll(ast.providers, context),
+    ast.elementProviderUsage,
+    visitAll(ast.children, context),
+    ast.ngContentIndex,
+    ast.sourceSpan,
+    ast.matchedNgContentSelectors,
+  );
 
   @override
   @mustCallSuper
   TemplateAst visitDirective(DirectiveAst ast, C? context) => DirectiveAst(
-        ast.directive,
-        inputs: visitAll(ast.inputs, context),
-        outputs: visitAll(ast.outputs, context),
-        sourceSpan: ast.sourceSpan,
-      );
+    ast.directive,
+    inputs: visitAll(ast.inputs, context),
+    outputs: visitAll(ast.outputs, context),
+    sourceSpan: ast.sourceSpan,
+  );
 
   @override
   @mustCallSuper
@@ -69,10 +70,11 @@ abstract class RecursiveTemplateVisitor<C>
 
   @override
   TemplateAst visitNgContent(NgContentAst ast, context) => NgContentAst(
-      ast.index,
-      ast.ngContentIndex,
-      ast.sourceSpan,
-      visit(ast.reference, context));
+    ast.index,
+    ast.ngContentIndex,
+    ast.sourceSpan,
+    visit(ast.reference, context),
+  );
 
   @override
   TemplateAst visitReference(ReferenceAst ast, void context) => ast;
@@ -100,8 +102,7 @@ abstract class RecursiveTemplateVisitor<C>
   TemplateAst visitDirectiveProperty(
     BoundDirectivePropertyAst ast,
     void context,
-  ) =>
-      ast;
+  ) => ast;
 
   @override
   TemplateAst visitDirectiveEvent(BoundDirectiveEventAst ast, void context) =>

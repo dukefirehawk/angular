@@ -6,11 +6,11 @@ import 'package:ngast/ngast.dart';
 RecoveringExceptionHandler exceptionHandler = RecoveringExceptionHandler();
 
 List<StandaloneTemplateAst> parse(String template) => const NgParser().parse(
-      template,
-      sourceUrl: '/test/parser_test.dart#inline',
-      exceptionHandler: exceptionHandler,
-      desugar: false,
-    );
+  template,
+  sourceUrl: '/test/parser_test.dart#inline',
+  exceptionHandler: exceptionHandler,
+  desugar: false,
+);
 
 void main() {
   String input;

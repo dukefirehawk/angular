@@ -256,5 +256,5 @@ const Map<String, String> namedEntities = <String, String>{
   'Zeta': 'Ζ',
   'zeta': 'ζ',
   'zwj': '‍',
-  'zwnj': '‌'
+  'zwnj': '‌',
 };

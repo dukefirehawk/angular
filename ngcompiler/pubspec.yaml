@@ -7,13 +7,15 @@ version: 4.0.0-dev.1
 repository: https://github.com/angulardart-community/angular
 
 environment:
-  sdk: '>=3.6.0 <4.0.0'
+  sdk: '>=3.9.0 <4.0.0'
+
+resolution: workspace
 
 dependencies:
-  analyzer: ^7.3.0
+  analyzer: ^8.4.0
   args: ^2.3.2
-  build: ^2.3.1
-  build_test: ^2.1.6
+  build: ^4.0.0
+  build_test: ^3.0.0
   code_builder: ^4.4.0
   collection: ^1.17.0
   csslib: ^1.0.0
@@ -24,9 +26,9 @@ dependencies:
   ngdart: ^9.0.0-dev.1
   package_config: ^2.1.0
   path: ^1.8.3
-  source_gen: ^2.0.0
+  source_gen: ^4.0.0
   source_span: ^1.9.1
 
 dev_dependencies:
-  lints: ^5.0.0
+  lints: ^6.0.0
   test: ^1.22.2

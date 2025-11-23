@@ -85,11 +85,14 @@ class ProviderResolver {
           // Given the token and visibility defined by providerType,
           // get value based on existing expression mapped to token.
           providerSource = _getDependency(
-              CompileDiDependencyMetadata(token: provider.useExisting));
+            CompileDiDependencyMetadata(token: provider.useExisting),
+          );
           directiveMetadata = null;
         } else if (provider.useFactory != null) {
-          providerSource =
-              _addFactoryProvider(provider, resolvedProvider.providerType);
+          providerSource = _addFactoryProvider(
+            provider,
+            resolvedProvider.providerType,
+          );
         } else if (provider.useClass != null) {
           var classType = provider.useClass!.identifier;
           providerSource = _addClassProvider(
@@ -107,7 +110,9 @@ class ProviderResolver {
           }
         } else {
           providerSource = ExpressionProviderSource(
-              provider.token!, convertValueToOutputAst(provider.useValue));
+            provider.token!,
+            convertValueToOutputAst(provider.useValue),
+          );
         }
         providerSources.add(providerSource);
       }
@@ -129,21 +134,31 @@ class ProviderResolver {
       } else {
         var token = resolvedProvider.token;
         _instances.add(
-            token,
-            _host.createProviderInstance(resolvedProvider, directiveMetadata,
-                providerSources, _instances.length));
+          token,
+          _host.createProviderInstance(
+            resolvedProvider,
+            directiveMetadata,
+            providerSources,
+            _instances.length,
+          ),
+        );
       }
     }
   }
 
   ProviderSource _addFactoryProvider(
-      CompileProviderMetadata provider, ProviderAstType providerType) {
+    CompileProviderMetadata provider,
+    ProviderAstType providerType,
+  ) {
     var parameters = <ProviderSource>[];
     for (var paramDep in provider.deps ?? provider.useFactory!.diDeps) {
       parameters.add(_getDependency(paramDep!));
     }
     return FactoryProviderSource(
-        provider.token!, provider.useFactory, parameters);
+      provider.token!,
+      provider.useFactory,
+      parameters,
+    );
   }
 
   ProviderSource _addClassProvider(
@@ -209,15 +224,20 @@ class ProviderResolver {
 abstract class ProviderResolverHost {
   /// Creates an eager instance for a provider and returns reference to source.
   ProviderSource createProviderInstance(
-      ProviderAst resolvedProvider,
-      CompileDirectiveMetadata? directiveMetadata,
-      List<ProviderSource> providerValueExpressions,
-      int uniqueId);
+    ProviderAst resolvedProvider,
+    CompileDirectiveMetadata? directiveMetadata,
+    List<ProviderSource> providerValueExpressions,
+    int uniqueId,
+  );
 
   /// Creates ProviderSource to call injectorGet on parent view that contains
   /// source NodeProviders.
-  ProviderSource createDynamicInjectionSource(ProviderResolver? source,
-      ProviderSource? value, CompileTokenMetadata? token, bool optional);
+  ProviderSource createDynamicInjectionSource(
+    ProviderResolver? source,
+    ProviderSource? value,
+    CompileTokenMetadata? token,
+    bool optional,
+  );
 
   /// Creates an expression that returns the internationalized [message].
   o.Expression createI18nMessage(I18nMessage message);

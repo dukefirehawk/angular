@@ -13,7 +13,7 @@ const _debugModuleUrl = 'asset://debug/lib';
 const _metadataMapVar = '_METADATA';
 String debugOutputAstAsDart(
   dynamic /* o . Statement | o . Expression | o . Type | List < dynamic > */
-      ast, {
+  ast, {
   bool emitNullSafeSyntax = false,
 }) {
   var converter = _DartEmitterVisitor(
@@ -43,15 +43,10 @@ class DartEmitter implements OutputEmitter {
   /// Whether to emit null-safe syntax (i.e. it would be valid to do so).
   final bool emitNullSafeSyntax;
 
-  DartEmitter({
-    this.emitNullSafeSyntax = false,
-  });
+  DartEmitter({this.emitNullSafeSyntax = false});
 
   @override
-  String emitStatements(
-    String moduleUrl,
-    List<o.Statement> stmts,
-  ) {
+  String emitStatements(String moduleUrl, List<o.Statement> stmts) {
     final srcParts = <String>[];
     final converter = _DartEmitterVisitor(
       moduleUrl,
@@ -61,9 +56,11 @@ class DartEmitter implements OutputEmitter {
     converter.visitAllStatements(stmts, ctx);
     converter.importsWithPrefixes.forEach((importedModuleUrl, prefix) {
       var importPath = getImportModulePath(moduleUrl, importedModuleUrl);
-      srcParts.add(prefix.isEmpty
-          ? "import '$importPath';"
-          : "import '$importPath' as $prefix;");
+      srcParts.add(
+        prefix.isEmpty
+            ? "import '$importPath';"
+            : "import '$importPath' as $prefix;",
+      );
     });
     srcParts.add(ctx.toSource());
     return srcParts.join('\n');
@@ -109,13 +106,8 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
   /// Whether this is currently emitting a new instance of a class.
   var _inInvokeOrNewInstance = false;
 
-  _DartEmitterVisitor(
-    this._moduleUrl, {
-    required bool emitNullSafeSyntax,
-  }) : super(
-          true,
-          emitNullSafeSyntax: emitNullSafeSyntax,
-        );
+  _DartEmitterVisitor(this._moduleUrl, {required bool emitNullSafeSyntax})
+    : super(true, emitNullSafeSyntax: emitNullSafeSyntax);
 
   @override
   void visitNamedExpr(o.NamedExpr ast, EmitterVisitorContext context) {
@@ -335,9 +327,14 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
       return;
     }
     context.print('<');
-    visitAllObjects((o.OutputType typeArgument) {
-      typeArgument.visitType(this, context);
-    }, typeArguments, context, ',');
+    visitAllObjects(
+      (o.OutputType typeArgument) {
+        typeArgument.visitType(this, context);
+      },
+      typeArguments,
+      context,
+      ',',
+    );
     context.print('>');
   }
 
@@ -349,16 +346,21 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
       return;
     }
     context.print('<');
-    visitAllObjects((o.TypeParameter typeParameter) {
-      context.print(typeParameter.name);
-      var bound = typeParameter.bound;
-      // Don't emit an explicit bound for dynamic, since bounds are implicitly
-      // dynamic.
-      if (bound != null && bound != o.dynamicType) {
-        context.print(' extends ');
-        bound.visitType(this, context);
-      }
-    }, typeParameters, context, ', ');
+    visitAllObjects(
+      (o.TypeParameter typeParameter) {
+        context.print(typeParameter.name);
+        var bound = typeParameter.bound;
+        // Don't emit an explicit bound for dynamic, since bounds are implicitly
+        // dynamic.
+        if (bound != null && bound != o.dynamicType) {
+          context.print(' extends ');
+          bound.visitType(this, context);
+        }
+      },
+      typeParameters,
+      context,
+      ', ',
+    );
     context.print('>');
   }
 
@@ -425,13 +427,17 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
 
   @override
   void visitReadClassMemberExpr(
-      o.ReadClassMemberExpr ast, EmitterVisitorContext context) {
+    o.ReadClassMemberExpr ast,
+    EmitterVisitorContext context,
+  ) {
     context.print('this.${ast.name}');
   }
 
   @override
   void visitWriteClassMemberExpr(
-      o.WriteClassMemberExpr expr, EmitterVisitorContext context) {
+    o.WriteClassMemberExpr expr,
+    EmitterVisitorContext context,
+  ) {
     var lineWasEmpty = context.lineIsEmpty();
     if (!lineWasEmpty) {
       context.print('(');
@@ -458,7 +464,9 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
 
   @override
   void visitBinaryOperatorExpr(
-      o.BinaryOperatorExpr ast, EmitterVisitorContext context) {
+    o.BinaryOperatorExpr ast,
+    EmitterVisitorContext context,
+  ) {
     switch (ast.operator) {
       case o.BinaryOperator.identical:
         context.print('identical(');
@@ -481,7 +489,9 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
 
   @override
   void visitLiteralVargsExpr(
-      o.LiteralVargsExpr ast, EmitterVisitorContext context) {
+    o.LiteralVargsExpr ast,
+    EmitterVisitorContext context,
+  ) {
     visitAllExpressions(
       ast.entries,
       context,
@@ -634,12 +644,7 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
   @override
   void visitExternalType(o.ExternalType ast, EmitterVisitorContext context) {
     final nullable = ast.modifiers.contains(o.TypeModifier.nullableModifier);
-    _visitIdentifier(
-      ast.value,
-      ast.typeParams,
-      context,
-      nullable: nullable,
-    );
+    _visitIdentifier(ast.value, ast.typeParams, context, nullable: nullable);
   }
 
   @override
@@ -651,9 +656,14 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
       context.print('void');
     }
     context.print(' Function(');
-    visitAllObjects((o.OutputType param) {
-      param.visitType(this, context);
-    }, type.paramTypes, context, ',');
+    visitAllObjects(
+      (o.OutputType param) {
+        param.visitType(this, context);
+      },
+      type.paramTypes,
+      context,
+      ',',
+    );
     context.print(')');
     if (type.modifiers.contains(o.TypeModifier.nullableModifier)) {
       final postfix = emitNullSafeSyntax ? '?' : '/*?*/';
@@ -690,14 +700,19 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
   }
 
   void _visitParams(List<o.FnParam> params, EmitterVisitorContext context) {
-    visitAllObjects((o.FnParam param) {
-      var type = param.type;
-      if (type != null) {
-        type.visitType(this, context);
-        context.print(' ');
-      }
-      context.print(param.name);
-    }, params, context, ',');
+    visitAllObjects(
+      (o.FnParam param) {
+        var type = param.type;
+        if (type != null) {
+          type.visitType(this, context);
+          context.print(' ');
+        }
+        context.print(param.name);
+      },
+      params,
+      context,
+      ',',
+    );
   }
 
   void _visitIdentifier(
@@ -706,10 +721,7 @@ class _DartEmitterVisitor extends AbstractEmitterVisitor
     EmitterVisitorContext context, {
     bool nullable = false,
   }) {
-    final prefix = _computeModulePrefix(
-      value,
-      context,
-    );
+    final prefix = _computeModulePrefix(value, context);
     String? postfix;
     if (nullable) {
       postfix = emitNullSafeSyntax ? '?' : '/*?*/';

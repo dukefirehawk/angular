@@ -8,7 +8,8 @@ import '../../src/resolve.dart';
 const testImport = 'asset:test_lib/lib/test_lib.dart';
 
 Future<TypedElement> parse(String source) async {
-  final amendedSource = '''
+  final amendedSource =
+      '''
     @Component()
     class GenericComponent<T> {}
 
@@ -41,16 +42,11 @@ void main() {
           TypeLink(
             'GenericComponent',
             testImport,
-            generics: [
-              TypeLink('String', 'dart:core'),
-            ],
+            generics: [TypeLink('String', 'dart:core')],
           ),
         );
 
-        expect(
-          typedElement,
-          expectedResult,
-        );
+        expect(typedElement, expectedResult);
       });
       test('with multiple concrete type arguments', () async {
         final typedElement = await parse(r'''
@@ -90,9 +86,7 @@ void main() {
                 TypeLink(
                   'List',
                   'dart:core',
-                  generics: [
-                    TypeLink('String', 'dart:core'),
-                  ],
+                  generics: [TypeLink('String', 'dart:core')],
                 ),
               ],
             ),
@@ -112,9 +106,7 @@ void main() {
             TypeLink(
               'GenericComponent',
               testImport,
-              generics: [
-                TypeLink('String', 'dart:core'),
-              ],
+              generics: [TypeLink('String', 'dart:core')],
             ),
             on: 'strings',
           ),
@@ -136,9 +128,7 @@ void main() {
             TypeLink(
               'GenericComponent',
               testImport,
-              generics: [
-                TypeLink('X', null),
-              ],
+              generics: [TypeLink('X', null)],
             ),
           ),
         );
@@ -156,9 +146,7 @@ void main() {
             TypeLink(
               'GenericComponent',
               testImport,
-              generics: [
-                TypeLink('int', 'dart:core'),
-              ],
+              generics: [TypeLink('int', 'dart:core')],
             ),
           ),
         );
@@ -180,9 +168,7 @@ void main() {
                 TypeLink(
                   'List',
                   'dart:core',
-                  generics: [
-                    TypeLink('int', 'dart:core'),
-                  ],
+                  generics: [TypeLink('int', 'dart:core')],
                 ),
               ],
             ),
@@ -231,9 +217,7 @@ void main() {
             TypeLink(
               'GenericComponent',
               testImport,
-              generics: [
-                TypeLink('X', null),
-              ],
+              generics: [TypeLink('X', null)],
             ),
             on: 'flow',
           ),
@@ -279,7 +263,7 @@ void main() {
           allOf(
             contains('Expected a generic type'),
             contains('got concrete type "ConcreteDirective"'),
-          )
+          ),
         ],
       );
     });
@@ -336,8 +320,9 @@ void main() {
         parseTyped,
         errors: [
           contains(
-              'The "on" argument is only supported on the root "Typed" of a '
-              '"Typed" expression')
+            'The "on" argument is only supported on the root "Typed" of a '
+            '"Typed" expression',
+          ),
         ],
       );
     });
@@ -353,8 +338,9 @@ void main() {
         parseTyped,
         errors: [
           contains(
-              'Expected a "Typed" expression with a "Component" or "Directive" '
-              'annotated type, but got "Typed<List>"')
+            'Expected a "Typed" expression with a "Component" or "Directive" '
+            'annotated type, but got "Typed<List>"',
+          ),
         ],
       );
     });
@@ -373,8 +359,9 @@ void main() {
         parseTyped,
         errors: [
           contains(
-              'Directive type arguments must be public, but "GenericComponent" '
-              'was given private type argument "_Private" by "Example".')
+            'Directive type arguments must be public, but "GenericComponent" '
+            'was given private type argument "_Private" by "Example".',
+          ),
         ],
       );
     });

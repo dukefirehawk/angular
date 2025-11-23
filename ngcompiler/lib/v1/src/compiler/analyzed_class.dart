@@ -29,21 +29,24 @@ class AnalyzedClass {
     this.locals = const {},
   });
 
-  AnalyzedClass.from(AnalyzedClass other,
-      {Map<String, DartType?> additionalLocals = const {}})
-      : classElement = other.classElement,
-        isMockLike = other.isMockLike,
-        locals = {}
-          ..addAll(other.locals)
-          ..addAll(additionalLocals);
+  AnalyzedClass.from(
+    AnalyzedClass other, {
+    Map<String, DartType?> additionalLocals = const {},
+  }) : classElement = other.classElement,
+       isMockLike = other.isMockLike,
+       locals = {}
+         ..addAll(other.locals)
+         ..addAll(additionalLocals);
 }
 
 /// Returns the [expression] type evaluated within context of [analyzedClass].
 ///
 /// Returns dynamic if [expression] can't be resolved.
 DartType getExpressionType(ast.AST expression, AnalyzedClass analyzedClass) {
-  final typeResolver =
-      _TypeResolver(analyzedClass.classElement, analyzedClass.locals);
+  final typeResolver = _TypeResolver(
+    analyzedClass.classElement,
+    analyzedClass.locals,
+  );
   return expression.visit(typeResolver);
 }
 
@@ -52,8 +55,8 @@ DartType getExpressionType(ast.AST expression, AnalyzedClass analyzedClass) {
 /// Returns null otherwise.
 DartType? getIterableElementType(DartType dartType, LibraryElement lib) =>
     dartType is InterfaceType
-        ? dartType.lookUpGetter2('single', lib)?.returnType
-        : null;
+    ? dartType.lookUpGetter2('single', lib)?.returnType
+    : null;
 
 /// Returns an int type using the [analyzedClass]'s context.
 DartType intType(AnalyzedClass analyzedClass) =>
@@ -114,8 +117,10 @@ String typeToCode(DartType type) {
 }
 
 PropertyInducingElement? _getField(AnalyzedClass clazz, String name) {
-  var getter =
-      clazz.classElement.lookUpGetter(name, clazz.classElement.library);
+  var getter = clazz.classElement.lookUpGetter(
+    name,
+    clazz.classElement.library,
+  );
   return getter?.variable2;
 }
 
@@ -166,7 +171,8 @@ bool isImmutable(ast.AST expression, AnalyzedClass? analyzedClass) {
 }
 
 bool isStaticGetterOrMethod(String name, AnalyzedClass analyzedClass) {
-  final member = analyzedClass.classElement.getGetter(name) ??
+  final member =
+      analyzedClass.classElement.getGetter(name) ??
       analyzedClass.classElement.getMethod(name);
   return member != null && member.isStatic;
 }
@@ -184,13 +190,17 @@ bool isStaticSetter(String name, AnalyzedClass analyzedClass) {
 /// If the underlying method has any parameters, then assume one parameter of
 /// '$event'.
 ast.ASTWithSource rewriteTearOff(
-    ast.ASTWithSource original, AnalyzedClass analyzedClass) {
+  ast.ASTWithSource original,
+  AnalyzedClass analyzedClass,
+) {
   var unwrappedExpression = original.ast;
 
   if (unwrappedExpression is ast.PropertyRead) {
     // Find the method, either on "this." or "super.".
     final method = analyzedClass.classElement.thisType.lookUpMethod2(
-        unwrappedExpression.name, analyzedClass.classElement.library);
+      unwrappedExpression.name,
+      analyzedClass.classElement.library,
+    );
 
     // If not found, we do not perform any re-write.
     if (method == null) {
@@ -203,10 +213,14 @@ ast.ASTWithSource rewriteTearOff(
     final positionalParameters = method.parameters.where((p) => !p.isNamed);
     if (positionalParameters.isEmpty) {
       return ast.ASTWithSource.from(
-          original, _simpleMethodCall(unwrappedExpression));
+        original,
+        _simpleMethodCall(unwrappedExpression),
+      );
     } else {
       return ast.ASTWithSource.from(
-          original, _complexMethodCall(unwrappedExpression));
+        original,
+        _complexMethodCall(unwrappedExpression),
+      );
     }
   }
   return original;
@@ -250,9 +264,9 @@ class _TypeResolver extends ast.AstVisitor<DartType, dynamic> {
   final Map<String, DartType?> _variables;
 
   _TypeResolver(ClassElement classElement, this._variables)
-      : _dynamicType = classElement.library.typeProvider.dynamicType,
-        _stringType = classElement.library.typeProvider.stringType,
-        _implicitReceiverType = classElement.thisType;
+    : _dynamicType = classElement.library.typeProvider.dynamicType,
+      _stringType = classElement.library.typeProvider.stringType,
+      _implicitReceiverType = classElement.thisType;
 
   @override
   DartType visitBinary(ast.Binary ast, a) {
@@ -353,8 +367,8 @@ class _TypeResolver extends ast.AstVisitor<DartType, dynamic> {
   @override
   DartType visitStaticRead(ast.StaticRead ast, _) =>
       ast.id.analyzedClass == null
-          ? _dynamicType
-          : ast.id.analyzedClass!.classElement.thisType;
+      ? _dynamicType
+      : ast.id.analyzedClass!.classElement.thisType;
 
   @override
   DartType visitVariableRead(ast.VariableRead ast, _) => _dynamicType;
@@ -364,8 +378,10 @@ class _TypeResolver extends ast.AstVisitor<DartType, dynamic> {
   /// Returns dynamic if [receiverType] has no [getterName].
   DartType _lookupGetterReturnType(DartType receiverType, String getterName) {
     if (receiverType is InterfaceType) {
-      var getter =
-          receiverType.lookUpGetter2(getterName, receiverType.element.library);
+      var getter = receiverType.lookUpGetter2(
+        getterName,
+        receiverType.element.library,
+      );
       if (getter != null) return getter.returnType;
     }
     return _dynamicType;
@@ -376,8 +392,10 @@ class _TypeResolver extends ast.AstVisitor<DartType, dynamic> {
   /// Returns dynamic if [receiverType] has no [methodName].
   DartType _lookupMethodReturnType(DartType receiverType, String methodName) {
     if (receiverType is InterfaceType) {
-      var method =
-          receiverType.lookUpMethod2(methodName, receiverType.element.library);
+      var method = receiverType.lookUpMethod2(
+        methodName,
+        receiverType.element.library,
+      );
       if (method != null) return method.returnType;
     }
     return _dynamicType;

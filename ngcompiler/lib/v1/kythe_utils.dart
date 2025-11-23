@@ -14,35 +14,41 @@ export 'package:ngcompiler/v1/src/compiler/template_compiler.dart'
 export 'package:ngcompiler/v1/src/compiler/template_parser/ast_template_parser.dart'
     show matchElementDirectives;
 
-typedef UncaughtExceptionHandler = bool Function(
-    Object exception, StackTrace stackTrace);
+typedef UncaughtExceptionHandler =
+    bool Function(Object exception, StackTrace stackTrace);
 
-Future<AngularArtifacts?>? angularArtifactsForKythe(LibraryElement element,
-    {UncaughtExceptionHandler? uncaughtExceptionHandler}) {
+Future<AngularArtifacts?>? angularArtifactsForKythe(
+  LibraryElement element, {
+  UncaughtExceptionHandler? uncaughtExceptionHandler,
+}) {
   final assetId = _toAssetId(element.identifier);
   if (assetId == null) return null;
   final exceptionHandler = ComponentVisitorExceptionHandler();
   return runWithContext(
-      CompileContext(
-        assetId,
-        policyExceptions: {},
-        policyExceptionsInPackages: {},
-        // TODO: Migration to 3.6
-        // isNullSafe: element.isNonNullableByDefault,
-        isNullSafe: !element.hasJS,
-        enableDevTools: false,
-      ), () async {
-    try {
-      return findComponentsAndDirectives(
-          LibraryReader(element), exceptionHandler);
-    } catch (e, s) {
-      if (uncaughtExceptionHandler?.call(e, s) ?? false) {
-        return null;
-      } else {
-        rethrow;
+    CompileContext(
+      assetId,
+      policyExceptions: {},
+      policyExceptionsInPackages: {},
+      // TODO: Migration to 3.6
+      // isNullSafe: element.isNonNullableByDefault,
+      isNullSafe: !element.hasJS,
+      enableDevTools: false,
+    ),
+    () async {
+      try {
+        return findComponentsAndDirectives(
+          LibraryReader(element),
+          exceptionHandler,
+        );
+      } catch (e, s) {
+        if (uncaughtExceptionHandler?.call(e, s) ?? false) {
+          return null;
+        } else {
+          rethrow;
+        }
       }
-    }
-  });
+    },
+  );
 }
 
 AssetId? _toAssetId(String identifier) {

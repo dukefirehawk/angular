@@ -18,12 +18,7 @@ String untokenize(Iterable<NgToken> tokens) => tokens
     .fold(StringBuffer(), (buffer, token) => buffer..write(token.lexeme))
     .toString();
 
-enum State {
-  comment,
-  element,
-  interpolation,
-  text,
-}
+enum State { comment, element, interpolation, text }
 
 String genericExpression = ' + 1 + 2';
 

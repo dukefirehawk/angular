@@ -10,8 +10,9 @@ void main() {
   CompileContext.overrideForTesting();
 
   group('should generate injector with', () {
-    final dartfmt =
-        DartFormatter(languageVersion: DartFormatter.latestLanguageVersion);
+    final dartfmt = DartFormatter(
+      languageVersion: DartFormatter.latestLanguageVersion,
+    );
     EqualsDart.format = dartfmt.format;
     late InjectorEmitter emitter;
     late List<InjectorReader> injectors;
@@ -100,11 +101,12 @@ void main() {
           injector.accept(emitter);
         } on BuildError catch (e) {
           expect(
-              e.toString(),
-              allOf([
-                contains('Reviving Types is not supported'),
-                contains('line 8, column 25 of')
-              ]));
+            e.toString(),
+            allOf([
+              contains('Reviving Types is not supported'),
+              contains('line 8, column 25 of'),
+            ]),
+          );
           rethrow;
         }
       }, throwsA(const TypeMatcher<BuildError>()));

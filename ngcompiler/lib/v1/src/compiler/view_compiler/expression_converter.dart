@@ -116,8 +116,8 @@ class _AstToExpressionVisitor
   @override
   o.Expression visitEmptyExpr(compiler_ast.EmptyExpr ast, _) =>
       _isBoolType(_boundType)
-          ? o.LiteralExpr(true, o.boolType)
-          : o.LiteralExpr('', o.stringType);
+      ? o.LiteralExpr(true, o.boolType)
+      : o.LiteralExpr('', o.stringType);
 
   @override
   o.Expression visitPipe(compiler_ast.BindingPipe ast, _) {
@@ -130,9 +130,13 @@ class _AstToExpressionVisitor
   @override
   o.Expression visitFunctionCall(compiler_ast.FunctionCall ast, _) {
     var e = ast.target.visit(this, false /* visitingRoot */);
-    return e.callFn(_visitAll(ast.args, false /* visitingRoot */),
-        namedParams: _visitAll(ast.namedArgs, false /* visitingRoot */)
-            .cast<o.NamedExpr>());
+    return e.callFn(
+      _visitAll(ast.args, false /* visitingRoot */),
+      namedParams: _visitAll(
+        ast.namedArgs,
+        false /* visitingRoot */,
+      ).cast<o.NamedExpr>(),
+    );
   }
 
   @override
@@ -171,8 +175,9 @@ class _AstToExpressionVisitor
 
   @override
   o.Expression visitInterpolation(compiler_ast.Interpolation ast, _) {
-    final expressionsAreString =
-        ast.expressions.every((ast) => isString(ast, _metadata.analyzedClass!));
+    final expressionsAreString = ast.expressions.every(
+      (ast) => isString(ast, _metadata.analyzedClass!),
+    );
 
     final interpolateIdentifiers = expressionsAreString
         ? Interpolation.interpolateString
@@ -183,8 +188,10 @@ class _AstToExpressionVisitor
       var firstArg = _compressWhitespacePreceding(ast.strings[0]);
       var secondArg = _compressWhitespaceFollowing(ast.strings[1]);
       final firstExpression = ast.expressions[0];
-      final expressionArg =
-          firstExpression.visit(this, false /* visitingRoot */);
+      final expressionArg = firstExpression.visit(
+        this,
+        false /* visitingRoot */,
+      );
       if (_isPrimitiveCheck(firstExpression, _metadata.analyzedClass)) {
         // If the interpolated expression is a primitive type, check the
         // expression directly (instead of checking the interpolated result)
@@ -218,16 +225,19 @@ class _AstToExpressionVisitor
         args.add(o.literal(literalText));
         args.add(ast.expressions[i].visit(this, false /* visitingRoot */));
       }
-      args.add(o.literal(
-          _compressWhitespaceFollowing(ast.strings[ast.strings.length - 1])));
+      args.add(
+        o.literal(
+          _compressWhitespaceFollowing(ast.strings[ast.strings.length - 1]),
+        ),
+      );
       if (ast.expressions.length < 3) {
         return o
             .importExpr(interpolateIdentifiers[ast.expressions.length])
             .callFn(args);
       } else {
-        return o
-            .importExpr(Interpolation.interpolateFallback)
-            .callFn([o.literalArr(args)]);
+        return o.importExpr(Interpolation.interpolateFallback).callFn([
+          o.literalArr(args),
+        ]);
       }
     }
   }
@@ -252,16 +262,20 @@ class _AstToExpressionVisitor
   @override
   o.Expression visitMethodCall(compiler_ast.MethodCall ast, _) {
     var args = _visitAll(ast.args, false /*visitingRoot */);
-    var namedArgs =
-        _visitAll(ast.namedArgs, false /*visitingRoot */).cast<o.NamedExpr>();
+    var namedArgs = _visitAll(
+      ast.namedArgs,
+      false /*visitingRoot */,
+    ).cast<o.NamedExpr>();
     var receiver = ast.receiver.visit(this, false /*visitingRoot */);
     if (identical(receiver, _implicitReceiverVal)) {
       var varExpr = _nameResolver.getLocal(ast.name);
       if (varExpr != null) {
         return varExpr.callFn(args, namedParams: namedArgs);
       } else {
-        receiver =
-            _getImplicitOrStaticReceiver(ast.name, isStaticGetterOrMethod);
+        receiver = _getImplicitOrStaticReceiver(
+          ast.name,
+          isStaticGetterOrMethod,
+        );
       }
     }
     return receiver.callMethod(ast.name, args, namedParams: namedArgs);
@@ -324,7 +338,9 @@ class _AstToExpressionVisitor
 
   @override
   o.Expression visitNamedExpr(compiler_ast.NamedExpr ast, _) => o.NamedExpr(
-      ast.name, ast.expression!.visit(this, false /*visitingRoot */));
+    ast.name,
+    ast.expression!.visit(this, false /*visitingRoot */),
+  );
 
   @override
   o.Expression visitVariableRead(compiler_ast.VariableRead ast, _) =>
@@ -363,7 +379,9 @@ bool _isBoolType(o.OutputType? type) {
 }
 
 bool _isPrimitiveCheck(
-    compiler_ast.AST expression, AnalyzedClass? analyzedClass) {
+  compiler_ast.AST expression,
+  AnalyzedClass? analyzedClass,
+) {
   return (!isImmutable(expression, analyzedClass) &&
       (isBool(expression, analyzedClass!) ||
           isNumber(expression, analyzedClass) ||

@@ -20,10 +20,13 @@ class AnnotationInformation<T extends Element> extends IndexedAnnotation<T> {
   final DartObject? constantValue;
   final List<AnalysisError> constantEvaluationErrors;
 
-  AnnotationInformation(super.element, super.annotation, super.annotationIndex,
-      this._exceptionHandler)
-      : constantValue = annotation.computeConstantValue(),
-        constantEvaluationErrors = annotation.constantEvaluationErrors ?? [];
+  AnnotationInformation(
+    super.element,
+    super.annotation,
+    super.annotationIndex,
+    this._exceptionHandler,
+  ) : constantValue = annotation.computeConstantValue(),
+      constantEvaluationErrors = annotation.constantEvaluationErrors ?? [];
 
   bool get isInputType => _isTypeExactly($Input);
   bool get isOutputType => _isTypeExactly($Output);
@@ -45,7 +48,8 @@ class AnnotationInformation<T extends Element> extends IndexedAnnotation<T> {
         // See https://github.com/dart-lang/sdk/issues/33932
         final IndexedAnnotation annotation = this;
         _exceptionHandler.handleWarning(
-            AngularAnalysisError(constantEvaluationErrors, annotation));
+          AngularAnalysisError(constantEvaluationErrors, annotation),
+        );
         sentWarning = true;
       }
       return false;
@@ -57,20 +61,31 @@ class AnnotationInformation<T extends Element> extends IndexedAnnotation<T> {
 /// Returns the [AnnotationInformation] for the first annotation on [element]
 /// that matches [test] or null if no such annotation exists.
 AnnotationInformation<T>? annotationWhere<T extends Element>(
-    T element,
-    bool Function(ElementAnnotation) test,
-    ComponentVisitorExceptionHandler exceptionHandler) {
-  for (var annotationIndex = 0;
-      annotationIndex < element.metadata.length;
-      annotationIndex++) {
+  T element,
+  bool Function(ElementAnnotation) test,
+  ComponentVisitorExceptionHandler exceptionHandler,
+) {
+  for (
+    var annotationIndex = 0;
+    annotationIndex < element.metadata.length;
+    annotationIndex++
+  ) {
     final annotation = element.metadata[annotationIndex];
 
     final annotationInfo = AnnotationInformation(
-        element, annotation, annotationIndex, exceptionHandler);
+      element,
+      annotation,
+      annotationIndex,
+      exceptionHandler,
+    );
 
     if (annotationInfo.constantValue == null) {
-      exceptionHandler.handleWarning(AngularAnalysisError(
-          annotationInfo.constantEvaluationErrors, annotationInfo));
+      exceptionHandler.handleWarning(
+        AngularAnalysisError(
+          annotationInfo.constantEvaluationErrors,
+          annotationInfo,
+        ),
+      );
     } else if (test(annotationInfo.annotation)) {
       return annotationInfo;
     }

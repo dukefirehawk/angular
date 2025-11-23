@@ -9,15 +9,11 @@ import '../visitor.dart';
 /// Clients should not extend, implement, or mix-in this class.
 abstract mixin class CloseElementAst implements TemplateAst {
   /// Creates a synthetic close element AST.
-  factory CloseElementAst(
-    String name,
-  ) = _SyntheticCloseElementAst;
+  factory CloseElementAst(String name) = _SyntheticCloseElementAst;
 
   /// Creates a synthetic close element AST from an existing AST node.
-  factory CloseElementAst.from(
-    TemplateAst origin,
-    String name,
-  ) = _SyntheticCloseElementAst.from;
+  factory CloseElementAst.from(TemplateAst origin, String name) =
+      _SyntheticCloseElementAst.from;
 
   /// Creates a new close element AST from a parsed source.
   factory CloseElementAst.parsed(
@@ -73,14 +69,10 @@ class ParsedCloseElementAst extends TemplateAst with CloseElementAst {
 
 class _SyntheticCloseElementAst extends SyntheticTemplateAst
     with CloseElementAst {
-  _SyntheticCloseElementAst(
-    this.name,
-  );
+  _SyntheticCloseElementAst(this.name);
 
-  _SyntheticCloseElementAst.from(
-    TemplateAst super.origin,
-    this.name,
-  ) : super.from();
+  _SyntheticCloseElementAst.from(TemplateAst super.origin, this.name)
+    : super.from();
 
   @override
   final String name;

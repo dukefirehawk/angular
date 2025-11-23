@@ -24,7 +24,7 @@ class DependencyReader {
   final TokenReader _tokenReader;
 
   const DependencyReader({TokenReader tokenReader = const TokenReader()})
-      : _tokenReader = tokenReader;
+    : _tokenReader = tokenReader;
 
   /// Returns the constructor on a given `class` [element] to use for injection.
   ///
@@ -40,7 +40,8 @@ class DependencyReader {
     // Otherwise, find the first public constructor.
     // If the class is abstract, find the first public factory constructor.
     return element.constructors.firstWhereOrNull(
-        (e) => e.isPublic && !element.isAbstract || e.isFactory);
+      (e) => e.isPublic && !element.isAbstract || e.isFactory,
+    );
   }
 
   /// Returns parsed dependencies for the provided [element].
@@ -169,15 +170,16 @@ class DependencyReader {
     final constructor = findConstructor(element);
     if (constructor == null) {
       throw BuildError.forElement(
-          element, 'Could not find a valid constructor');
+        element,
+        'Could not find a valid constructor',
+      );
     }
     return _parseDependencies(constructor, constructor.parameters);
   }
 
   DependencyInvocation<ExecutableElement> _parseFunctionDependencies(
     ExecutableElement element,
-  ) =>
-      _parseDependencies(element, element.parameters);
+  ) => _parseDependencies(element, element.parameters);
 }
 
 /// Statically analyzed arguments needed to invoke a constructor or function.
@@ -212,11 +214,8 @@ class DependencyInvocation<E extends Element?> {
       const MapEquality<Object, Object>().hash(named);
 
   @override
-  String toString() => 'DependencyInvocation ${{
-        'bound': '${urlOf(bound)}',
-        'positional': '$positional',
-        'named': '$named',
-      }}';
+  String toString() =>
+      'DependencyInvocation ${{'bound': '${urlOf(bound)}', 'positional': '$positional', 'named': '$named'}}';
 }
 
 /// Statically analyzed information necessary to satisfy a dependency.
@@ -271,12 +270,6 @@ class DependencyElement {
       skipSelf.hashCode;
 
   @override
-  String toString() => 'DependencyElement ${{
-        'token': token,
-        'type': type,
-        'host': host,
-        'optional': optional,
-        'self': self,
-        'skipSelf': skipSelf,
-      }}';
+  String toString() =>
+      'DependencyElement ${{'token': token, 'type': type, 'host': host, 'optional': optional, 'self': self, 'skipSelf': skipSelf}}';
 }

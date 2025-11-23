@@ -13,7 +13,9 @@ class Compiler implements Generator {
   // We still get a lot of other formatting, such as forced line breaks (after
   // semicolons for instance), spaces in argument lists, etc.
   static final _formatter = DartFormatter(
-      languageVersion: DartFormatter.latestLanguageVersion, pageWidth: 1000000);
+    languageVersion: DartFormatter.latestLanguageVersion,
+    pageWidth: 1000000,
+  );
 
   // Ideally this would be part of this generator, and not delegated to an
   // external function, but today much of the AngularDart compiler still lives
@@ -80,5 +82,7 @@ class Placeholder implements Builder {
 
   @override
   Future<void> build(BuildStep buildStep) => buildStep.writeAsString(
-      buildStep.inputId.changeExtension('.ng_placeholder'), '');
+    buildStep.inputId.changeExtension('.ng_placeholder'),
+    '',
+  );
 }

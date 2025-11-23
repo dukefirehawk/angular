@@ -29,9 +29,7 @@ AngularCompiler createTemplateCompiler(
       DirectiveCompiler(),
       StyleCompiler(flags),
       ViewCompiler(flags, parser, schemaRegistry),
-      DartEmitter(
-        emitNullSafeSyntax: CompileContext.current.emitNullSafeCode,
-      ),
+      DartEmitter(emitNullSafeSyntax: CompileContext.current.emitNullSafeCode),
     ),
     AstDirectiveNormalizer(NgAssetReader.fromBuildStep(buildStep)),
     DirectiveConverter(schemaRegistry),
@@ -45,10 +43,7 @@ AngularCompiler createTemplateCompiler(
 /// **NOTE**: This is seperate from [createTemplateCompiler], because some of
 /// the functionality provided by [TemplateViewCompiler] is currently used by
 /// other sub-systems, such as the stylesheet compiler.
-TemplateCompiler createViewCompiler(
-  BuildStep buildStep,
-  CompilerFlags flags,
-) {
+TemplateCompiler createViewCompiler(BuildStep buildStep, CompilerFlags flags) {
   final schemaRegistry = DomElementSchemaRegistry();
   return TemplateCompiler(
     DirectiveCompiler(),

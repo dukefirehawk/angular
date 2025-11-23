@@ -153,10 +153,7 @@ class NgParser {
   }) {
     final tokens = const NgLexer().tokenize(template, exceptionHandler);
     final parser = RecursiveAstParser(
-      SourceFile.fromString(
-        template,
-        url: sourceUrl,
-      ),
+      SourceFile.fromString(template, url: sourceUrl),
       tokens,
       _voidElements,
       _svgElements,

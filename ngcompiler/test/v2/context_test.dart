@@ -12,18 +12,24 @@ void main() {
 
     test('should normally use runWithContext', () {
       final context = CompileContext.forTesting();
-      runWithContext(context, expectAsync0(() async {
-        expect(CompileContext.current, same(context));
-      }));
+      runWithContext(
+        context,
+        expectAsync0(() async {
+          expect(CompileContext.current, same(context));
+        }),
+      );
     });
 
     test('takes precedence from overrideWithTesting', () {
       final contextA = CompileContext.forTesting();
       final contextB = CompileContext.forTesting();
       CompileContext.overrideForTesting(contextB);
-      runWithContext(contextA, expectAsync0(() async {
-        expect(CompileContext.current, same(contextB));
-      }));
+      runWithContext(
+        contextA,
+        expectAsync0(() async {
+          expect(CompileContext.current, same(contextB));
+        }),
+      );
     });
   });
 
@@ -67,10 +73,7 @@ void main() {
         () => context.throwRecoverableErrors(),
         throwsA(predicate((e) => '$e'.contains('$badButRecoverable'))),
       );
-      expect(
-        () => context.throwRecoverableErrors(),
-        returnsNormally,
-      );
+      expect(() => context.throwRecoverableErrors(), returnsNormally);
     });
 
     group('emitNullSafeCode', () {
@@ -126,9 +129,7 @@ void main() {
           enableDevTools: false,
           isNullSafe: false,
           policyExceptions: {
-            'FORCE_DEVTOOLS_ENABLED': {
-              'foo/sub/lib/bar.dart',
-            },
+            'FORCE_DEVTOOLS_ENABLED': {'foo/sub/lib/bar.dart'},
           },
           policyExceptionsInPackages: {},
         );
@@ -155,9 +156,7 @@ void main() {
           isNullSafe: false,
           policyExceptions: {},
           policyExceptionsInPackages: {
-            'EXCLUDED_VALIDATE_MISSING_DIRECTIVES': {
-              'foo/sub',
-            },
+            'EXCLUDED_VALIDATE_MISSING_DIRECTIVES': {'foo/sub'},
           },
         );
         expect(context.validateMissingDirectives, isFalse);

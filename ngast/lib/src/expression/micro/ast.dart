@@ -14,10 +14,7 @@ class NgMicroAst {
   final List<PropertyAst> properties;
 
   @literal
-  const NgMicroAst({
-    required this.letBindings,
-    required this.properties,
-  });
+  const NgMicroAst({required this.letBindings, required this.properties});
 
   @override
   bool operator ==(Object other) {
@@ -29,7 +26,9 @@ class NgMicroAst {
   @override
   int get hashCode {
     return Object.hash(
-        _listEquals.hash(letBindings), _listEquals.hash(properties));
+      _listEquals.hash(letBindings),
+      _listEquals.hash(properties),
+    );
   }
 
   @override

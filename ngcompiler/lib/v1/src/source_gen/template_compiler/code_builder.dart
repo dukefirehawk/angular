@@ -37,10 +37,7 @@ String buildGeneratedCode(
     for (final injector in outputs.injectorsOutput) {
       final emitter = InjectorEmitter();
       injector.accept(emitter);
-      file.body.addAll([
-        emitter.createFactory(),
-        emitter.createClass(),
-      ]);
+      file.body.addAll([emitter.createFactory(), emitter.createClass()]);
     }
 
     // Write imports AND backing code required for generated injectors.

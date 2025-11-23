@@ -17,10 +17,7 @@ class AngularArtifacts {
   /// Processed `@Directive`-annotated classes.
   final List<CompileDirectiveMetadata> directives;
 
-  const AngularArtifacts({
-    required this.components,
-    required this.directives,
-  });
+  const AngularArtifacts({required this.components, required this.directives});
 
   /// Whether the input has no component and directives.
   bool get isEmpty => components.isEmpty && directives.isEmpty;
@@ -105,11 +102,19 @@ class TemplateCompiler {
   }
 
   List<DartSourceOutput> compileStylesheet(
-      String stylesheetUrl, String cssText) {
-    final plainStyles =
-        _styleCompiler.compileStylesheet(stylesheetUrl, cssText, false);
-    final shimStyles =
-        _styleCompiler.compileStylesheet(stylesheetUrl, cssText, true);
+    String stylesheetUrl,
+    String cssText,
+  ) {
+    final plainStyles = _styleCompiler.compileStylesheet(
+      stylesheetUrl,
+      cssText,
+      false,
+    );
+    final shimStyles = _styleCompiler.compileStylesheet(
+      stylesheetUrl,
+      cssText,
+      true,
+    );
     return [
       _createSourceModule(
         stylesModuleUrl(stylesheetUrl, false),
@@ -131,13 +136,7 @@ class TemplateCompiler {
     String moduleUrl,
     List<o.Statement> statements,
   ) {
-    final sourceCode = _outputEmitter.emitStatements(
-      moduleUrl,
-      statements,
-    );
-    return DartSourceOutput(
-      outputUrl: moduleUrl,
-      sourceCode: sourceCode,
-    );
+    final sourceCode = _outputEmitter.emitStatements(moduleUrl, statements);
+    return DartSourceOutput(outputUrl: moduleUrl, sourceCode: sourceCode);
   }
 }

@@ -43,10 +43,7 @@ void main() {
     test('OpaqueToken', () {
       final token = reader.parseTokenObject(tokens[1]);
       expect(token, const TypeMatcher<OpaqueTokenElement>());
-      expect(
-        (token as OpaqueTokenElement).identifier,
-        'exampleToken',
-      );
+      expect((token as OpaqueTokenElement).identifier, 'exampleToken');
     });
 
     group('LiteralToken throws', () {
