@@ -173,7 +173,7 @@ class _NormalizedComponentVisitor extends RecursiveElementVisitor2<void> {
               UnresolvedExpressionError(
                 [argument.expression],
                 element,
-                annotationImpl.compilationUnit,
+                annotationImpl.libraryFragment,
               ),
             );
             break;
@@ -185,7 +185,7 @@ class _NormalizedComponentVisitor extends RecursiveElementVisitor2<void> {
               UnresolvedExpressionError(
                 values.elements.where(_isUnresolvedOrNotAnExpression),
                 element,
-                annotationImpl.compilationUnit,
+                annotationImpl.libraryFragment,
               ),
             );
           }
@@ -248,8 +248,8 @@ class _ComponentVisitor
     AnnotationInformation<ClassElement>? directiveInfo;
     AnnotationInformation<ClassElement>? linkInfo;
 
-    for (var index = 0; index < element.metadata.length; index++) {
-      final annotation = element.metadata[index];
+    for (var index = 0; index < element.metadata.annotations.length; index++) {
+      final annotation = element.metadata.annotations[index];
       final annotationInfo = AnnotationInformation(
         element,
         annotation,
@@ -317,10 +317,10 @@ class _ComponentVisitor
 
     for (
       var annotationIndex = 0;
-      annotationIndex < element.metadata.length;
+      annotationIndex < element.metadata.annotations.length;
       annotationIndex++
     ) {
-      var annotation = element.metadata[annotationIndex];
+      var annotation = element.metadata.annotations[annotationIndex];
       final annotationInfo = AnnotationInformation(
         element,
         annotation,
@@ -614,7 +614,7 @@ class _ComponentVisitor
         return;
       }
       var classId = CompileIdentifierMetadata(
-        name: _directiveClassElement!.name,
+        name: _directiveClassElement!.displayName,
         moduleUrl: moduleUrl(_directiveClassElement!.library),
         analyzedClass: AnalyzedClass(_directiveClassElement!),
       );
@@ -811,8 +811,11 @@ class _ComponentVisitor
     if (lifecycleHooks.contains(LifecycleHooks.doCheck)) {
       final ngDoCheck =
           element.getMethod('ngDoCheck') ??
-          element.lookUpInheritedMethod('ngDoCheck', element.library);
-      if (ngDoCheck != null && ngDoCheck.isAsynchronous) {
+          element.lookUpInheritedMethod(
+            methodName: 'ngDoCheck',
+            library: element.library,
+          );
+      if (ngDoCheck != null && ngDoCheck.firstFragment.isAsynchronous) {
         CompileContext.current.reportAndRecover(
           BuildError.forElement(
             ngDoCheck,
@@ -987,7 +990,7 @@ class _ComponentVisitor
       AnalyzedClass? analyzedClass;
       if (id is PrefixedIdentifier) {
         // We only allow prefixed identifiers to have library prefixes.
-        if (id.prefix.staticElement is! PrefixElement) {
+        if (id.prefix.element is! PrefixElement) {
           _exceptionHandler.handle(
             ErrorMessageForAnnotation(
               annotationInfo,
@@ -1003,7 +1006,7 @@ class _ComponentVisitor
         name = id.name;
       }
 
-      final staticElement = id.staticElement;
+      final staticElement = id.element;
       if (staticElement is ClassElement) {
         analyzedClass = AnalyzedClass(staticElement);
       } else if (staticElement == null) {

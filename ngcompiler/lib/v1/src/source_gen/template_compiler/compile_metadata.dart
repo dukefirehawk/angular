@@ -5,7 +5,7 @@ import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor2.dart';
 import 'package:analyzer/src/dart/constant/value.dart';
 import 'package:analyzer/src/dart/element/element.dart';
-import 'package:analyzer/src/generated/utilities_dart.dart';
+//import 'package:analyzer/src/generated/utilities_dart.dart';
 import 'package:ngdart/src/meta.dart';
 import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:ngcompiler/v1/cli.dart';
@@ -388,7 +388,7 @@ class CompileTypeMetadataVisitor
       return CompileTokenMetadata(
         identifier: CompileIdentifierMetadata(
           name: name,
-          moduleUrl: moduleUrl(id.staticElement!.library!),
+          moduleUrl: moduleUrl(id.element!), // id.staticElement!.library!),
         ),
       );
     }

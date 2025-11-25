@@ -203,7 +203,7 @@ class UnresolvedExpressionError extends AsyncBuildError {
   final Iterable<AstNode> expressions;
   final ClassElement componentType;
   //final CompilationUnitElement compilationUnit;
-  final InvalidType compilationUnit;
+  final Fragment compilationUnit;
 
   UnresolvedExpressionError(
     this.expressions,
@@ -226,7 +226,7 @@ class UnresolvedExpressionError extends AsyncBuildError {
   BuildError _buildErrorForUnresolvedExpressions(
     Iterable<AstNode> expressions,
     ClassElement componentType,
-    InvalidType compilationUnit,
+    Fragment compilationUnit,
   ) {
     return BuildError.withoutContext(
       messages.unresolvedSource(

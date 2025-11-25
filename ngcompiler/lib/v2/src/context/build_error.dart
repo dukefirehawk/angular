@@ -59,7 +59,7 @@ abstract class BuildError extends Error {
 
   /// Creates a build error using the provided source element as [context].
   factory BuildError.forElement(Element context, String message) {
-    final source = context.source;
+    final source = context.library?.firstFragment.source;
     if (source == null || source.contents.data.isEmpty) {
       final warning = source == null
           ? 'No source text available for $context'
