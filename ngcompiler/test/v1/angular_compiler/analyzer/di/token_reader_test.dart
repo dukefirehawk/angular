@@ -28,7 +28,7 @@ void main() {
       class Example {
         const Example();
       }
-    '''))!.metadata.first.computeConstantValue()!.toListValue()!;
+    '''))!.metadata.annotations.first.computeConstantValue()!.toListValue()!;
     });
 
     test('Type', () {

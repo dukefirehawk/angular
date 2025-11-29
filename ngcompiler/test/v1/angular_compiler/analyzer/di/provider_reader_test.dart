@@ -23,7 +23,7 @@ void main() {
     late ClassElement $ExamplePrime;
     late ClassElement $DependencyA;
     late ClassElement $DependencyB;
-    late FunctionElement $createExample;
+    late TopLevelFunctionElement $createExample;
     late MethodElement $ExampleCreate;
 
     setUpAll(() async {
@@ -101,9 +101,9 @@ void main() {
       $ExamplePrime = testLib.getClass('ExamplePrime')!;
       $DependencyA = testLib.getClass('DependencyA')!;
       $DependencyB = testLib.getClass('DependencyB')!;
-      $createExample = testLib.definingCompilationUnit.functions.first;
+      $createExample = testLib.firstFragment.functions.first.element;
       $ExampleCreate = $Example.getMethod('create')!;
-      providers = $Example.metadata.first
+      providers = $Example.metadata.annotations.first
           .computeConstantValue()!
           .toListValue()!;
     });

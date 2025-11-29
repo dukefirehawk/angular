@@ -15,6 +15,7 @@ void main() {
       library
           .getClass('Example')!
           .metadata
+          .annotations
           .first
           .computeConstantValue()!
           .getField('template')!
@@ -32,7 +33,12 @@ void main() {
       class Example {}
       ''', includeAngularDeps: false);
     expect(
-      library.getClass('Example')!.metadata.first.computeConstantValue(),
+      library
+          .getClass('Example')!
+          .metadata
+          .annotations
+          .first
+          .computeConstantValue(),
       isNull,
       reason: 'Angular was not loaded',
     );
@@ -54,7 +60,7 @@ void main() {
     );
     final clazz = library.getClass('Example')!;
     expect(
-      clazz.metadata.first
+      clazz.metadata.annotations.first
           .computeConstantValue()!
           .getField('template')!
           .toStringValue(),

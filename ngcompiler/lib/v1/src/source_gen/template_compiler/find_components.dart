@@ -294,15 +294,16 @@ class _ComponentVisitor
   }
 
   @override
-  CompileDirectiveMetadata? visitPropertyAccessorElement(
-    PropertyAccessorElement element,
-  ) {
-    super.visitPropertyAccessorElement(element);
-    _visitClassMember(
-      element,
-      isGetter: element.isGetter,
-      isSetter: element.isSetter,
-    );
+  CompileDirectiveMetadata? visitGetterElement(GetterElement element) {
+    super.visitGetterElement(element);
+    _visitClassMember(element, isGetter: true, isSetter: false);
+    return null;
+  }
+
+  @override
+  CompileDirectiveMetadata? visitSetterElement(SetterElement element) {
+    super.visitSetterElement(element);
+    _visitClassMember(element, isGetter: false, isSetter: true);
     return null;
   }
 
@@ -710,7 +711,7 @@ class _ComponentVisitor
     DirectiveVisitor(
       onHostBinding: _addHostBinding,
       onHostListener: _addHostListener,
-    ).visitDirective(element);
+    ).visitDirective(element.firstFragment);
     _collectInheritableMetadata(element);
     final isComponent = directiveInfo.isComponent;
     final annotationValue = directiveInfo.constantValue;

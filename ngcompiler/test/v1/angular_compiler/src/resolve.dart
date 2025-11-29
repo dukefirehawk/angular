@@ -53,5 +53,5 @@ Future<ClassElement?> resolveClass(String source, [String? name]) async {
   final library = await resolveLibrary(source);
   return name != null
       ? library.getClass(name)
-      : library.definingCompilationUnit.classes.first;
+      : library.firstFragment.classes.first.element;
 }

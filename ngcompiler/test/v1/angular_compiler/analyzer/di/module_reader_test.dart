@@ -63,10 +63,10 @@ void main() {
       ''');
       $Example = testLib.getClass('Example')!;
       $Dependency = testLib.getClass('Dependency')!;
-      $listModule = $Example.metadata.first.computeConstantValue()!;
-      $newModuleA = $Example.metadata[1].computeConstantValue()!;
-      $newModuleB = $Example.metadata[2].computeConstantValue()!;
-      $newModuleC = $Example.metadata[3].computeConstantValue()!;
+      $listModule = $Example.metadata.annotations.first.computeConstantValue()!;
+      $newModuleA = $Example.metadata.annotations[1].computeConstantValue()!;
+      $newModuleB = $Example.metadata.annotations[2].computeConstantValue()!;
+      $newModuleC = $Example.metadata.annotations[3].computeConstantValue()!;
     });
 
     group('should parse module', () {
@@ -240,6 +240,7 @@ void main() {
         testLib
             .getClass('Example')!
             .metadata
+            .annotations
             .map((e) => e.computeConstantValue()),
       );
       aListOfProviders = testObjects[0];

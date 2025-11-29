@@ -54,11 +54,11 @@ void main() {
     });
 
     group('injection annotations', () {
-      Element getParameterFrom(String name) => testLib
-          .definingCompilationUnit
+      FormalParameterFragment getParameterFrom(String name) => testLib
+          .firstFragment
           .functions
           .firstWhere((e) => e.name == name)
-          .parameters
+          .formalParameters
           .first;
 
       const {
@@ -70,7 +70,7 @@ void main() {
       }.forEach((name, type) {
         test('of $type should find "$name"', () {
           final parameter = getParameterFrom(name);
-          expect(type.firstAnnotationOfExact(parameter), isNotNull);
+          expect(type.firstAnnotationOfExact(parameter.element), isNotNull);
         });
       });
     });

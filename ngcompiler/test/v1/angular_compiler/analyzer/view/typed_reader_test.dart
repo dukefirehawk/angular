@@ -21,7 +21,7 @@ Future<TypedElement> parse(String source) async {
   final element = await resolveClass(amendedSource, 'Example');
 
   final typedReader = TypedReader(element!);
-  final typedValue = element.metadata
+  final typedValue = element.metadata.annotations
       .firstWhere((annotation) => annotation.element!.name == 'typed')
       .computeConstantValue()!;
   return typedReader.parse(typedValue);
@@ -230,7 +230,8 @@ void main() {
     Future<void> parseTyped(LibraryElement element) async {
       final example = element.getClass('Example')!;
       final typedReader = TypedReader(example);
-      final typedValue = example.metadata.first.computeConstantValue()!;
+      final typedValue = example.metadata.annotations.first
+          .computeConstantValue()!;
       typedReader.parse(typedValue);
     }
 

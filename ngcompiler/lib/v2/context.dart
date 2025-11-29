@@ -72,7 +72,7 @@ Future<T> runWithContext<T>(CompileContext instance, Future<T> Function() run) {
       }
     },
     zoneSpecification: ZoneSpecification(
-      print: (_, __, ___, line) => log.info(line),
+      print: (_, _, _, line) => log.info(line),
     ),
     zoneValues: {_compileContextKey: instance},
   )?.then((result) {

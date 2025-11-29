@@ -1,7 +1,6 @@
 import 'package:analyzer/dart/analysis/results.dart';
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/error/error.dart';
 import 'package:build/build.dart';
 import 'package:source_span/source_span.dart';
@@ -220,6 +219,32 @@ class UnresolvedExpressionError extends AsyncBuildError {
     ),
   );
 
+  // Replacement for ClassElement.contetns.data
+  Iterable<Element> allClassMembers(ClassElement cls) sync* {
+    // Fields (include synthetic accessors)
+    for (var field in cls.fields) {
+      yield field;
+      if (field.getter case var g when g != null) yield g;
+      if (field.setter case var s when s != null) yield s;
+    }
+
+    // Methods
+    yield* cls.methods;
+
+    // Constructors
+    yield* cls.constructors;
+  }
+
+  String allClassMembersContentData(ClassElement cls) {
+    var contents = allClassMembers(cls);
+    var buffer = StringBuffer();
+    for (var member in contents) {
+      buffer.write('${member.name}\n');
+    }
+
+    return buffer.toString();
+  }
+
   // TODO(deboer): Since we are checking ElementAnnotation.constantValueErrors,
   // all code paths that call this function are unreachable.
   // If we don't see any errors in the wild, delete this code.
@@ -235,7 +260,7 @@ class UnresolvedExpressionError extends AsyncBuildError {
             sourceSpanWithLineInfo(
               e.offset,
               e.length,
-              componentType.contents.data,
+              allClassMembersContentData(componentType),
               componentType.library.firstFragment.source.uri,
             ),
             'This argument *may* have not been resolved',

@@ -68,23 +68,21 @@ void main() {
 
     ClassElement? classNamed(String name) => library.getClass(name);
 
-    FunctionElement functionNamed(String name) => library
-        .definingCompilationUnit
-        .functions
-        .firstWhere((e) => e.name == name);
+    TopLevelFunctionFragment functionNamed(String name) =>
+        library.firstFragment.functions.firstWhere((e) => e.name == name);
 
     test('a function with no parameters', () {
       final function = functionNamed('createExample0');
-      final deps = reader.parseDependencies(function);
-      expect(deps.bound, const TypeMatcher<FunctionElement>());
+      final deps = reader.parseDependencies(function.element);
+      expect(deps.bound, const TypeMatcher<TopLevelFunctionFragment>());
       expect(deps.positional, isEmpty);
       expect(deps.named, isEmpty);
     });
 
     test('a function with one parameter', () {
       final function = functionNamed('createExample1');
-      final deps = reader.parseDependencies(function);
-      expect(deps.bound, const TypeMatcher<FunctionElement>());
+      final deps = reader.parseDependencies(function.element);
+      expect(deps.bound, const TypeMatcher<TopLevelFunctionFragment>());
       expect(deps.positional, [
         DependencyElement(
           TypeTokenElement(
@@ -97,8 +95,8 @@ void main() {
 
     test('a function with two parameters, of which one is named', () {
       final function = functionNamed('createExample2');
-      final deps = reader.parseDependencies(function);
-      expect(deps.bound, const TypeMatcher<FunctionElement>());
+      final deps = reader.parseDependencies(function.element);
+      expect(deps.bound, const TypeMatcher<TopLevelFunctionFragment>());
       expect(deps.positional, [
         DependencyElement(
           TypeTokenElement(
@@ -111,7 +109,7 @@ void main() {
 
     test('a function with a parameter annotated with @Host', () {
       final function = functionNamed('createExampleHost');
-      final deps = reader.parseDependencies(function);
+      final deps = reader.parseDependencies(function.element);
       expect(deps.positional, [
         DependencyElement(
           TypeTokenElement(
@@ -124,7 +122,7 @@ void main() {
 
     test('a function with a parameter annotated with @Optional', () {
       final function = functionNamed('createExampleOptional');
-      final deps = reader.parseDependencies(function);
+      final deps = reader.parseDependencies(function.element);
       expect(deps.positional, [
         DependencyElement(
           TypeTokenElement(
@@ -141,7 +139,7 @@ void main() {
 
     test('a function with a parameter annotated with @Self', () {
       final function = functionNamed('createExampleSelf');
-      final deps = reader.parseDependencies(function);
+      final deps = reader.parseDependencies(function.element);
       expect(deps.positional, [
         DependencyElement(
           TypeTokenElement(
@@ -154,7 +152,7 @@ void main() {
 
     test('a function with a parameter annotated with @SkipSelf', () {
       final function = functionNamed('createExampleSkipSelf');
-      final deps = reader.parseDependencies(function);
+      final deps = reader.parseDependencies(function.element);
       expect(deps.positional, [
         DependencyElement(
           TypeTokenElement(
@@ -167,7 +165,7 @@ void main() {
 
     test('a function with a parameter annotated with @Inject', () {
       final function = functionNamed('createExampleInject');
-      final deps = reader.parseDependencies(function);
+      final deps = reader.parseDependencies(function.element);
       expect(deps.positional, [
         DependencyElement(
           OpaqueTokenElement(
@@ -184,7 +182,7 @@ void main() {
 
     test('a function with a parameter annotated with an OpaqueToken', () {
       final function = functionNamed('createExampleInjectToken');
-      final deps = reader.parseDependencies(function);
+      final deps = reader.parseDependencies(function.element);
       expect(deps.positional, [
         DependencyElement(
           OpaqueTokenElement(
@@ -201,7 +199,7 @@ void main() {
 
     test('a function with an untyped parameter annotated with @Inject', () {
       final function = functionNamed('createExampleDynamic');
-      final deps = reader.parseDependencies(function);
+      final deps = reader.parseDependencies(function.element);
       expect(deps.positional, [
         DependencyElement(
           TypeTokenElement(

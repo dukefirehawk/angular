@@ -1,10 +1,22 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:build_test/build_test.dart';
 import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 import 'resolve.dart';
+
+// Replacement for removed scopeLogAsync function in package:build
+Future<T> scopeLogAsync<T>(Future<T> Function() fn, Logger logger) async {
+  final sub = logger.onRecord.listen((record) {
+    print('${record.level.name}: ${record.time}: ${record.message}');
+  });
+
+  try {
+    return await fn();
+  } finally {
+    await sub.cancel();
+  }
+}
 
 Future<T> _recordLogs<T>(
   Future<T> Function() run,
