@@ -18,7 +18,7 @@ void main() {
       final lib = await resolve('''
         dynamic topLevelField;
         ''', includeAngularDeps: false);
-      final field = lib.library.topLevelFunctions.last as VariableElement;
+      final field = lib.library.topLevelVariables.last as VariableElement;
       expect(field.type.isExplicitlyNullable, isFalse);
       expect(field.type.isExplicitlyNonNullable, isFalse);
     }
@@ -32,7 +32,7 @@ void main() {
         final lib = await resolve('''
           String topLevelField;
           ''', includeAngularDeps: false);
-        final field = lib.library.topLevelFunctions.last as VariableElement;
+        final field = lib.library.topLevelVariables.last as VariableElement;
         expect(field.type.isExplicitlyNullable, isFalse);
         expect(field.type.isExplicitlyNonNullable, isTrue);
       });
@@ -41,7 +41,7 @@ void main() {
         final lib = await resolve('''
           String? topLevelField;
           ''', includeAngularDeps: false);
-        final field = lib.library.topLevelFunctions.last as VariableElement;
+        final field = lib.library.topLevelVariables.last as VariableElement;
         expect(field.type.isExplicitlyNullable, isTrue);
         expect(field.type.isExplicitlyNonNullable, isFalse);
       });
@@ -51,7 +51,7 @@ void main() {
           import 'dart:async';
           FutureOr<String?> topLevelField;
           ''', includeAngularDeps: false);
-        final field = lib.library.topLevelFunctions.last as VariableElement;
+        final field = lib.library.topLevelVariables.last as VariableElement;
         expect(field.type.isExplicitlyNullable, isTrue);
         expect(field.type.isExplicitlyNonNullable, isFalse);
       });
@@ -69,7 +69,7 @@ void main() {
           
           String topLevelField;
           ''', includeAngularDeps: false);
-          final field = lib.library.topLevelFunctions.last as VariableElement;
+          final field = lib.library.topLevelVariables.last as VariableElement;
           expect(field.type.isExplicitlyNullable, isFalse);
           expect(field.type.isExplicitlyNonNullable, isFalse);
         },
@@ -84,7 +84,7 @@ void main() {
           import 'dart:async';
           FutureOr<String> topLevelField;
           ''', includeAngularDeps: false);
-          final field = lib.library.topLevelFunctions.last as VariableElement;
+          final field = lib.library.topLevelVariables.last as VariableElement;
           expect(field.type.isExplicitlyNullable, isFalse);
           expect(field.type.isExplicitlyNonNullable, isFalse);
         },

@@ -59,11 +59,10 @@ void main() {
       },
     );
     final clazz = library.getClass('Example')!;
+
+    var annotation = clazz.metadata.annotations.first;
     expect(
-      clazz.metadata.annotations.first
-          .computeConstantValue()!
-          .getField('template')!
-          .toStringValue(),
+      annotation.computeConstantValue()!.getField('template')!.toStringValue(),
       'Hello World',
     );
     expect(clazz.supertype!.element.name, 'Base');

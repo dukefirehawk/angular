@@ -2,16 +2,14 @@ import 'dart:io';
 
 import 'package:build/build.dart';
 import 'package:build/experiments.dart';
-import 'package:build_resolvers/build_resolvers.dart';
 import 'package:build_test/build_test.dart' hide testBuilder;
 import 'package:glob/glob.dart';
 import 'package:logging/logging.dart';
 import 'package:test/test.dart';
-import 'package:ngdart/src/build.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 /// A 'test' build process (similar to the normal one).
-final Builder _testAngularBuilder = MultiplexingBuilder([
+final Builder _testAngularBuilder = AggregateBuilder([
   templateCompiler(BuilderOptions({})),
   stylesheetCompiler(BuilderOptions({})),
 ]);
@@ -61,10 +59,7 @@ Future<void> _testBuilder(
   // Setup the readers/writers for assets.
   final sources = InMemoryAssetReader(rootPackage: rootPackage);
   final packages = await _packageAssets;
-  final reader = MultiAssetReader([
-    sources,
-    packages,
-  ]);
+  final reader = MultiAssetReader([sources, packages]);
 
   // Sanity check.
   if (!await reader.canRead(AssetId(ngPackage, 'lib/angular.dart'))) {
@@ -150,9 +145,7 @@ Future<void> compilesExpecting(
   include ??= const {};
 
   // Complete list of input sources.
-  final sources = <String, String>{
-    inputSource: input,
-  }..addAll(include);
+  final sources = <String, String>{inputSource: input}..addAll(include);
 
   // Run the builder.
   final records = <Level, List<LogRecord>>{};
@@ -180,9 +173,12 @@ void expectLogRecords(List<LogRecord>? logs, matcher, String reasonPrefix) {
     return;
   }
   logs ??= [];
-  expect(logs.map(formattedLogMessage), matcher,
-      reason:
-          '$reasonPrefix: \n${logs.map((l) => '${formattedLogMessage(l)} at:\n ${l.stackTrace}')}');
+  expect(
+    logs.map(formattedLogMessage),
+    matcher,
+    reason:
+        '$reasonPrefix: \n${logs.map((l) => '${formattedLogMessage(l)} at:\n ${l.stackTrace}')}',
+  );
 }
 
 String formattedLogMessage(LogRecord record) {
@@ -201,15 +197,14 @@ Future<void> compilesNormally(
   String? inputSource,
   Map<String, String>? include,
   Set<AssetId>? runBuilderOn,
-}) =>
-    compilesExpecting(
-      input,
-      inputSource: inputSource,
-      runBuilderOn: runBuilderOn,
-      include: include,
-      errors: isEmpty,
-      warnings: isEmpty,
-    );
+}) => compilesExpecting(
+  input,
+  inputSource: inputSource,
+  runBuilderOn: runBuilderOn,
+  include: include,
+  errors: isEmpty,
+  warnings: isEmpty,
+);
 
 /// Match for a source location, but don't require tests to manage package
 /// names.

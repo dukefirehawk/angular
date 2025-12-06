@@ -34,7 +34,7 @@ Future<LibraryElement> resolveLibrary(String source) async {
       $source
     ''';
 
-  //print(inputSource);
+  print(inputSource);
   return withEnabledExperiments(
     () => resolveSource(
       inputSource,

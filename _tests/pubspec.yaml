@@ -22,7 +22,6 @@ dependencies:
 
 dev_dependencies:
   analyzer: ^8.4.0
-  build: ^4.0.3
   build_runner: ^2.3.3
   build_web_compilers: ^4.1.3
   csslib: ^1.0.0
