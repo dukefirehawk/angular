@@ -4,8 +4,8 @@ import 'dart:js_interop';
 import 'package:sanitize_html/sanitize_html.dart';
 import 'package:web/web.dart' show DocumentFragment;
 
-import 'package:ngdart/src/core/application_tokens.dart' as tokens show appId;
-import 'package:ngdart/src/runtime/dom_events.dart' show EventManager;
+import '../../core/application_tokens.dart' as tokens show appId;
+import '../../runtime/dom_events.dart' show EventManager;
 
 /// Application wide view utilities.
 late AppViewUtils appViewUtils;
@@ -16,10 +16,7 @@ class AppViewUtils {
   final String appId;
   final EventManager eventManager;
 
-  AppViewUtils(
-    @tokens.appId this.appId,
-    this.eventManager,
-  );
+  AppViewUtils(@tokens.appId this.appId, this.eventManager);
 }
 
 /// Creates a document fragment from [trustedHtml].

@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
-import 'package:ngdart/src/meta.dart';
+
+import '../../meta/directives.dart';
 
 final RegExp _re = RegExp('^(\\d+)?\\.((\\d+)(\\-(\\d+))?)?\$');
 
@@ -115,14 +116,13 @@ class CurrencyPipe extends _NumberPipe {
     String currencyCode = 'USD',
     bool symbolDisplay = false,
     String? digits,
-  ]) =>
-      _NumberPipe._format(
-        value,
-        _NumberFormatStyle.currency,
-        digits,
-        currencyCode,
-        symbolDisplay,
-      );
+  ]) => _NumberPipe._format(
+    value,
+    _NumberFormatStyle.currency,
+    digits,
+    currencyCode,
+    symbolDisplay,
+  );
 
   const CurrencyPipe();
 }

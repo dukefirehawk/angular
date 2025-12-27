@@ -1,5 +1,6 @@
 import 'package:meta/dart2js.dart' as dart2js;
-import 'package:ngdart/src/utilities.dart';
+
+import '../utilities/is_dev_mode.dart';
 
 /// Current stack of tokens being requested for an injection.
 List<Object>? _tokenStack;
@@ -93,16 +94,16 @@ class NoProviderError extends InjectionError {
   final List<Object> path;
 
   NoProviderError._(this.token, List<Object>? stack)
-      : path = _withAdjacentDeduped(stack, token),
-        super._();
+    : path = _withAdjacentDeduped(stack, token),
+      super._();
 
   @override
   String toString() => path.isEmpty
       ? _noProviderError(token)
       : '${_noProviderError(token)}:\n'
-          '  ${path.join(' ->\n  ')} ->\n'
-          '  $token.\n'
-          '**NOTE**: This path is not exhaustive, and nodes may be missing '
-          'in between the "->" delimiters. There is ongoing work to improve '
-          'this error message and include all the nodes where possible. ';
+            '  ${path.join(' ->\n  ')} ->\n'
+            '  $token.\n'
+            '**NOTE**: This path is not exhaustive, and nodes may be missing '
+            'in between the "->" delimiters. There is ongoing work to improve '
+            'this error message and include all the nodes where possible. ';
 }

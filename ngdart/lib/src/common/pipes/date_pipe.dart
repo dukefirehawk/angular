@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/utilities.dart';
 
+import '../../meta/directives.dart';
+import '../../utilities/unsafe_cast.dart';
 import 'invalid_pipe_argument_exception.dart';
 
 /// Formats a date value to a string based on the requested format.
@@ -77,7 +77,7 @@ class DatePipe {
     'mediumDate': 'yMMMd',
     'shortDate': 'yMd',
     'mediumTime': 'jms',
-    'shortTime': 'jm'
+    'shortTime': 'jm',
   };
 
   String? transform(dynamic value, [String pattern = 'mediumDate']) {

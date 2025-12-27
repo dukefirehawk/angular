@@ -1,6 +1,6 @@
-import 'package:ngdart/angular.dart';
 import 'package:web/web.dart' show Element;
 
+import '../meta/directives.dart';
 import 'dom_sanitization_service.dart' show SafeHtml;
 
 /// Sets [Element.innerHTML] _without_ sanitizing the HTML output.
@@ -40,7 +40,7 @@ class SafeInnerHtmlDirective {
   SafeInnerHtmlDirective(this._element);
 
   @Input()
-  set safeInnerHtml(safeInnerHtml) {
+  set safeInnerHtml(dynamic safeInnerHtml) {
     // print('Setting inner html as $safeInnerHtml');
     if (safeInnerHtml is SafeHtml) {
       //_element.setInnerHtml(
@@ -60,9 +60,7 @@ class SafeInnerHtmlDirective {
       // origin instead of passing a primitive string through layers
       // of code which could introduce mutations making security auditing
       // hard.
-      throw UnsupportedError(
-        'SafeHtml required (got $safeInnerHtml)',
-      );
+      throw UnsupportedError('SafeHtml required (got $safeInnerHtml)');
     }
   }
 }

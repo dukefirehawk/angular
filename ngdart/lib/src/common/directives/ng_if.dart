@@ -1,6 +1,6 @@
-import 'package:ngdart/src/core/linker.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/runtime/check_binding.dart';
+import '../../core/linker.dart';
+import '../../meta/directives.dart';
+import '../../runtime/check_binding.dart';
 
 /// Causes an element and its contents to be conditionally added/removed from
 /// the DOM based on the value of the given boolean template expression.
@@ -27,9 +27,7 @@ import 'package:ngdart/src/runtime/check_binding.dart';
 /// ```
 ///
 /// [guide]: https://webdev.dartlang.org/angular/guide/template-syntax.html#ngIf
-@Directive(
-  selector: '[ngIf]',
-)
+@Directive(selector: '[ngIf]')
 class NgIf {
   final TemplateRef _templateRef;
   final ViewContainerRef _viewContainer;

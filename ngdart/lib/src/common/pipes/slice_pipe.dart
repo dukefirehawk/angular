@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:ngdart/src/meta.dart';
-
+import '../../meta/directives.dart';
 import 'invalid_pipe_argument_exception.dart' show InvalidPipeArgumentException;
 
 /// Creates a new [List] or [String] containing a subset (slice) of the

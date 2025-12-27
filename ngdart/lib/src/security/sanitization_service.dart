@@ -2,11 +2,11 @@
 /// SafeValue equivalents that can be used to bind to in templates.
 abstract class SanitizationService {
   // Sanitizes html content.
-  String? sanitizeHtml(value);
+  String? sanitizeHtml(dynamic value);
   // Sanitizes css style.
-  String? sanitizeStyle(value);
+  String? sanitizeStyle(dynamic value);
   // Sanitizes url link.
-  String? sanitizeUrl(value);
+  String? sanitizeUrl(dynamic value);
   // Sanitizes resource loading url.
-  String? sanitizeResourceUrl(value);
+  String? sanitizeResourceUrl(dynamic value);
 }

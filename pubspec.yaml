@@ -11,7 +11,8 @@ workspace:
   - ngforms
   - ngrouter
   - goldens
-  - _tests
+  - ngdart2
+  #- _tests
 
 dev_dependencies:
   melos: ^7.3.0

@@ -3,12 +3,13 @@ import 'package:web/web.dart' show Element;
 
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/core/change_detection/change_detection.dart';
-import 'package:ngdart/src/core/change_detection/host.dart';
-import 'package:ngdart/src/di/errors.dart';
-import 'package:ngdart/src/di/injector.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/utilities.dart';
+import '../../../core/change_detection/change_detection.dart'
+    hide ChangeDetectorState, ChangeDetectionStrategy;
+import '../../../core/change_detection/host.dart';
+import '../../../di/errors.dart';
+import '../../../di/injector.dart';
+import '../../../meta/change_detection_constants.dart';
+import '../../../utilities/unsafe_cast.dart';
 
 /// The base implementation of all views.
 ///
@@ -191,8 +192,7 @@ abstract class View implements ChangeDetectorRef {
     Object token,
     int nodeIndex,
     Object? notFoundResult,
-  ) =>
-      notFoundResult;
+  ) => notFoundResult;
 
   /// The dependency lookup implementation for [injectorGet].
   ///
@@ -280,30 +280,24 @@ class _ElementInjector extends Injector {
   _ElementInjector(this._view, this._nodeIndex);
 
   @override
-  T provideUntyped<T>(
-    Object token, [
-    Object? orElse = throwIfNotFound,
-  ]) =>
+  T provideUntyped<T>(Object token, [Object? orElse = throwIfNotFound]) =>
       unsafeCast(_view.inject(token, _nodeIndex, orElse));
 
   @override
   Object? injectFromAncestryOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
-  ]) =>
-      throw UnimplementedError();
+  ]) => throw UnimplementedError();
 
   @override
   Object? injectFromParentOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
-  ]) =>
-      throw UnimplementedError();
+  ]) => throw UnimplementedError();
 
   @override
   Object? injectFromSelfOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
-  ]) =>
-      throw UnimplementedError();
+  ]) => throw UnimplementedError();
 }

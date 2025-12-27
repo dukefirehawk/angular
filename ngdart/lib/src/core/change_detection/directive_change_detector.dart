@@ -1,6 +1,6 @@
 import 'package:web/web.dart';
 
-import 'package:ngdart/src/core/linker/views/render_view.dart';
+import '../linker/views/render_view.dart';
 
 /// Base class for helpers generated for some classes annotated with @Directive.
 ///

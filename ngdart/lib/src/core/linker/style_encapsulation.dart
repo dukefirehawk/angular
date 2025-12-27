@@ -1,9 +1,10 @@
 import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
-import 'package:ngdart/src/core/linker/app_view_utils.dart';
-import 'package:ngdart/src/runtime/dom_helpers.dart';
-import 'package:ngdart/src/utilities.dart';
+import '../../core/linker/app_view_utils.dart';
+import '../../runtime/dom_helpers.dart';
+import '../../utilities/is_dev_mode.dart';
+import '../../utilities/unsafe_cast.dart';
 
 /// Clears all component styles from the DOM.
 ///
@@ -109,10 +110,8 @@ class ComponentStyles {
 
   /// Creates a [ComponentStyles] that directly appends [styles] to the DOM.
   @dart2js.noInline
-  factory ComponentStyles.unscoped(
-    List<Object> styles,
-    String? componentUrl,
-  ) = _UnscopedComponentStyles;
+  factory ComponentStyles.unscoped(List<Object> styles, String? componentUrl) =
+      _UnscopedComponentStyles;
 
   /// Adds a CSS shim class to [element].
   void addContentShimClass(Element element) {
@@ -179,10 +178,7 @@ class ComponentStyles {
 }
 
 class _UnscopedComponentStyles extends ComponentStyles {
-  _UnscopedComponentStyles(
-    super.styles,
-    super.componentUrl,
-  ) : super._();
+  _UnscopedComponentStyles(super.styles, super.componentUrl) : super._();
 
   @override
   void addContentShimClass(Element element) {

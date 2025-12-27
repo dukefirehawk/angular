@@ -1,7 +1,5 @@
-import 'package:ngdart/src/utilities.dart';
-
+import '../../utilities/unsafe_cast.dart';
 import 'view_container.dart';
-import 'view_ref.dart' show EmbeddedViewRef;
 import 'views/embedded_view.dart';
 import 'views/render_view.dart';
 
@@ -19,12 +17,12 @@ import 'views/render_view.dart';
 /// it to the View Container.
 class TemplateRef {
   final ViewContainer _viewContainer;
-  final EmbeddedView<void> Function(RenderView, int) _viewFactory;
+  final EmbeddedView<dynamic> Function(RenderView, int) _viewFactory;
 
   TemplateRef(this._viewContainer, this._viewFactory);
 
   /// Instantiates an instance of the provided template.
-  EmbeddedViewRef createEmbeddedView() {
+  EmbeddedView<dynamic> createEmbeddedView() {
     // The unsafe cast is necessary because a view container's parent may be any
     // kind of view, but this method is only ever called when the parent view is
     // a `RenderView`.

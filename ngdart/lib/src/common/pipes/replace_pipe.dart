@@ -1,5 +1,4 @@
-import 'package:ngdart/src/meta.dart';
-
+import '../../meta/directives.dart';
 import 'invalid_pipe_argument_exception.dart' show InvalidPipeArgumentException;
 
 /// Creates a new String with some or all of the matches of a pattern replaced
@@ -30,8 +29,11 @@ import 'invalid_pipe_argument_exception.dart' show InvalidPipeArgumentException;
 class ReplacePipe {
   const ReplacePipe();
 
-  dynamic transform(dynamic value, dynamic /* String | RegExp */ pattern,
-      dynamic /* Function | String */ replacement) {
+  dynamic transform(
+    dynamic value,
+    dynamic /* String | RegExp */ pattern,
+    dynamic /* Function | String */ replacement,
+  ) {
     if (value == null) {
       return value;
     }
@@ -47,8 +49,9 @@ class ReplacePipe {
     }
     // template fails with literal RegExp e.g /pattern/igm
     if (replacement is String Function(Match)) {
-      var rgxPattern =
-          pattern is String ? RegExp(pattern) : (pattern as RegExp);
+      var rgxPattern = pattern is String
+          ? RegExp(pattern)
+          : (pattern as RegExp);
       return input.replaceAllMapped(rgxPattern, replacement);
     }
     if (pattern is RegExp) {

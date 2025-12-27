@@ -5,14 +5,20 @@ import 'package:build/experiments.dart';
 import 'package:build_test/build_test.dart' hide testBuilder;
 import 'package:glob/glob.dart';
 import 'package:logging/logging.dart';
+import 'package:ngcompiler/v1/src/compiler/stylesheet_compiler/builder.dart';
+import 'package:ngcompiler/v1/src/compiler/template_compiler.dart';
 import 'package:test/test.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 /// A 'test' build process (similar to the normal one).
-final Builder _testAngularBuilder = AggregateBuilder([
-  templateCompiler(BuilderOptions({})),
-  stylesheetCompiler(BuilderOptions({})),
-]);
+final Builder _testAngularBuilder1 = TemplateCompiler(
+  BuilderOptions({}),
+  null,
+  null,
+  null,
+);
+
+final Builder _testAngularBuilder2 = StylesheetCompiler(BuilderOptions({}));
 
 // Here to be configurable.
 //
@@ -57,7 +63,7 @@ Future<void> _testBuilder(
   String? rootPackage,
 }) async {
   // Setup the readers/writers for assets.
-  final sources = InMemoryAssetReader(rootPackage: rootPackage);
+  final sources = TestReaderWriter(rootPackage: rootPackage);
   final packages = await _packageAssets;
   final reader = MultiAssetReader([sources, packages]);
 
@@ -67,7 +73,7 @@ Future<void> _testBuilder(
   }
 
   // Load user sources.
-  final writer = InMemoryAssetWriter();
+  final writer = TestReaderWriter();
   final inputIds = runBuilderOn ?? [];
   sourceAssets.forEach((serializedId, contents) {
     final id = makeAssetId(serializedId);

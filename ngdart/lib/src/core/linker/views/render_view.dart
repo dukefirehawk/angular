@@ -3,13 +3,13 @@ import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
-import 'package:ngdart/src/core/linker/app_view_utils.dart';
-import 'package:ngdart/src/core/linker/style_encapsulation.dart';
-import 'package:ngdart/src/core/linker/view_container.dart';
-import 'package:ngdart/src/core/linker/view_fragment.dart';
-import 'package:ngdart/src/runtime/dom_helpers.dart';
-import 'package:ngdart/src/utilities.dart';
+import '../../../core/linker/app_view_utils.dart';
+import '../../../core/linker/style_encapsulation.dart';
+import '../../../core/linker/view_container.dart';
+import '../../../core/linker/view_fragment.dart';
+import '../../../runtime/dom_helpers.dart';
 
+import '../../../utilities/unsafe_cast.dart';
 import 'view.dart';
 
 /// A view that renders a portion of a component template.
@@ -161,9 +161,10 @@ abstract class RenderView extends View {
   /// known type.
   void Function(E) eventHandler1<E, F extends E>(void Function(F) handler) {
     assert(
-        E == Null || F != Null,
-        "Event handler '$handler' isn't assignable to expected type "
-        "'($E) => void'");
+      E == Null || F != Null,
+      "Event handler '$handler' isn't assignable to expected type "
+      "'($E) => void'",
+    );
     return (E event) {
       markForCheck();
       appViewUtils.eventManager.zone.runGuarded(

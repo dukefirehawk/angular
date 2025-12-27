@@ -3,12 +3,11 @@ import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/core/change_detection/host.dart';
-import 'package:ngdart/src/core/linker/style_encapsulation.dart';
-import 'package:ngdart/src/devtools.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/utilities.dart';
-
+import '../../../core/change_detection/host.dart';
+import '../../../core/linker/style_encapsulation.dart';
+import '../../../devtools.dart';
+import '../../../meta/change_detection_constants.dart';
+import '../../../utilities/is_dev_mode.dart';
 import 'render_view.dart';
 import 'view.dart';
 
@@ -312,7 +311,8 @@ class _ComponentViewData implements RenderViewData {
   }
 
   void _updateShouldSkipChangeDetection() {
-    _shouldSkipChangeDetection = _changeDetectionMode ==
+    _shouldSkipChangeDetection =
+        _changeDetectionMode ==
             ChangeDetectionCheckedState.waitingForMarkForCheck ||
         _changeDetectionMode ==
             ChangeDetectionCheckedState.waitingToBeAttached ||

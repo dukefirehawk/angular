@@ -28,7 +28,7 @@ export 'meta/visibility.dart';
 ///
 /// ```dart
 /// // my_component.dart
-/// import 'package:ngdart/angular.dart';
+/// import '../angular.dart';
 ///
 /// @Component(
 ///   selector: 'my-comp',

@@ -2,10 +2,10 @@ import 'dart:js_interop_unsafe';
 
 import 'package:web/web.dart';
 
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/utilities.dart';
-
 import '../../core/change_detection/differs/default_keyvalue_differ.dart';
+import '../../meta/directives.dart';
+import '../../meta/lifecycle_hooks.dart';
+import '../../utilities/unsafe_cast.dart';
 
 /// The `NgStyle` directive changes an element's style based on the bound style
 /// expression:
@@ -56,9 +56,7 @@ import '../../core/change_detection/differs/default_keyvalue_differ.dart';
 ///
 /// [guide]: https://webdev.dartlang.org/angular/guide/template-syntax.html#ngStyle
 /// [ex]: https://angulardart.dev/examples/template-syntax#ngStyle
-@Directive(
-  selector: '[ngStyle]',
-)
+@Directive(selector: '[ngStyle]')
 class NgStyle implements DoCheck {
   final Element _ngElement;
   Map<String, String?>? _rawStyle;
@@ -94,6 +92,8 @@ class NgStyle implements DoCheck {
     );
     */
     _ngElement.setProperty(
-        unsafeCast(record.key), unsafeCast(record.currentValue));
+      unsafeCast(record.key),
+      unsafeCast(record.currentValue),
+    );
   }
 }

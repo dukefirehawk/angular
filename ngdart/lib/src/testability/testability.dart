@@ -7,8 +7,8 @@ import 'package:web/web.dart';
 
 import 'package:meta/meta.dart';
 
-import '../../di.dart';
 import '../core/zone/ng_zone.dart';
+import '../meta/di_providers.dart';
 import 'js_api.dart';
 
 part 'js_impl.dart';

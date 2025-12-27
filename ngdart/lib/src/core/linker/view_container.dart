@@ -1,9 +1,9 @@
 import 'package:web/web.dart';
 
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/di/injector.dart' show Injector;
-import 'package:ngdart/src/utilities.dart';
+import '../../di/injector.dart' show Injector;
 
+import '../../utilities/unsafe_cast.dart';
 import 'component_factory.dart' show ComponentFactory, ComponentRef;
 import 'component_loader.dart';
 import 'element_ref.dart';
@@ -129,7 +129,7 @@ class ViewContainer extends ComponentLoader implements ViewContainerRef {
       contextInjector,
       projectableNodes,
     );
-    insert(componentRef.hostView, index);
+    insert(componentRef.hostView as ViewRef, index);
     return componentRef;
   }
 
@@ -267,6 +267,5 @@ class ViewContainer extends ComponentLoader implements ViewContainerRef {
   ComponentRef<T> loadNextTo<T extends Object>(
     ComponentFactory<T> component, {
     Injector? injector,
-  }) =>
-      loadNextToLocation(component, this, injector: injector);
+  }) => loadNextToLocation(component, this, injector: injector);
 }

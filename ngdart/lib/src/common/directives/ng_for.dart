@@ -1,8 +1,8 @@
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/utilities.dart';
-
 import '../../core/change_detection/differs/default_iterable_differ.dart';
 import '../../core/linker.dart';
+import '../../meta/directives.dart';
+import '../../meta/lifecycle_hooks.dart';
+import '../../utilities/unsafe_cast.dart';
 
 /// The `NgFor` directive instantiates a template once per item from an
 /// iterable. The context for each instantiated template inherits from the outer
@@ -82,9 +82,7 @@ import '../../core/linker.dart';
 /// page.
 ///
 /// [guide]: https://webdev.dartlang.org/angular/guide/template-syntax.html#ngFor
-@Directive(
-  selector: '[ngFor][ngForOf]',
-)
+@Directive(selector: '[ngFor][ngForOf]')
 class NgFor implements DoCheck {
   final ViewContainerRef _viewContainer;
 

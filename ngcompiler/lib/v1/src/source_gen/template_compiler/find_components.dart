@@ -344,7 +344,7 @@ class _ComponentVisitor
           }
           //DartType propertyType = setter.parameters.first.type;
           final dynamicType = setter.library.typeProvider.dynamicType;
-          var propertyType = setter.formalParameters.first.library2?.typeSystem;
+          var propertyType = setter.formalParameters.first.library?.typeSystem;
 
           // Resolves unspecified or bounded generic type parameters.
           // TODO: Migration to 3.6 (Need review)

@@ -34,12 +34,28 @@ Future<LibraryElement> resolveLibrary(String source) async {
       $source
     ''';
 
-  print(inputSource);
+  //print(inputSource);
   return withEnabledExperiments(
     () => resolveSource(
       inputSource,
       (resolver) async => (await resolver.findLibraryByName('_test'))!,
       inputId: AssetId('test_lib', 'lib/test_lib.dart'),
+      nonInputsToReadFromFilesystem: {
+        AssetId('ngdart', 'lib/angular.dart'),
+        AssetId('ngdart', 'lib/src/meta.dart'),
+        AssetId('ngdart', 'lib/src/meta/di_modules.dart'),
+        AssetId('ngdart', 'lib/src/meta/di_arguments.dart'),
+        AssetId('ngdart', 'lib/src/meta/di_tokens.dart'),
+        AssetId('ngdart', 'lib/src/meta/di_providers.dart'),
+        AssetId('ngdart', 'lib/src/meta/di_generate_injector.dart'),
+        AssetId('ngdart', 'lib/src/meta/lifecycle_hooks.dart'),
+        AssetId('ngdart', 'lib/src/meta/typed.dart'),
+        AssetId('ngdart', 'lib/src/meta/directives.dart'),
+        AssetId('ngdart', 'lib/src/meta/view.dart'),
+        AssetId('ngdart', 'lib/src/meta/visibility.dart'),
+        AssetId('ngdart', 'lib/src/meta/change_detection_constants.dart'),
+        AssetId('ngdart', 'lib/src/meta/change_detection_link.dart'),
+      },
       packageConfig: packageConfig,
     ),
     ['non-nullable'],

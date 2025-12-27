@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/utilities.dart';
+import '../utilities.dart';
 
 /// Whether [_debugCheckBinding] should throw if the values are different.
 var _debugThrowIfChanged = false;
@@ -80,10 +80,9 @@ bool checkBinding(
   Object? newValue, [
   String? expression,
   String? location,
-]) =>
-    isDevMode && _debugThrowIfChanged
-        ? !_debugCheckBinding(oldValue, newValue, expression, location)
-        : !identical(oldValue, newValue);
+]) => isDevMode && _debugThrowIfChanged
+    ? !_debugCheckBinding(oldValue, newValue, expression, location)
+    : !identical(oldValue, newValue);
 
 /// Returns `true` if [oldValue] is identical to [newValue].
 ///
@@ -107,12 +106,14 @@ bool _debugCheckBinding(
       : const _DevModeEquality().equals(oldValue, newValue);
 
   if (!isIdentical) {
-    _unstableExpressionValues.add(UnstableExpressionValue._(
-      expression: expression,
-      location: location,
-      oldValue: oldValue,
-      newValue: newValue,
-    ));
+    _unstableExpressionValues.add(
+      UnstableExpressionValue._(
+        expression: expression,
+        location: location,
+        oldValue: oldValue,
+        newValue: newValue,
+      ),
+    );
     if (_debugThrowImmediately) {
       debugThrowIfUnstableExpressionsFound();
     }
@@ -176,7 +177,8 @@ class UnstableExpressionError extends Error {
 
   @override
   String toString() {
-    final message = ''
+    final message =
+        ''
         'An expression bound in an AngularDart template returned a different '
         'value the second time it was evaluated.\n';
     return '$message\n$details\n$_goLink\n';

@@ -1,4 +1,4 @@
-import 'package:ngdart/src/di/injector.dart' show Injector;
+import '../../di/injector.dart' show Injector;
 
 import 'component_factory.dart' show ComponentFactory, ComponentRef;
 import 'component_loader.dart';

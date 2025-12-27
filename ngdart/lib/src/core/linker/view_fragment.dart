@@ -1,8 +1,8 @@
 import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
-import 'package:ngdart/src/utilities.dart';
 
+import '../../utilities/unsafe_cast.dart';
 import 'view_container.dart';
 
 /// Provides a collection of [Node] and/or [ViewContainer]s and access to them.

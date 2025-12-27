@@ -12,7 +12,7 @@ import 'visibility.dart';
 /// ```dart
 /// import 'package:web/web.dart';
 ///
-/// import 'package:ngdart/angular.dart';
+/// import '../angular.dart';
 ///
 /// @Directive(selector: '[myHighlight]')
 /// class HighlightDirective {
@@ -375,16 +375,9 @@ abstract class _Query {
 /// combination with an `NgFor` (or a custom directive that supports moving
 /// embedded views) this field or setter may _not_ be updated. For details see
 /// go/angular-dart/dev/template-queries.
-@Target({
-  TargetKind.field,
-  TargetKind.setter,
-})
+@Target({TargetKind.field, TargetKind.setter})
 class ContentChildren extends _Query {
-  const ContentChildren(
-    super.selector, {
-    super.descendants = true,
-    super.read,
-  });
+  const ContentChildren(super.selector, {super.descendants = true, super.read});
 }
 
 /// Declares a reference to a single child node projected into `<ng-content>`.
@@ -394,18 +387,10 @@ class ContentChildren extends _Query {
 /// - similar to `querySelector` instead of `querySelectorAll`.
 ///
 /// See [ContentChildren] and [ViewChildren] for full documentation.
-@Target({
-  TargetKind.field,
-  TargetKind.setter,
-})
+@Target({TargetKind.field, TargetKind.setter})
 class ContentChild extends _Query {
-  const ContentChild(
-    super.selector, {
-    super.read,
-  }) : super(
-          descendants: true,
-          first: true,
-        );
+  const ContentChild(super.selector, {super.read})
+    : super(descendants: true, first: true);
 }
 
 abstract class _ViewQuery extends _Query {
@@ -590,17 +575,9 @@ abstract class _ViewQuery extends _Query {
 /// combination with an `NgFor` (or a custom directive that supports moving
 /// embedded views) this field or setter may _not_ be updated. For details see
 /// go/angular-dart/dev/template-queries.
-@Target({
-  TargetKind.field,
-  TargetKind.setter,
-})
+@Target({TargetKind.field, TargetKind.setter})
 class ViewChildren extends _ViewQuery {
-  const ViewChildren(
-    super.selector, {
-    super.read,
-  }) : super(
-          descendants: true,
-        );
+  const ViewChildren(super.selector, {super.read}) : super(descendants: true);
 }
 
 /// Declares a reference to a single child node in a component's template.
@@ -628,18 +605,10 @@ class ViewChildren extends _ViewQuery {
 /// ```
 ///
 /// See [ViewChildren] for a full documentation of parameters and more examples.
-@Target({
-  TargetKind.field,
-  TargetKind.setter,
-})
+@Target({TargetKind.field, TargetKind.setter})
 class ViewChild extends _ViewQuery {
-  const ViewChild(
-    super.selector, {
-    super.read,
-  }) : super(
-          descendants: true,
-          first: true,
-        );
+  const ViewChild(super.selector, {super.read})
+    : super(descendants: true, first: true);
 }
 
 /// Declares a data-bound input property.
@@ -680,10 +649,7 @@ class ViewChild extends _ViewQuery {
 ///    directives: const [BankAccount])
 ///  class App {}
 ///  ```
-@Target({
-  TargetKind.field,
-  TargetKind.setter,
-})
+@Target({TargetKind.field, TargetKind.setter})
 class Input {
   /// Name used when instantiating a component in the template.
   final String? bindingPropertyName;
@@ -737,10 +703,7 @@ class Input {
 ///   }
 /// }
 /// ```
-@Target({
-  TargetKind.field,
-  TargetKind.getter,
-})
+@Target({TargetKind.field, TargetKind.getter})
 class Output {
   final String? bindingPropertyName;
   const Output([this.bindingPropertyName]);
@@ -781,10 +744,7 @@ class Output {
 ///   String debugId;
 /// }
 /// ```
-@Target({
-  TargetKind.field,
-  TargetKind.getter,
-})
+@Target({TargetKind.field, TargetKind.getter})
 class HostBinding {
   final String? hostPropertyName;
   const HostBinding([this.hostPropertyName]);

@@ -1,12 +1,12 @@
 import 'package:web/web.dart';
 
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/core/change_detection/change_detector_ref.dart';
-import 'package:ngdart/src/core/zone/ng_zone.dart';
-import 'package:ngdart/src/di/injector.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/utilities.dart';
+import '../../core/change_detection/change_detector_ref.dart';
+import '../../core/zone/ng_zone.dart';
+import '../../di/injector.dart';
 
+import '../../meta/lifecycle_hooks.dart';
+import '../../utilities/is_dev_mode.dart';
 import 'view_ref.dart' show ViewRef;
 import 'views/host_view.dart';
 
@@ -43,15 +43,11 @@ bool debugUsesDefaultChangeDetection(ComponentRef<void> componentRef) {
 /// objects related to this Component Instance and allows you to destroy the
 /// Component Instance via the [ComponentRef.destroy] method.
 class ComponentRef<C> {
-  final HostView<void> _hostView;
+  final HostView _hostView;
   final Element _nativeElement;
   final C _component;
 
-  ComponentRef(
-    this._hostView,
-    this._nativeElement,
-    this._component,
-  );
+  ComponentRef(this._hostView, this._nativeElement, this._component);
 
   /// Location of the Host Element of this Component Instance.
   Element get location => _nativeElement;
@@ -63,10 +59,10 @@ class ComponentRef<C> {
   C get instance => _component;
 
   /// The [ViewRef] of the Host View of this Component instance.
-  ViewRef get hostView => _hostView;
+  HostView get hostView => _hostView;
 
   /// The [ChangeDetectorRef] of the Component instance.
-  ChangeDetectorRef get changeDetectorRef => _hostView;
+  HostView get changeDetectorRef => _hostView;
 
   /// Runs [run] to apply changes to the component instance.
   ///
@@ -133,10 +129,7 @@ class ComponentFactory<T extends Object> {
   final HostView<T> Function() _viewFactory;
 
   /// Internal constructor for generated code only - **do not invoke**.
-  const ComponentFactory(
-    this.selector,
-    this._viewFactory,
-  );
+  const ComponentFactory(this.selector, this._viewFactory);
 
   @Deprecated('Unsupported and in the process of removal.')
   Type get componentType => T;

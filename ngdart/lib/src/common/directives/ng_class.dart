@@ -1,9 +1,10 @@
 import 'package:web/web.dart';
 
-import 'package:ngdart/src/core/change_detection/differs/default_iterable_differ.dart';
-import 'package:ngdart/src/core/change_detection/differs/default_keyvalue_differ.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/utilities.dart';
+import '../../core/change_detection/differs/default_iterable_differ.dart';
+import '../../core/change_detection/differs/default_keyvalue_differ.dart';
+import '../../meta/directives.dart';
+import '../../meta/lifecycle_hooks.dart';
+import '../../utilities/unsafe_cast.dart';
 
 /// The [NgClass] directive conditionally adds and removes CSS classes on an
 /// HTML element based on an expression's evaluation result.
@@ -48,9 +49,7 @@ import 'package:ngdart/src/utilities.dart';
 ///
 /// [ex]: https://angulardart.dev/examples/template-syntax#ngClass
 /// [guide]: https://webdev.dartlang.org/angular/guide/template-syntax.html#ngClass
-@Directive(
-  selector: '[ngClass]',
-)
+@Directive(selector: '[ngClass]')
 class NgClass implements DoCheck, OnDestroy {
   // Separator used to split string to parts - can be any number of
   // whitespaces, new lines or tabs.

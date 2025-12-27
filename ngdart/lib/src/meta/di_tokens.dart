@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/utilities.dart';
+
+import '../utilities/is_dev_mode.dart';
 
 /// A token to be used instead of [Type] when configuring dependency injection.
 ///

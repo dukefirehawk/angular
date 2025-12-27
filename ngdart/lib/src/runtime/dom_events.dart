@@ -1,7 +1,7 @@
 import 'package:web/web.dart';
 import 'dart:js_interop';
 
-import 'package:ngdart/src/core/zone/ng_zone.dart';
+import '../core/zone/ng_zone.dart';
 
 /// Provides a runtime implementation for "native" DOM events on elements.
 class EventManager {
@@ -29,11 +29,12 @@ class EventManager {
       zone.runOutsideAngular(() {
         //_keyEvents.addEventListener(element, name, callback);
         _keyEvents.addEventListener(
-            element,
-            name,
-            ((Event event) {
-              callback.callAsFunction(event);
-            }).toJS);
+          element,
+          name,
+          ((Event event) {
+            callback.callAsFunction(event);
+          }).toJS,
+        );
       });
       return;
     }
@@ -42,10 +43,11 @@ class EventManager {
     // "click"), it will never be called into EventManager. But of course the
     // browser APIs change, so this is the final fallback.
     element.addEventListener(
-        name,
-        ((Event event) {
-          callback.callAsFunction(event);
-        }).toJS);
+      name,
+      ((Event event) {
+        callback.callAsFunction(event);
+      }).toJS,
+    );
   }
 }
 
@@ -99,15 +101,16 @@ class _KeyEventsHandler {
     }
 
     element.addEventListener(
-        parsed.domEventName,
-        (Event event) {
-          // TODO: Migrate to 3.6 (Need review)
-          //if (event is KeyboardEvent && parsed.matches(event)) {
-          if (event.isA<KeyboardEvent>() &&
-              parsed.matches(event as KeyboardEvent)) {
-            callback.callAsFunction(event);
-          }
-        }.toJS);
+      parsed.domEventName,
+      (Event event) {
+        // TODO: Migrate to 3.6 (Need review)
+        //if (event is KeyboardEvent && parsed.matches(event)) {
+        if (event.isA<KeyboardEvent>() &&
+            parsed.matches(event as KeyboardEvent)) {
+          callback.callAsFunction(event);
+        }
+      }.toJS,
+    );
   }
 
   static _ParsedEvent? _parse(String name) {
@@ -253,7 +256,7 @@ const _keyCodeNames = {
   122: 'f11',
   123: 'f12',
   144: 'numlock',
-  145: 'scrolllock'
+  145: 'scrolllock',
 };
 
 /// Determines whether a given modifier key name is currently active.
@@ -261,5 +264,5 @@ final _modifiers = <String, bool Function(KeyboardEvent)>{
   'alt': (event) => event.altKey,
   'control': (event) => event.ctrlKey,
   'meta': (event) => event.metaKey,
-  'shift': (event) => event.shiftKey
+  'shift': (event) => event.shiftKey,
 };

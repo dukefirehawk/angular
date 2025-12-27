@@ -2,27 +2,20 @@ import 'dart:async';
 import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
-import 'package:ngdart/src/core/exception_handler.dart';
-import 'package:ngdart/src/devtools.dart';
-import 'package:ngdart/src/di/injector.dart';
-import 'package:ngdart/src/testability.dart';
-import 'package:ngdart/src/utilities.dart';
-
+import '../devtools.dart';
+import '../di/injector.dart';
+import '../testability.dart';
+import '../utilities/unsafe_cast.dart';
+import 'change_detection/change_detector_ref.dart';
 import 'change_detection/host.dart';
+import 'exception_handler.dart';
 import 'linker/component_factory.dart' show ComponentRef, ComponentFactory;
 import 'zone/ng_zone.dart' show NgZone;
 
 /// **INTERNAL ONLY**: Do not use.
 @dart2js.tryInline
-ApplicationRef internalCreateApplicationRef(
-  NgZone ngZone,
-  Injector injector,
-) =>
-    ApplicationRef._(
-      ngZone,
-      injector.provideType(ExceptionHandler),
-      injector,
-    );
+ApplicationRef internalCreateApplicationRef(NgZone ngZone, Injector injector) =>
+    ApplicationRef._(ngZone, injector.provideType(ExceptionHandler), injector);
 
 /// A reference to an Angular application running on a page.
 ///
@@ -38,16 +31,9 @@ class ApplicationRef extends ChangeDetectionHost {
   late final StreamSubscription<void> _onErrorSub;
   late final StreamSubscription<void> _onMicroSub;
 
-  ApplicationRef._(
-    this._ngZone,
-    this._exceptionHandler,
-    this._injector,
-  ) {
+  ApplicationRef._(this._ngZone, this._exceptionHandler, this._injector) {
     _onErrorSub = _ngZone.onUncaughtError.listen((e) {
-      handleUncaughtException(
-        e.error,
-        e.stackTrace,
-      );
+      handleUncaughtException(e.error, e.stackTrace);
     });
     _onMicroSub = _ngZone.onMicrotaskEmpty.listen((_) {
       _ngZone.runGuarded(tick);
@@ -68,36 +54,38 @@ class ApplicationRef extends ChangeDetectionHost {
   ComponentRef<T> bootstrap<T extends Object>(
     ComponentFactory<T> componentFactory,
   ) {
-    return unsafeCast(run(() {
-      final component = componentFactory.create(_injector);
-      final existing = querySelector(componentFactory.selector);
-      Element? replacement;
-      if (existing != null) {
-        final newElement = component.location;
-        // For app shards using bootstrapStatic, transfer element id
-        // from original node to allow hosting applications to locate loaded
-        // application root.
-        if (newElement.id.isEmpty) {
-          newElement.id = existing.id;
+    return unsafeCast(
+      run(() {
+        final component = componentFactory.create(_injector);
+        final existing = querySelector(componentFactory.selector);
+        Element? replacement;
+        if (existing != null) {
+          final newElement = component.location;
+          // For app shards using bootstrapStatic, transfer element id
+          // from original node to allow hosting applications to locate loaded
+          // application root.
+          if (newElement.id.isEmpty) {
+            newElement.id = existing.id;
+          }
+          replacement = newElement;
+          existing.replaceWith(replacement);
+        } else {
+          document.body!.append(component.location);
         }
-        replacement = newElement;
-        existing.replaceWith(replacement);
-      } else {
-        document.body!.append(component.location);
-      }
-      final injector = component.injector;
-      final testability = injector.provideTypeOptional<Testability>(
-        Testability,
-      );
-      if (testability != null) {
-        final registry = _injector.provideType<TestabilityRegistry>(
-          TestabilityRegistry,
+        final injector = component.injector;
+        final testability = injector.provideTypeOptional<Testability>(
+          Testability,
         );
-        registry.registerApplication(component.location, testability);
-      }
-      _loadedRootComponent(component, replacement);
-      return component;
-    }));
+        if (testability != null) {
+          final registry = _injector.provideType<TestabilityRegistry>(
+            TestabilityRegistry,
+          );
+          registry.registerApplication(component.location, testability);
+        }
+        _loadedRootComponent(component, replacement);
+        return component;
+      }),
+    );
   }
 
   void _loadedRootComponent(ComponentRef<void> component, Element? node) {
@@ -109,7 +97,7 @@ class ApplicationRef extends ChangeDetectionHost {
       _destroyedRootComponent(component);
       node?.remove();
     });
-    registerChangeDetector(component.changeDetectorRef);
+    registerChangeDetector(component.changeDetectorRef as ChangeDetectorRef);
     tick();
   }
 
@@ -117,7 +105,7 @@ class ApplicationRef extends ChangeDetectionHost {
     if (!_rootComponents.remove(component)) {
       return;
     }
-    unregisterChangeDetector(component.changeDetectorRef);
+    unregisterChangeDetector(component.changeDetectorRef as ChangeDetectorRef);
   }
 
   /// Dispose of this application and all of its components.

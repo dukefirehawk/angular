@@ -1,5 +1,6 @@
-import 'package:ngdart/src/core/linker.dart';
-import 'package:ngdart/src/meta.dart';
+import '../../core/linker.dart';
+import '../../meta/directives.dart';
+import '../../meta/lifecycle_hooks.dart';
 
 /// Inserts an embedded view, created from a [TemplateRef].
 ///
@@ -40,9 +41,7 @@ import 'package:ngdart/src/meta.dart';
 ///   };
 /// }
 /// ```
-@Directive(
-  selector: '[ngTemplateOutlet]',
-)
+@Directive(selector: '[ngTemplateOutlet]')
 class NgTemplateOutlet implements DoCheck {
   final ViewContainerRef _viewContainerRef;
 
