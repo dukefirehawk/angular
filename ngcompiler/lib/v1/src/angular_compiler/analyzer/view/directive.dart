@@ -35,7 +35,8 @@ class DirectiveVisitor {
   /// Throws a [BuildError] if [element] is not an instance-level member.
   static void _assertInstance(Element element, String message) {
     //if (element is ClassMemberElement && !element.isStatic) {
-    if (element is PropertyAccessorElement && !element.isStatic) {
+    //if (element is PropertyAccessorElement && !element.isStatic) {
+    if (element is MethodElement && !element.isStatic) {
       return;
     }
     throw BuildError.forElement(element, message);
