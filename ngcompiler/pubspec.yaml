@@ -24,7 +24,6 @@ dependencies:
   meta: ^1.8.0
   ngast: ^4.0.0-dev.1
   ngdart: ^9.0.0-dev.1
-  ngdart2: ^9.0.0-dev.1
   package_config: ^2.1.0
   path: ^1.8.3
   source_gen: ^4.0.0
