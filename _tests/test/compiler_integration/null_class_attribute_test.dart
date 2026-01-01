@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:_tests/compiler.dart';
+import '../../lib/compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 void main() {

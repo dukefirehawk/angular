@@ -103,7 +103,7 @@ Future<AnalyzedClass?> analyzeClass(String source) async {
   return library.accept<AnalyzedClass>(visitor);
 }
 
-class AnalyzedClassVisitor extends RecursiveElementVisitor<AnalyzedClass> {
+class AnalyzedClassVisitor extends RecursiveAstVisitor<AnalyzedClass> {
   @override
   AnalyzedClass? visitClassElement(ClassElement element) {
     return AnalyzedClass(element);

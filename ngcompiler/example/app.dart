@@ -15,7 +15,7 @@ import '../test/v1/angular_compiler/src/resolve.dart';
 //   : Isolate.packageConfig.then(loadPackageConfigUri);
 
 void main() async {
-  _testResolveModule();
+  _testResolveModuleRaw();
 }
 
 /* 
@@ -67,23 +67,40 @@ void _testResolveModule() async {
 
       class ExamplePrime extends Example {}
 
+      @Component(
+        selector: 'example',
+        template: 'Hello World',
+      )
+      class Example2 {}
     ''';
 
   var testLib = await resolveSource(
     inputSource,
     (resolver) async => (await resolver.findLibraryByName('test'))!,
     //inputId: AssetId('test_lib', 'lib/test_lib.dart'),
-    inputId: AssetId('ngdart', 'lib/angular.dart'),
-    // nonInputsToReadFromFilesystem: {
-    //   AssetId('ngdart', 'lib/angular.dart'),
-    //   AssetId('ngdart', 'lib/src/meta.dart'),
-    //   AssetId('ngdart', 'lib/src/meta/di_modules.dart'),
-    //   AssetId('ngdart', 'lib/src/meta/di_arguments.dart'),
-    //},
+    //inputId: AssetId('ngdart', 'lib/angular.dart'),
+    nonInputsToReadFromFilesystem: {
+      AssetId('ngdart', 'lib/angular.dart'),
+      //   AssetId('ngdart', 'lib/src/meta.dart'),
+      AssetId('ngdart', 'lib/src/meta/di_modules.dart'),
+      AssetId('ngdart', 'lib/src/meta/di_arguments.dart'),
+      AssetId('ngdart', 'lib/src/meta/change_detection_constants.dart'),
+      AssetId('ngdart', 'lib/src/meta/change_detection_link.dart'),
+      AssetId('ngdart', 'lib/src/meta/di_generate_injector.dart'),
+      AssetId('ngdart', 'lib/src/meta/di_modules.dart'),
+      AssetId('ngdart', 'lib/src/meta/di_providers.dart'),
+      AssetId('ngdart', 'lib/src/meta/di_tokens.dart'),
+      AssetId('ngdart', 'lib/src/meta/directives.dart'),
+      AssetId('ngdart', 'lib/src/meta/lifecycle_hooks.dart'),
+      AssetId('ngdart', 'lib/src/meta/typed.dart'),
+      AssetId('ngdart', 'lib/src/meta/view.dart'),
+      AssetId('ngdart', 'lib/src/meta/visibility.dart'),
+    },
     packageConfig: packageConfig,
   );
-  var example = testLib?.getClass('Example')!;
-  var dependency = testLib?.getClass('Dependency')!;
+  var example = testLib.getClass('Example')!;
+  var example2 = testLib.getClass('Example2')!;
+  var dependency = testLib.getClass('Dependency')!;
 }
 
 /* 
@@ -93,7 +110,7 @@ void _testResolveModuleRaw() async {
   final inputSource = r'''
       library test;
 
-      import 'package:ngdart/angular.dart';
+      import 'package:ngdart2/angular.dart';
 
       class Dependency {}
 
@@ -157,10 +174,10 @@ void _testResolveModuleRaw() async {
     },
     //inputId: testAssetId,
     nonInputsToReadFromFilesystem: {
-      AssetId('ngdart', 'lib/angular.dart'),
-      AssetId('ngdart', 'lib/src/meta.dart'),
-      AssetId('ngdart', 'lib/src/meta/di_modules.dart'),
-      AssetId('ngdart', 'lib/src/meta/di_arguments.dart'),
+      AssetId('ngdart2', 'lib/angular.dart'),
+      AssetId('ngdart2', 'lib/src/meta.dart'),
+      AssetId('ngdart2', 'lib/src/meta/di_modules.dart'),
+      AssetId('ngdart2', 'lib/src/meta/di_arguments.dart'),
     },
     packageConfig: config,
   );

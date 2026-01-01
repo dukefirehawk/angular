@@ -1,12 +1,13 @@
 import 'package:test/test.dart';
-import 'package:_tests/compiler.dart';
+import '../../lib/compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 void main() {
   CompileContext.overrideForTesting();
 
   test('should fail on a non-".css" file extension', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       @Component(
@@ -17,13 +18,14 @@ void main() {
         ],
       )
       class Example {}
-    """, errors: [
-      contains('Unsupported extension in styleUrls: "example.scss"'),
-    ]);
+    """,
+      errors: [contains('Unsupported extension in styleUrls: "example.scss"')],
+    );
   });
 
   test('should fail on an invalid URI', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       @Component(
@@ -35,8 +37,8 @@ void main() {
         ],
       )
       class Example {}
-    """, errors: [
-      contains('Invalid Style URL: "packages:foo/foo.css"'),
-    ]);
+    """,
+      errors: [contains('Invalid Style URL: "packages:foo/foo.css"')],
+    );
   });
 }

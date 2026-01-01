@@ -1,4 +1,4 @@
-import 'package:_tests/compiler.dart';
+import '../../lib/compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
 import 'package:test/test.dart';
 
@@ -6,18 +6,21 @@ void main() {
   CompileContext.overrideForTesting();
 
   test('should fail on an @Injectable private class', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       @Injectable()
       class _HeroService {}
-    """, errors: [
-      allOf([
-        contains('Private classes can not be @Injectable'),
-        contains('_HeroService'),
-        containsSourceLocation(4, 13)
-      ]),
-    ]);
+    """,
+      errors: [
+        allOf([
+          contains('Private classes can not be @Injectable'),
+          contains('_HeroService'),
+          containsSourceLocation(4, 13),
+        ]),
+      ],
+    );
   });
 
   test('should succeed on an @Injectable() public class', () async {

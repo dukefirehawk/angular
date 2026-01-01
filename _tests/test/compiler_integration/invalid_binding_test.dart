@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:_tests/compiler.dart';
+import '../../lib/compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 void main() {
@@ -16,9 +16,7 @@ void main() {
       )
       class TestComponent {}
     ''',
-      errors: [
-        contains('The "tabindex" attribute expects an integer value'),
-      ],
+      errors: [contains('The "tabindex" attribute expects an integer value')],
     );
   });
 }

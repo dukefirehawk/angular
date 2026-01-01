@@ -73,3 +73,4 @@ For more information using `dart run build_runner test`, see the documentation:
 ## Debug
 
 * `.dart_tool/build/entrypoint/build.dart`
+* `dart run build_runner build --dart-jit-vm-arg=--observe --dart-jit-vm-arg=--pause-isolates-on-start`

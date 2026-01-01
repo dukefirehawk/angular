@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:test/test.dart';
-import 'package:_tests/matchers.dart';
+import '../../lib/matchers.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/experimental.dart';
 import 'package:ngdart/src/di/injector.dart';
@@ -39,26 +39,17 @@ void main() {
     group('.empty', () {
       test('should throw by default', () {
         final i = Injector.empty();
-        expect(
-          () => i.get(ExampleService),
-          throwsNoProviderError,
-        );
+        expect(() => i.get(ExampleService), throwsNoProviderError);
         expect(
           () => i.provideType<ExampleService>(ExampleService),
           throwsNoProviderError,
         );
-        expect(
-          () => i.injectFromSelf(ExampleService),
-          throwsNoProviderError,
-        );
+        expect(() => i.injectFromSelf(ExampleService), throwsNoProviderError);
         expect(
           () => i.injectFromAncestry(ExampleService),
           throwsNoProviderError,
         );
-        expect(
-          () => i.injectFromParent(ExampleService),
-          throwsNoProviderError,
-        );
+        expect(() => i.injectFromParent(ExampleService), throwsNoProviderError);
       });
 
       test('should throw a readable message with injection fails', () {
@@ -101,10 +92,7 @@ void main() {
         final i = Injector.map({}, parent);
         expect(i.get(ExampleService), instance);
         expect(i.provideType<ExampleService>(ExampleService), instance);
-        expect(
-          () => i.injectFromSelf(ExampleService),
-          throwsNoProviderError,
-        );
+        expect(() => i.injectFromSelf(ExampleService), throwsNoProviderError);
         expect(i.injectFromAncestry(ExampleService), instance);
         expect(i.injectFromParent(ExampleService), instance);
       });
@@ -126,10 +114,7 @@ void main() {
           () => i.injectFromAncestry(ExampleService),
           throwsNoProviderError,
         );
-        expect(
-          () => i.injectFromParent(ExampleService),
-          throwsNoProviderError,
-        );
+        expect(() => i.injectFromParent(ExampleService), throwsNoProviderError);
       });
 
       test('should return itself if Injector is passed', () {
@@ -232,9 +217,11 @@ void main() {
           () => injector.get(ExampleService3),
           throwsA(
             predicate(
-              (e) => '$e'.contains(''
-                  'No provider found for $MissingService:\n  '
-                  '$ExampleService3 ->\n  $MissingService.'),
+              (e) => '$e'.contains(
+                ''
+                'No provider found for $MissingService:\n  '
+                '$ExampleService3 ->\n  $MissingService.',
+              ),
             ),
           ),
         );
@@ -245,10 +232,12 @@ void main() {
           () => injector.get(ExampleService4),
           throwsA(
             predicate(
-              (e) => '$e'.contains(''
-                  'No provider found for $MissingService:\n  '
-                  '$ExampleService4 ->\n  $ExampleService3 ->\n  '
-                  '$MissingService.'),
+              (e) => '$e'.contains(
+                ''
+                'No provider found for $MissingService:\n  '
+                '$ExampleService4 ->\n  $ExampleService3 ->\n  '
+                '$MissingService.',
+              ),
             ),
           ),
         );
@@ -276,15 +265,11 @@ void main() {
 
       test('should support arbitrary const values in ValueProvider', () {
         final injector = valueProviderExamples(Injector.empty());
-        final c1 = injector.provideType<TestConstNoArgs>(
-          TestConstNoArgs,
-        );
+        final c1 = injector.provideType<TestConstNoArgs>(TestConstNoArgs);
         final c2 = injector.provideType<TestConstPositionalArgs>(
           TestConstPositionalArgs,
         );
-        final c3 = injector.provideType<TestConstNamedArgs>(
-          TestConstNamedArgs,
-        );
+        final c3 = injector.provideType<TestConstNamedArgs>(TestConstNamedArgs);
         final c4 = injector.provideType<TestConstNamedArgs2>(
           TestConstNamedArgs2,
         );
@@ -478,11 +463,7 @@ final InjectorFactory exampleGenerated = ng.exampleGenerated$Injector;
 @GenerateInjector.fromModules([
   Module(
     include: [
-      Module(
-        provide: [
-          ValueProvider(ExampleService, ExampleService()),
-        ],
-      ),
+      Module(provide: [ValueProvider(ExampleService, ExampleService())]),
     ],
     provide: [
       ValueProvider(ExampleService2, ExampleService2()),
@@ -565,10 +546,7 @@ const topLevelValue = TestConstNamedArgs2(name: 'TestConstNamedArgs2');
 const topLevelProvider = ValueProvider(TestConstNamedArgs2, topLevelValue);
 
 @GenerateInjector([
-  ValueProvider(
-    TestConstNoArgs,
-    TestConstNoArgs(),
-  ),
+  ValueProvider(TestConstNoArgs, TestConstNoArgs()),
   ValueProvider(
     TestConstPositionalArgs,
     TestConstPositionalArgs('TestConstPositionalArgs'),

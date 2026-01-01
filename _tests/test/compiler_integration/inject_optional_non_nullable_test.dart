@@ -1,13 +1,14 @@
 import 'package:build/build.dart';
 import 'package:test/test.dart';
-import 'package:_tests/compiler.dart';
+import '../../lib/compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 void main() {
   setUp(CompileContext.overrideForTesting);
 
   test('should fail on an injector with a nullable non-optional', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       class Engine {
@@ -18,15 +19,14 @@ void main() {
         ClassProvider(Engine),
       ])
       final injectorFactory = null; // OK for compiler tests.
-    """, errors: [
-      allOf(
-        contains('must be annotated @Optional()'),
-      )
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should fail on an injector with a nullable FutureOr', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import 'dart:async';
       import '$ngImport';
 
@@ -38,15 +38,14 @@ void main() {
         ClassProvider(Engine),
       ])
       final injectorFactory = null; // OK for compiler tests.
-    """, errors: [
-      allOf(
-        contains('must be annotated @Optional()'),
-      )
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should fail on an injector with a non-nullable optional', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       class Engine {
@@ -57,11 +56,9 @@ void main() {
         ClassProvider(Engine),
       ])
       final injectorFactory = null; // OK for compiler tests.
-    """, errors: [
-      allOf(
-        contains('must be annotated @Optional()'),
-      )
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should allow optional FactoryProvider deps in injector', () async {
@@ -115,7 +112,8 @@ void main() {
   });
 
   test('should fail on a component with a non-nullable optional', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       class Engine {}
@@ -127,15 +125,14 @@ void main() {
       class CarComponent {
         CarComponent(@Optional() Engine engine);
       }
-    """, errors: [
-      allOf(
-        contains('must be annotated @Optional()'),
-      )
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should fail on a component with a nullable non-optional', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       class Engine {}
@@ -147,15 +144,14 @@ void main() {
       class CarComponent {
         CarComponent(Engine? engine);
       }
-    """, errors: [
-      allOf(
-        contains('must be annotated @Optional()'),
-      )
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should fail on an component with a nullable FutureOr', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import 'dart:async';
       import '$ngImport';
 
@@ -168,11 +164,9 @@ void main() {
       class CarComponent {
         CarComponent(FutureOr<Engine?> engine);
       }
-    """, errors: [
-      allOf(
-        contains('must be annotated @Optional()'),
-      )
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should allow a nullable attribute that is not optional', () async {
@@ -192,7 +186,8 @@ void main() {
   });
 
   group('should allow opted-out to use opted-in import w/o error', () {
-    final clientLibSource = """
+    final clientLibSource =
+        """
       
       import '$ngImport';
       import 'opted_in_library.dart';
@@ -225,9 +220,7 @@ void main() {
       ''';
       await compilesNormally(
         clientLibSource,
-        include: {
-          'pkg|lib/opted_in_library.dart': importLibSource,
-        },
+        include: {'pkg|lib/opted_in_library.dart': importLibSource},
         inputSource: 'pkg|lib/opted_out_client.dart',
         runBuilderOn: {AssetId('pkg', 'lib/opted_out_client.dart')},
       );
@@ -241,9 +234,7 @@ void main() {
       ''';
       await compilesNormally(
         clientLibSource,
-        include: {
-          'pkg|lib/opted_in_library.dart': importLibSource,
-        },
+        include: {'pkg|lib/opted_in_library.dart': importLibSource},
         inputSource: 'pkg|lib/opted_out_client.dart',
         runBuilderOn: {AssetId('pkg', 'lib/opted_out_client.dart')},
       );

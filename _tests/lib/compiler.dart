@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:build/build.dart';
 import 'package:build/experiments.dart';
-import 'package:build_test/build_test.dart' hide testBuilder;
+import 'package:build_test/build_test.dart';
 import 'package:glob/glob.dart';
 import 'package:logging/logging.dart';
 import 'package:ngcompiler/v1/src/compiler/stylesheet_compiler/builder.dart';
@@ -11,7 +11,7 @@ import 'package:test/test.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 /// A 'test' build process (similar to the normal one).
-final Builder _testAngularBuilder1 = TemplateCompiler(
+final Builder _testAngularBuilder = TemplateCompiler(
   BuilderOptions({}),
   null,
   null,
@@ -65,7 +65,9 @@ Future<void> _testBuilder(
   // Setup the readers/writers for assets.
   final sources = TestReaderWriter(rootPackage: rootPackage);
   final packages = await _packageAssets;
-  final reader = MultiAssetReader([sources, packages]);
+
+  final reader = PackageAssetReader.forPackages([sources, packages]);
+  //final reader = MultiAssetReader([sources, packages]);
 
   // Sanity check.
   if (!await reader.canRead(AssetId(ngPackage, 'lib/angular.dart'))) {
@@ -77,7 +79,8 @@ Future<void> _testBuilder(
   final inputIds = runBuilderOn ?? [];
   sourceAssets.forEach((serializedId, contents) {
     final id = makeAssetId(serializedId);
-    sources.cacheStringAsset(id, contents);
+    //sources.cacheStringAsset(id, contents);
+    sources.writeAsString(id, contents);
     if (runBuilderOn == null) {
       inputIds.add(id);
     }
@@ -91,7 +94,8 @@ Future<void> _testBuilder(
   // TODO: Can we cache and re-use this once per test suite?
   final framework = packages.findAssets(_ngFiles, package: ngPackage);
   await for (final file in framework) {
-    sources.cacheStringAsset(file, await packages.readAsString(file));
+    //sources.cacheStringAsset(file, await packages.readAsString(file));
+    await sources.writeAsString(file, await packages.readAsString(file));
   }
 
   final logger = Logger('_testBuilder');
@@ -102,14 +106,22 @@ Future<void> _testBuilder(
     CompileContext.forTesting(),
     () {
       return withEnabledExperiments(
-        () => runBuilder(
+        () => testBuilder(
           builder,
           inputIds,
-          reader,
-          writer,
-          AnalyzerResolvers(),
-          logger: logger,
+          rootPackage: rootPackage,
+          readerWriter: writer,
+          //resolvers: AnalyzerResolvers(),
+          onLog: logger,
         ),
+        // () => runBuilder(
+        //   builder,
+        //   inputIds,
+        //   reader,
+        //   writer,
+        //   AnalyzerResolvers(),
+        //   logger: logger,
+        // ),
         ['non-nullable'],
       );
     },

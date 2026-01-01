@@ -1,12 +1,13 @@
 import 'package:test/test.dart';
-import 'package:_tests/compiler.dart';
+import '../../lib/compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 void main() {
   CompileContext.overrideForTesting();
 
   test('should refuse to compile late final fields marked @Input()', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       @Component(
@@ -17,15 +18,14 @@ void main() {
         @Input()
         late final String name;
       }
-    """, errors: [
-      allOf(
-        contains('Inputs cannot be "late final"'),
-      )
-    ]);
+    """,
+      errors: [allOf(contains('Inputs cannot be "late final"'))],
+    );
   });
 
   test('should refuse to compile non-nullable single child query', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import 'package:web/web.dart';
       import '$ngImport';
 
@@ -37,15 +37,14 @@ void main() {
         @ViewChild('div')
         set div(Element div) {}
       }
-    """, errors: [
-      allOf(
-        contains('queries must be nullable'),
-      )
-    ]);
+    """,
+      errors: [allOf(contains('queries must be nullable'))],
+    );
   });
 
   test('should refuse to compile late fields with a child query', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import 'package:web/web.dart';
       import '$ngImport';
 
@@ -57,15 +56,14 @@ void main() {
         @ViewChild('div')
         late Element? div;
       }
-    """, errors: [
-      allOf(
-        contains('View and content queries cannot be "late"'),
-      )
-    ]);
+    """,
+      errors: [allOf(contains('View and content queries cannot be "late"'))],
+    );
   });
 
   test('should refuse to compile late fields with a children query', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import 'package:web/web.dart';
       import '$ngImport';
 
@@ -77,11 +75,9 @@ void main() {
         @ViewChildren('div')
         late List<Element> div;
       }
-    """, errors: [
-      allOf(
-        contains('View and content queries cannot be "late"'),
-      )
-    ]);
+    """,
+      errors: [allOf(contains('View and content queries cannot be "late"'))],
+    );
   });
 
   test('should compile non-nullable fields with a children query', () async {

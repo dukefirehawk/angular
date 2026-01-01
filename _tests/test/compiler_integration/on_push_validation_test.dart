@@ -1,12 +1,13 @@
 import 'package:test/test.dart';
-import 'package:_tests/compiler.dart';
+import '../../lib/compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 void main() {
   CompileContext.overrideForTesting();
 
   test('emits warning for Default component in OnPush template', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       @Component(
@@ -26,14 +27,16 @@ void main() {
         directives: [DefaultComponent],
       )
       class TestComponent {}
-    """, warnings: [
-      allOf([
-        contains('<default>'),
-        contains(
-          '"DefaultComponent" doesn\'t use "ChangeDetectionStrategy.onPush"',
-        ),
-      ]),
-    ]);
+    """,
+      warnings: [
+        allOf([
+          contains('<default>'),
+          contains(
+            '"DefaultComponent" doesn\'t use "ChangeDetectionStrategy.onPush"',
+          ),
+        ]),
+      ],
+    );
   });
 
   group('@skipOnPushValidation', () {
@@ -63,7 +66,8 @@ void main() {
 
     group('is not permitted', () {
       test('on an HTML element', () async {
-        await compilesExpecting("""
+        await compilesExpecting(
+          """
           import '$ngImport';
 
           @Component(
@@ -74,16 +78,19 @@ void main() {
             changeDetection: ChangeDetectionStrategy.onPush,
           )
           class TestComponent {}
-        """, errors: [
-          allOf([
-            contains('@skipOnPushValidation'),
-            contains('Can only be applied to a component element'),
-          ]),
-        ]);
+        """,
+          errors: [
+            allOf([
+              contains('@skipOnPushValidation'),
+              contains('Can only be applied to a component element'),
+            ]),
+          ],
+        );
       });
 
       test('on an OnPush component', () async {
-        await compilesExpecting("""
+        await compilesExpecting(
+          """
           import '$ngImport';
 
           @Component(
@@ -102,19 +109,22 @@ void main() {
             changeDetection: ChangeDetectionStrategy.onPush,
           )
           class TestComponent {}
-        """, errors: [
-          allOf([
-            contains('@skipOnPushValidation'),
-            contains(
-              'Can only be applied to a component using '
-              '"ChangeDetectionStrategy.checkAlways"',
-            ),
-          ]),
-        ]);
+        """,
+          errors: [
+            allOf([
+              contains('@skipOnPushValidation'),
+              contains(
+                'Can only be applied to a component using '
+                '"ChangeDetectionStrategy.checkAlways"',
+              ),
+            ]),
+          ],
+        );
       });
 
       test('in the template of a Default component', () async {
-        await compilesExpecting("""
+        await compilesExpecting(
+          """
           import '$ngImport';
 
           @Component(
@@ -131,15 +141,17 @@ void main() {
             directives: [DefaultComponent],
           )
           class TestComponent {}
-        """, errors: [
-          allOf([
-            contains('@skipOnPushValidation'),
-            contains(
-              'Can only be used in the template of a component using '
-              '"ChangeDetectionStrategy.onPush"',
-            ),
-          ]),
-        ]);
+        """,
+          errors: [
+            allOf([
+              contains('@skipOnPushValidation'),
+              contains(
+                'Can only be used in the template of a component using '
+                '"ChangeDetectionStrategy.onPush"',
+              ),
+            ]),
+          ],
+        );
       });
     });
   });
