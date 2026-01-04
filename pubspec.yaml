@@ -11,6 +11,7 @@ workspace:
   - ngforms
   - ngrouter
   - goldens
+  - examples/hello_world
   #- _tests
 
 dev_dependencies:

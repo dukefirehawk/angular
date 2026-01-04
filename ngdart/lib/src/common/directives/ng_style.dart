@@ -5,6 +5,8 @@ import 'package:web/web.dart';
 import '../../core/change_detection/differs/default_keyvalue_differ.dart';
 import '../../meta/directives.dart';
 import '../../meta/lifecycle_hooks.dart';
+import '../../meta/di_arguments.dart';
+
 import '../../utilities/unsafe_cast.dart';
 
 /// The `NgStyle` directive changes an element's style based on the bound style
@@ -58,15 +60,15 @@ import '../../utilities/unsafe_cast.dart';
 /// [ex]: https://angulardart.dev/examples/template-syntax#ngStyle
 @Directive(selector: '[ngStyle]')
 class NgStyle implements DoCheck {
-  final Element _ngElement;
-  Map<String, String?>? _rawStyle;
+  final Element? _ngElement;
+  Map<String, String?> _rawStyle = {};
   DefaultKeyValueDiffer? _differ;
 
-  NgStyle(this._ngElement);
+  NgStyle(@Optional() this._ngElement);
 
   @Input('ngStyle')
   set rawStyle(Map<String, String?>? v) {
-    _rawStyle = v;
+    _rawStyle = v ?? {};
     if (_differ == null && v != null) {
       _differ = DefaultKeyValueDiffer();
     }
@@ -91,7 +93,7 @@ class NgStyle implements DoCheck {
       unsafeCast(record.currentValue),
     );
     */
-    _ngElement.setProperty(
+    _ngElement?.setProperty(
       unsafeCast(record.key),
       unsafeCast(record.currentValue),
     );

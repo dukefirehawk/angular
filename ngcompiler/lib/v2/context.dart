@@ -47,7 +47,7 @@ Future<T> runWithContext<T>(CompileContext instance, Future<T> Function() run) {
         final eCasted = e;
         final convert = BuildError.forSourceSpan(
           spanForElement(eCasted.annotatedElement),
-          'Could not resolve "${eCasted.annotationSource!.text}":\n'
+          'Could not resolve "${eCasted.annotationSource?.text ?? 'Null'}":\n'
           '${messages.analysisFailureReasons}',
         );
         e = convert;

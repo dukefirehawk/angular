@@ -4,6 +4,7 @@ import '../../core/change_detection/differs/default_iterable_differ.dart';
 import '../../core/change_detection/differs/default_keyvalue_differ.dart';
 import '../../meta/directives.dart';
 import '../../meta/lifecycle_hooks.dart';
+import '../../meta/di_arguments.dart';
 import '../../utilities/unsafe_cast.dart';
 
 /// The [NgClass] directive conditionally adds and removes CSS classes on an
@@ -54,14 +55,14 @@ class NgClass implements DoCheck, OnDestroy {
   // Separator used to split string to parts - can be any number of
   // whitespaces, new lines or tabs.
   static final _separator = RegExp(r'\s+');
-  final Element _ngEl;
+  final Element? _ngEl;
 
   DefaultIterableDiffer? _iterableDiffer;
   DefaultKeyValueDiffer? _keyValueDiffer;
 
   List<String> _initialClasses = [];
   Object? _rawClass;
-  NgClass(this._ngEl);
+  NgClass(@Optional() this._ngEl);
 
   @Input('class')
   set initialClasses(String? v) {
@@ -172,21 +173,21 @@ class NgClass implements DoCheck, OnDestroy {
     className = className.trim();
     if (className.isEmpty) return;
     var el = _ngEl;
-    var classList = el.classList;
+    var classList = el?.classList;
     if (className.contains(' ')) {
       var classes = className.split(_separator);
       for (var i = 0, len = classes.length; i < len; i++) {
         if (enabled) {
-          classList.add(classes[i]);
+          classList?.add(classes[i]);
         } else {
-          classList.remove(classes[i]);
+          classList?.remove(classes[i]);
         }
       }
     } else {
       if (enabled) {
-        classList.add(className);
+        classList?.add(className);
       } else {
-        classList.remove(className);
+        classList?.remove(className);
       }
     }
   }

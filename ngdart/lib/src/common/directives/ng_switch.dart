@@ -6,17 +6,18 @@ import '../../meta/visibility.dart';
 const _whenDefault = Object();
 
 class SwitchView {
-  final ViewContainerRef _viewContainerRef;
-  final TemplateRef _templateRef;
+  final ViewContainerRef? _viewContainerRef;
+  final TemplateRef? _templateRef;
 
-  SwitchView(this._viewContainerRef, this._templateRef);
+  SwitchView(@Optional() this._viewContainerRef, @Optional() this._templateRef);
 
   void create() {
-    _viewContainerRef.createEmbeddedView(_templateRef);
+    if (_templateRef == null) return;
+    _viewContainerRef?.createEmbeddedView(_templateRef);
   }
 
   void destroy() {
-    _viewContainerRef.clear();
+    _viewContainerRef?.clear();
   }
 }
 
@@ -168,16 +169,16 @@ class NgSwitch {
 ///
 @Directive(selector: '[ngSwitchWhen],[ngSwitchCase]')
 class NgSwitchWhen {
-  final NgSwitch _switch;
+  final NgSwitch? _switch;
   final SwitchView _view;
 
   /// Used as a marker for an uninitialized value.
   dynamic _value = _whenDefault;
 
   NgSwitchWhen(
-    ViewContainerRef viewContainer,
-    TemplateRef templateRef,
-    @Host() this._switch,
+    @Optional() ViewContainerRef? viewContainer,
+    @Optional() TemplateRef? templateRef,
+    @Optional() @Host() this._switch,
   ) : _view = SwitchView(viewContainer, templateRef);
 
   @Input()
@@ -188,7 +189,7 @@ class NgSwitchWhen {
   @Input()
   set ngSwitchWhen(dynamic value) {
     if (identical(value, _value)) return;
-    _switch._onWhenValueChanged(_value, value, _view);
+    _switch?._onWhenValueChanged(_value, value, _view);
     _value = value;
   }
 }
@@ -201,11 +202,11 @@ class NgSwitchWhen {
 @Directive(selector: '[ngSwitchDefault]')
 class NgSwitchDefault {
   NgSwitchDefault(
-    ViewContainerRef viewContainer,
-    TemplateRef templateRef,
-    @Host() NgSwitch switchDirective,
+    @Optional() ViewContainerRef? viewContainer,
+    @Optional() TemplateRef? templateRef,
+    @Optional() @Host() NgSwitch? switchDirective,
   ) {
-    switchDirective._registerView(
+    switchDirective?._registerView(
       _whenDefault,
       SwitchView(viewContainer, templateRef),
     );

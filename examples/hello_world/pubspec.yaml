@@ -1,7 +1,9 @@
 name: examples_hello_world
 
 environment:
-  sdk: '>=3.6.0 <4.0.0'
+  sdk: '>=3.10.0 <4.0.0'
+
+resolution: workspace
 
 dependencies:
   # No strict dependencies, we always use dependency_overrides.
@@ -10,4 +12,4 @@ dependencies:
 dev_dependencies:
   build_runner: ^2.4.0
   build_web_compilers: ^4.1.0
-  lints: ^5.0.0
+  lints: ^6.0.0
