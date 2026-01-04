@@ -21,12 +21,10 @@ import 'router_link_directive.dart';
 ///   <a routerLink="/user/bob">Bob</a>
 /// </div>
 /// ```
-@Directive(
-  selector: '[routerLinkActive]',
-)
+@Directive(selector: '[routerLinkActive]')
 class RouterLinkActive implements AfterViewInit, OnDestroy {
-  final Element _element;
-  final Router _router;
+  final Element? _element;
+  final Router? _router;
 
   late StreamSubscription<RouterState> _routeChanged;
   late List<String> _classes;
@@ -34,13 +32,14 @@ class RouterLinkActive implements AfterViewInit, OnDestroy {
   @ContentChildren(RouterLink)
   List<RouterLink>? links;
 
-  RouterLinkActive(this._element, this._router);
+  RouterLinkActive(@Optional() this._element, @Optional() this._router);
 
   @override
   void ngOnDestroy() => _routeChanged.cancel();
 
   @override
   void ngAfterViewInit() {
+    if (_router == null) return;
     _routeChanged = _router.stream.listen(_update);
     _update(_router.current);
   }
@@ -67,8 +66,10 @@ class RouterLinkActive implements AfterViewInit, OnDestroy {
         if (url.path != routerState.path) continue;
         // Only compare query parameters if specified in the [routerLink].
         if (url.queryParameters.isNotEmpty &&
-            !const MapEquality<String, String>()
-                .equals(url.queryParameters, routerState.queryParameters)) {
+            !const MapEquality<String, String>().equals(
+              url.queryParameters,
+              routerState.queryParameters,
+            )) {
           continue;
         }
         // Only compare fragment identifier if specified in the [routerLink].
@@ -82,7 +83,7 @@ class RouterLinkActive implements AfterViewInit, OnDestroy {
     }
     //_element.classList.toggleAll(_classes, isActive);
     for (var clazz in _classes) {
-      _element.classList.toggle(clazz, isActive);
+      _element?.classList.toggle(clazz, isActive);
     }
   }
 }
