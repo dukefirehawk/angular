@@ -1,11 +1,8 @@
+import 'package:ngdart/src/core/change_detection/differs/default_iterable_differ.dart';
+import 'package:ngdart/src/core/change_detection/differs/default_keyvalue_differ.dart';
+import 'package:ngdart/src/meta.dart';
+import 'package:ngdart/src/utilities.dart';
 import 'package:web/web.dart';
-
-import '../../core/change_detection/differs/default_iterable_differ.dart';
-import '../../core/change_detection/differs/default_keyvalue_differ.dart';
-import '../../meta/directives.dart';
-import '../../meta/lifecycle_hooks.dart';
-import '../../meta/di_arguments.dart';
-import '../../utilities/unsafe_cast.dart';
 
 /// The [NgClass] directive conditionally adds and removes CSS classes on an
 /// HTML element based on an expression's evaluation result.
@@ -144,9 +141,9 @@ class NgClass implements DoCheck, OnDestroy {
     }
   }
 
-  /// If [rawClassVal] is an Iterable, it should only contain string values,
-  /// but it is OK if the Iterable itself is `Iterable<dynamic>` or
-  /// `Iterable<Object>` since we need to walk it in this method anyway.
+  /// If [rawClassVal] is an `Iterable`, it should only contain string values,
+  /// but it is OK if the `Iterable` itself is [Iterable<dynamic>] or
+  /// `Iterable<Object?>` since we need to walk it in this method anyway.
   ///
   /// Likewise, if [rawClassVal] is a Map, its keys should all be strings.
   void _applyClasses(Object? /* Iterable | Map */ rawClassVal, bool isCleanup) {

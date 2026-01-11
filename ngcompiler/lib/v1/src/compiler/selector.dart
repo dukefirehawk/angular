@@ -325,7 +325,7 @@ class SelectorMatcher<T> {
 
   bool _matchTerminal(
     Map<String, List<SelectorContext<T>>> map,
-    name,
+    Object? name,
     CssSelector cssSelector,
     void Function(CssSelector, T)? matchedCallback,
   ) {
@@ -350,7 +350,7 @@ class SelectorMatcher<T> {
 
   bool _matchPartial(
     Map<String, SelectorMatcher<T>> map,
-    name,
+    Object? name,
     CssSelector cssSelector,
     void Function(CssSelector, T)? matchedCallback,
   ) {

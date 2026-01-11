@@ -1,7 +1,7 @@
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngforms/ngforms.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 
 import 'memorized_form_test.template.dart' as ng;
 
@@ -21,7 +21,8 @@ void main() {
 
       setUp(() async {
         var testBed = NgTestBed<TestControlComponent>(
-            ng.createTestControlComponentFactory());
+          ng.createTestControlComponentFactory(),
+        );
         fixture = await testBed.create();
         readonlyCmp = fixture.assertOnlyInstance;
       });
@@ -53,13 +54,17 @@ void main() {
 
       test('Readding a control preserves the value', () async {
         await fixture.update((component) => showControls(component, true));
-        await fixture.update((component) =>
-            (component.form!.controls!['two'] as Control).updateValue('two'));
+        await fixture.update(
+          (component) =>
+              (component.form!.controls!['two'] as Control).updateValue('two'),
+        );
         await fixture.update((component) => showControls(component, false));
         await fixture.update((component) => showControls(component, true));
         expect(readonlyCmp.form!.form!.controls.length, 2);
-        expect(readonlyCmp.form!.value, {'one': null, 'two': 'two'},
-            reason: 'Should still have the same values');
+        expect(readonlyCmp.form!.value, {
+          'one': null,
+          'two': 'two',
+        }, reason: 'Should still have the same values');
       });
     });
 
@@ -74,8 +79,9 @@ void main() {
       }
 
       setUp(() async {
-        var testBed =
-            NgTestBed<TestGroupComponent>(ng.createTestGroupComponentFactory());
+        var testBed = NgTestBed<TestGroupComponent>(
+          ng.createTestGroupComponentFactory(),
+        );
         fixture = await testBed.create();
         readonlyCmp = fixture.assertOnlyInstance;
       });
@@ -93,41 +99,43 @@ void main() {
         expect(readonlyCmp.form!.form!.controls.length, 2);
         expect(readonlyCmp.form!.value, {
           'one': {'one': 'one'},
-          'two': {'two': null}
+          'two': {'two': null},
         });
       });
 
-      test('Adding then removing control groups does not remove control',
-          () async {
-        await fixture.update((component) {
-          component.one = 'one';
-          showGroups(component, true);
-        });
-        await fixture.update((component) => showGroups(component, false));
-        expect(readonlyCmp.form!.form!.controls.length, 2);
-        expect(readonlyCmp.form!.value, {
-          'one': {'one': 'one'},
-          'two': {'two': null}
-        });
-      });
+      test(
+        'Adding then removing control groups does not remove control',
+        () async {
+          await fixture.update((component) {
+            component.one = 'one';
+            showGroups(component, true);
+          });
+          await fixture.update((component) => showGroups(component, false));
+          expect(readonlyCmp.form!.form!.controls.length, 2);
+          expect(readonlyCmp.form!.value, {
+            'one': {'one': 'one'},
+            'two': {'two': null},
+          });
+        },
+      );
 
       test('Readding a control group preserves the value', () async {
         await fixture.update((component) => showGroups(component, true));
-        await fixture.update((component) =>
-            ((component.form!.controls!['two'] as ControlGroup).controls['two']
-                    as Control)
-                .updateValue('two'));
+        await fixture.update(
+          (component) =>
+              ((component.form!.controls!['two'] as ControlGroup)
+                          .controls['two']
+                      as Control)
+                  .updateValue('two'),
+        );
         await fixture.update((component) => showGroups(component, false));
         await fixture.update((component) => showGroups(component, true));
 
         expect(readonlyCmp.form!.form!.controls.length, 2);
-        expect(
-            readonlyCmp.form!.value,
-            {
-              'one': {'one': null},
-              'two': {'two': 'two'}
-            },
-            reason: 'Should still have the same values');
+        expect(readonlyCmp.form!.value, {
+          'one': {'one': null},
+          'two': {'two': 'two'},
+        }, reason: 'Should still have the same values');
       });
     });
   });

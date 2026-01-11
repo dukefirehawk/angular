@@ -1,5 +1,5 @@
-import 'package:test/test.dart';
 import 'package:ngrouter/src/url.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('$Url', () {
@@ -19,8 +19,10 @@ void main() {
       });
 
       test('should parse the queryParameters', () {
-        expect(url.queryParameters,
-            {'bar': 'true', 'path/param/key': 'uri?param'});
+        expect(url.queryParameters, {
+          'bar': 'true',
+          'path/param/key': 'uri?param',
+        });
       });
     });
 

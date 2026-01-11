@@ -1,6 +1,6 @@
 import 'package:build/build.dart';
-import 'package:test/test.dart';
 import 'package:ngcompiler/v2/context.dart';
+import 'package:test/test.dart';
 
 void main() {
   tearDown(CompileContext.removeTestingOverride);
@@ -38,7 +38,6 @@ void main() {
       final context = CompileContext(
         AssetId('foo.sub', 'lib/bar.dart'),
         enableDevTools: false,
-        isNullSafe: false,
         policyExceptions: {},
         policyExceptionsInPackages: {},
       );
@@ -49,7 +48,6 @@ void main() {
       final context = CompileContext(
         AssetId('foo', 'lib/bar.dart'),
         enableDevTools: false,
-        isNullSafe: false,
         policyExceptions: {},
         policyExceptionsInPackages: {},
       );
@@ -60,7 +58,6 @@ void main() {
       final context = CompileContext(
         AssetId('foo.sub', 'lib/bar.dart'),
         enableDevTools: false,
-        isNullSafe: false,
         policyExceptions: {},
         policyExceptionsInPackages: {},
       );
@@ -76,36 +73,11 @@ void main() {
       expect(() => context.throwRecoverableErrors(), returnsNormally);
     });
 
-    group('emitNullSafeCode', () {
-      test('should be false if the source library is not opted-in', () {
-        final context = CompileContext(
-          AssetId('foo.sub', 'lib/bar.dart'),
-          enableDevTools: false,
-          isNullSafe: false,
-          policyExceptions: {},
-          policyExceptionsInPackages: {},
-        );
-        expect(context.emitNullSafeCode, isFalse);
-      });
-
-      test('should be true if the source library opted-in', () {
-        final context = CompileContext(
-          AssetId('foo.sub', 'lib/bar.dart'),
-          enableDevTools: false,
-          isNullSafe: true,
-          policyExceptions: {},
-          policyExceptionsInPackages: {},
-        );
-        expect(context.emitNullSafeCode, isTrue);
-      });
-    });
-
     group('isDevToolsEnabled', () {
       test('should be false by default', () {
         final context = CompileContext(
           AssetId('foo.sub', 'lib/bar.dart'),
           enableDevTools: false,
-          isNullSafe: false,
           policyExceptions: {},
           policyExceptionsInPackages: {},
         );
@@ -116,7 +88,6 @@ void main() {
         final context = CompileContext(
           AssetId('foo.sub', 'lib/bar.dart'),
           enableDevTools: true,
-          isNullSafe: false,
           policyExceptions: {},
           policyExceptionsInPackages: {},
         );
@@ -127,7 +98,6 @@ void main() {
         final context = CompileContext(
           AssetId('foo.sub', 'lib/bar.dart'),
           enableDevTools: false,
-          isNullSafe: false,
           policyExceptions: {
             'FORCE_DEVTOOLS_ENABLED': {'foo/sub/lib/bar.dart'},
           },
@@ -142,7 +112,6 @@ void main() {
         final context = CompileContext(
           AssetId('foo', 'lib/bar.dart'),
           enableDevTools: false,
-          isNullSafe: false,
           policyExceptions: {},
           policyExceptionsInPackages: {},
         );
@@ -153,7 +122,6 @@ void main() {
         final context = CompileContext(
           AssetId('foo.sub', 'lib/bar.dart'),
           enableDevTools: false,
-          isNullSafe: false,
           policyExceptions: {},
           policyExceptionsInPackages: {
             'EXCLUDED_VALIDATE_MISSING_DIRECTIVES': {'foo/sub'},

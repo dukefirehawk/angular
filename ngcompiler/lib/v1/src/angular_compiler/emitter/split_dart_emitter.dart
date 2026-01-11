@@ -8,11 +8,8 @@ import 'package:code_builder/code_builder.dart';
 class SplitDartEmitter extends DartEmitter {
   final StringSink? _writeImports;
 
-  SplitDartEmitter(
-    this._writeImports, {
-    super.allocator,
-    bool emitNullSafeSyntax = false,
-  }) : super(orderDirectives: false, useNullSafetySyntax: emitNullSafeSyntax);
+  SplitDartEmitter(this._writeImports, {super.allocator})
+    : super(orderDirectives: false, useNullSafetySyntax: true);
 
   @override
   StringSink visitDirective(Directive spec, [StringSink? output]) {

@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:logging/logging.dart';
-import 'package:test/test.dart';
 import 'package:ngcompiler/v2/context.dart';
+import 'package:test/test.dart';
 
 import 'resolve.dart';
 

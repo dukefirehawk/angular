@@ -1,6 +1,6 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:test/test.dart';
 import 'package:ngcompiler/v1/angular_compiler.dart';
+import 'package:test/test.dart';
 
 import '../../src/compile.dart';
 import '../../src/resolve.dart';
@@ -10,10 +10,10 @@ const testImport = 'asset:test_lib/lib/test_lib.dart';
 Future<TypedElement> parse(String source) async {
   final amendedSource =
       '''
-    @Component()
+    @Component(selector: '')
     class GenericComponent<T> {}
 
-    @Directive()
+    @Directive(selector: '')
     class GenericDirective<K, V> {}
 
     $source
@@ -271,7 +271,7 @@ void main() {
     test('if a non-existent type parameter is flowed', () async {
       await compilesExpecting(
         '''
-        @Component()
+        @Component(selector: '')
         class GenericComponent<T> {}
         const typed = Typed<GenericComponent>.of([#X]);
 
@@ -290,7 +290,7 @@ void main() {
     test("if a type argument isn't a supported type", () async {
       await compilesExpecting(
         '''
-        @Component()
+        @Component(selector: '')
         class GenericComponent<T> {}
         const typed = Typed<GenericComponent>.of([12]);
 
@@ -309,7 +309,7 @@ void main() {
     test('if "Typed.on" is specified anywhere other than the root', () async {
       await compilesExpecting(
         '''
-       @Component()
+       @Component(selector: '')
         class GenericComponent<T> {}
         const typed = Typed<GenericComponent>.of([
           Typed<List>.of([#X], on: 'foo'),
@@ -349,7 +349,7 @@ void main() {
     test('if a private type argument is used', () async {
       await compilesExpecting(
         '''
-        @Component()
+        @Component(selector: '')
         class GenericComponent<T> {}
         class _Private {}
         const typed = Typed<GenericComponent<_Private>>();

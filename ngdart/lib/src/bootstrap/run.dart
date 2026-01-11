@@ -1,5 +1,4 @@
 import 'package:meta/meta.dart';
-import '../meta.dart';
 
 import '../core/application_ref.dart';
 import '../core/application_tokens.dart';
@@ -8,6 +7,7 @@ import '../core/linker/app_view_utils.dart';
 import '../core/zone/ng_zone.dart';
 import '../devtools.dart';
 import '../di/injector.dart';
+import '../meta.dart';
 import '../runtime/dom_events.dart';
 import '../utilities.dart';
 import 'modules.dart';

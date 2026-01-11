@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:web/web.dart';
 
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'outputs_test.template.dart' as ng;
 
@@ -12,7 +12,8 @@ void main() {
 
   test('should support directive outputs on regular elements', () async {
     final testBed = NgTestBed<ElementWithEventDirectivesComponent>(
-        ng.createElementWithEventDirectivesComponentFactory());
+      ng.createElementWithEventDirectivesComponentFactory(),
+    );
     final testFixture = await testBed.create();
     final emitter = testFixture.assertOnlyInstance.emitter;
     final listener = testFixture.assertOnlyInstance.listener!;
@@ -23,7 +24,8 @@ void main() {
 
   test('should support directive outputs on template elements', () async {
     final testBed = NgTestBed<TemplateWithEventDirectivesComponent>(
-        ng.createTemplateWithEventDirectivesComponentFactory());
+      ng.createTemplateWithEventDirectivesComponentFactory(),
+    );
     final testFixture = await testBed.create();
     final component = testFixture.assertOnlyInstance;
     expect(component.msg, isNull);
@@ -35,7 +37,8 @@ void main() {
 
   test('should support [()] syntax', () async {
     final testBed = NgTestBed<TwoWayBindingComponent>(
-        ng.createTwoWayBindingComponentFactory());
+      ng.createTwoWayBindingComponentFactory(),
+    );
     final testFixture = await testBed.create();
     final component = testFixture.assertOnlyInstance;
     expect(component.directive!.control, 'one');
@@ -46,23 +49,26 @@ void main() {
 
   test('should support render events', () async {
     final testBed = NgTestBed<ElementWithDomEventComponent>(
-        ng.createElementWithDomEventComponentFactory());
+      ng.createElementWithDomEventComponentFactory(),
+    );
     final testFixture = await testBed.create();
-    final div = testFixture.rootElement.children.item(0);
+    final div = testFixture.rootElement.children.item(0)!;
     final listener = testFixture.assertOnlyInstance.listener;
-    await testFixture.update((_) => div?.dispatchEvent(Event('click')));
+    await testFixture.update((_) => div.dispatchEvent(Event('click')));
     expect(listener!.eventTypes, ['click']);
   });
 
   test('should support preventing default on render events', () async {
     final testBed = NgTestBed<TestPreventDefaultComponent>(
-        ng.createTestPreventDefaultComponentFactory());
+      ng.createTestPreventDefaultComponentFactory(),
+    );
     final testFixture = await testBed.create();
     final inputPrevent =
         testFixture.rootElement.children.item(0) as HTMLInputElement;
     final inputNoPrevent =
         testFixture.rootElement.children.item(1) as HTMLInputElement;
-    final clickPrevent = MouseEvent('click');
+    // `true` by default in the `dart:html` Event contructor
+    final clickPrevent = MouseEvent('click', MouseEventInit(cancelable: true));
     final clickNoPrevent = MouseEvent('click');
     inputPrevent.dispatchEvent(clickPrevent);
     inputNoPrevent.dispatchEvent(clickNoPrevent);
@@ -73,23 +79,28 @@ void main() {
     expect(inputNoPrevent.checked, true);
   });
 
-  test('should provide helpful error for incorrectly typed handler', () async {
-    final testBed = NgTestBed<TestMismatchedHandler>(
-        ng.createTestMismatchedHandlerFactory());
-    expect(
-      testBed.create,
-      throwsA(const TypeMatcher<AssertionError>().having(
-        (a) => a.message,
-        'message',
-        contains("isn't assignable to expected type"),
-      )),
-    );
-  }, skip: 'https://github.com/dart-lang/sdk/issues/36832');
+  test(
+    'should provide helpful error for incorrectly typed handler',
+    () async {
+      final testBed = NgTestBed<TestMismatchedHandler>(
+        ng.createTestMismatchedHandlerFactory(),
+      );
+      expect(
+        testBed.create,
+        throwsA(
+          const TypeMatcher<AssertionError>().having(
+            (a) => a.message,
+            'message',
+            contains("isn't assignable to expected type"),
+          ),
+        ),
+      );
+    },
+    skip: 'https://github.com/dart-lang/sdk/issues/36832',
+  );
 }
 
-@Directive(
-  selector: '[emitter]',
-)
+@Directive(selector: '[emitter]')
 class EventEmitterDirective {
   String? msg;
 
@@ -103,9 +114,7 @@ class EventEmitterDirective {
   }
 }
 
-@Directive(
-  selector: '[listener]',
-)
+@Directive(selector: '[listener]')
 class EventListenerDirective {
   String? msg;
 
@@ -143,9 +152,7 @@ class TemplateWithEventDirectivesComponent {
   EventListenerDirective? listener;
 }
 
-@Directive(
-  selector: '[two-way]',
-)
+@Directive(selector: '[two-way]')
 class DirectiveWithTwoWayBinding {
   final _streamController = StreamController<String>();
 
@@ -172,9 +179,7 @@ class TwoWayBindingComponent {
   DirectiveWithTwoWayBinding? directive;
 }
 
-@Directive(
-  selector: '[listener]',
-)
+@Directive(selector: '[listener]')
 class DomEventListenerDirective {
   List<String> eventTypes = [];
 
@@ -194,9 +199,7 @@ class ElementWithDomEventComponent {
   DomEventListenerDirective? listener;
 }
 
-@Directive(
-  selector: '[listenerprevent]',
-)
+@Directive(selector: '[listenerprevent]')
 class DirectiveListeningDomEventPrevent {
   @HostListener('click')
   void onEvent(Event event) {
@@ -204,9 +207,7 @@ class DirectiveListeningDomEventPrevent {
   }
 }
 
-@Directive(
-  selector: '[listenernoprevent]',
-)
+@Directive(selector: '[listenernoprevent]')
 class DirectiveListeningDomEventNoPrevent {
   @HostListener('click')
   void onEvent(Event event) {}
@@ -214,7 +215,8 @@ class DirectiveListeningDomEventNoPrevent {
 
 @Component(
   selector: 'test-prevent-default',
-  template: '<input type="checkbox" listenerprevent>'
+  template:
+      '<input type="checkbox" listenerprevent>'
       '<input type="checkbox" listenernoprevent>',
   directives: [
     DirectiveListeningDomEventNoPrevent,
@@ -223,10 +225,7 @@ class DirectiveListeningDomEventNoPrevent {
 )
 class TestPreventDefaultComponent {}
 
-@Component(
-  selector: 'output',
-  template: '',
-)
+@Component(selector: 'output', template: '')
 class OutputComponent {
   @Output()
   Stream<String> output = Stream.empty();

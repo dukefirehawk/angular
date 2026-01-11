@@ -1,8 +1,8 @@
 import '../../core/change_detection/differs/default_iterable_differ.dart';
 import '../../core/linker.dart';
+import '../../meta/di_arguments.dart';
 import '../../meta/directives.dart';
 import '../../meta/lifecycle_hooks.dart';
-import '../../meta/di_arguments.dart';
 import '../../utilities/unsafe_cast.dart';
 
 /// The `NgFor` directive instantiates a template once per item from an

@@ -41,7 +41,7 @@ abstract class AbstractControlDirective<T extends AbstractControl> {
   /// * value is set to null
   ///
   /// For more information, see `AbstractControl`.
-  void reset({value}) {
+  void reset({Object? value}) {
     control?.reset(value: value);
   }
 }

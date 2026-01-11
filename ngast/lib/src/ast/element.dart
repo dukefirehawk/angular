@@ -5,7 +5,7 @@ import '../ast.dart';
 import '../token/tokens.dart';
 import '../visitor.dart';
 
-const _listEquals = ListEquality<dynamic>();
+const _listEquals = ListEquality();
 
 /// Represents a DOM element that was parsed, that could be upgraded.
 ///

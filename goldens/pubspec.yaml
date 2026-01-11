@@ -3,7 +3,7 @@ description: Goldens for AngularDart.
 publish_to: none
 
 environment:
-  sdk: '>=3.6.0 <4.0.0'
+  sdk: ">=3.10.0 <4.0.0"
 
 resolution: workspace
 
@@ -18,3 +18,4 @@ dev_dependencies:
   glob: ^2.1.1
   lints: ^6.0.0
   path: ^1.8.3
+  web: ^1.1.1

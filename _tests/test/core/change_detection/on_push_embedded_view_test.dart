@@ -1,8 +1,7 @@
-import 'package:web/web.dart';
-
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'on_push_embedded_view_test.template.dart' as ng;
 
@@ -10,8 +9,9 @@ void main() {
   late NgTestFixture<TestComponent> fixture;
 
   setUp(() async {
-    fixture = await NgTestBed<TestComponent>(ng.createTestComponentFactory())
-        .create();
+    fixture = await NgTestBed<TestComponent>(
+      ng.createTestComponentFactory(),
+    ).create();
   });
 
   tearDown(disposeAnyRunningTest);
@@ -33,8 +33,7 @@ void main() {
   // component, there's currently no mechanism in the framework that marks that
   // component to be checked when the `<template>` parent receives a change that
   // could invalidate a binding within the `<template>`.
-  group(
-      'updating the OnPush component which defines a template should update '
+  group('updating the OnPush component which defines a template should update '
       'any embedded views created from that template', () {
     test('when embedded within the OnPush component of origin', () async {
       final component = fixture.assertOnlyInstance;
@@ -46,14 +45,18 @@ void main() {
       });
 
       expect(
-          component.templateProducer!.textContent, contains('Hello template!'));
+        component.templateProducer!.textContent,
+        contains('Hello template!'),
+      );
 
       await fixture.update((component) {
         component.templateText = 'Goodbye template!';
       });
 
-      expect(component.templateProducer!.textContent,
-          contains('Goodbye template!'));
+      expect(
+        component.templateProducer!.textContent,
+        contains('Goodbye template!'),
+      );
     });
 
     test('when embedded within a separate OnPush component', () async {
@@ -83,22 +86,22 @@ void main() {
       expect(
         component.templateConsumer!.textContent,
         contains('Hello template!'),
-        reason: 'Unrelated change to view container parent triggers change '
+        reason:
+            'Unrelated change to view container parent triggers change '
             'detection of nested views which delivers an old change from the '
             'template parent to the embedded view.',
       );
       expect(
-          component.templateConsumer!.textContent, contains('Hello consumer!'));
+        component.templateConsumer!.textContent,
+        contains('Hello consumer!'),
+      );
     });
   });
 }
 
 @Component(
   selector: 'test',
-  directives: [
-    TemplateProducerComponent,
-    TemplateConsumerComponent,
-  ],
+  directives: [TemplateProducerComponent, TemplateConsumerComponent],
   template: '''
     <template-producer
         #templateProducer="templateProducer"

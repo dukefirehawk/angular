@@ -1,11 +1,8 @@
-@JS()
-library;
-
 import 'dart:async';
 import 'dart:js_interop';
-import 'package:web/web.dart';
 
 import 'package:meta/meta.dart';
+import 'package:web/web.dart';
 
 import '../core/zone/ng_zone.dart';
 import '../meta/di_providers.dart';

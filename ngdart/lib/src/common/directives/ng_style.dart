@@ -1,13 +1,7 @@
-import 'dart:js_interop_unsafe';
-
+import 'package:ngdart/src/core/change_detection/differs/default_keyvalue_differ.dart';
+import 'package:ngdart/src/meta.dart';
+import 'package:ngdart/src/utilities/unsafe_cast.dart';
 import 'package:web/web.dart';
-
-import '../../core/change_detection/differs/default_keyvalue_differ.dart';
-import '../../meta/directives.dart';
-import '../../meta/lifecycle_hooks.dart';
-import '../../meta/di_arguments.dart';
-
-import '../../utilities/unsafe_cast.dart';
 
 /// The `NgStyle` directive changes an element's style based on the bound style
 /// expression:
@@ -87,15 +81,11 @@ class NgStyle implements DoCheck {
   }
 
   void _setProperty(KeyValueChangeRecord record) {
-    /*
-    _ngElement.style.setProperty(
+    // HTMLElement, SVGElement and MathMLElement have same `style` property.
+    // The cast should be omitted because both types are JSObject.
+    (_ngElement as HTMLElement).style.setProperty(
       unsafeCast(record.key),
-      unsafeCast(record.currentValue),
-    );
-    */
-    _ngElement?.setProperty(
-      unsafeCast(record.key),
-      unsafeCast(record.currentValue),
+      unsafeCast(record.currentValue ?? ''),
     );
   }
 }

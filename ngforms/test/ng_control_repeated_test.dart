@@ -14,7 +14,7 @@ void main() {
   test('should update an NgForm without throwing an NPE', () async {
     final testBed = NgTestBed<AppComponent>(ng.createAppComponentFactory());
     expect(
-      (await testBed.create()).rootElement.textContent,
+      (await testBed.create()).rootElement.innerHTML,
       contains(r'<input title="Input #0:true">'),
     );
   });
@@ -22,10 +22,7 @@ void main() {
 
 @Component(
   selector: 'root',
-  directives: [
-    formDirectives,
-    NgFor,
-  ],
+  directives: [formDirectives, NgFor],
   template: r'''
     <form>
       <input *ngFor="let val of values; let idx = index"

@@ -4,8 +4,8 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:analyzer/dart/element/visitor2.dart';
 import 'package:analyzer/src/dart/element/element.dart';
-
-import 'package:ngdart/src/meta.dart';
+import 'package:build/build.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:ngcompiler/v1/src/compiler/analyzed_class.dart';
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart';
@@ -19,8 +19,7 @@ import 'package:ngcompiler/v1/src/source_gen/common/annotation_matcher.dart';
 import 'package:ngcompiler/v1/src/source_gen/common/url_resolver.dart';
 import 'package:ngcompiler/v2/analyzer.dart';
 import 'package:ngcompiler/v2/context.dart';
-import 'package:build/build.dart';
-import 'package:collection/collection.dart' show IterableExtension;
+import 'package:ngdart/src/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:source_gen/source_gen.dart';
 
@@ -232,9 +231,6 @@ class _ComponentVisitor
 
   final LibraryReader _library;
   final ComponentVisitorExceptionHandler _exceptionHandler;
-
-  /// Whether the component being visited re-implements 'noSuchMethod'.
-  bool _implementsNoSuchMethod = false;
 
   /// Element of the current directive being visited.
   ///
@@ -556,7 +552,9 @@ class _ComponentVisitor
   }
 
   static final _coreIterable = TypeChecker.fromUrl('dart:core#Iterable');
-  static final _htmlElement = TypeChecker.fromUrl('dart:html#Element');
+  static final _htmlElement = TypeChecker.fromUrl(
+    'package:web/src/dom/dom.dart#Element',
+  );
 
   CompileQueryMetadata _getQuery(
     AnnotationInformation annotationInfo,
@@ -673,12 +671,6 @@ class _ComponentVisitor
     // whether a user type implements 'noSuchMethod'.
     if (element is ClassElement && element.isDartCoreObject) return;
 
-    // Skip checking for noSuchMethod for opted-in libraries.
-    if (!CompileContext.current.emitNullSafeCode &&
-        element.getMethod('noSuchMethod') != null) {
-      _implementsNoSuchMethod = true;
-    }
-
     // Collect metadata from field and property accessor annotations.
     element.visitChildren(this);
 
@@ -739,10 +731,7 @@ class _ComponentVisitor
     // _createTemplateMetadata failed to create the metadata.
     if (template == null) return null;
 
-    final analyzedClass = AnalyzedClass(
-      element,
-      isMockLike: _implementsNoSuchMethod,
-    );
+    final analyzedClass = AnalyzedClass(element);
     final lifecycleHooks = extractLifecycleHooks(element);
     _validateLifecycleHooks(lifecycleHooks, element, isComponent);
 
@@ -767,7 +756,8 @@ class _ComponentVisitor
       _exceptionHandler.handle(
         ErrorMessageForAnnotation(
           linkInfo,
-          'Only supported on components that use "OnPush" change detection',
+          'Only supported on components that use '
+          '"ChangeDetectionStrategy.onPush" change detection',
         ),
       );
     }

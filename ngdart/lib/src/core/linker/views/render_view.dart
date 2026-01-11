@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'dart:js_interop';
-import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
-import '../../../core/linker/app_view_utils.dart';
-import '../../../core/linker/style_encapsulation.dart';
-import '../../../core/linker/view_container.dart';
-import '../../../core/linker/view_fragment.dart';
-import '../../../runtime/dom_helpers.dart';
+import 'package:ngdart/src/core/linker/app_view_utils.dart';
+import 'package:ngdart/src/core/linker/style_encapsulation.dart';
+import 'package:ngdart/src/core/linker/view_container.dart';
+import 'package:ngdart/src/core/linker/view_fragment.dart';
+import 'package:ngdart/src/runtime/dom_helpers.dart';
+import 'package:ngdart/src/utilities.dart';
+import 'package:web/web.dart';
 
 import '../../../utilities/unsafe_cast.dart';
 import 'view.dart';
@@ -129,21 +129,12 @@ abstract class RenderView extends View {
   ///   * Calls [markForCheck] on this view to ensure it gets change detected
   ///   during the next change detection cycle, in case it uses a non-default
   ///   change detection strategy.
-  // TODO: Migrated to dart 3.6 (Need to review)
-  JSFunction? eventHandler0(void Function() handler) {
-    return () {
-      markForCheck();
-      appViewUtils.eventManager.zone.runGuarded(handler);
-    }.toJS;
-  }
-  /*
-  void Function(E) eventHandler0<E>(void Function() handler) {
+  void Function(E event) eventHandler0<E>(void Function() handler) {
     return (E event) {
       markForCheck();
       appViewUtils.eventManager.zone.runGuarded(handler);
     };
   }
-  */
 
   /// The same as [eventHandler0], but [handler] is passed an event parameter.
   ///
@@ -168,16 +159,16 @@ abstract class RenderView extends View {
     return (E event) {
       markForCheck();
       appViewUtils.eventManager.zone.runGuarded(
-        () => handler(unsafeCast<F>(event)),
+        () => handler(unsafeCast(event)),
       );
     };
   }
 
   // Styling -------------------------------------------------------------------
 
-  /// Equivalent to [addShimE], but optimized for [HtmlElement].
+  /// Equivalent to [addShimE], but optimized for [HTMLElement].
   @dart2js.tryInline
-  void addShimC(HtmlElement element) {
+  void addShimC(HTMLElement element) {
     componentStyles.addContentShimClassHtmlElement(element);
   }
 
@@ -187,7 +178,7 @@ abstract class RenderView extends View {
   /// shim class is needed for any styles to match [element].
   ///
   /// This should only be used for SVG or custom elements. For a plain
-  /// [HtmlElement], use [addShimC] instead.
+  /// [HTMLElement], use [addShimC] instead.
   @dart2js.tryInline
   void addShimE(Element element) {
     componentStyles.addContentShimClass(element);
@@ -200,7 +191,7 @@ abstract class RenderView extends View {
   ///
   /// For example, through the `[class]="..."` or `[attr.class]="..."` syntax.
   @dart2js.noInline
-  void updateChildClass(HtmlElement element, String newClass) {
+  void updateChildClass(HTMLElement element, String newClass) {
     componentStyles.updateChildClassHtmlElement(element, newClass);
   }
 

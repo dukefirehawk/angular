@@ -45,10 +45,12 @@ class Location {
   final String _baseHref;
 
   Location(this.locationStrategy)
-      : _baseHref = _sanitizeBaseHref(locationStrategy) {
-    locationStrategy.onPopState((Event ev) {
-      _subject.add({'url': path(), 'pop': true, 'type': ev.type});
-    }.toJS);
+    : _baseHref = _sanitizeBaseHref(locationStrategy) {
+    locationStrategy.onPopState(
+      (Event ev) {
+        _subject.add({'url': path(), 'pop': true, 'type': ev.type});
+      }.toJS,
+    );
   }
 
   static String _sanitizeBaseHref(LocationStrategy platformStrategy) {
@@ -64,7 +66,8 @@ class Location {
   /// Given a string representing a URL, returns the normalized URL path without
   /// leading or trailing slashes
   String normalize(String url) => Location.stripTrailingSlash(
-      _stripBaseHref(_baseHref, _stripIndexHtml(url)));
+    _stripBaseHref(_baseHref, _stripIndexHtml(url)),
+  );
 
   /// Normalizes [path] for navigation.
   ///

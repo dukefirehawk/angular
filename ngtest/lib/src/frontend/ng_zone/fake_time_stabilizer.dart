@@ -128,14 +128,17 @@ class TimersWillNotCompleteError extends Error {
   TimersWillNotCompleteError._(this._maxIterations, this._timers);
 
   @override
-  String toString() => (StringBuffer('Could not complete timers!')
-        ..write('Tried $_maxIterations times to elapse timers')
-        ..writeln(', but everytime more were scheduled.')
-        ..writeln('The following timers are pending:')
-        ..writeAll(_timers, '\n')
-        ..write('Check your code carefully and/or increase maxIterations only ')
-        ..writeln('when timers are being continously scheduled by design.'))
-      .toString();
+  String toString() =>
+      (StringBuffer('Could not complete timers!')
+            ..write('Tried $_maxIterations times to elapse timers')
+            ..writeln(', but everytime more were scheduled.')
+            ..writeln('The following timers are pending:')
+            ..writeAll(_timers, '\n')
+            ..write(
+              'Check your code carefully and/or increase maxIterations only ',
+            )
+            ..writeln('when timers are being continously scheduled by design.'))
+          .toString();
 }
 
 /// A simplified fake timer that does not wrap an actual timer.

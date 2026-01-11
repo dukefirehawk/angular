@@ -1,7 +1,7 @@
-//import 'dart:html' as html;
-import 'package:web/web.dart' as html;
+import 'dart:js_interop';
 
 import 'package:ngdart/angular.dart' show Injectable, Inject, Optional;
+import 'package:web/helpers.dart' as html;
 
 import 'location.dart' show Location;
 import 'location_strategy.dart' show LocationStrategy, appBaseHref;
@@ -33,12 +33,18 @@ class PathLocationStrategy extends LocationStrategy {
   ]) {
     href ??= _platformLocation.getBaseHrefFromDOM();
     if (href == null) {
-      throw ArgumentError('No base href set. Please provide a value for the '
-          'appBaseHref token or add a base element to the document.');
+      throw ArgumentError(
+        'No base href set. Please provide a value for the '
+        'appBaseHref token or add a base element to the document.',
+      );
     }
     _baseHref = href;
   }
 
+  @override
+  //void onPopState(void Function(Event event) fn) {
+  //  _platformLocation.onPopState(fn);
+  //}
   @override
   void onPopState(html.EventListener fn) {
     _platformLocation.onPopState(fn);
@@ -61,17 +67,23 @@ class PathLocationStrategy extends LocationStrategy {
       Location.normalizeQueryParams(_platformLocation.search);
 
   @override
-  void pushState(Object? state, String title, String url, String queryParams) {
-    var externalUrl =
-        prepareExternalUrl(url + Location.normalizeQueryParams(queryParams));
+  void pushState(JSAny? state, String title, String url, String queryParams) {
+    var externalUrl = prepareExternalUrl(
+      url + Location.normalizeQueryParams(queryParams),
+    );
     _platformLocation.pushState(state, title, externalUrl);
   }
 
   @override
   void replaceState(
-      Object? state, String title, String url, String queryParams) {
-    var externalUrl =
-        prepareExternalUrl(url + Location.normalizeQueryParams(queryParams));
+    JSAny? state,
+    String title,
+    String url,
+    String queryParams,
+  ) {
+    var externalUrl = prepareExternalUrl(
+      url + Location.normalizeQueryParams(queryParams),
+    );
     _platformLocation.replaceState(state, title, externalUrl);
   }
 

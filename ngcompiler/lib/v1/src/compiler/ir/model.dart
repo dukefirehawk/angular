@@ -1,4 +1,3 @@
-import 'package:source_span/source_span.dart';
 import 'package:ngcompiler/v1/src/compiler/analyzed_class.dart' as analyzed;
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart';
 import 'package:ngcompiler/v1/src/compiler/i18n/message.dart';
@@ -9,6 +8,7 @@ import 'package:ngcompiler/v1/src/compiler/view_compiler/compile_view.dart';
 import 'package:ngcompiler/v1/src/compiler/view_compiler/ir/provider_source.dart';
 import 'package:ngcompiler/v1/src/compiler/view_compiler/view_compiler_utils.dart'
     show namespaceUris;
+import 'package:source_span/source_span.dart';
 
 import '../expression_parser/ast.dart' as ast;
 import '../output/output_ast.dart' as o;
@@ -502,17 +502,7 @@ class CustomEvent extends BoundEvent {
 }
 
 class DirectiveOutput extends BoundEvent {
-  /// Whether this output has mock-like behavior.
-  ///
-  /// The heuristic used to determine mock-like behavior is if the analyzed
-  /// class or one of its ancestors, other than [Object], implements
-  /// [noSuchMethod].
-  ///
-  /// Note that is the value is _never_ true for null-safe libraries, as we no
-  /// longer support null streams/stream subscriptions in the generated code.
-  final bool isMockLike;
-
-  DirectiveOutput(super.name, this.isMockLike);
+  DirectiveOutput(super.name);
 
   @override
   R accept<R, C, CO extends C>(

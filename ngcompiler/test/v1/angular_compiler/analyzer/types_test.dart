@@ -1,5 +1,5 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:ngcompiler/v1/src/angular_compiler/analyzer/types.dart';
+import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:test/test.dart';
 
 import '../src/resolve.dart';
@@ -16,11 +16,10 @@ void main() {
 
     setUpAll(() async {
       testLib = await resolveLibrary(r'''
-
-        @Directive()
+        @Directive(selector: '')
         class ADirective {}
 
-        @Component()
+        @Component(selector: '')
         class AComponent {}
 
         @Injectable()

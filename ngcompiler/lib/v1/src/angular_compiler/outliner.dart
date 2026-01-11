@@ -12,6 +12,7 @@ import 'package:ngdart/src/core/change_detection/directive_change_detector.dart'
 import 'package:ngdart/src/core/linker/views/component_view.dart' as _ng;
 import 'package:ngdart/src/core/linker/views/render_view.dart' as _ng;
 import 'package:ngdart/src/core/linker/views/view.dart' as _ng;
+import 'package:web/web.dart' as _html;
 ''';
 
 const _analyzerIgnores =

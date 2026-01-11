@@ -1,8 +1,7 @@
-import 'package:web/web.dart';
-
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'detect_host_changes_test.template.dart' as ng;
 
@@ -41,9 +40,7 @@ class TestContainer {}
 )
 class ChildComponent extends SomeDirective {}
 
-@Directive(
-  selector: '[someDirective]',
-)
+@Directive(selector: '[someDirective]')
 class SomeDirective {
   @HostBinding('attr.role')
   static const hostRole = 'button';
@@ -58,5 +55,5 @@ class SomeDirective {
   void handleClick(Event e) {}
 
   @HostListener('keypress')
-  void handleKeyPress(Event e) {}
+  void handleKeyPress(KeyboardEvent e) {}
 }

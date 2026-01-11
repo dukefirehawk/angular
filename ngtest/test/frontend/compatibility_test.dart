@@ -1,9 +1,10 @@
-import 'package:web/web.dart';
+import 'dart:js_interop';
 
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 import 'package:ngtest/compatibility.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'compatibility_test.template.dart' as ng;
 
@@ -12,9 +13,6 @@ void main() {
   late Element testRoot;
 
   setUp(() {
-    // TODO: Migrate to 3.6 (Need review)
-    //docRoot = Element.tag('doc-root');
-    //testRoot = Element.tag('ng-test-bed-example-test');
     docRoot = document.createElement('doc-root');
     testRoot = document.createElement('ng-test-bed-example-test');
     docRoot.append(testRoot);
@@ -45,40 +43,49 @@ void main() {
       await fixture.update((_) => testService!.value = 'New value');
       expect(docRoot.textContent, 'New value');
       await fixture.dispose();
-      print(docRoot.innerHTML);
+      print((docRoot.innerHTML as JSString).toDart);
       expect(docRoot.textContent, isEmpty);
     });
     group('and beforeComponentCreated without error', () {
       test('should handle synchronous fn', () async {
-        final fixture = await testBed.create(beforeComponentCreated: (i) {
-          testService = i.provideType(TestService);
-          testService!.value = 'New value';
-        }, beforeChangeDetection: (_) {
-          expect(testService, isNotNull);
-        });
+        final fixture = await testBed.create(
+          beforeComponentCreated: (i) {
+            testService = i.provideType(TestService);
+            testService!.value = 'New value';
+          },
+          beforeChangeDetection: (_) {
+            expect(testService, isNotNull);
+          },
+        );
         expect(docRoot.textContent, 'New value');
         await fixture.dispose();
       });
 
       test('should handle asynchronous fn', () async {
-        final fixture = await testBed.create(beforeComponentCreated: (i) async {
-          testService = i.provideType(TestService);
-          testService!.value = 'New value';
-        }, beforeChangeDetection: (_) {
-          expect(testService, isNotNull);
-        });
+        final fixture = await testBed.create(
+          beforeComponentCreated: (i) async {
+            testService = i.provideType(TestService);
+            testService!.value = 'New value';
+          },
+          beforeChangeDetection: (_) {
+            expect(testService, isNotNull);
+          },
+        );
         expect(docRoot.textContent, 'New value');
         await fixture.dispose();
       });
 
       test('should handle asynchronous fn with delayed future', () async {
-        final fixture = await testBed.create(beforeComponentCreated: (i) async {
-          await Future.delayed(Duration(milliseconds: 200));
-          testService = i.provideType(TestService);
-          testService!.value = 'New value';
-        }, beforeChangeDetection: (_) {
-          expect(testService, isNotNull);
-        });
+        final fixture = await testBed.create(
+          beforeComponentCreated: (i) async {
+            await Future<void>.delayed(Duration(milliseconds: 200));
+            testService = i.provideType(TestService);
+            testService!.value = 'New value';
+          },
+          beforeChangeDetection: (_) {
+            expect(testService, isNotNull);
+          },
+        );
         expect(docRoot.textContent, 'New value');
         await fixture.dispose();
       });
@@ -87,31 +94,43 @@ void main() {
     group('and beforeComponentCreated with error', () {
       test('should handle synchronous fn', () async {
         // ignore: void_checks
-        expect(testBed.create(beforeComponentCreated: (_) {
-          throw Error();
-        }), throwsA(const TypeMatcher<Error>()));
+        expect(
+          testBed.create(
+            beforeComponentCreated: (_) {
+              throw Error();
+            },
+          ),
+          throwsA(const TypeMatcher<Error>()),
+        );
       });
 
       test('should handle asynchronous fn', () async {
-        expect(testBed.create(beforeComponentCreated: (_) async {
-          throw Error();
-        }), throwsA(const TypeMatcher<Error>()));
+        expect(
+          testBed.create(
+            beforeComponentCreated: (_) async {
+              throw Error();
+            },
+          ),
+          throwsA(const TypeMatcher<Error>()),
+        );
       });
 
       test('should handle asynchronous fn with delayed future', () async {
-        expect(testBed.create(beforeComponentCreated: (_) async {
-          await Future<void>.delayed(Duration(milliseconds: 200));
-          throw Error();
-        }), throwsA(const TypeMatcher<Error>()));
+        expect(
+          testBed.create(
+            beforeComponentCreated: (_) async {
+              await Future<void>.delayed(Duration(milliseconds: 200));
+              throw Error();
+            },
+          ),
+          throwsA(const TypeMatcher<Error>()),
+        );
       });
     });
   });
 }
 
-@Component(
-  selector: 'test',
-  template: '{{value}}',
-)
+@Component(selector: 'test', template: '{{value}}')
 class AngularInjector {
   final TestService _testService;
 

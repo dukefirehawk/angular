@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 import 'package:web/web.dart';
 
 import 'clear_component_styles_test.template.dart' as ng;
@@ -12,15 +12,23 @@ void main() {
   group('debugClearComponentStyles()', () {
     test('should clear component styles from DOM', () async {
       await expectTextFontStyle(
-          ng.createItalicTextComponentFactory(), 'italic');
+        ng.createItalicTextComponentFactory(),
+        'italic',
+      );
       await expectTextFontStyle(
-          ng.createNormalTextComponentFactory(), 'normal');
+        ng.createNormalTextComponentFactory(),
+        'normal',
+      );
     });
     test('should allow reloading the same component styles', () async {
       await expectTextFontStyle(
-          ng.createItalicTextComponentFactory(), 'italic');
+        ng.createItalicTextComponentFactory(),
+        'italic',
+      );
       await expectTextFontStyle(
-          ng.createItalicTextComponentFactory(), 'italic');
+        ng.createItalicTextComponentFactory(),
+        'italic',
+      );
     });
   });
 }
@@ -34,7 +42,9 @@ Future<void> expectTextFontStyle(
   final testFixture = await testBed.create();
   final text = testFixture.rootElement.querySelector('.text');
   expect(
-      window.getComputedStyle(text).getPropertyValue('font-style'), fontStyle);
+    window.getComputedStyle(text!).getPropertyValue('font-style'),
+    fontStyle,
+  );
   return testFixture.dispose();
 }
 
@@ -52,8 +62,5 @@ Future<void> expectTextFontStyle(
 )
 class ItalicTextComponent {}
 
-@Component(
-  selector: 'test',
-  template: '<p class="text"></p>',
-)
+@Component(selector: 'test', template: '<p class="text"></p>')
 class NormalTextComponent {}

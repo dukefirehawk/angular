@@ -59,13 +59,12 @@ typedef ValidatorFn = Map<String, dynamic>? Function(AbstractControl c);
 ///
 /// A _required_ control must have a non-empty value.
 @Directive(
-  selector: ''
+  selector:
+      ''
       '[required][ngControl],'
       '[required][ngFormControl],'
       '[required][ngModel]',
-  providers: [
-    ExistingProvider.forToken(ngValidators, RequiredValidator),
-  ],
+  providers: [ExistingProvider.forToken(ngValidators, RequiredValidator)],
 )
 class RequiredValidator implements Validator {
   @Input()
@@ -82,13 +81,12 @@ class RequiredValidator implements Validator {
 /// <input ngControl="fullName" minLength="10" />
 /// ```
 @Directive(
-  selector: ''
+  selector:
+      ''
       '[minlength][ngControl],'
       '[minlength][ngFormControl],'
       '[minlength][ngModel]',
-  providers: [
-    ExistingProvider.forToken(ngValidators, MinLengthValidator),
-  ],
+  providers: [ExistingProvider.forToken(ngValidators, MinLengthValidator)],
 )
 class MinLengthValidator implements Validator {
   @HostBinding('attr.minlength')
@@ -109,7 +107,10 @@ class MinLengthValidator implements Validator {
     if (v == null || v == '') return null;
     return v.length < minLength
         ? {
-            'minlength': {'requiredLength': minLength, 'actualLength': v.length}
+            'minlength': {
+              'requiredLength': minLength,
+              'actualLength': v.length,
+            },
           }
         : null;
   }
@@ -121,13 +122,12 @@ class MinLengthValidator implements Validator {
 /// <input ngControl="fullName" maxLength="10" />
 /// ```
 @Directive(
-  selector: ''
+  selector:
+      ''
       '[maxlength][ngControl],'
       '[maxlength][ngFormControl],'
       '[maxlength][ngModel]',
-  providers: [
-    ExistingProvider.forToken(ngValidators, MaxLengthValidator),
-  ],
+  providers: [ExistingProvider.forToken(ngValidators, MaxLengthValidator)],
 )
 class MaxLengthValidator implements Validator {
   @HostBinding('attr.maxlength')
@@ -148,7 +148,10 @@ class MaxLengthValidator implements Validator {
     if (v == null || v == '') return null;
     return v.length > maxLength
         ? {
-            'maxlength': {'requiredLength': maxLength, 'actualLength': v.length}
+            'maxlength': {
+              'requiredLength': maxLength,
+              'actualLength': v.length,
+            },
           }
         : null;
   }
@@ -163,13 +166,12 @@ class MaxLengthValidator implements Validator {
 /// The attribute value is parsed and used as a [RegExp] to validate the control
 /// value against. The regular expression must match the entire control value.
 @Directive(
-  selector: ''
+  selector:
+      ''
       '[pattern][ngControl],'
       '[pattern][ngFormControl],'
       '[pattern][ngModel]',
-  providers: [
-    ExistingProvider.forToken(ngValidators, PatternValidator),
-  ],
+  providers: [ExistingProvider.forToken(ngValidators, PatternValidator)],
 )
 class PatternValidator implements Validator {
   @HostBinding('attr.pattern')

@@ -15,7 +15,7 @@ import 'package:ngdart/angular.dart';
   //     }
   //   ''',
   // ],
-  styleUrls: ['home.css'],
+  //styleUrls: ['home.css'],
   templateUrl: 'home.html',
   directives: [NgIf],
   providers: [],

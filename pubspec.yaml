@@ -1,7 +1,8 @@
 name: angular_workspace
+publish_to: none
 
 environment:
-  sdk: '>=3.8.0 <4.0.0'
+  sdk: ">=3.10.0 <4.0.0"
 
 workspace:
   - ngast
@@ -12,7 +13,7 @@ workspace:
   - ngrouter
   - goldens
   - examples/hello_world
-  #- _tests
+  - _tests
 
 dev_dependencies:
   melos: ^7.3.0

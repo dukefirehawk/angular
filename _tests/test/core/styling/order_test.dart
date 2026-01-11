@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 import 'package:web/web.dart';
 
 import 'order_test.template.dart' as ng;
@@ -55,11 +55,7 @@ void main() {
     <child *ngIf="isFirstChildVisible"></child>
     <parent *ngIf="isParentVisible"></parent>
   ''',
-  directives: [
-    ChildComponent,
-    ParentComponent,
-    NgIf,
-  ],
+  directives: [ChildComponent, ParentComponent, NgIf],
 )
 class TestComponent {
   var isFirstChildVisible = false;
@@ -86,9 +82,7 @@ class TestComponent {
       }
     ''',
   ],
-  directives: [
-    ChildComponent,
-  ],
+  directives: [ChildComponent],
 )
 class ParentComponent {}
 

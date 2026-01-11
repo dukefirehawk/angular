@@ -1,5 +1,3 @@
-library;
-
 import '../parser/reader.dart';
 import '../scanner.dart';
 import '../token/tokens.dart';

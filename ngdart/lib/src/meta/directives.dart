@@ -278,7 +278,7 @@ class Pipe {
 ///
 /// > **NOTE**: `@Attribute` is not affected by any updates to attributes to the
 /// > host element (including the `[attr.*]` template syntax, or imperative
-/// > updates to the DOM using `dart:html`).
+/// > updates to the DOM using `package:web/web.dart`).
 ///
 /// ### Example
 ///

@@ -24,6 +24,12 @@ dependencies:
   ngcompiler: ^4.0.0-dev.1
   stream_transform: ^2.1.0
   web: ^1.1.1
+  sanitize_dom: ^0.1.0
 
 dev_dependencies:
   lints: ^6.0.0
+
+  # minimal versions to support null safety and class modifiers
+  build_runner: ^2.4.12
+  build_web_compilers: ^4.0.11
+  watcher: ^1.1.0

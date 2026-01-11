@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngrouter/testing.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 
 // ignore: uri_has_not_been_generated
 import 'navigation_queue_test.template.dart' as ng;
@@ -22,15 +22,14 @@ void main() {
     final secondCompleter = Completer<void>();
     final thirdCompleter = Completer<void>();
 
-    final testBed = NgTestBed<TestComponent>(
-      ng.createTestComponentFactory(),
-    ).addInjector(
-      (i) => Injector.map({
-        firstToken: firstCompleter.future,
-        secondToken: secondCompleter.future,
-        thirdToken: thirdCompleter.future,
-      }, i),
-    );
+    final testBed = NgTestBed<TestComponent>(ng.createTestComponentFactory())
+        .addInjector(
+          (i) => Injector.map({
+            firstToken: firstCompleter.future,
+            secondToken: secondCompleter.future,
+            thirdToken: thirdCompleter.future,
+          }, i),
+        );
 
     final testFixture = await testBed.create();
     final router = testFixture.assertOnlyInstance.router;
@@ -57,12 +56,8 @@ void main() {
 @Component(
   selector: 'test',
   template: '<router-outlet [routes]="routes"></router-outlet>',
-  directives: [
-    RouterOutlet,
-  ],
-  providers: [
-    routerProvidersTest,
-  ],
+  directives: [RouterOutlet],
+  providers: [routerProvidersTest],
 )
 class TestComponent {
   final Router router;
@@ -98,7 +93,7 @@ abstract class DelayedActivation implements CanActivate {
   DelayedActivation(this._future);
 
   @override
-  Future<bool> canActivate(_, __) => _future.then((_) => true);
+  Future<bool> canActivate(_, _) => _future.then((_) => true);
 }
 
 @Component(selector: 'first', template: 'First')

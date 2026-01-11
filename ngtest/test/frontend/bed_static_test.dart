@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 
 import 'bed_static_test.template.dart' as ng_generated;
 
@@ -12,26 +12,23 @@ void main() {
     );
     final NgTestFixture<ExampleComp> fixture = await testBed.create();
     expect(fixture.text, '0');
-    await fixture.update((comp) => comp
-      ..a = 1
-      ..b = 2);
+    await fixture.update(
+      (comp) => comp
+        ..a = 1
+        ..b = 2,
+    );
     expect(fixture.text, '3');
   });
 }
 
-@GenerateInjector([
-  Provider(MathService),
-])
+@GenerateInjector([Provider(MathService)])
 final InjectorFactory mathInjector = ng_generated.mathInjector$Injector;
 
 class MathService {
   num add(num a, num b) => a + b;
 }
 
-@Component(
-  selector: 'example',
-  template: '{{math.add(a, b)}}',
-)
+@Component(selector: 'example', template: '{{math.add(a, b)}}')
 class ExampleComp {
   final MathService math;
 

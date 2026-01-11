@@ -1,18 +1,17 @@
 import 'dart:async';
-import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:meta/meta.dart';
-import '../../../core/change_detection/host.dart';
-import '../../../core/linker/style_encapsulation.dart';
-import '../../../core/linker/view_container.dart';
-import '../../../core/linker/view_fragment.dart';
-import '../../../core/linker/view_ref.dart';
-import '../../../meta/change_detection_constants.dart';
-import '../../../runtime/dom_helpers.dart';
+import 'package:ngdart/src/core/change_detection/host.dart';
+import 'package:ngdart/src/core/linker/style_encapsulation.dart';
+import 'package:ngdart/src/core/linker/view_container.dart';
+import 'package:ngdart/src/core/linker/view_fragment.dart';
+import 'package:ngdart/src/core/linker/view_ref.dart';
+import 'package:ngdart/src/meta.dart';
+import 'package:ngdart/src/runtime/dom_helpers.dart';
+import 'package:ngdart/src/utilities.dart';
+import 'package:web/web.dart';
 
-import '../../../utilities/is_dev_mode.dart';
-import '../../../utilities/unsafe_cast.dart';
 import 'dynamic_view.dart';
 import 'render_view.dart';
 

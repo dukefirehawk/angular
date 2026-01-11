@@ -1,13 +1,12 @@
+import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
-import 'package:web/web.dart' hide Location;
-import 'dart:js_interop';
-
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngrouter/testing.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart' hide Location;
 
 import 'router_link_directive_test.template.dart' as ng;
 
@@ -30,11 +29,14 @@ void main() {
   tearDown(disposeAnyRunningTest);
 
   test('should attempt to navigate to the provided link', () async {
-    final fixture = await NgTestBed<TestRouterLink>(
-      ng.createTestRouterLinkFactory(),
-    ).addInjector(addInjector).create(beforeChangeDetection: (comp) {
-      comp.routerLink = '/users/bob';
-    });
+    final fixture =
+        await NgTestBed<TestRouterLink>(ng.createTestRouterLinkFactory())
+            .addInjector(addInjector)
+            .create(
+              beforeChangeDetection: (comp) {
+                comp.routerLink = '/users/bob';
+              },
+            );
     final anchor = fixture.rootElement.querySelector('a') as HTMLAnchorElement;
     expect(anchor.pathname, '/users/bob');
     expect(fakeRouter.lastNavigatedPath, isNull);
@@ -55,11 +57,14 @@ void main() {
   });
 
   test('should parse out query params and fragment', () async {
-    final fixture = await NgTestBed<TestRouterLink>(
-      ng.createTestRouterLinkFactory(),
-    ).addInjector(addInjector).create(beforeChangeDetection: (comp) {
-      comp.routerLink = '/users/bob?param1=one&param2=2#frag';
-    });
+    final fixture =
+        await NgTestBed<TestRouterLink>(ng.createTestRouterLinkFactory())
+            .addInjector(addInjector)
+            .create(
+              beforeChangeDetection: (comp) {
+                comp.routerLink = '/users/bob?param1=one&param2=2#frag';
+              },
+            );
     final anchor = fixture.rootElement.querySelector('a') as HTMLAnchorElement;
     expect(anchor.pathname, '/users/bob');
     await fixture.update((_) => anchor.click());
@@ -72,11 +77,16 @@ void main() {
   });
 
   test('should not use the router when the target is not _self', () async {
-    final fixture = await NgTestBed<TestRouterLinkWithTarget>(
-      ng.createTestRouterLinkWithTargetFactory(),
-    ).addInjector(addInjector).create(beforeChangeDetection: (comp) {
-      comp.routerLink = '/users/bob';
-    });
+    final fixture =
+        await NgTestBed<TestRouterLinkWithTarget>(
+              ng.createTestRouterLinkWithTargetFactory(),
+            )
+            .addInjector(addInjector)
+            .create(
+              beforeChangeDetection: (comp) {
+                comp.routerLink = '/users/bob';
+              },
+            );
     final anchor = fixture.rootElement.querySelector('a') as HTMLAnchorElement;
     expect(anchor.pathname, '/users/bob');
     expect(anchor.target, '_parent');
@@ -87,9 +97,7 @@ void main() {
 
 @Component(
   selector: 'test-router-link',
-  directives: [
-    RouterLink,
-  ],
+  directives: [RouterLink],
   template: r'''
     <a [routerLink]="routerLink"></a>
   ''',
@@ -109,9 +117,7 @@ class TestRouterLinkKeyPress {
 
 @Component(
   selector: 'test-router-link',
-  directives: [
-    RouterLink,
-  ],
+  directives: [RouterLink],
   template: r'''
     <a (click)="onClick($event)" [routerLink]="routerLink" target="_parent"></a>
   ''',
@@ -144,7 +150,8 @@ class FakeRouter implements Router {
 }
 
 const _createKeyboardEventName = '__dart_createKeyboardEvent';
-const _createKeyboardEventScript = '''
+const _createKeyboardEventScript =
+    '''
 window['$_createKeyboardEventName'] = function(
     type, keyCode, ctrlKey, altKey, shiftKey, metaKey) {
   var event = document.createEvent('KeyboardEvent');
@@ -176,31 +183,22 @@ Event createKeyboardEvent(
   bool shiftKey = false,
   bool metaKey = false,
 }) {
-  // TODO: Migrate to 3.6 (Need review)
-  //if (!context.hasProperty(_createKeyboardEventName)) {
-  if (globalContext
-      .getProperty(_createKeyboardEventName.toJS)
-      .isDefinedAndNotNull) {
+  if (!globalContext.has(_createKeyboardEventName)) {
     final script = document.createElement('script')
       ..setAttribute('type', 'text/javascript')
-      ..text = _createKeyboardEventScript;
+      ..textContent = _createKeyboardEventScript;
     document.body!.append(script);
   }
-
-  // TODO: Migrate to 3.6 (Need review)
+  return globalContext.callMethodVarArgs(_createKeyboardEventName.toJS, [
+        type.toJS,
+        keyCode.toJS,
+        ctrlKey.toJS,
+        altKey.toJS,
+        shiftKey.toJS,
+        metaKey.toJS,
+      ])
+      as Event;
   /*
-  return context.callMethod(
-    _createKeyboardEventName,
-    [
-      type,
-      keyCode,
-      ctrlKey,
-      altKey,
-      shiftKey,
-      metaKey,
-    ],
-  ) as Event;
-  */
   return globalContext.callMethod(
     _createKeyboardEventName.toJS,
     [
@@ -212,4 +210,5 @@ Event createKeyboardEvent(
       metaKey,
     ].toJSBox,
   ) as Event;
+  */
 }

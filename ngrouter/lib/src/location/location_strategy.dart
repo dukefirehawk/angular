@@ -1,6 +1,7 @@
-import 'package:web/web.dart';
+import 'dart:js_interop';
 
 import 'package:ngdart/angular.dart' show OpaqueToken;
+import 'package:web/web.dart';
 
 /// `LocationStrategy` is responsible for representing and reading route state
 /// from the browser's URL. Angular provides two strategies:
@@ -20,9 +21,8 @@ abstract class LocationStrategy {
   String path();
   String hash();
   String prepareExternalUrl(String internal);
-  void pushState(Object? state, String title, String url, String queryParams);
-  void replaceState(
-      Object? state, String title, String url, String queryParams);
+  void pushState(JSAny? state, String title, String url, String queryParams);
+  void replaceState(JSAny? state, String title, String url, String queryParams);
   void forward();
   void back();
   //void onPopState(void Function(Event event) fn);

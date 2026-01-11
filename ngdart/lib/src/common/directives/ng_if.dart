@@ -1,6 +1,6 @@
 import '../../core/linker.dart';
-import '../../meta/directives.dart';
 import '../../meta/di_arguments.dart';
+import '../../meta/directives.dart';
 import '../../runtime/check_binding.dart';
 
 /// Causes an element and its contents to be conditionally added/removed from

@@ -58,8 +58,7 @@ abstract mixin class EmbeddedContentAst implements StandaloneTemplateAst {
   /// Reference assignment.
   ReferenceAst? get reference;
 
-  // ignore: unintended_html_in_doc_comment
-  /// </ng-content> that is paired to this <ng-content>.
+  /// `</ng-content>` that is paired to this `<ng-content>`.
   CloseElementAst get closeComplement;
   set closeComplement(CloseElementAst closeComplement);
 

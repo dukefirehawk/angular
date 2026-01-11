@@ -2,7 +2,6 @@ import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
 import 'package:web/web.dart';
-//import 'dart:js_util' as js_util;
 
 import '../model.dart' show Control, AbstractControlGroup;
 import '../validators.dart' show Validators;
@@ -19,28 +18,35 @@ import 'radio_control_value_accessor.dart' show RadioControlValueAccessor;
 import 'select_control_value_accessor.dart' show SelectControlValueAccessor;
 import 'validators.dart' show ValidatorFn;
 
-List<String?> controlPath(String? name, ControlContainer parent) =>
-    <String?>[...parent.path!, name];
+List<String?> controlPath(String? name, ControlContainer parent) => <String?>[
+  ...parent.path!,
+  name,
+];
 
 void setUpControl(Control control, NgControl dir) {
   assert(
-      dir.valueAccessor != null,
-      'No value accessor for '
-      '(${dir.path!.join(' -> ')}) or you may be missing formDirectives in '
-      'your directives list.');
+    dir.valueAccessor != null,
+    'No value accessor for '
+    '(${dir.path!.join(' -> ')}) or you may be missing formDirectives in '
+    'your directives list.',
+  );
   control.validator = Validators.compose([control.validator, dir.validator]);
   var valueAccessor = dir.valueAccessor!;
   valueAccessor.writeValue(control.value);
   // view -> model
   valueAccessor.registerOnChange((dynamic newValue, {String? rawValue}) {
     dir.viewToModelUpdate(newValue);
-    control.updateValue(newValue,
-        emitModelToViewChange: false, rawValue: rawValue);
+    control.updateValue(
+      newValue,
+      emitModelToViewChange: false,
+      rawValue: rawValue,
+    );
     control.markAsDirty(emitEvent: false);
   });
   // model -> view
   control.registerOnChange(
-      (dynamic newValue) => dir.valueAccessor?.writeValue(newValue));
+    (dynamic newValue) => dir.valueAccessor?.writeValue(newValue),
+  );
   control.disabledChanges.listen(valueAccessor.onDisabledChanged);
   if (control.disabled) valueAccessor.onDisabledChanged(control.disabled);
   // touched
@@ -61,7 +67,8 @@ void _throwError(AbstractControlDirective? dir, String message) {
 
 ValidatorFn? composeValidators(List<dynamic>? validators) {
   return Validators.compose(
-      validators?.map<ValidatorFn>(normalizeValidator).toList());
+    validators?.map<ValidatorFn>(normalizeValidator).toList(),
+  );
 }
 
 ControlValueAccessor<dynamic>? selectValueAccessor(
@@ -96,8 +103,6 @@ ControlValueAccessor<dynamic>? selectValueAccessor(
   return null;
 }
 
-void setElementDisabled(HtmlElement? element, bool isDisabled) {
-  // TODO: Migrate to 3.6 (Need review)
-  //js_util.setProperty(element, 'disabled', isDisabled);
-  element?.setProperty('disabled'.toJS, isDisabled.toJS);
+void setElementDisabled(HTMLElement element, bool isDisabled) {
+  element['disabled'] = isDisabled.toJS;
 }

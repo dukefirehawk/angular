@@ -7,6 +7,16 @@
 - Migrate `dart:html` to `package:web/web`
 - Migrate `dart:js` to `dart:js_interop`
 
+## 3.0.0-dev.2
+
+- **REFACTOR**(ngast,ngcompiler): reduce dynamic usage in i18n.
+- **REFACTOR**(all): update to Dart 3 ([#68](https://github.com/angulardart-community/angular/issues/68)).
+- **DOCS**(all): update to new workflow badge.
+
+## 3.0.0-dev.1
+
+- Migrate to Analyzer v6 and bump minimum SDK to 3.0
+
 ## 3.0.0-dev.0
 
 - Migrate to Analyzer v5 and bump minimum SDK to 2.18

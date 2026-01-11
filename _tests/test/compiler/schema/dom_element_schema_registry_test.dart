@@ -1,7 +1,7 @@
-import 'package:test/test.dart';
 import 'package:ngcompiler/v1/src/compiler/schema/dom_element_schema_registry.dart'
     show DomElementSchemaRegistry;
 import 'package:ngcompiler/v1/src/compiler/security.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('DOMElementSchema', () {
@@ -41,14 +41,17 @@ void main() {
       expect(registry.getMappedPropName('readonly'), 'readOnly');
     });
     test(
-        'should not re-map property names that are not specified in DOM facade',
-        () {
-      expect(registry.getMappedPropName('title'), 'title');
-      expect(registry.getMappedPropName('exotic-unknown'), 'exotic-unknown');
-    });
+      'should not re-map property names that are not specified in DOM facade',
+      () {
+        expect(registry.getMappedPropName('title'), 'title');
+        expect(registry.getMappedPropName('exotic-unknown'), 'exotic-unknown');
+      },
+    );
     test('should return security contexts for elements', () {
       expect(
-          registry.securityContext('a', 'href'), TemplateSecurityContext.url);
+        registry.securityContext('a', 'href'),
+        TemplateSecurityContext.url,
+      );
     });
     test('should detect properties on namespaced elements', () {
       expect(registry.hasProperty('@svg:g', 'id'), true);

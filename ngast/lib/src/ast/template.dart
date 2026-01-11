@@ -5,7 +5,7 @@ import '../ast.dart';
 import '../token/tokens.dart';
 import '../visitor.dart';
 
-const _listEquals = ListEquality<dynamic>();
+const _listEquals = ListEquality();
 
 /// Represents an embedded template (i.e. is not directly rendered in DOM).
 ///

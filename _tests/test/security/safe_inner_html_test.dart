@@ -1,10 +1,10 @@
 @TestOn('browser')
 library;
 
-import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/security.dart';
+import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 
 import 'safe_inner_html_test.template.dart' as ng;
 
@@ -33,8 +33,9 @@ void main() {
     });
 
     test('normally, interpolated innerHtml should be sanitized', () async {
-      final testBed =
-          NgTestBed(ng.createInterpolatedNormalInnerHtmlTestFactory());
+      final testBed = NgTestBed(
+        ng.createInterpolatedNormalInnerHtmlTestFactory(),
+      );
       final testRoot = await testBed.create();
       expect(testRoot.text, contains('(Secure)'));
     });
@@ -42,17 +43,19 @@ void main() {
     // TODO(GZGavinZhao): note to self: interpolation messed things up.
     // [interpolate0] converts anything to a String, which causes sanitizeHtml
     // unable to detect whether the passed HTML should be trusted...
-    test('SafeHtml should be passed through interpolation', () async {
-      final testBed =
-          NgTestBed(ng.createInterpolatedTrustedInnerHtmlTestFactory());
-      final testRoot = await testBed.create();
-      print(testRoot.rootElement.innerHTML);
-      await testRoot.update();
-      print(testRoot.rootElement.innerHTML);
-      expect(testRoot.text, contains('(Unsafe)'));
-    },
-        skip:
-            'TODO(GZGavinZhao): interpolate0 converts anything to string, which messed up sanitizeHTML');
+    test(
+      'SafeHtml should be passed through interpolation',
+      () async {
+        final testBed = NgTestBed(
+          ng.createInterpolatedTrustedInnerHtmlTestFactory(),
+        );
+        final testRoot = await testBed.create();
+        await testRoot.update();
+        expect(testRoot.text, contains('(Unsafe)'));
+      },
+      skip:
+          'TODO(GZGavinZhao): interpolate0 converts anything to string, which messed up sanitizeHTML',
+    );
 
     test('unsafe HTML should throw', () async {
       final testBed = NgTestBed(ng.createUntrustedInnerHtmlTestFactory());
@@ -94,7 +97,7 @@ class TrustedSafeInnerHtmlTest {
   final SafeHtml trustedHtml;
 
   TrustedSafeInnerHtmlTest(DomSanitizationService domSecurityService)
-      : trustedHtml = domSecurityService.bypassSecurityTrustHtml(dangerousHtml);
+    : trustedHtml = domSecurityService.bypassSecurityTrustHtml(dangerousHtml);
 }
 
 @Component(
@@ -110,7 +113,7 @@ class TrustedInnerHtmlTest {
   final SafeHtml trustedHtml;
 
   TrustedInnerHtmlTest(DomSanitizationService domSecurityService)
-      : trustedHtml = domSecurityService.bypassSecurityTrustHtml(dangerousHtml);
+    : trustedHtml = domSecurityService.bypassSecurityTrustHtml(dangerousHtml);
 }
 
 @Component(
@@ -138,7 +141,7 @@ class InterpolatedTrustedInnerHtmlTest {
   final SafeHtml trustedHtml;
 
   InterpolatedTrustedInnerHtmlTest(DomSanitizationService domSecurityService)
-      : trustedHtml = domSecurityService.bypassSecurityTrustHtml(dangerousHtml);
+    : trustedHtml = domSecurityService.bypassSecurityTrustHtml(dangerousHtml);
 }
 
 @Component(

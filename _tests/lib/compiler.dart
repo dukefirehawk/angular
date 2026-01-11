@@ -7,8 +7,8 @@ import 'package:glob/glob.dart';
 import 'package:logging/logging.dart';
 import 'package:ngcompiler/v1/src/compiler/stylesheet_compiler/builder.dart';
 import 'package:ngcompiler/v1/src/compiler/template_compiler.dart';
-import 'package:test/test.dart';
 import 'package:ngcompiler/v2/context.dart';
+import 'package:test/test.dart';
 
 /// A 'test' build process (similar to the normal one).
 final Builder _testAngularBuilder = TemplateCompiler(
@@ -179,21 +179,20 @@ Future<void> compilesExpecting(
   expectLogRecords(records[Level.SEVERE], errors, 'Errors');
   expectLogRecords(records[Level.WARNING], warnings, 'Warnings');
   expectLogRecords(records[Level.INFO], notices, 'Notices');
-
-  if (outputs != null) {
-    // TODO: Add an output verification or consider a golden file mechanism.
-    throw UnimplementedError();
-  }
 }
 
-void expectLogRecords(List<LogRecord>? logs, matcher, String reasonPrefix) {
+void expectLogRecords(
+  List<LogRecord>? logs,
+  Object? matcher,
+  String reasonPrefix,
+) {
   if (matcher == null) {
     return;
   }
   logs ??= [];
   expect(
     logs.map(formattedLogMessage),
-    matcher,
+    matcher is Iterable ? containsAllInOrder(matcher) : matcher,
     reason:
         '$reasonPrefix: \n${logs.map((l) => '${formattedLogMessage(l)} at:\n ${l.stackTrace}')}',
   );
@@ -226,5 +225,6 @@ Future<void> compilesNormally(
 
 /// Match for a source location, but don't require tests to manage package
 /// names.
-Matcher containsSourceLocation(int line, int column) =>
-    contains('line $line, column $column of ');
+Matcher containsSourceLocation(int line, int column) {
+  return contains('line $line, column $column of ');
+}

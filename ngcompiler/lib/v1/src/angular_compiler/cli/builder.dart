@@ -1,6 +1,6 @@
-import 'package:ngcompiler/v2/context.dart';
 import 'package:build/build.dart';
 import 'package:dart_style/dart_style.dart';
+import 'package:ngcompiler/v2/context.dart';
 import 'package:source_gen/source_gen.dart';
 
 import 'flags.dart';
@@ -32,14 +32,11 @@ class Compiler implements Generator {
 
   @override
   Future<String> generate(LibraryReader library, BuildStep buildStep) {
-    //final isNullSafe = library.element.isNonNullableByDefault;
-    final isNullSafe = !library.element.metadata.hasJS;
     return runWithContext(
       CompileContext(
         buildStep.inputId,
         policyExceptions: _flags.policyExceptions,
         policyExceptionsInPackages: _flags.policyExceptionInPackages,
-        isNullSafe: isNullSafe,
         enableDevTools: _flags.enableDevTools,
       ),
       () => _build(library, buildStep, _flags),

@@ -1,6 +1,5 @@
-import 'package:web/web.dart';
-
 import 'package:ngdart/angular.dart';
+import 'package:web/web.dart';
 
 import 'control_value_accessor.dart'
     show ChangeHandler, ControlValueAccessor, ngValueAccessor, TouchHandler;
@@ -17,7 +16,8 @@ const numberValueAccessor = ExistingProvider.forToken(
 ///
 ///  <input type="number" [(ngModel)]="age">
 @Directive(
-  selector: 'input[type=number][ngControl],'
+  selector:
+      'input[type=number][ngControl],'
       'input[type=number][ngFormControl],'
       'input[type=number][ngModel]',
   providers: [numberValueAccessor],
@@ -27,8 +27,8 @@ class NumberValueAccessor extends Object
     implements ControlValueAccessor<Object?> {
   final HTMLInputElement _element;
 
-  NumberValueAccessor(HtmlElement element)
-      : _element = element as HTMLInputElement;
+  NumberValueAccessor(HTMLElement element)
+    : _element = element as HTMLInputElement;
 
   @HostListener('change', ['\$event.target.value'])
   @HostListener('input', ['\$event.target.value'])

@@ -1,9 +1,8 @@
-import 'package:web/web.dart';
-
-import 'package:test/test.dart';
-import '../../../lib/matchers.dart';
+import 'package:_tests/matchers.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'projection_test.template.dart' as ng;
 
@@ -77,7 +76,7 @@ void main() {
       );
       var testFixture = await testBed.create();
       var mainEl = testFixture.rootElement;
-      var div1 = mainEl.children.item(0);
+      var div1 = mainEl.children.item(0)!;
       var div2 = document.createElement('div');
       div2.className = 'redStyle';
       mainEl.append(div2);
@@ -91,7 +90,7 @@ void main() {
       );
       var testFixture = await testBed.create();
       var mainEl = testFixture.rootElement;
-      var div1 = mainEl.children.item(0);
+      var div1 = mainEl.children.item(0)!;
       var div2 = document.createElement('div');
       div2.className = 'blueStyle';
       mainEl.append(div2);
@@ -112,10 +111,12 @@ void main() {
         ng.createSelectExactAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
-      expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
-        select('.rejected')!.textContent!.trim(),
+        testFixture.rootElement.querySelector('.selected')!.textContent!.trim(),
+        'Should be selected.',
+      );
+      expect(
+        testFixture.rootElement.querySelector('.rejected')!.textContent!.trim(),
         "Shouldn't be selected.",
       );
     });
@@ -125,10 +126,12 @@ void main() {
         ng.createSelectHyphenAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
-      expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
-        select('.rejected')!.textContent!.trim(),
+        testFixture.rootElement.querySelector('.selected')!.textContent!.trim(),
+        'Should be selected.',
+      );
+      expect(
+        testFixture.rootElement.querySelector('.rejected')!.textContent!.trim(),
         "Shouldn't be selected.",
       );
     });
@@ -138,10 +141,12 @@ void main() {
         ng.createSelectListAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
-      expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
-        select('.rejected')!.textContent!.trim(),
+        testFixture.rootElement.querySelector('.selected')!.textContent!.trim(),
+        'Should be selected.',
+      );
+      expect(
+        testFixture.rootElement.querySelector('.rejected')!.textContent!.trim(),
         "Shouldn't be selected.",
       );
     });
@@ -151,10 +156,12 @@ void main() {
         ng.createSelectPrefixAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
-      expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
-        select('.rejected')!.textContent!.trim(),
+        testFixture.rootElement.querySelector('.selected')!.textContent!.trim(),
+        'Should be selected.',
+      );
+      expect(
+        testFixture.rootElement.querySelector('.rejected')!.textContent!.trim(),
         "Shouldn't be selected.",
       );
     });
@@ -164,10 +171,12 @@ void main() {
         ng.createSelectSetAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
-      expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
-        select('.rejected')!.textContent!.trim(),
+        testFixture.rootElement.querySelector('.selected')!.textContent!.trim(),
+        'Should be selected.',
+      );
+      expect(
+        testFixture.rootElement.querySelector('.rejected')!.textContent!.trim(),
         "Shouldn't be selected.",
       );
     });
@@ -177,10 +186,12 @@ void main() {
         ng.createSelectSubstringAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
-      expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
-        select('.rejected')!.textContent!.trim(),
+        testFixture.rootElement.querySelector('.selected')!.textContent!.trim(),
+        'Should be selected.',
+      );
+      expect(
+        testFixture.rootElement.querySelector('.rejected')!.textContent!.trim(),
         "Shouldn't be selected.",
       );
     });
@@ -190,10 +201,12 @@ void main() {
         ng.createSelectSuffixAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
-      expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
-        select('.rejected')!.textContent!.trim(),
+        testFixture.rootElement.querySelector('.selected')!.textContent!.trim(),
+        'Should be selected.',
+      );
+      expect(
+        testFixture.rootElement.querySelector('.rejected')!.textContent!.trim(),
         "Shouldn't be selected.",
       );
     });
@@ -203,10 +216,12 @@ void main() {
         ng.createNgProjectAsTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
-      expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
-        select('.rejected')!.textContent!.trim(),
+        testFixture.rootElement.querySelector('.selected')!.textContent!.trim(),
+        'Should be selected.',
+      );
+      expect(
+        testFixture.rootElement.querySelector('.rejected')!.textContent!.trim(),
         "Shouldn't be selected.",
       );
     });

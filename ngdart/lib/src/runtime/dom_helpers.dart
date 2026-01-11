@@ -1,19 +1,14 @@
 /// This library is considered separate from rest of `runtime.dart`, as it
-/// imports `dart:html` and `runtime.dart` is currently used on libraries
+/// imports `web` package and `runtime.dart` is currently used on libraries
 /// that expect to only run on the command-line VM.
-@JS()
 library;
 
 import 'dart:js_interop';
-import 'package:web/web.dart' hide document;
+import 'dart:js_interop_unsafe';
 
-//import 'dart:html' hide document;
-//import 'dart:js_interop';
-//import 'package:js/js_util.dart' as js;
 import 'package:meta/dart2js.dart' as dart2js;
-import '../utilities.dart';
-
-import 'dom_helpers.dart' as js;
+import 'package:ngdart/src/utilities.dart';
+import 'package:web/web.dart';
 
 /// https://developer.mozilla.org/en-US/docs/Web/API/Document/createTextNode
 Text _createTextNode(String text) => Text(text);
@@ -46,7 +41,7 @@ var domRootRendererIsDirty = false;
 ///
 /// For [element]s not guaranteed to be HTML, see [updateClassBindingNonHtml].
 @dart2js.noInline
-void updateClassBinding(HtmlElement element, String className, bool isAdd) {
+void updateClassBinding(HTMLElement element, String className, bool isAdd) {
   if (isAdd) {
     element.classList.add(className);
   } else {
@@ -56,8 +51,8 @@ void updateClassBinding(HtmlElement element, String className, bool isAdd) {
 
 /// Similar to [updateClassBinding], for an [element] not guaranteed to be HTML.
 ///
-/// For example, using [Element.tag] to create a custom element will not be
-/// recognized as a built-in HTML element, or for SVG elements created by the
+/// For example, using [document.createElement] to create a custom element will
+/// not be recognized as a built-in HTML element, or for SVG elements created by the
 /// template.
 ///
 /// Dart2JS emits slightly more optimized cost in [updateClassBinding].
@@ -118,7 +113,20 @@ void setAttribute(Element element, String attribute, [String value = '']) {
 /// ```
 @dart2js.tryInline
 void setProperty(Element element, String property, Object? value) {
-  js.setProperty(element, property, value);
+  // TODO(ykmnkmi): `ngcompiler` doesn't have type data to use convert
+  //  values to JS types and use `JSAny` here. Expected to be inlined
+  //  with right type.
+  if (value == null) {
+    element[property] = null;
+  } else if (value is bool) {
+    element[property] = value.toJS;
+  } else if (value is num) {
+    element[property] = value.toJS;
+  } else if (value is String) {
+    element[property] = value.toJS;
+  } else {
+    element[property] = value.jsify();
+  }
 }
 
 /// Creates a [Text] node with the provided [contents].
@@ -171,7 +179,7 @@ Text createText(String contents) {
 /// This is an optimization to reduce code size for a common operation.
 @dart2js.noInline
 Text appendText(Node parent, String text) {
-  return unsafeCast(parent.append(createText(text)));
+  return unsafeCast(parent.appendChild(createText(text)));
 }
 
 /// Returns a new [Comment] node with empty contents.
@@ -185,7 +193,7 @@ Comment createAnchor() => _createComment();
 /// This is an optimization to reduce code size for a common operation.
 @dart2js.noInline
 Comment appendAnchor(Node parent) {
-  return unsafeCast(parent.append(_createComment()));
+  return unsafeCast(parent.appendChild(_createComment()));
 }
 
 /// Appends and returns a new empty [DivElement] to a [parent] node.
@@ -193,15 +201,15 @@ Comment appendAnchor(Node parent) {
 /// This is an optimization to reduce code size for a common operation.
 @dart2js.noInline
 HTMLDivElement appendDiv(Document doc, Node parent) {
-  return unsafeCast(parent.append(doc.createElement('div')));
+  return unsafeCast(parent.appendChild(doc.createElement('div')));
 }
 
-/// Appends and returns a new empty [SpanElement] to a [parent] node.
+/// Appends and returns a new empty [HTMLSpanElement] to a [parent] node.
 ///
 /// This is an optimization to reduce code size for a common operation.
 @dart2js.noInline
 HTMLSpanElement appendSpan(Document doc, Node parent) {
-  return unsafeCast(parent.append(doc.createElement('span')));
+  return unsafeCast(parent.appendChild(doc.createElement('span')));
 }
 
 /// Appends and returns a new empty [Element] to a [parent] node.
@@ -212,17 +220,13 @@ HTMLSpanElement appendSpan(Document doc, Node parent) {
 @dart2js.noInline
 T appendElement<T extends Element>(Document doc, Node parent, String tagName) {
   // <T extends Element> allows the pattern:
-  // HtmlElement e = appendElement(doc, parent, 'foo')
+  // HTMLElement e = appendElement(doc, parent, 'foo')
   //
   // ... without gratituous use of unsafeCast or casts in general.
-  return unsafeCast(parent.append(doc.createElement(tagName)));
+  return unsafeCast(parent.appendChild(doc.createElement(tagName)));
 }
 
 /// Inserts [nodes] into the DOM before [sibling].
-///
-/// This intentionally does not use [Node.insertAllBefore], which is slower due
-/// to extra type and runtime checks that are not necessary for our generated
-/// code.
 @dart2js.noInline
 void insertNodesBefore(List<Node> nodes, Node parent, Node sibling) {
   for (var i = 0, l = nodes.length; i < l; i++) {
@@ -234,18 +238,17 @@ void insertNodesBefore(List<Node> nodes, Node parent, Node sibling) {
 @dart2js.noInline
 void appendNodes(List<Node> nodes, Node parent) {
   for (var i = 0, l = nodes.length; i < l; i++) {
-    parent.append(nodes[i]);
+    parent.appendChild(nodes[i]);
   }
 }
 
 /// Removes [nodes] from the DOM.
 @dart2js.noInline
 void removeNodes(List<Node> nodes) {
-  /* 
-  for (var i = 0, l = nodes.length; i < l; i++) {
-    nodes.delete();
+  for (var i = 0; i < nodes.length; i++) {
+    var node = nodes[i];
+    node.parentNode?.removeChild(node);
   }
-  */
   nodes.removeRange(0, nodes.length);
 }
 
@@ -258,8 +261,6 @@ void insertNodesAsSibling(List<Node> nodes, Node sibling) {
   if (nodes.isEmpty || parentOfSibling == null) {
     return;
   }
-
-  //final nextSibling = sibling.nextNode;
   final nextSibling = sibling.nextSibling;
   if (nextSibling == null) {
     appendNodes(nodes, parentOfSibling);

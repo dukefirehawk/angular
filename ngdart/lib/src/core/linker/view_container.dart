@@ -1,7 +1,7 @@
-import 'package:web/web.dart';
-
 import 'package:meta/meta.dart';
-import '../../di/injector.dart' show Injector;
+import 'package:ngdart/src/di/injector.dart' show Injector;
+import 'package:ngdart/src/utilities.dart';
+import 'package:web/web.dart';
 
 import '../../utilities/unsafe_cast.dart';
 import 'component_factory.dart' show ComponentFactory, ComponentRef;

@@ -7,6 +7,14 @@
 - Migrate `dart:html` to `package:web/web`
 - Migrate `dart:js` to `dart:js_interop`
 
+## 5.0.0-dev.3
+
+> Note: This release has breaking changes.
+
+- **REFACTOR**(all): update to Dart 3 ([#68](https://github.com/angulardart-community/angular/issues/68)).
+- **DOCS**(all): update to new workflow badge.
+- **BREAKING** **REFACTOR**(ngforms): rename providers & fix all static warnings ([#54](https://github.com/angulardart-community/angular/issues/54)).
+
 ## 5.0.0-dev.1
 
 > Note: This release has breaking changes.

@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 import 'package:web/web.dart';
 
 import 'ng_style_test.template.dart' as ng;
@@ -12,8 +12,7 @@ void main() {
     test('should update styles specified in an map literal', () async {
       var testBed = NgTestBed<MapUpdateTest>(ng.createMapUpdateTestFactory());
       var testFixture = await testBed.create();
-      var content =
-          testFixture.rootElement.querySelector('div') as HTMLDivElement;
+      var content = testFixture.rootElement.querySelector('div') as HTMLElement;
       await testFixture.update((MapUpdateTest component) {
         component.map = {'max-width': '40px'};
       });
@@ -27,8 +26,7 @@ void main() {
     test('should remove styles when deleting a key in a map literal', () async {
       var testBed = NgTestBed<MapUpdateTest>(ng.createMapUpdateTestFactory());
       var testFixture = await testBed.create();
-      var content =
-          testFixture.rootElement.querySelector('div') as HTMLDivElement;
+      var content = testFixture.rootElement.querySelector('div') as HTMLElement;
       await testFixture.update((MapUpdateTest component) {
         component.map = {'max-width': '40px'};
       });
@@ -41,10 +39,10 @@ void main() {
 
     test('should cooperate with the style attribute', () async {
       var testBed = NgTestBed<MapUpdateWithDefaultTest>(
-          ng.createMapUpdateWithDefaultTestFactory());
+        ng.createMapUpdateWithDefaultTestFactory(),
+      );
       var testFixture = await testBed.create();
-      var content =
-          testFixture.rootElement.querySelector('div') as HTMLDivElement;
+      var content = testFixture.rootElement.querySelector('div') as HTMLElement;
       await testFixture.update((MapUpdateWithDefaultTest component) {
         component.map = {'max-width': '40px'};
       });
@@ -57,24 +55,27 @@ void main() {
       expect(content.style.fontSize, '12px');
     });
 
-    test('should cooperate with the style.[styleName]="expr" special-case',
-        () async {
-      var testBed = NgTestBed<MapUpdateWithStyleExprTest>(
-          ng.createMapUpdateWithStyleExprTestFactory());
-      var testFixture = await testBed.create();
-      var content =
-          testFixture.rootElement.querySelector('div') as HTMLDivElement;
-      await testFixture.update((MapUpdateWithStyleExprTest component) {
-        component.map = {'max-width': '40px'};
-      });
-      expect(content.style.maxWidth, '40px');
-      expect(content.style.fontSize, '12px');
-      await testFixture.update((MapUpdateWithStyleExprTest component) {
-        component.map!.remove('max-width');
-      });
-      expect(content.style.maxWidth, '');
-      expect(content.style.fontSize, '12px');
-    });
+    test(
+      'should cooperate with the style.[styleName]="expr" special-case',
+      () async {
+        var testBed = NgTestBed<MapUpdateWithStyleExprTest>(
+          ng.createMapUpdateWithStyleExprTestFactory(),
+        );
+        var testFixture = await testBed.create();
+        var content =
+            testFixture.rootElement.querySelector('div') as HTMLElement;
+        await testFixture.update((MapUpdateWithStyleExprTest component) {
+          component.map = {'max-width': '40px'};
+        });
+        expect(content.style.maxWidth, '40px');
+        expect(content.style.fontSize, '12px');
+        await testFixture.update((MapUpdateWithStyleExprTest component) {
+          component.map!.remove('max-width');
+        });
+        expect(content.style.maxWidth, '');
+        expect(content.style.fontSize, '12px');
+      },
+    );
   });
 }
 

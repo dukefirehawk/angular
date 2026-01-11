@@ -1,8 +1,8 @@
-import 'package:web/web.dart' as html;
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/src/devtools.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'inspector_test.template.dart' as ng;
 
@@ -22,8 +22,8 @@ void main() {
   group('getComponents', () {
     test('component views', () async {
       final testBed = NgTestBed<TestComponentViews>(
-          ng.createTestComponentViewsFactory()
-              as ComponentFactory<TestComponentViews>);
+        ng.createTestComponentViewsFactory(),
+      );
       await testBed.create();
 
       final components = Inspector.instance.getComponents(groupName);
@@ -53,8 +53,8 @@ void main() {
     group('embedded views', () {
       test('conditional', () async {
         final testBed = NgTestBed<TestConditionalEmbeddedViews>(
-            ng.createTestConditionalEmbeddedViewsFactory()
-                as ComponentFactory<TestConditionalEmbeddedViews>);
+          ng.createTestConditionalEmbeddedViewsFactory(),
+        );
         final testFixture = await testBed.create();
 
         // Should not return embedded component before it's created.
@@ -96,8 +96,8 @@ void main() {
 
       test('repeated', () async {
         final testBed = NgTestBed<TestRepeatedEmbeddedViews>(
-            ng.createTestRepeatedEmbeddedViewsFactory()
-                as ComponentFactory<TestRepeatedEmbeddedViews>);
+          ng.createTestRepeatedEmbeddedViewsFactory(),
+        );
         final testFixture = await testBed.create(
           beforeChangeDetection: (component) {
             component.values = [1, 2, 4];
@@ -158,8 +158,8 @@ void main() {
 
       test('transplanted', () async {
         final testBed = NgTestBed<TestTransplantedEmbeddedViews>(
-            ng.createTestTransplantedEmbeddedViewsFactory()
-                as ComponentFactory<TestTransplantedEmbeddedViews>);
+          ng.createTestTransplantedEmbeddedViewsFactory(),
+        );
         await testBed.create();
 
         final components = Inspector.instance.getComponents(groupName);
@@ -167,7 +167,9 @@ void main() {
 
         var component = components[0];
         expect(
-            component, containsPair('name', 'TestTransplantedEmbeddedViews'));
+          component,
+          containsPair('name', 'TestTransplantedEmbeddedViews'),
+        );
         expect(component, containsPair('children', hasLength(1)));
         {
           final components = component['children'] as List<Map<String, Object>>;
@@ -186,8 +188,7 @@ void main() {
     });
 
     test('host views', () async {
-      final testBed = NgTestBed<TestHostViews>(
-          ng.createTestHostViewsFactory() as ComponentFactory<TestHostViews>);
+      final testBed = NgTestBed<TestHostViews>(ng.createTestHostViewsFactory());
       final testFixture = await testBed.create();
 
       // Should not return imperatively loaded component before it's created.
@@ -229,8 +230,8 @@ void main() {
 
     test('projected content', () async {
       final testBed = NgTestBed<TestProjectedContent>(
-          ng.createTestProjectedContentFactory()
-              as ComponentFactory<TestProjectedContent>);
+        ng.createTestProjectedContentFactory(),
+      );
       await testBed.create();
 
       final components = Inspector.instance.getComponents(groupName);
@@ -268,14 +269,14 @@ void main() {
     });
 
     group('external content root', () {
-      late html.Element container;
+      late Element container;
       late NgTestFixture<TestExternalContentRoots> testFixture;
 
       setUp(() async {
         container = createContentRoot();
         final testBed = NgTestBed<TestExternalContentRoots>(
-            ng.createTestExternalContentRootsFactory()
-                as ComponentFactory<TestExternalContentRoots>);
+          ng.createTestExternalContentRootsFactory(),
+        );
         testFixture = await testBed.create();
       });
 
@@ -324,8 +325,8 @@ void main() {
       final containerOne = createContentRoot();
       final containerTwo = createContentRoot();
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory()
-              as ComponentFactory<TestExternalContentRoots>);
+        ng.createTestExternalContentRootsFactory(),
+      );
       final testFixture = await testBed.create();
 
       await testFixture.update((component) {
@@ -346,8 +347,8 @@ void main() {
 
     test('is coalesced by existing content root', () async {
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory()
-              as ComponentFactory<TestExternalContentRoots>);
+        ng.createTestExternalContentRootsFactory(),
+      );
       final testFixture = await testBed.create();
       final container = createContentRoot(parent: testFixture.rootElement);
 
@@ -364,11 +365,11 @@ void main() {
 
     test('coalesces existing content roots', () async {
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory()
-              as ComponentFactory<TestExternalContentRoots>);
+        ng.createTestExternalContentRootsFactory(),
+      );
       final testFixture = await testBed.create();
-      final childContainer = html.HTMLDivElement();
-      final parentContainer = testFixture.rootElement.parentNode!
+      final childContainer = HTMLDivElement();
+      final parentContainer = testFixture.rootElement.parentElement!
         ..append(childContainer);
       registerContentRoot(childContainer);
       registerContentRoot(parentContainer);
@@ -400,44 +401,54 @@ void main() {
   group('getNodes', () {
     test('component views', () async {
       final testBed = NgTestBed<TestComponentViews>(
-          ng.createTestComponentViewsFactory()
-              as ComponentFactory<TestComponentViews>);
+        ng.createTestComponentViewsFactory(),
+      );
       await testBed.create();
 
       expect(
         rootNode(),
-        InspectorNode((b) => b
-          ..component.name = '$TestComponentViews'
-          ..children.replace([
-            InspectorNode((b) => b
-              ..component.name = '$TestComponentViews1'
-              ..children.replace([
-                InspectorNode((b) => b.component.name = '$TestComponentViews2'),
-                InspectorNode((b) => b.component.name = '$TestComponentViews3'),
-              ])),
-          ])),
+        InspectorNode(
+          (b) => b
+            ..component.name = '$TestComponentViews'
+            ..children.replace([
+              InspectorNode(
+                (b) => b
+                  ..component.name = '$TestComponentViews1'
+                  ..children.replace([
+                    InspectorNode(
+                      (b) => b.component.name = '$TestComponentViews2',
+                    ),
+                    InspectorNode(
+                      (b) => b.component.name = '$TestComponentViews3',
+                    ),
+                  ]),
+              ),
+            ]),
+        ),
       );
     });
 
     group('embedded views', () {
       test('conditional', () async {
         final testBed = NgTestBed<TestConditionalEmbeddedViews>(
-            ng.createTestConditionalEmbeddedViewsFactory()
-                as ComponentFactory<TestConditionalEmbeddedViews>);
+          ng.createTestConditionalEmbeddedViewsFactory(),
+        );
         final testFixture = await testBed.create();
 
         // Should not return embedded component before it's created.
         expect(
           rootNode(),
-          InspectorNode((b) => b
-            ..component.name = '$TestConditionalEmbeddedViews'
-            ..children.replace([
-              InspectorNode(
-                (b) => b.directives.replace([
-                  InspectorDirective((b) => b.name = '$NgIf'),
-                ]),
-              ),
-            ])),
+          InspectorNode(
+            (b) => b
+              ..component.name = '$TestConditionalEmbeddedViews'
+              ..children.replace([
+                InspectorNode(
+                  (b) => b.directives.replace([
+                    InspectorDirective((b) => b.name = '$NgIf'),
+                  ]),
+                ),
+              ]),
+          ),
         );
 
         // Should return embedded component after it's created.
@@ -447,17 +458,19 @@ void main() {
 
         expect(
           rootNode(),
-          InspectorNode((b) => b
-            ..component.name = '$TestConditionalEmbeddedViews'
-            ..children.replace([
-              InspectorNode(
-                (b) => b.directives.replace([
-                  InspectorDirective((b) => b.name = '$NgIf'),
-                ]),
-              ),
-              // TODO(b/196106275): should be a child of the NgIf node.
-              InspectorNode((b) => b.component.name = '$TestEmbeddedViews1'),
-            ])),
+          InspectorNode(
+            (b) => b
+              ..component.name = '$TestConditionalEmbeddedViews'
+              ..children.replace([
+                InspectorNode(
+                  (b) => b.directives.replace([
+                    InspectorDirective((b) => b.name = '$NgIf'),
+                  ]),
+                ),
+                // TODO(b/196106275): should be a child of the NgIf node.
+                InspectorNode((b) => b.component.name = '$TestEmbeddedViews1'),
+              ]),
+          ),
         );
 
         // Should not return embedded component after it's destroyed.
@@ -467,22 +480,24 @@ void main() {
 
         expect(
           rootNode(),
-          InspectorNode((b) => b
-            ..component.name = '$TestConditionalEmbeddedViews'
-            ..children.replace([
-              InspectorNode(
-                (b) => b.directives.replace([
-                  InspectorDirective((b) => b.name = '$NgIf'),
-                ]),
-              ),
-            ])),
+          InspectorNode(
+            (b) => b
+              ..component.name = '$TestConditionalEmbeddedViews'
+              ..children.replace([
+                InspectorNode(
+                  (b) => b.directives.replace([
+                    InspectorDirective((b) => b.name = '$NgIf'),
+                  ]),
+                ),
+              ]),
+          ),
         );
       });
 
       test('repeated', () async {
         final testBed = NgTestBed<TestRepeatedEmbeddedViews>(
-            ng.createTestRepeatedEmbeddedViewsFactory()
-                as ComponentFactory<TestRepeatedEmbeddedViews>);
+          ng.createTestRepeatedEmbeddedViewsFactory(),
+        );
         final testFixture = await testBed.create(
           beforeChangeDetection: (component) {
             component.values = [1, 2, 4];
@@ -492,18 +507,22 @@ void main() {
         // Should return embedded components after they're created.
         expect(
           rootNode(),
-          InspectorNode((b) => b
-            ..component.name = '$TestRepeatedEmbeddedViews'
-            ..children.replace([
-              InspectorNode(
-                (b) => b.directives.replace([
-                  InspectorDirective((b) => b.name = '$NgFor'),
-                ]),
-              ),
-              // TODO(b/196106275): should be children of the NgFor node.
-              for (var i = 0; i < 3; i++)
-                InspectorNode((b) => b.component.name = '$TestEmbeddedViews1'),
-            ])),
+          InspectorNode(
+            (b) => b
+              ..component.name = '$TestRepeatedEmbeddedViews'
+              ..children.replace([
+                InspectorNode(
+                  (b) => b.directives.replace([
+                    InspectorDirective((b) => b.name = '$NgFor'),
+                  ]),
+                ),
+                // TODO(b/196106275): should be children of the NgFor node.
+                for (var i = 0; i < 3; i++)
+                  InspectorNode(
+                    (b) => b.component.name = '$TestEmbeddedViews1',
+                  ),
+              ]),
+          ),
         );
 
         await testFixture.update((component) {
@@ -513,18 +532,22 @@ void main() {
         // Should reflect additions to embedded views.
         expect(
           rootNode(),
-          InspectorNode((b) => b
-            ..component.name = '$TestRepeatedEmbeddedViews'
-            ..children.replace([
-              InspectorNode(
-                (b) => b.directives.replace([
-                  InspectorDirective((b) => b.name = '$NgFor'),
-                ]),
-              ),
-              // TODO(b/196106275): should be children of the NgFor node.
-              for (var i = 0; i < 4; i++)
-                InspectorNode((b) => b.component.name = '$TestEmbeddedViews1'),
-            ])),
+          InspectorNode(
+            (b) => b
+              ..component.name = '$TestRepeatedEmbeddedViews'
+              ..children.replace([
+                InspectorNode(
+                  (b) => b.directives.replace([
+                    InspectorDirective((b) => b.name = '$NgFor'),
+                  ]),
+                ),
+                // TODO(b/196106275): should be children of the NgFor node.
+                for (var i = 0; i < 4; i++)
+                  InspectorNode(
+                    (b) => b.component.name = '$TestEmbeddedViews1',
+                  ),
+              ]),
+          ),
         );
 
         await testFixture.update((component) {
@@ -534,52 +557,62 @@ void main() {
         // Should reflect removals to embedded components.
         expect(
           rootNode(),
-          InspectorNode((b) => b
-            ..component.name = '$TestRepeatedEmbeddedViews'
-            ..children.replace([
-              InspectorNode(
-                (b) => b.directives.replace([
-                  InspectorDirective((b) => b.name = '$NgFor'),
-                ]),
-              ),
-              // TODO(b/196106275): should be children of the NgFor node.
-              for (var i = 0; i < 2; i++)
-                InspectorNode((b) => b.component.name = '$TestEmbeddedViews1'),
-            ])),
+          InspectorNode(
+            (b) => b
+              ..component.name = '$TestRepeatedEmbeddedViews'
+              ..children.replace([
+                InspectorNode(
+                  (b) => b.directives.replace([
+                    InspectorDirective((b) => b.name = '$NgFor'),
+                  ]),
+                ),
+                // TODO(b/196106275): should be children of the NgFor node.
+                for (var i = 0; i < 2; i++)
+                  InspectorNode(
+                    (b) => b.component.name = '$TestEmbeddedViews1',
+                  ),
+              ]),
+          ),
         );
       });
 
       test('transplated', () async {
         final testBed = NgTestBed<TestTransplantedEmbeddedViews>(
-            ng.createTestTransplantedEmbeddedViewsFactory()
-                as ComponentFactory<TestTransplantedEmbeddedViews>);
+          ng.createTestTransplantedEmbeddedViewsFactory(),
+        );
         await testBed.create();
 
         expect(
           rootNode(),
-          InspectorNode((b) => b
-            ..component.name = '$TestTransplantedEmbeddedViews'
-            ..children.replace([
-              InspectorNode((b) => b
-                ..component.name = '$TestEmbeddedViews2'
-                ..children.replace([
-                  InspectorNode(
-                    (b) => b.directives.replace([
-                      InspectorDirective((b) => b.name = '$NgTemplateOutlet'),
+          InspectorNode(
+            (b) => b
+              ..component.name = '$TestTransplantedEmbeddedViews'
+              ..children.replace([
+                InspectorNode(
+                  (b) => b
+                    ..component.name = '$TestEmbeddedViews2'
+                    ..children.replace([
+                      InspectorNode(
+                        (b) => b.directives.replace([
+                          InspectorDirective(
+                            (b) => b.name = '$NgTemplateOutlet',
+                          ),
+                        ]),
+                      ),
+                      // TODO(b/196106275): should be a child of NgTemplateOutlet.
+                      InspectorNode(
+                        (b) => b.component.name = '$TestEmbeddedViews1',
+                      ),
                     ]),
-                  ),
-                  // TODO(b/196106275): should be a child of NgTemplateOutlet.
-                  InspectorNode(
-                      (b) => b.component.name = '$TestEmbeddedViews1'),
-                ])),
-            ])),
+                ),
+              ]),
+          ),
         );
       });
     });
 
     test('host views', () async {
-      final testBed = NgTestBed<TestHostViews>(
-          ng.createTestHostViewsFactory() as ComponentFactory<TestHostViews>);
+      final testBed = NgTestBed<TestHostViews>(ng.createTestHostViewsFactory());
       final testFixture = await testBed.create();
 
       // Should not return imperatively loaded component before it's created.
@@ -595,11 +628,13 @@ void main() {
       // Should return imperatively loaded component after it's created.
       expect(
         rootNode(),
-        InspectorNode((b) => b
-          ..component.name = '$TestHostViews'
-          ..children.replace([
-            InspectorNode((b) => b.component.name = '$TestHostViews1'),
-          ])),
+        InspectorNode(
+          (b) => b
+            ..component.name = '$TestHostViews'
+            ..children.replace([
+              InspectorNode((b) => b.component.name = '$TestHostViews1'),
+            ]),
+        ),
       );
 
       await testFixture.update((component) {
@@ -615,42 +650,51 @@ void main() {
 
     test('projected content', () async {
       final testBed = NgTestBed<TestProjectedContent>(
-          ng.createTestProjectedContentFactory()
-              as ComponentFactory<TestProjectedContent>);
+        ng.createTestProjectedContentFactory(),
+      );
       await testBed.create();
 
       expect(
         rootNode(),
-        InspectorNode((b) => b
-          ..component.name = '$TestProjectedContent'
-          ..children.replace([
-            InspectorNode((b) => b
-              ..component.name = '$TestProjectedContent1'
-              ..children.replace([
-                InspectorNode(
-                    (b) => b.component.name = '$TestProjectedContent3'),
-                InspectorNode(
-                    (b) => b.component.name = '$TestProjectedContent2'),
-                InspectorNode((b) => b
-                  ..component.name = '$TestProjectedContent5'
+        InspectorNode(
+          (b) => b
+            ..component.name = '$TestProjectedContent'
+            ..children.replace([
+              InspectorNode(
+                (b) => b
+                  ..component.name = '$TestProjectedContent1'
                   ..children.replace([
                     InspectorNode(
-                        (b) => b.component.name = '$TestProjectedContent4'),
-                  ])),
-              ])),
-          ])),
+                      (b) => b.component.name = '$TestProjectedContent3',
+                    ),
+                    InspectorNode(
+                      (b) => b.component.name = '$TestProjectedContent2',
+                    ),
+                    InspectorNode(
+                      (b) => b
+                        ..component.name = '$TestProjectedContent5'
+                        ..children.replace([
+                          InspectorNode(
+                            (b) => b.component.name = '$TestProjectedContent4',
+                          ),
+                        ]),
+                    ),
+                  ]),
+              ),
+            ]),
+        ),
       );
     });
 
     group('external content root', () {
-      late html.Element container;
+      late Element container;
       late NgTestFixture<TestExternalContentRoots> testFixture;
 
       setUp(() async {
         container = createContentRoot();
         final testBed = NgTestBed<TestExternalContentRoots>(
-            ng.createTestExternalContentRootsFactory()
-                as ComponentFactory<TestExternalContentRoots>);
+          ng.createTestExternalContentRootsFactory(),
+        );
         testFixture = await testBed.create();
       });
 
@@ -699,8 +743,8 @@ void main() {
       final containerOne = createContentRoot();
       final containerTwo = createContentRoot();
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory()
-              as ComponentFactory<TestExternalContentRoots>);
+        ng.createTestExternalContentRootsFactory(),
+      );
       final testFixture = await testBed.create();
 
       await testFixture.update((component) {
@@ -721,8 +765,8 @@ void main() {
 
     test('is coalesced by existing content root', () async {
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory()
-              as ComponentFactory<TestExternalContentRoots>);
+        ng.createTestExternalContentRootsFactory(),
+      );
       final testFixture = await testBed.create();
       final container = createContentRoot(parent: testFixture.rootElement);
 
@@ -739,11 +783,11 @@ void main() {
 
     test('coalesces existing content roots', () async {
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory()
-              as ComponentFactory<TestExternalContentRoots>);
+        ng.createTestExternalContentRootsFactory(),
+      );
       final testFixture = await testBed.create();
-      final childContainer = html.HTMLDivElement();
-      final parentContainer = testFixture.rootElement.parentNode!
+      final childContainer = HTMLDivElement();
+      final parentContainer = testFixture.rootElement.parentElement!
         ..append(childContainer);
       registerContentRoot(childContainer);
       registerContentRoot(parentContainer);
@@ -778,7 +822,8 @@ void main() {
 
     test('no inputs', () async {
       final testBed = NgTestBed<TestUsedInputs>(
-          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
+        ng.createTestUsedInputsFactory(),
+      );
       await testBed.create();
 
       final components = Inspector.instance.getComponents(groupName);
@@ -791,8 +836,8 @@ void main() {
 
     test('omits unused inputs', () async {
       final testBed = NgTestBed<TestUnusedInputs>(
-          ng.createTestUnusedInputsFactory()
-              as ComponentFactory<TestUnusedInputs>);
+        ng.createTestUnusedInputsFactory(),
+      );
       await testBed.create();
 
       final id = firstChildComponentId();
@@ -802,7 +847,8 @@ void main() {
 
     test('omits inputs until set', () async {
       final testBed = NgTestBed<TestUsedInputs>(
-          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
+        ng.createTestUsedInputsFactory(),
+      );
       final testFixture = await testBed.create();
 
       final id = firstChildComponentId();
@@ -829,7 +875,8 @@ void main() {
 
     test('updates inputs when changed', () async {
       final testBed = NgTestBed<TestUsedInputs>(
-          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
+        ng.createTestUsedInputsFactory(),
+      );
       final testFixture = await testBed.create(
         beforeChangeDetection: (component) {
           component.title = 'Hello!';
@@ -850,8 +897,8 @@ void main() {
 
     test('records immutable expressions', () async {
       final testBed = NgTestBed<TestImmutableInputs>(
-          ng.createTestImmutableInputsFactory()
-              as ComponentFactory<TestImmutableInputs>);
+        ng.createTestImmutableInputsFactory(),
+      );
       final testFixture = await testBed.create();
 
       final id = firstChildComponentId();
@@ -877,7 +924,8 @@ void main() {
 
     test('no inputs', () async {
       final testBed = NgTestBed<TestUsedInputs>(
-          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
+        ng.createTestUsedInputsFactory(),
+      );
       await testBed.create();
 
       final nodes = Inspector.instance.getNodes(groupName);
@@ -888,8 +936,8 @@ void main() {
 
     test('omits unused inputs', () async {
       final testBed = NgTestBed<TestUnusedInputs>(
-          ng.createTestUnusedInputsFactory()
-              as ComponentFactory<TestUnusedInputs>);
+        ng.createTestUnusedInputsFactory(),
+      );
       await testBed.create();
 
       final id = firstChildComponentId();
@@ -899,7 +947,8 @@ void main() {
 
     test('omits inputs until set', () async {
       final testBed = NgTestBed<TestUsedInputs>(
-          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
+        ng.createTestUsedInputsFactory(),
+      );
       final testFixture = await testBed.create();
 
       final id = firstChildComponentId();
@@ -926,7 +975,8 @@ void main() {
 
     test('updates inputs when changed', () async {
       final testBed = NgTestBed<TestUsedInputs>(
-          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
+        ng.createTestUsedInputsFactory(),
+      );
       final testFixture = await testBed.create(
         beforeChangeDetection: (component) {
           component.title = 'Hello!';
@@ -947,8 +997,8 @@ void main() {
 
     test('records immutable expressions', () async {
       final testBed = NgTestBed<TestImmutableInputs>(
-          ng.createTestImmutableInputsFactory()
-              as ComponentFactory<TestImmutableInputs>);
+        ng.createTestImmutableInputsFactory(),
+      );
       final testFixture = await testBed.create();
 
       final id = firstChildComponentId();
@@ -966,8 +1016,8 @@ void main() {
 
     test('captures directive inputs', () async {
       final testBed = NgTestBed<TestConditionalEmbeddedViews>(
-          ng.createTestConditionalEmbeddedViewsFactory()
-              as ComponentFactory<TestConditionalEmbeddedViews>);
+        ng.createTestConditionalEmbeddedViewsFactory(),
+      );
       final testFixture = await testBed.create();
       final nodes = Inspector.instance.getNodes(groupName);
       final ngIfId = nodes.first.children.first.directives.first.id;
@@ -987,9 +1037,9 @@ void main() {
   });
 }
 
-html.Element createContentRoot({html.Element? parent}) {
-  final root = html.HTMLDivElement();
-  (parent ?? html.document.body!).append(root);
+Element createContentRoot({Element? parent}) {
+  final root = HTMLDivElement();
+  (parent ?? document.body!).append(root);
   registerContentRoot(root);
   return root;
 }
@@ -1015,10 +1065,7 @@ class TestComponentViews {}
 
 @Component(
   selector: 'test-1',
-  directives: [
-    TestComponentViews2,
-    TestComponentViews3,
-  ],
+  directives: [TestComponentViews2, TestComponentViews3],
   template: '''
     <test-2></test-2>
     <test-3></test-3>
@@ -1026,16 +1073,10 @@ class TestComponentViews {}
 )
 class TestComponentViews1 {}
 
-@Component(
-  selector: 'test-2',
-  template: '',
-)
+@Component(selector: 'test-2', template: '')
 class TestComponentViews2 {}
 
-@Component(
-  selector: 'test-3',
-  template: '',
-)
+@Component(selector: 'test-3', template: '')
 class TestComponentViews3 {}
 
 @Component(
@@ -1060,18 +1101,12 @@ class TestRepeatedEmbeddedViews {
   var values = <int>[];
 }
 
-@Component(
-  selector: 'test-1',
-  template: '',
-)
+@Component(selector: 'test-1', template: '')
 class TestEmbeddedViews1 {}
 
 @Component(
   selector: 'test',
-  directives: [
-    TestEmbeddedViews1,
-    TestEmbeddedViews2,
-  ],
+  directives: [TestEmbeddedViews1, TestEmbeddedViews2],
   template: '''
     <template #templateRef>
       <test-1></test-1>
@@ -1100,8 +1135,7 @@ class TestEmbeddedViews2 {
   ''',
 )
 class TestHostViews {
-  final componentFactory =
-      ng.createTestHostViews1Factory() as ComponentFactory<TestHostViews1>;
+  final componentFactory = ng.createTestHostViews1Factory();
 
   @ViewChild('viewContainerRef', read: ViewContainerRef)
   ViewContainerRef? viewContainerRef;
@@ -1155,22 +1189,13 @@ class TestProjectedContent {}
 )
 class TestProjectedContent1 {}
 
-@Component(
-  selector: 'test-2',
-  template: '',
-)
+@Component(selector: 'test-2', template: '')
 class TestProjectedContent2 {}
 
-@Component(
-  selector: 'test-3',
-  template: '',
-)
+@Component(selector: 'test-3', template: '')
 class TestProjectedContent3 {}
 
-@Component(
-  selector: 'test-4',
-  template: '',
-)
+@Component(selector: 'test-4', template: '')
 class TestProjectedContent4 {}
 
 @Component(
@@ -1213,7 +1238,7 @@ class TestExternalContentRoots {
   @ViewChild('multiple')
   TemplateRef? multipleComponentTemplateRef;
 
-  void initExternalContent(html.Element container, TemplateRef content) {
+  void initExternalContent(Element container, TemplateRef content) {
     final viewRef = _viewContainerRef.createEmbeddedView(content);
     for (final node in viewRef.rootNodes) {
       container.append(node);
@@ -1221,10 +1246,7 @@ class TestExternalContentRoots {
   }
 }
 
-@Component(
-  selector: 'test-inputs',
-  template: '',
-)
+@Component(selector: 'test-inputs', template: '')
 class TestInputs {
   @Input()
   String? name;

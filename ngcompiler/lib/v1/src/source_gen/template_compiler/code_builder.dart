@@ -2,7 +2,6 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:ngcompiler/v1/cli.dart';
-import 'package:ngcompiler/v2/context.dart';
 
 import 'template_compiler_outputs.dart';
 
@@ -28,11 +27,7 @@ String buildGeneratedCode(
     final imports = StringBuffer();
     final body = StringBuffer();
     final file = LibraryBuilder();
-    final dart = SplitDartEmitter(
-      imports,
-      allocator: allocator,
-      emitNullSafeSyntax: CompileContext.current.emitNullSafeCode,
-    );
+    final dart = SplitDartEmitter(imports, allocator: allocator);
 
     for (final injector in outputs.injectorsOutput) {
       final emitter = InjectorEmitter();

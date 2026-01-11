@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:js_interop';
-import 'package:web/helpers.dart';
-import 'package:web/web.dart';
 
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngrouter/testing.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'routing_state_crash_test.template.dart' as ng;
 
@@ -72,7 +71,7 @@ class LoggingExceptionHandler implements ExceptionHandler {
   }
 
   @override
-  void call(exception, [stack, __]) {
+  void call(exception, [stack, _]) {
     _logs.add('$exception: $stack');
 
     if (exception is! IntentionalException) {
@@ -102,14 +101,8 @@ class LoggingExceptionHandler implements ExceptionHandler {
       <router-outlet [routes]="routes"></router-outlet>
     </div>
   ''',
-  directives: [
-    RouterLink,
-    RouterOutlet,
-  ],
-  providers: [
-    routerProvidersTest,
-    ClassProvider(ServiceThatThrows),
-  ],
+  directives: [RouterLink, RouterOutlet],
+  providers: [routerProvidersTest, ClassProvider(ServiceThatThrows)],
 )
 class AppComponent {
   static final routes = [
@@ -165,23 +158,15 @@ class AppComponent {
   }
 }
 
-@Component(
-  selector: 'home',
-  template: 'Home Page',
-)
+@Component(selector: 'home', template: 'Home Page')
 class HomeComponent {}
 
-@Component(
-  selector: 'another',
-  template: 'Another Page',
-)
+@Component(selector: 'another', template: 'Another Page')
 class AnotherComponent {}
 
 @Component(
   selector: 'throws',
-  directives: [
-    NgIf,
-  ],
+  directives: [NgIf],
   template: r'''
     <ng-container *ngIf="service.getterThatThrows">
       Should not be shown.

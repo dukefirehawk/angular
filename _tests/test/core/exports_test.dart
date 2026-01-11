@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 import 'package:web/web.dart';
 
 import 'exports_statics.dart' as lib;
@@ -14,46 +14,53 @@ void main() {
     group('can interpolate', () {
       test('constants', () async {
         var testBed = NgTestBed<InterpolateConstantTest>(
-            ng.createInterpolateConstantTestFactory());
+          ng.createInterpolateConstantTestFactory(),
+        );
         var fixture = await testBed.create();
         expect(fixture.text, 'hello');
       });
       test('static fields', () async {
         var testBed = NgTestBed<InterpolateStaticFieldTest>(
-            ng.createInterpolateStaticFieldTestFactory());
+          ng.createInterpolateStaticFieldTestFactory(),
+        );
         var fixture = await testBed.create();
         expect(fixture.text, 'static field');
       });
       test('enums', () async {
         var testBed = NgTestBed<InterpolateEnumTest>(
-            ng.createInterpolateEnumTestFactory());
+          ng.createInterpolateEnumTestFactory(),
+        );
         var fixture = await testBed.create();
         expect(fixture.text, 'MyEnum.a');
       });
       test('top-level functions', () async {
         var testBed = NgTestBed<InterpolateTopLevelFunctionTest>(
-            ng.createInterpolateTopLevelFunctionTestFactory());
+          ng.createInterpolateTopLevelFunctionTestFactory(),
+        );
         var fixture = await testBed.create();
         expect(fixture.text, 'hello!!!');
       });
       test('static functions', () async {
         var testBed = NgTestBed<InterpolateStaticFunctionTest>(
-            ng.createInterpolateStaticFunctionTestFactory());
+          ng.createInterpolateStaticFunctionTestFactory(),
+        );
         var fixture = await testBed.create();
         expect(fixture.text, 'hello???');
       });
     });
 
     test('can be used in NgFor', () async {
-      var testBed =
-          NgTestBed<StaticNgForTest>(ng.createStaticNgForTestFactory());
+      var testBed = NgTestBed<StaticNgForTest>(
+        ng.createStaticNgForTestFactory(),
+      );
       var fixture = await testBed.create();
       expect(fixture.text, '123');
     });
 
     test('can be used in event handlers', () async {
       var testBed = NgTestBed<StaticEventHandlerTest>(
-          ng.createStaticEventHandlerTestFactory());
+        ng.createStaticEventHandlerTestFactory(),
+      );
       var fixture = await testBed.create();
       var div = fixture.rootElement.querySelector('div') as HTMLDivElement;
       clickHandled = false;
@@ -65,7 +72,8 @@ void main() {
 
     test('can be assigned in an event handler', () async {
       var testBed = NgTestBed<StaticEventHandlerTargetTest>(
-          ng.createStaticEventHandlerTargetTestFactory());
+        ng.createStaticEventHandlerTargetTestFactory(),
+      );
       var fixture = await testBed.create();
       var div = fixture.rootElement.querySelector('div') as HTMLDivElement;
       MyClass.clickHandled = false;
@@ -77,7 +85,8 @@ void main() {
 
     test('can be used as event handler arguments', () async {
       var testBed = NgTestBed<StaticEventHandlerArgTest>(
-          ng.createStaticEventHandlerArgTestFactory());
+        ng.createStaticEventHandlerArgTestFactory(),
+      );
       var fixture = await testBed.create();
       var div = fixture.rootElement.querySelector('div') as HTMLDivElement;
       late List<Object> listArg;
@@ -102,19 +111,21 @@ void main() {
 
     test('can refer to own statics automatically with @HostBinding', () async {
       var testBed = NgTestBed<SelfReferHostBindingTest>(
-          ng.createSelfReferHostBindingTestFactory());
+        ng.createSelfReferHostBindingTestFactory(),
+      );
       var fixture = await testBed.create();
-      expect((fixture.rootElement as HTMLDivElement).title, 'hello');
+      expect((fixture.rootElement as HTMLElement).title, 'hello');
       await fixture.update((_) {
         SelfReferHostBindingTest.staticField = 'goodbye';
       });
-      expect((fixture.rootElement as HTMLDivElement).title, 'goodbye');
+      expect((fixture.rootElement as HTMLElement).title, 'goodbye');
     });
 
     group('can be prefixed', () {
       test('with library prefix', () async {
         var testBed = NgTestBed<StaticLibraryPrefixTest>(
-            ng.createStaticLibraryPrefixTestFactory());
+          ng.createStaticLibraryPrefixTestFactory(),
+        );
         var fixture = await testBed.create();
         expect(fixture.text, 'hello');
       });
@@ -207,10 +218,7 @@ class SelfReferTest {
   static String staticField = 'hello';
 }
 
-@Component(
-  selector: 'self-refer-host-binding-test',
-  template: '',
-)
+@Component(selector: 'self-refer-host-binding-test', template: '')
 class SelfReferHostBindingTest {
   @HostBinding('title')
   static var staticField = 'hello';

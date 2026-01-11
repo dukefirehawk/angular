@@ -1,5 +1,3 @@
-library;
-
 part 'lexeme.dart';
 part 'token_types.dart';
 

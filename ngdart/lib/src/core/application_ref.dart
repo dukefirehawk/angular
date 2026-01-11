@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
+import 'package:web/web.dart';
+
 import '../devtools.dart';
 import '../di/injector.dart';
 import '../testability.dart';
@@ -57,7 +58,7 @@ class ApplicationRef extends ChangeDetectionHost {
     return unsafeCast(
       run(() {
         final component = componentFactory.create(_injector);
-        final existing = querySelector(componentFactory.selector);
+        final existing = document.querySelector(componentFactory.selector);
         Element? replacement;
         if (existing != null) {
           final newElement = component.location;
@@ -67,23 +68,19 @@ class ApplicationRef extends ChangeDetectionHost {
           if (newElement.id.isEmpty) {
             newElement.id = existing.id;
           }
-          replacement = newElement;
-          existing.replaceWith(replacement);
-        } else {
-          document.body!.append(component.location);
-        }
-        final injector = component.injector;
-        final testability = injector.provideTypeOptional<Testability>(
-          Testability,
-        );
-        if (testability != null) {
-          final registry = _injector.provideType<TestabilityRegistry>(
-            TestabilityRegistry,
+          final injector = component.injector;
+          final testability = injector.provideTypeOptional<Testability>(
+            Testability,
           );
-          registry.registerApplication(component.location, testability);
+          if (testability != null) {
+            final registry = _injector.provideType<TestabilityRegistry>(
+              TestabilityRegistry,
+            );
+            registry.registerApplication(component.location, testability);
+          }
+          _loadedRootComponent(component, replacement);
+          return component;
         }
-        _loadedRootComponent(component, replacement);
-        return component;
       }),
     );
   }

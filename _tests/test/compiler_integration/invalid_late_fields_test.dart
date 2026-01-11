@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
-import '../../lib/compiler.dart';
+import 'package:_tests/compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
+import 'package:test/test.dart';
 
 void main() {
   CompileContext.overrideForTesting();
@@ -19,15 +19,16 @@ void main() {
         late final String name;
       }
     """,
-      errors: [allOf(contains('Inputs cannot be "late final"'))],
+      errors: [contains('Inputs cannot be "late final"')],
     );
   });
 
   test('should refuse to compile non-nullable single child query', () async {
     await compilesExpecting(
       """
-      import 'package:web/web.dart';
       import '$ngImport';
+
+      import 'package:web/web.dart';
 
       @Component(
         selector: 'example-comp',
@@ -38,15 +39,16 @@ void main() {
         set div(Element div) {}
       }
     """,
-      errors: [allOf(contains('queries must be nullable'))],
+      errors: [contains('queries must be nullable')],
     );
   });
 
   test('should refuse to compile late fields with a child query', () async {
     await compilesExpecting(
       """
-      import 'package:web/web.dart';
       import '$ngImport';
+
+      import 'package:web/web.dart';
 
       @Component(
         selector: 'example-comp',
@@ -57,15 +59,16 @@ void main() {
         late Element? div;
       }
     """,
-      errors: [allOf(contains('View and content queries cannot be "late"'))],
+      errors: [contains('View and content queries cannot be "late"')],
     );
   });
 
   test('should refuse to compile late fields with a children query', () async {
     await compilesExpecting(
       """
-      import 'package:web/web.dart';
       import '$ngImport';
+
+      import 'package:web/web.dart';
 
       @Component(
         selector: 'example-comp',
@@ -76,14 +79,15 @@ void main() {
         late List<Element> div;
       }
     """,
-      errors: [allOf(contains('View and content queries cannot be "late"'))],
+      errors: [contains('View and content queries cannot be "late"')],
     );
   });
 
   test('should compile non-nullable fields with a children query', () async {
     await compilesNormally("""
-      import 'package:web/web.dart';
       import '$ngImport';
+
+      import 'package:web/web.dart';
 
       @Component(
         selector: 'example-comp',

@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:web/web.dart';
 
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/src/core/application_ref.dart';
 import 'package:ngdart/src/core/linker/app_view_utils.dart';
 import 'package:ngdart/src/runtime/dom_events.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'application_ref_test.template.dart' as ng;
 
@@ -22,16 +22,14 @@ void main() {
 
     // Setup global variables that need to exist before using bootstrap.
     // TODO: Move this to a common place. It's duplicated all over.
-    appViewUtils = AppViewUtils(
-      'appId',
-      EventManager(ngZone),
-    );
+    appViewUtils = AppViewUtils('appId', EventManager(ngZone));
   });
 
   group('dispose should ', () {
     test('destroy bootstrapped components', () {
-      final comp =
-          appRef.bootstrap<HelloComponent>(ng.createHelloComponentFactory());
+      final comp = appRef.bootstrap<HelloComponent>(
+        ng.createHelloComponentFactory(),
+      );
       final view = comp.hostView;
       expect(view.destroyed, isFalse);
 
@@ -56,10 +54,11 @@ void main() {
   group('bootstrap should', () {
     test('replace an existing element if in the DOM', () {
       final existing = document.createElement('hello-component')
-        ..text = 'Loading...';
+        ..textContent = 'Loading...';
       document.body!.append(existing);
-      final comp =
-          appRef.bootstrap<HelloComponent>(ng.createHelloComponentFactory());
+      final comp = appRef.bootstrap<HelloComponent>(
+        ng.createHelloComponentFactory(),
+      );
       expect(comp.location.textContent, 'Hello World');
       expect(
         document.body!.querySelector('hello-component'),
@@ -68,8 +67,9 @@ void main() {
     });
 
     test('create a new element if missing from the DOM', () {
-      final comp =
-          appRef.bootstrap<HelloComponent>(ng.createHelloComponentFactory());
+      final comp = appRef.bootstrap<HelloComponent>(
+        ng.createHelloComponentFactory(),
+      );
       expect(comp.location.textContent, 'Hello World');
       expect(
         document.body!.querySelector('hello-component'),
@@ -101,12 +101,12 @@ void main() {
 
     test('return an asynchronous null', () {
       final result = appRef.run(() async => null);
-      expect(result, isInstanceOf<Future<void>>());
+      expect(result, isA<Future<void>>());
     });
 
     test('return an asynchronous nullable value', () {
       final result = appRef.run<String?>(() async => null);
-      expect(result, isInstanceOf<Future<String?>>());
+      expect(result, isA<Future<String?>>());
     });
 
     test('never return (threw synchronously)', () {
@@ -120,10 +120,7 @@ void main() {
   });
 }
 
-@Component(
-  selector: 'hello-component',
-  template: 'Hello World',
-)
+@Component(selector: 'hello-component', template: 'Hello World')
 class HelloComponent {}
 
 class _NullExceptionHandler implements ExceptionHandler {

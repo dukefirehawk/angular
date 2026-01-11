@@ -19,5 +19,5 @@ enum ViewEncapsulation {
   emulated,
 
   /// Don't provide any template or style encapsulation.
-  none
+  none,
 }

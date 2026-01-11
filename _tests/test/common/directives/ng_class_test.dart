@@ -1,8 +1,8 @@
-import 'package:web/web.dart';
-
-import 'package:test/test.dart';
+import 'package:_tests/matchers.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'ng_class_test.template.dart' as ng;
 
@@ -11,95 +11,103 @@ void main() {
 
   group('ngClass', () {
     test('should clean up when the directive is destroyed', () async {
-      var testBed =
-          NgTestBed<DestroyClassTest>(ng.createDestroyClassTestFactory());
+      var testBed = NgTestBed<DestroyClassTest>(
+        ng.createDestroyClassTestFactory(),
+      );
       var testFixture = await testBed.create();
       await testFixture.update((DestroyClassTest component) {
         component.items = [
-          ['0']
+          ['0'],
         ];
       });
       await testFixture.update((DestroyClassTest component) {
         component.items = [
-          ['1']
+          ['1'],
         ];
       });
       expect(
         testFixture.rootElement.querySelector('div')!.classList,
-        equals(['1']),
+        hasDomTokenList(['1']),
       );
     });
 
-    test('should add classes specified in map without change in class names',
-        () async {
-      var testBed = NgTestBed<ClassWithNames>(ng.createClassWithNamesFactory());
-      var testFixture = await testBed.create();
-      expect(
-        testFixture.rootElement.querySelector('div')!.classList,
-        equals(['foo-bar', 'fooBar']),
-      );
-    });
+    test(
+      'should add classes specified in map without change in class names',
+      () async {
+        var testBed = NgTestBed<ClassWithNames>(
+          ng.createClassWithNamesFactory(),
+        );
+        var testFixture = await testBed.create();
+        expect(
+          testFixture.rootElement.querySelector('div')!.classList,
+          hasDomTokenList(['foo-bar', 'fooBar']),
+        );
+      },
+    );
 
     test('should update classes based on changes in map values', () async {
-      var testBed =
-          NgTestBed<ConditionMapTest>(ng.createConditionMapTestFactory());
+      var testBed = NgTestBed<ConditionMapTest>(
+        ng.createConditionMapTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
       await testFixture.update((ConditionMapTest component) {
         component.condition = false;
       });
-      expect(content.classList, equals(['bar']));
+      expect(content.classList, hasDomTokenList(['bar']));
     });
 
     test('should update classes based on changes to the map', () async {
       var testBed = NgTestBed<MapUpdateTest>(ng.createMapUpdateTestFactory());
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
       await testFixture.update((MapUpdateTest component) {
         component.map!['bar'] = true;
       });
-      expect(content.classList, equals(['foo', 'bar']));
+      expect(content.classList, hasDomTokenList(['foo', 'bar']));
       await testFixture.update((MapUpdateTest component) {
         component.map!['baz'] = true;
       });
-      expect(content.classList, equals(['foo', 'bar', 'baz']));
+      expect(content.classList, hasDomTokenList(['foo', 'bar', 'baz']));
       await testFixture.update((MapUpdateTest component) {
         component.map!.remove('bar');
       });
-      expect(content.classList, equals(['foo', 'baz']));
+      expect(content.classList, hasDomTokenList(['foo', 'baz']));
     });
 
-    test('should update classes based on reference changes to the map',
-        () async {
-      var testBed = NgTestBed<MapUpdateTest>(ng.createMapUpdateTestFactory());
-      var testFixture = await testBed.create();
-      var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo']));
-      await testFixture.update((MapUpdateTest component) {
-        component.map = <String, bool>{'foo': true, 'bar': true};
-      });
-      expect(content.classList, equals(['foo', 'bar']));
-      await testFixture.update((MapUpdateTest component) {
-        component.map = <String, bool>{'baz': true};
-      });
-      expect(content.classList, equals(['baz']));
-    });
+    test(
+      'should update classes based on reference changes to the map',
+      () async {
+        var testBed = NgTestBed<MapUpdateTest>(ng.createMapUpdateTestFactory());
+        var testFixture = await testBed.create();
+        var content = testFixture.rootElement.querySelector('div')!;
+        expect(content.classList, hasDomTokenList(['foo']));
+        await testFixture.update((MapUpdateTest component) {
+          component.map = <String, bool>{'foo': true, 'bar': true};
+        });
+        expect(content.classList, hasDomTokenList(['foo', 'bar']));
+        await testFixture.update((MapUpdateTest component) {
+          component.map = <String, bool>{'baz': true};
+        });
+        expect(content.classList, hasDomTokenList(['baz']));
+      },
+    );
 
     test('should remove classes when expression is null', () async {
       var testBed = NgTestBed<MapUpdateTest>(ng.createMapUpdateTestFactory());
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
       await testFixture.update((MapUpdateTest component) {
         component.map = null;
       });
-      expect(content.classList, isEmpty);
+      expect(content.classList, hasDomTokenList([]));
       await testFixture.update((MapUpdateTest component) {
         component.map = <String, bool>{'foo': false, 'bar': true};
       });
-      expect(content.classList, equals(['bar']));
+      expect(content.classList, hasDomTokenList(['bar']));
     });
 
     test('should allow multiple classes per expression', () async {
@@ -109,11 +117,14 @@ void main() {
       await testFixture.update((MapUpdateTest component) {
         component.map = <String, bool>{'bar baz': true, 'bar1 baz1': true};
       });
-      expect(content.classList, equals(['bar', 'baz', 'bar1', 'baz1']));
+      expect(
+        content.classList,
+        hasDomTokenList(['bar', 'baz', 'bar1', 'baz1']),
+      );
       await testFixture.update((MapUpdateTest component) {
         component.map = <String, bool>{'bar baz': false, 'bar1 baz1': true};
       });
-      expect(content.classList, equals(['bar1', 'baz1']));
+      expect(content.classList, hasDomTokenList(['bar1', 'baz1']));
     });
 
     test('should split by one or more spaces between classes', () async {
@@ -123,72 +134,77 @@ void main() {
       await testFixture.update((MapUpdateTest component) {
         component.map = <String, bool>{'foo bar     baz': true};
       });
-      expect(content.classList, equals(['foo', 'bar', 'baz']));
+      expect(content.classList, hasDomTokenList(['foo', 'bar', 'baz']));
     });
 
     test('should update classes based on changes to the list', () async {
       var testBed = NgTestBed<ListUpdateTest>(ng.createListUpdateTestFactory());
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
       await testFixture.update((ListUpdateTest component) {
         component.list.add('bar');
       });
-      expect(content.classList, equals(['foo', 'bar']));
+      expect(content.classList, hasDomTokenList(['foo', 'bar']));
       await testFixture.update((ListUpdateTest component) {
         component.list[1] = 'baz';
       });
-      expect(content.classList, equals(['foo', 'baz']));
+      expect(content.classList, hasDomTokenList(['foo', 'baz']));
       await testFixture.update((ListUpdateTest component) {
         component.list.remove('baz');
       });
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
     });
 
     test('should update classes when list reference changes', () async {
       var testBed = NgTestBed<ListUpdateTest>(ng.createListUpdateTestFactory());
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
       await testFixture.update((ListUpdateTest component) {
         component.list = ['bar'];
       });
-      expect(content.classList, equals(['bar']));
+      expect(content.classList, hasDomTokenList(['bar']));
     });
 
-    test('should take initial classes into account when a reference changes',
-        () async {
-      var testBed = NgTestBed<ListUpdateWithInitialTest>(
-          ng.createListUpdateWithInitialTestFactory());
-      var testFixture = await testBed.create();
-      var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo']));
-      await testFixture.update((ListUpdateWithInitialTest component) {
-        component.list = ['bar'];
-      });
-      expect(content.classList, equals(['foo', 'bar']));
-    });
+    test(
+      'should take initial classes into account when a reference changes',
+      () async {
+        var testBed = NgTestBed<ListUpdateWithInitialTest>(
+          ng.createListUpdateWithInitialTestFactory(),
+        );
+        var testFixture = await testBed.create();
+        var content = testFixture.rootElement.querySelector('div')!;
+        expect(content.classList, hasDomTokenList(['foo']));
+        await testFixture.update((ListUpdateWithInitialTest component) {
+          component.list = ['bar'];
+        });
+        expect(content.classList, hasDomTokenList(['foo', 'bar']));
+      },
+    );
 
     test('should ignore empty or blank class names', () async {
       var testBed = NgTestBed<ListUpdateWithInitialTest>(
-          ng.createListUpdateWithInitialTestFactory());
+        ng.createListUpdateWithInitialTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
       await testFixture.update((ListUpdateWithInitialTest component) {
         component.list = ['', '  '];
       });
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
     });
 
     test('should trim blanks from class names', () async {
       var testBed = NgTestBed<ListUpdateWithInitialTest>(
-          ng.createListUpdateWithInitialTestFactory());
+        ng.createListUpdateWithInitialTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
       await testFixture.update((ListUpdateWithInitialTest component) {
         component.list = [' bar  '];
       });
-      expect(content.classList, equals(['foo', 'bar']));
+      expect(content.classList, hasDomTokenList(['foo', 'bar']));
     });
 
     test('should allow multiple classes per item in lists', () async {
@@ -198,12 +214,17 @@ void main() {
       await testFixture.update((ListUpdateTest component) {
         component.list = ['foo bar baz', 'foo1 bar1   baz1'];
       });
-      expect(content.classList,
-          equals(['foo', 'bar', 'baz', 'foo1', 'bar1', 'baz1']));
+      expect(
+        content.classList,
+        hasDomTokenList(['foo', 'bar', 'baz', 'foo1', 'bar1', 'baz1']),
+      );
       await testFixture.update((ListUpdateTest component) {
         component.list = ['foo bar   baz foobar'];
       });
-      expect(content.classList, equals(['foo', 'bar', 'baz', 'foobar']));
+      expect(
+        content.classList,
+        hasDomTokenList(['foo', 'bar', 'baz', 'foobar']),
+      );
     });
 
     test('should update classes if the set instance changes', () async {
@@ -215,198 +236,221 @@ void main() {
       await testFixture.update((SetUpdateTest component) {
         component.set = set;
       });
-      expect(content.classList, equals(['bar']));
+      expect(content.classList, hasDomTokenList(['bar']));
       set = <String>{};
       set.add('baz');
       await testFixture.update((SetUpdateTest component) {
         component.set = set;
       });
-      expect(content.classList, equals(['baz']));
+      expect(content.classList, hasDomTokenList(['baz']));
     });
 
     test('should add classes specified in a string literal', () async {
-      var testBed =
-          NgTestBed<StringLiteralTest>(ng.createStringLiteralTestFactory());
+      var testBed = NgTestBed<StringLiteralTest>(
+        ng.createStringLiteralTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo', 'bar', 'foo-bar', 'fooBar']));
+      expect(
+        content.classList,
+        hasDomTokenList(['foo', 'bar', 'foo-bar', 'fooBar']),
+      );
     });
 
     test('should update classes based on changes to the string', () async {
-      var testBed =
-          NgTestBed<StringUpdateTest>(ng.createStringUpdateTestFactory());
+      var testBed = NgTestBed<StringUpdateTest>(
+        ng.createStringUpdateTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
       await testFixture.update((StringUpdateTest component) {
         component.string = 'foo bar';
       });
-      expect(content.classList, equals(['foo', 'bar']));
+      expect(content.classList, hasDomTokenList(['foo', 'bar']));
       await testFixture.update((StringUpdateTest component) {
         component.string = 'baz';
       });
-      expect(content.classList, equals(['baz']));
-    });
-
-    test('should remove active classes when switching from string to null',
-        () async {
-      var testBed =
-          NgTestBed<StringUpdateTest>(ng.createStringUpdateTestFactory());
-      var testFixture = await testBed.create();
-      var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo']));
-      await testFixture.update((StringUpdateTest component) {
-        component.string = null;
-      });
-      expect(content.classList, isEmpty);
+      expect(content.classList, hasDomTokenList(['baz']));
     });
 
     test(
-        'should take initial classes into account when '
+      'should remove active classes when switching from string to null',
+      () async {
+        var testBed = NgTestBed<StringUpdateTest>(
+          ng.createStringUpdateTestFactory(),
+        );
+        var testFixture = await testBed.create();
+        var content = testFixture.rootElement.querySelector('div')!;
+        expect(content.classList, hasDomTokenList(['foo']));
+        await testFixture.update((StringUpdateTest component) {
+          component.string = null;
+        });
+        expect(content.classList.length, equals(0));
+      },
+    );
+
+    test('should take initial classes into account when '
         'switching from string to null', () async {
       var testBed = NgTestBed<StringUpdateWithInitialTest>(
-          ng.createStringUpdateWithInitialTestFactory());
+        ng.createStringUpdateWithInitialTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
       await testFixture.update((StringUpdateWithInitialTest component) {
         component.string = null;
       });
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
     });
 
     test('should ignore empty and blank strings', () async {
       var testBed = NgTestBed<StringUpdateWithInitialTest>(
-          ng.createStringUpdateWithInitialTestFactory());
+        ng.createStringUpdateWithInitialTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
       await testFixture.update((StringUpdateWithInitialTest component) {
         component.string = '';
       });
-      expect(content.classList, equals(['foo']));
+      expect(content.classList, hasDomTokenList(['foo']));
     });
 
     test('should cooperate with the class attribute', () async {
       var testBed = NgTestBed<MapUpdateWithInitialTest>(
-          ng.createMapUpdateWithInitialTestFactory());
+        ng.createMapUpdateWithInitialTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
       await testFixture.update((MapUpdateWithInitialTest component) {
         component.map!['bar'] = true;
       });
-      expect(content.classList, equals(['init', 'foo', 'bar']));
+      expect(content.classList, hasDomTokenList(['init', 'foo', 'bar']));
       await testFixture.update((MapUpdateWithInitialTest component) {
         component.map!['foo'] = false;
       });
-      expect(content.classList, equals(['init', 'bar']));
+      expect(content.classList, hasDomTokenList(['init', 'bar']));
       await testFixture.update((MapUpdateWithInitialTest component) {
         component.map = null;
       });
-      expect(content.classList, equals(['init', 'foo']));
+      expect(content.classList, hasDomTokenList(['init', 'foo']));
     });
 
     test('should cooperate with interpolated class attribute', () async {
       var testBed = NgTestBed<MapUpdateWithInitialInterpolationTest>(
-          ng.createMapUpdateWithInitialInterpolationTestFactory());
+        ng.createMapUpdateWithInitialInterpolationTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      await testFixture
-          .update((MapUpdateWithInitialInterpolationTest component) {
+      await testFixture.update((
+        MapUpdateWithInitialInterpolationTest component,
+      ) {
         component.map!['bar'] = true;
       });
-      expect(content.classList, equals(['init', 'foo', 'bar']));
-      await testFixture
-          .update((MapUpdateWithInitialInterpolationTest component) {
+      expect(content.classList, hasDomTokenList(['init', 'foo', 'bar']));
+      await testFixture.update((
+        MapUpdateWithInitialInterpolationTest component,
+      ) {
         component.map!['foo'] = false;
       });
-      expect(content.classList, equals(['init', 'bar']));
-      await testFixture
-          .update((MapUpdateWithInitialInterpolationTest component) {
+      expect(content.classList, hasDomTokenList(['init', 'bar']));
+      await testFixture.update((
+        MapUpdateWithInitialInterpolationTest component,
+      ) {
         component.map = null;
       });
-      expect(content.classList, equals(['init', 'foo']));
+      expect(content.classList, hasDomTokenList(['init', 'foo']));
     });
 
     test('should cooperate with class attribute and binding to it', () async {
       var testBed = NgTestBed<MapUpdateWithInitialBindingTest>(
-          ng.createMapUpdateWithInitialBindingTestFactory());
+        ng.createMapUpdateWithInitialBindingTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
       await testFixture.update((MapUpdateWithInitialBindingTest component) {
         component.map!['bar'] = true;
       });
-      expect(content.classList, equals(['init', 'foo', 'bar']));
+      expect(content.classList, hasDomTokenList(['init', 'foo', 'bar']));
       await testFixture.update((MapUpdateWithInitialBindingTest component) {
         component.map!['foo'] = false;
       });
-      expect(content.classList, equals(['init', 'bar']));
+      expect(content.classList, hasDomTokenList(['init', 'bar']));
       await testFixture.update((MapUpdateWithInitialBindingTest component) {
         component.map = null;
       });
-      expect(content.classList, equals(['init', 'foo']));
-    });
-
-    test('should cooperate with class attribute and class.name binding',
-        () async {
-      var testBed = NgTestBed<MapUpdateWithConditionBindingTest>(
-          ng.createMapUpdateWithConditionBindingTestFactory());
-      var testFixture = await testBed.create();
-      var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['init', 'foo', 'baz']));
-      await testFixture.update((MapUpdateWithConditionBindingTest component) {
-        component.map!['bar'] = true;
-      });
-      expect(content.classList, equals(['init', 'foo', 'baz', 'bar']));
-      await testFixture.update((MapUpdateWithConditionBindingTest component) {
-        component.map!['foo'] = false;
-      });
-      expect(content.classList, equals(['init', 'baz', 'bar']));
-      await testFixture.update((MapUpdateWithConditionBindingTest component) {
-        component.condition = false;
-      });
-      expect(content.classList, equals(['init', 'bar']));
+      expect(content.classList, hasDomTokenList(['init', 'foo']));
     });
 
     test(
-        'should cooperate with initial class and class '
+      'should cooperate with class attribute and class.name binding',
+      () async {
+        var testBed = NgTestBed<MapUpdateWithConditionBindingTest>(
+          ng.createMapUpdateWithConditionBindingTestFactory(),
+        );
+        var testFixture = await testBed.create();
+        var content = testFixture.rootElement.querySelector('div')!;
+        expect(content.classList, hasDomTokenList(['init', 'foo', 'baz']));
+        await testFixture.update((MapUpdateWithConditionBindingTest component) {
+          component.map!['bar'] = true;
+        });
+        expect(
+          content.classList,
+          hasDomTokenList(['init', 'foo', 'baz', 'bar']),
+        );
+        await testFixture.update((MapUpdateWithConditionBindingTest component) {
+          component.map!['foo'] = false;
+        });
+        expect(content.classList, hasDomTokenList(['init', 'baz', 'bar']));
+        await testFixture.update((MapUpdateWithConditionBindingTest component) {
+          component.condition = false;
+        });
+        expect(content.classList, hasDomTokenList(['init', 'bar']));
+      },
+    );
+
+    test('should cooperate with initial class and class '
         'attribute binding when binding changes', () async {
       var testBed = NgTestBed<MapUpdateWithStringBindingTest>(
-          ng.createMapUpdateWithStringBindingTestFactory());
+        ng.createMapUpdateWithStringBindingTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['init', 'foo']));
+      expect(content.classList, hasDomTokenList(['init', 'foo']));
       await testFixture.update((MapUpdateWithStringBindingTest component) {
         component.map!['bar'] = true;
       });
-      expect(content.classList, equals(['init', 'foo', 'bar']));
+      expect(content.classList, hasDomTokenList(['init', 'foo', 'bar']));
       await testFixture.update((MapUpdateWithStringBindingTest component) {
         component.string = 'baz';
       });
-      expect(content.classList, equals(['init', 'bar', 'baz', 'foo']));
+      expect(content.classList, hasDomTokenList(['init', 'bar', 'baz', 'foo']));
       await testFixture.update((MapUpdateWithStringBindingTest component) {
         component.map = null;
       });
-      expect(content.classList, equals(['init', 'baz']));
+      expect(content.classList, hasDomTokenList(['init', 'baz']));
     });
 
-    test(
-        'should cooperate with interpolated class attribute '
+    test('should cooperate with interpolated class attribute '
         'and clas.name binding', () async {
       var testBed = NgTestBed<InterpolationWithConditionBindingTest>(
-          ng.createInterpolationWithConditionBindingTestFactory());
+        ng.createInterpolationWithConditionBindingTestFactory(),
+      );
       var testFixture = await testBed.create();
       var content = testFixture.rootElement.querySelector('div')!;
-      expect(content.classList, equals(['foo', 'baz']));
-      await testFixture
-          .update((InterpolationWithConditionBindingTest component) {
+      expect(content.classList, hasDomTokenList(['foo', 'baz']));
+      await testFixture.update((
+        InterpolationWithConditionBindingTest component,
+      ) {
         component.condition = false;
       });
-      expect(content.classList, equals(['foo']));
-      await testFixture
-          .update((InterpolationWithConditionBindingTest component) {
+      expect(content.classList, hasDomTokenList(['foo']));
+      await testFixture.update((
+        InterpolationWithConditionBindingTest component,
+      ) {
         component.condition = true;
       });
-      expect(content.classList, equals(['foo', 'baz']));
+      expect(content.classList, hasDomTokenList(['foo', 'baz']));
     });
   });
 
@@ -468,10 +512,11 @@ void main() {
           ..name = 'dynamic'
           ..enabled = true,
       );
-      expect(
-        fixture.rootElement.allCssClasses,
-        ['static', 'dynamic', 'enabled'],
-      );
+      expect(fixture.rootElement.allCssClasses, [
+        'static',
+        'dynamic',
+        'enabled',
+      ]);
     });
   });
 
@@ -561,10 +606,7 @@ class DestroyClassTest {
   template: '<div [ngClass]="classes"></div>',
 )
 class ClassWithNames {
-  static const classes = {
-    'foo-bar': true,
-    'fooBar': true,
-  };
+  static const classes = {'foo-bar': true, 'fooBar': true};
 }
 
 @Component(
@@ -578,10 +620,7 @@ class ConditionMapTest extends Base {
 
   Map<String, bool> get conditionMap {
     if (_prevCondition != condition) {
-      _conditionMap = {
-        'foo': condition,
-        'bar': !condition,
-      };
+      _conditionMap = {'foo': condition, 'bar': !condition};
       _prevCondition = condition;
     }
     return _conditionMap!;
@@ -681,28 +720,20 @@ class MapUpdateWithStringBindingTest extends Base {}
 class InterpolationWithConditionBindingTest extends Base {}
 
 extension _SumCssClasses on Element {
-  Iterable<String> get allCssClasses {
-    // TODO: Migrate to dart 3.6 (Need to review)
-    //return querySelectorAll('*').map((e) => e.classList).expand((c) => c);
-    var classList = [];
-    var all = querySelectorAll('*');
-    for (var i = 0; i < all.length; i++) {
-      classList.add((all.item(i) as HTMLElement).classList);
-    }
-    return classList.expand((DOMTokenList c) {
-      var result = <String>[];
-      for (var i = 0; i > c.length; i++) {
-        result.add(c.item(i));
+  Iterable<String> get allCssClasses sync* {
+    final nodes = querySelectorAll('*');
+    final nodesLength = nodes.length;
+    for (var i = 0; i < nodesLength; i++) {
+      final classList = (nodes.item(i) as Element).classList;
+      final classListLength = classList.length;
+      for (var j = 0; j < classListLength; j++) {
+        yield classList.item(j)!;
       }
-      return result;
-    });
+    }
   }
 }
 
-@Component(
-  selector: 'child',
-  template: '',
-)
+@Component(selector: 'child', template: '')
 class ChildWithHostClass {
   @Input()
   String? name;
@@ -713,9 +744,7 @@ class ChildWithHostClass {
 
 @Component(
   selector: 'test',
-  directives: [
-    NgClass,
-  ],
+  directives: [NgClass],
   template: r'''
     <div class="static" [ngClass]="name"></div>
   ''',
@@ -746,9 +775,7 @@ class TestStaticClassWithAttrClass {
 
 @Component(
   selector: 'test',
-  directives: [
-    ChildWithHostClass,
-  ],
+  directives: [ChildWithHostClass],
   template: r'''
     <child class="static" [name]="name"></child>
   ''',
@@ -759,9 +786,7 @@ class TestStaticClassWithHostClass {
 
 @Component(
   selector: 'test',
-  directives: [
-    NgClass,
-  ],
+  directives: [NgClass],
   template: r'''
     <div class="static" [class.enabled]="enabled" [ngClass]="name"></div>
   ''',
@@ -773,9 +798,7 @@ class TestStaticClassWithClassDotNgClass {
 
 @Component(
   selector: 'test',
-  directives: [
-    NgClass,
-  ],
+  directives: [NgClass],
   template: r'''
     <div class="{{name1}}" [ngClass]="name2"></div>
   ''',
@@ -809,9 +832,7 @@ class TestDynamicClassWithAttrClass {
 
 @Component(
   selector: 'test',
-  directives: [
-    ChildWithHostClass,
-  ],
+  directives: [ChildWithHostClass],
   template: r'''
     <child class="{{name1}}" [name]="name2"></child>
   ''',

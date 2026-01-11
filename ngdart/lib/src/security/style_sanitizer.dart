@@ -20,9 +20,10 @@ const _colorFns = '(?:rgb|hsl)a?';
 const _fnArgs = '\\([-0-9.%, a-zA-Z]+\\)';
 const _key = '([a-zA-Z-]+[ ]?\\:)';
 
-final RegExp _safeStyleValue =
-    RegExp('^($_values|($_key$_values[ ;]?)|((?:$_transformationFns|'
-        '$_colorFns)$_fnArgs)[ ;]?)+\$');
+final RegExp _safeStyleValue = RegExp(
+  '^($_values|($_key$_values[ ;]?)|((?:$_transformationFns|'
+  '$_colorFns)$_fnArgs)[ ;]?)+\$',
+);
 
 /// Matches a `url(...)` value with an arbitrary argument as long as it does
 /// not contain parentheses.

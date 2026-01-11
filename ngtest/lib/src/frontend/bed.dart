@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
+import 'package:web/web.dart';
 
 import '../bootstrap.dart';
 import '../errors.dart';
@@ -69,8 +69,6 @@ Future<void> disposeAnyRunningTest() async {
 /// ```
 class NgTestBed<T extends Object> {
   static Element _defaultHost() {
-    // TODO: Migrate to 3.6 (Need review)
-    //final host = Element.tag('ng-test-bed');
     final host = document.createElement('ng-test-bed');
     document.body!.append(host);
     return host;
@@ -78,9 +76,7 @@ class NgTestBed<T extends Object> {
 
   static Injector _defaultRootInjector(Injector parent) => parent;
 
-  static NgTestStabilizer _alwaysStable(
-    Injector _,
-  ) =>
+  static NgTestStabilizer _alwaysStable(Injector _) =>
       NgTestStabilizer.alwaysStable;
 
   static NgTestStabilizer _defaultStabilizers(
@@ -147,21 +143,22 @@ class NgTestBed<T extends Object> {
     required NgTestStabilizerFactory stabilizer,
     InjectorFactory? rootInjector,
     required ComponentFactory<T> component,
-  })  : _host = host,
-        _createStabilizer = stabilizer,
-        _rootInjector = rootInjector ?? _defaultRootInjector,
-        _componentFactory = component;
+  }) : _host = host,
+       _createStabilizer = stabilizer,
+       _rootInjector = rootInjector ?? _defaultRootInjector,
+       _componentFactory = component;
 
   NgTestBed._useComponentFactory({
     Element? host,
     required ComponentFactory<T> component,
     required InjectorFactory rootInjector,
     required bool watchAngularLifecycle,
-  })  : _host = host,
-        _createStabilizer =
-            watchAngularLifecycle ? _defaultStabilizers : _alwaysStable,
-        _rootInjector = rootInjector,
-        _componentFactory = component;
+  }) : _host = host,
+       _createStabilizer = watchAngularLifecycle
+           ? _defaultStabilizers
+           : _alwaysStable,
+       _rootInjector = rootInjector,
+       _componentFactory = component;
 
   /// Returns a new instance of [NgTestBed] with the root injector wrapped.
   ///

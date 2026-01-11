@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:meta/meta.dart';
 
 /// Provides influence over how change detection should execute for a component.
@@ -101,7 +103,7 @@ abstract class ChangeDetectorRef {
   /// Prefer propagating updates to children through the template over this
   /// method when possible. This method is intended as a last resort to
   /// facilitate migrating components to use `ChangeDetectionStrategy.onPush`.
-  void markChildForCheck(Object child);
+  void markChildForCheck(JSAny child);
 
   /// See [DeprecatedChangeDetectorRef.detach] for details.
   @Deprecated('Use "changeDetection: ChangeDetectionStrategy.onPush" instead')

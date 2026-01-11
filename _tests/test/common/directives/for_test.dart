@@ -1,12 +1,10 @@
-library;
-
 import 'dart:async';
 
-import 'package:test/test.dart';
+import 'package:_tests/matchers.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 
-import '../../../lib/matchers.dart';
 import 'for_test.template.dart' as ng;
 
 void main() {
@@ -312,7 +310,7 @@ void main() {
       await testFixture.update((component) {
         component.child!.items = ['a', 'b', 'c'];
       });
-      expect(testFixture.text, hasTextContent('0: a;1: b;2: c;'));
+      expect(testFixture.text, equals('0: a;1: b;2: c;'));
     });
 
     test('should use a default template if a custom one is null', () async {
@@ -323,7 +321,7 @@ void main() {
       await testFixture.update((NgForCustomTemplateNullTest component) {
         component.child!.items = ['a', 'b', 'c'];
       });
-      expect(testFixture.text, hasTextContent('0: a;1: b;2: c;'));
+      expect(testFixture.text, equals('0: a;1: b;2: c;'));
     });
 
     test('should use a custom template (precedence) when both default and a '
@@ -335,7 +333,7 @@ void main() {
       await testFixture.update((NgForCustomTemplatePrecedenceTest component) {
         component.child!.items = ['a', 'b', 'c'];
       });
-      expect(testFixture.text, hasTextContent('0: a;1: b;2: c;'));
+      expect(testFixture.text, equals('0: a;1: b;2: c;'));
     });
 
     group('track by', () {

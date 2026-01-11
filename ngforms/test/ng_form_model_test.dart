@@ -1,7 +1,7 @@
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngforms/ngforms.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 
 import 'ng_form_model_test.template.dart' as ng;
 
@@ -15,8 +15,9 @@ void main() {
     tearDown(() => disposeAnyRunningTest());
 
     setUp(() async {
-      var testBed =
-          NgTestBed<NgFormModelTest>(ng.createNgFormModelTestFactory());
+      var testBed = NgTestBed<NgFormModelTest>(
+        ng.createNgFormModelTestFactory(),
+      );
       fixture = await testBed.create();
     });
 
@@ -40,8 +41,10 @@ void main() {
         await fixture.update((cmp) {
           var dir = NgControlName(cmp.form!, null, null);
           dir.name = 'login';
-          expect(() => cmp.form!.addControl(dir),
-              throwsWith('No value accessor for (login)'));
+          expect(
+            () => cmp.form!.addControl(dir),
+            throwsWith('No value accessor for (login)'),
+          );
         });
       });
 
@@ -49,24 +52,26 @@ void main() {
         await fixture.update((cmp) {
           // sync validators are set
           expect(cmp.formModel.hasError('required', ['login']), true);
-          (cmp.formModel.findPath(['login']) as Control)
-              .updateValue('invalid value');
+          (cmp.formModel.findPath(['login']) as Control).updateValue(
+            'invalid value',
+          );
         });
       });
 
       test('should write value to the DOM', () async {
         await fixture.update((cmp) {
-          (cmp.formModel.findPath(['login']) as Control)
-              .updateValue('initValue');
+          (cmp.formModel.findPath(['login']) as Control).updateValue(
+            'initValue',
+          );
           expect(
-              (cmp.loginControlDir!.valueAccessor as DummyControlValueAccessor)
-                  .writtenValue,
-              'initValue');
+            (cmp.loginControlDir!.valueAccessor as DummyControlValueAccessor)
+                .writtenValue,
+            'initValue',
+          );
         });
       });
 
-      test(
-          'should add the directive to the list of directives '
+      test('should add the directive to the list of directives '
           'included in the form', () async {
         await fixture.update((cmp) {
           expect(cmp.form!.directives, [cmp.loginControlDir]);
@@ -85,21 +90,24 @@ void main() {
 
         await fixture.update((cmp) {
           // sync validators are set
-          expect(cmp.formModel.hasError('differentPasswords', ['passwords']),
-              true);
+          expect(
+            cmp.formModel.hasError('differentPasswords', ['passwords']),
+            true,
+          );
 
           (cmp.formModel.findPath(['passwords', 'passwordConfirm']) as Control)
               .updateValue('somePassword');
 
-          expect(cmp.formModel.hasError('differentPasswords', ['passwords']),
-              false);
+          expect(
+            cmp.formModel.hasError('differentPasswords', ['passwords']),
+            false,
+          );
         });
       });
     });
 
     group('removeControl', () {
-      test(
-          'should remove the directive to the list of directives included in '
+      test('should remove the directive to the list of directives included in '
           'the form', () async {
         await fixture.update((cmp) {
           cmp.needsLogin = false;
@@ -114,14 +122,16 @@ void main() {
     group('ngAfterChanges', () {
       test('should update dom values of all the directives', () async {
         await fixture.update((cmp) {
-          (cmp.formModel.findPath(['login']) as Control)
-              .updateValue('new value');
+          (cmp.formModel.findPath(['login']) as Control).updateValue(
+            'new value',
+          );
         });
         await fixture.update((cmp) {
           expect(
-              (cmp.loginControlDir!.valueAccessor as DummyControlValueAccessor)
-                  .writtenValue,
-              'new value');
+            (cmp.loginControlDir!.valueAccessor as DummyControlValueAccessor)
+                .writtenValue,
+            'new value',
+          );
         });
       });
     });
@@ -160,17 +170,19 @@ class NgFormModelTest {
 
   var formModel = ControlGroup({
     'login': Control(),
-    'passwords':
-        ControlGroup({'password': Control(), 'passwordConfirm': Control()})
+    'passwords': ControlGroup({
+      'password': Control(),
+      'passwordConfirm': Control(),
+    }),
   });
 }
 
-@Directive(selector: '[dummy]', providers: [
-  ExistingProvider.forToken(
-    ngValueAccessor,
-    DummyControlValueAccessor,
-  )
-])
+@Directive(
+  selector: '[dummy]',
+  providers: [
+    ExistingProvider.forToken(ngValueAccessor, DummyControlValueAccessor),
+  ],
+)
 class DummyControlValueAccessor implements ControlValueAccessor<dynamic> {
   dynamic writtenValue;
 
@@ -187,13 +199,19 @@ class DummyControlValueAccessor implements ControlValueAccessor<dynamic> {
   void onDisabledChanged(bool isDisabled) {}
 }
 
-@Directive(selector: '[matchingPasswords]', providers: [
-  ValueProvider.forToken(
-      ngValidators, MatchingPasswordsValidator.matchingPasswordsValidator),
-])
+@Directive(
+  selector: '[matchingPasswords]',
+  providers: [
+    ValueProvider.forToken(
+      ngValidators,
+      MatchingPasswordsValidator.matchingPasswordsValidator,
+    ),
+  ],
+)
 class MatchingPasswordsValidator {
   static Map<String, dynamic>? matchingPasswordsValidator(
-      AbstractControl control) {
+    AbstractControl control,
+  ) {
     if (control is! ControlGroup) throw StateError('Must be ControlGroup');
     var group = control;
     if (group.controls['password']!.value !=

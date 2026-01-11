@@ -1,9 +1,9 @@
 import '../meta/di_arguments.dart';
 import '../utilities.dart';
 import 'html_sanitizer.dart';
+import 'sanitization_service.dart';
 import 'style_sanitizer.dart';
 import 'url_sanitizer.dart';
-import 'sanitization_service.dart';
 
 abstract class SafeValue {
   /// Named this way to allow security teams to

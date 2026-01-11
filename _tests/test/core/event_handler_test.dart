@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'event_handler_test.template.dart' as ng;
 
@@ -122,17 +122,21 @@ void main() {
     });
   });
 
-  test('should support top-level methods tear-offs for events', () async {
-    final testBed = NgTestBed<TestTopLevelMethods>(
-      ng.createTestTopLevelMethodsFactory(),
-    );
-    final fixture = await testBed.create();
-    overrideTopLevelDoCapture = expectAsync0(() {});
-    await fixture.update((_) {
-      (fixture.rootElement.querySelector('button') as HTMLButtonElement)
-          .click();
-    });
-  }, skip: 'https://github.com/angulardart/angular/issues/1670');
+  test(
+    'should support top-level methods tear-offs for events',
+    () async {
+      final testBed = NgTestBed<TestTopLevelMethods>(
+        ng.createTestTopLevelMethodsFactory(),
+      );
+      final fixture = await testBed.create();
+      overrideTopLevelDoCapture = expectAsync0(() {});
+      await fixture.update((_) {
+        (fixture.rootElement.querySelector('button') as HTMLButtonElement)
+            .click();
+      });
+    },
+    skip: 'https://github.com/angulardart/angular/issues/1670',
+  );
 
   test('should support top-level methods invoked for events', () async {
     final testBed = NgTestBed<TestTopLevelMethodsDirect>(
@@ -170,17 +174,21 @@ void main() {
     });
   });
 
-  test('should support chained method tear-offs for events', () async {
-    final testBed = NgTestBed<TestChainedMethods>(
-      ng.createTestChainedMethodsFactory(),
-    );
-    final fixture = await testBed.create();
-    fixture.assertOnlyInstance.bar.overrideDoCapture = expectAsync0(() {});
-    await fixture.update((_) {
-      (fixture.rootElement.querySelector('button') as HTMLButtonElement)
-          .click();
-    });
-  }, skip: 'https://github.com/angulardart/angular/issues/1670');
+  test(
+    'should support chained method tear-offs for events',
+    () async {
+      final testBed = NgTestBed<TestChainedMethods>(
+        ng.createTestChainedMethodsFactory(),
+      );
+      final fixture = await testBed.create();
+      fixture.assertOnlyInstance.bar.overrideDoCapture = expectAsync0(() {});
+      await fixture.update((_) {
+        (fixture.rootElement.querySelector('button') as HTMLButtonElement)
+            .click();
+      });
+    },
+    skip: 'https://github.com/angulardart/angular/issues/1670',
+  );
 
   test('should support chained method invoked for events', () async {
     final testBed = NgTestBed<TestChainedMethodsDirect>(
@@ -197,7 +205,8 @@ void main() {
   // All exceptions thrown in event listeners should be caught for logging.
   test('should be able to catch a thrown event listener error', () async {
     final testBed = NgTestBed<ComponentWithHostEventThatThrows>(
-        ng.createComponentWithHostEventThatThrowsFactory());
+      ng.createComponentWithHostEventThatThrowsFactory(),
+    );
     final fixture = await testBed.create();
     expect(
       fixture.update((_) => (fixture.rootElement as HTMLElement).click()),
@@ -218,19 +227,19 @@ void main() {
 )
 class ClickHandler extends SuperClick {
   @ViewChild('noArg')
-  HtmlElement? noArgButton;
+  HTMLElement? noArgButton;
 
   @ViewChild('oneArg')
-  HtmlElement? oneArgButton;
+  HTMLElement? oneArgButton;
 
   @ViewChild('noArgTearoff')
-  HtmlElement? noArgTearoffButton;
+  HTMLElement? noArgTearoffButton;
 
   @ViewChild('oneArgTearoff')
-  HtmlElement? oneArgTearoffButton;
+  HTMLElement? oneArgTearoffButton;
 
   @ViewChild('superTearoff')
-  HtmlElement? superTearoffButton;
+  HTMLElement? superTearoffButton;
 
   void onClick() {
     _clicks.add(null);
@@ -251,10 +260,7 @@ class SuperClick {
   final _clicks = StreamController<void>();
 }
 
-@Component(
-  selector: 'test',
-  template: r'<button (click)="foo()"></button>',
-)
+@Component(selector: 'test', template: r'<button (click)="foo()"></button>')
 class TestNamedArgsWithDefaultValue1 {
   final captured = <String>[];
 
@@ -263,10 +269,7 @@ class TestNamedArgsWithDefaultValue1 {
   }
 }
 
-@Component(
-  selector: 'test',
-  template: r'<button (click)="foo"></button>',
-)
+@Component(selector: 'test', template: r'<button (click)="foo"></button>')
 class TestNamedArgsWithDefaultValue2 {
   final captured = <String>[];
 
@@ -401,10 +404,7 @@ class Bar {
   }
 }
 
-@Component(
-  selector: 'test',
-  template: '',
-)
+@Component(selector: 'test', template: '')
 class ComponentWithHostEventThatThrows {
   @HostListener('click')
   void onClick() => throw IntentionalError();

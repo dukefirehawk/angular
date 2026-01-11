@@ -1,15 +1,14 @@
-//import 'dart:html' show Element;
-import 'package:web/web.dart' show Element;
+import 'dart:js_interop';
 
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:meta/meta.dart';
-import '../../../core/change_detection/change_detection.dart'
-    hide ChangeDetectorState, ChangeDetectionStrategy;
-import '../../../core/change_detection/host.dart';
-import '../../../di/errors.dart';
-import '../../../di/injector.dart';
-import '../../../meta/change_detection_constants.dart';
-import '../../../utilities/unsafe_cast.dart';
+import 'package:ngdart/src/core/change_detection/change_detection.dart';
+import 'package:ngdart/src/core/change_detection/host.dart';
+import 'package:ngdart/src/di/errors.dart';
+import 'package:ngdart/src/di/injector.dart';
+import 'package:ngdart/src/meta.dart';
+import 'package:ngdart/src/utilities.dart';
+import 'package:web/web.dart';
 
 /// The base implementation of all views.
 ///
@@ -125,10 +124,8 @@ abstract class View implements ChangeDetectorRef {
   void disableChangeDetection();
 
   @override
-  void markChildForCheck(Object child) {
-    // TODO: Migrate to 3.6 (Need review)
-    // assert(child is! Element , 'Expected a component instance');
-    assert(child == Element, 'Expected a component instance');
+  void markChildForCheck(JSAny child) {
+    assert(!child.isA<HTMLElement>(), 'Expected a component instance');
     queryChangeDetectorRefs[child]?.markForCheck();
   }
 

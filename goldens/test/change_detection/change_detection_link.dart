@@ -3,7 +3,6 @@ library;
 
 import 'dart:js_interop';
 import 'package:ngdart/angular.dart';
-import 'package:ngdart/experimental.dart';
 
 import 'change_detection_link.template.dart' as ng;
 
@@ -42,19 +41,15 @@ class GoldenComponent {}
     <nested-on-push-link></nested-on-push-link>
     <nested-on-push-link *ngIf="isVisible"></nested-on-push-link>
   ''',
-  directives: [
-    NestedOnPush,
-    NestedOnPushLink,
-    NgIf,
-  ],
+  directives: [NestedOnPush, NestedOnPushLink, NgIf],
   changeDetection: ChangeDetectionStrategy.onPush,
 )
 class OnPushLink {
   @ViewChild('container', read: ViewContainerRef)
-  set container(ViewContainerRef? _) => deopt(_);
+  set container(ViewContainerRef? a) => deopt(a);
 
   @ViewChild('embeddedContainer', read: ViewContainerRef)
-  set embeddedContainer(ViewContainerRef? _) => deopt(_);
+  set embeddedContainer(ViewContainerRef? a) => deopt(a);
 
   bool isVisible = deopt();
 }
@@ -77,5 +72,5 @@ class NestedOnPush {}
 )
 class NestedOnPushLink {
   @ViewChild('container', read: ViewContainerRef)
-  set container(ViewContainerRef? _) => deopt(_);
+  set container(ViewContainerRef? a) => deopt(a);
 }

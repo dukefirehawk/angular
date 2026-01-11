@@ -1,9 +1,8 @@
-import 'package:web/web.dart';
-
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngforms/ngforms.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'ng_control_name_test.template.dart' as ng;
 
@@ -14,8 +13,9 @@ void main() {
     tearDown(() => disposeAnyRunningTest());
 
     setUp(() async {
-      var testBed =
-          NgTestBed<NgControlNameTest>(ng.createNgControlNameTestFactory());
+      var testBed = NgTestBed<NgControlNameTest>(
+        ng.createNgControlNameTestFactory(),
+      );
       fixture = await testBed.create();
     });
 
@@ -56,7 +56,8 @@ void main() {
 
     setUp(() async {
       var testBed = NgTestBed<NgControlNameInitTest>(
-          ng.createNgControlNameInitTestFactory());
+        ng.createNgControlNameInitTestFactory(),
+      );
       fixture = await testBed.create();
     });
 
@@ -72,9 +73,7 @@ void main() {
 
 @Component(
   selector: 'ng-control-name-test',
-  directives: [
-    formDirectives,
-  ],
+  directives: [formDirectives],
   template: '''
 <div [ngFormModel]="formModel">
   <input [ngControl]="'login'"
@@ -104,10 +103,7 @@ class NgControlNameTest {
 
 @Component(
   selector: 'ng-control-name-accessor-test',
-  directives: [
-    formDirectives,
-    TestAccessor,
-  ],
+  directives: [formDirectives, TestAccessor],
   template: '''
 <form>
   <input [ngControl]="'login'" [ngModel]="'Test'" test-accessor />
@@ -124,12 +120,7 @@ class NgControlNameInitTest {
 
 @Directive(
   selector: '[test-accessor]',
-  providers: [
-    ExistingProvider.forToken(
-      ngValueAccessor,
-      TestAccessor,
-    )
-  ],
+  providers: [ExistingProvider.forToken(ngValueAccessor, TestAccessor)],
 )
 class TestAccessor implements ControlValueAccessor<dynamic> {
   dynamic value;

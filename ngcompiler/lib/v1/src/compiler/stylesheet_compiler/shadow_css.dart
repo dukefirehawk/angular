@@ -219,8 +219,10 @@ SimpleSelectorSequence _createPseudoClassSelectorSequence(String name) {
 /// TODO(leonsenft): remove if/when csslib supports Selector Level 4 grammar.
 ///
 /// Grammar:
-///   `<complex-selector> =`
-///     `<compound-selector> [ <combinator>? <compound-selector> ]*`
+/// ```
+///   <complex-selector> =
+///     <compound-selector> [ <combinator>? <compound-selector> ]*
+/// ```
 class _ComplexSelector {
   List<_CompoundSelector> compoundSelectors = [];
 
@@ -261,7 +263,9 @@ class _ComplexSelector {
 /// TODO(leonsenft): remove if/when csslib supports Selector Level 4 grammar.
 ///
 /// Grammar:
-///   `<compound-selector> = <simple-selector>+`
+/// ```
+///   <compound-selector> = <simple-selector>+
+/// ```
 ///
 /// The [combinator] precedes the compound selector when included in a
 /// complex selector.

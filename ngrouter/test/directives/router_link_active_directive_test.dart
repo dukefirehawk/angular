@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
-import 'package:ngrouter/testing.dart';
 import 'package:ngrouter/src/location/testing/mock_location_strategy.dart'; // by some cause it is not visilble by ngrouter/testing.dart above
+import 'package:ngrouter/testing.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 
 import 'router_link_active_directive_test.template.dart' as ng;
 
@@ -28,68 +28,89 @@ void main() {
   tearDown(disposeAnyRunningTest);
 
   test('should add/remove a CSS class as a route is activated', () async {
-    final fixture = await NgTestBed<TestRouterLinkActive>(
-      ng.createTestRouterLinkActiveFactory(),
-    ).addInjector(addInjector).create(beforeChangeDetection: (component) {
-      component.link = '/user/bob';
-      fakeRouter.current = RouterState('/user/jill', const []);
-    });
+    final fixture =
+        await NgTestBed<TestRouterLinkActive>(
+              ng.createTestRouterLinkActiveFactory(),
+            )
+            .addInjector(addInjector)
+            .create(
+              beforeChangeDetection: (component) {
+                component.link = '/user/bob';
+                fakeRouter.current = RouterState('/user/jill', const []);
+              },
+            );
     final anchor = fixture.rootElement.querySelector('a')!;
-    expect(anchor.classList, isEmpty);
+    expect(anchor.classList, hasLength(0));
     await fixture.update((_) {
       fakeRouter.current = RouterState('/user/bob', const []);
     });
-    expect(anchor.classList, contains('active-link'));
+    expect(anchor.classList.contains('active-link'), isTrue);
   });
 
   test('should validate queryParams and fragment', () async {
-    final fixture = await NgTestBed<TestRouterLinkActive>(
-      ng.createTestRouterLinkActiveFactory(),
-    ).addInjector(addInjector).create(beforeChangeDetection: (component) {
-      component.link = '/user/bob?param=1#frag';
-      fakeRouter.current = RouterState('/user/bob', const []);
-    });
+    final fixture =
+        await NgTestBed<TestRouterLinkActive>(
+              ng.createTestRouterLinkActiveFactory(),
+            )
+            .addInjector(addInjector)
+            .create(
+              beforeChangeDetection: (component) {
+                component.link = '/user/bob?param=1#frag';
+                fakeRouter.current = RouterState('/user/bob', const []);
+              },
+            );
     final anchor = fixture.rootElement.querySelector('a')!;
-    expect(anchor.classList, isEmpty);
+    expect(anchor.classList, hasLength(0));
     await fixture.update((_) {
-      fakeRouter.current =
-          RouterState('/user/bob', const [], queryParameters: {'param': '1'});
+      fakeRouter.current = RouterState(
+        '/user/bob',
+        const [],
+        queryParameters: {'param': '1'},
+      );
     });
-    expect(anchor.classList, isEmpty);
+    expect(anchor.classList, hasLength(0));
     await fixture.update((_) {
       fakeRouter.current = RouterState('/user/bob', const [], fragment: 'frag');
     });
-    expect(anchor.classList, isEmpty);
+    expect(anchor.classList, hasLength(0));
 
     await fixture.update((_) {
-      fakeRouter.current = RouterState('/user/bob', const [],
-          queryParameters: {'param': '1'}, fragment: 'frag');
+      fakeRouter.current = RouterState(
+        '/user/bob',
+        const [],
+        queryParameters: {'param': '1'},
+        fragment: 'frag',
+      );
     });
-    expect(anchor.classList, contains('active-link'));
+    expect(anchor.classList.contains('active-link'), isTrue);
   });
 
-  test(
-      'should ignore the current urls queryParams and fragment if not '
+  test('should ignore the current urls queryParams and fragment if not '
       'specified in the routerLinks', () async {
-    final fixture = await NgTestBed<TestRouterLinkActive>(
-            ng.createTestRouterLinkActiveFactory())
-        .addInjector(addInjector)
-        .create(beforeChangeDetection: (component) {
-      component.link = '/user/bob';
-      fakeRouter.current = RouterState('/user/bob', const [],
-          queryParameters: {'param': '1'}, fragment: 'frag');
-    });
+    final fixture =
+        await NgTestBed<TestRouterLinkActive>(
+              ng.createTestRouterLinkActiveFactory(),
+            )
+            .addInjector(addInjector)
+            .create(
+              beforeChangeDetection: (component) {
+                component.link = '/user/bob';
+                fakeRouter.current = RouterState(
+                  '/user/bob',
+                  const [],
+                  queryParameters: {'param': '1'},
+                  fragment: 'frag',
+                );
+              },
+            );
     final anchor = fixture.rootElement.querySelector('a')!;
-    expect(anchor.classList, contains('active-link'));
+    expect(anchor.classList.contains('active-link'), isTrue);
   });
 }
 
 @Component(
   selector: 'test-router-link-active',
-  directives: [
-    RouterLink,
-    RouterLinkActive,
-  ],
+  directives: [RouterLink, RouterLinkActive],
   template: r'''
     <a [routerLink]="link" routerLinkActive="active-link">Bob</a>
   ''',

@@ -1,8 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
-//import 'package:analyzer/dart/element/visitor.dart';
-import 'package:test/test.dart';
 import 'package:ngcompiler/v1/src/compiler/analyzed_class.dart';
 import 'package:ngcompiler/v1/src/compiler/expression_parser/ast.dart';
+import 'package:test/test.dart';
 
 import '../resolve_util.dart';
 
@@ -103,6 +102,11 @@ Future<AnalyzedClass?> analyzeClass(String source) async {
   return library.accept<AnalyzedClass>(visitor);
 }
 
+/*
+  TODO: This is a temporary visitor to extract AnalyzedClass from the resolved
+  library. Once we have a better way to create AnalyzedClass instances in tests,
+  we can remove this.
+*/
 class AnalyzedClassVisitor extends RecursiveAstVisitor<AnalyzedClass> {
   @override
   AnalyzedClass? visitClassElement(ClassElement element) {

@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:web/web.dart';
 
-import 'package:test/test.dart';
-import '../../lib/query_tests.dart';
+import 'package:_tests/query_tests.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'query_view_test.template.dart' as ng;
 
@@ -46,6 +46,11 @@ void main() {
         '2',
         '3',
       ]);
+      final fixture2 = await testBed.create();
+      expect(
+        fixture2.assertOnlyInstance.taggedDivs!.map((e) => e.textContent),
+        ['1', '2', '3'],
+      );
     });
 
     test('should work in a multiple nesting+static scenario', () async {
@@ -63,6 +68,11 @@ void main() {
         '6',
         '7',
       ]);
+      final fixture2 = await testBed.create();
+      expect(
+        fixture2.assertOnlyInstance.taggedDivs!.map((e) => e.textContent),
+        ['1', '2', '3', '4', '5', '6', '7'],
+      );
     });
 
     test('should work on type selectors that are not directives', () async {

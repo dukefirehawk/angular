@@ -1,13 +1,21 @@
-import 'package:web/web.dart';
-
+import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
+
+// TODO(ykmnkmi): replace with BrowserPlatformLocation when `mockito` supports
+//  extension types.
+@GenerateNiceMocks([MockSpec<PlatformLocation>()])
+import 'hash_location_strategy_test.mocks.dart'; // ignore: uri_does_not_exist
 
 import 'hash_location_strategy_test.template.dart' as ng;
 
+// TODO(ykmnkmi): replace with MockBrowserPlatformLocation when `mockito`
+//  supports extension types.
+// ignore: undefined_function
 final platformLocation = MockPlatformLocation();
 
 void main() {
@@ -18,21 +26,23 @@ void main() {
   tearDown(disposeAnyRunningTest);
 
   test('browser location should match clicked href', () async {
-    final testBed = NgTestBed<AppComponent>(ng.createAppComponentFactory(),
-        rootInjector: injectorFactory);
+    final testBed = NgTestBed<AppComponent>(
+      ng.createAppComponentFactory(),
+      rootInjector: injectorFactory,
+    );
     final testFixture = await testBed.create();
     expect(
-        testFixture.assertOnlyInstance.anchor?.getAttribute('href'), '#/foo');
+      testFixture.assertOnlyInstance.anchor!.getAttribute('href'),
+      '#/foo',
+    );
     await testFixture.update((c) {
-      c.anchor?.click();
+      c.anchor!.click();
     });
     verify(platformLocation.pushState(any, '', '#/foo')).called(1);
   });
 }
 
 PlatformLocation platformLocationFactory() => platformLocation;
-
-class MockPlatformLocation extends Mock implements BrowserPlatformLocation {}
 
 @GenerateInjector([
   routerProvidersHash,
@@ -56,7 +66,7 @@ class AppComponent {
   static final routes = [fooRoute];
 
   @ViewChild('routerLink')
-  HtmlElement? anchor;
+  HTMLAnchorElement? anchor;
 }
 
 @Component(selector: 'foo', template: '')

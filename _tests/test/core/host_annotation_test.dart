@@ -1,8 +1,7 @@
-import 'package:web/web.dart';
-
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'host_annotation_test.template.dart' as ng;
 
@@ -10,25 +9,31 @@ void main() {
   tearDown(disposeAnyRunningTest);
 
   /// Returns the root [Element] created by initializing [component].
-  Future<Element> rootElementOf<T extends Object>(
+  Future<HTMLElement> rootElementOf<T extends Object>(
     ComponentFactory<T> component,
   ) {
     final testBed = NgTestBed(component);
-    return testBed.create().then((fixture) => fixture.rootElement);
+    return testBed.create().then(
+      (fixture) => fixture.rootElement as HTMLElement,
+    );
   }
 
   group('@HostBinding', () {
     test('should assign "title" based on a static', () async {
-      final element = await rootElementOf<HostBindingStaticTitle>(
-        ng.createHostBindingStaticTitleFactory(),
-      ) as HTMLDivElement;
+      final element =
+          await rootElementOf<HostBindingStaticTitle>(
+                ng.createHostBindingStaticTitleFactory(),
+              )
+              as HTMLDivElement;
       expect(element.title, 'Hello World');
     });
 
     test('should assign "title" based on an instance member', () async {
-      final element = await rootElementOf<HostBindingInstanceTitle>(
-        ng.createHostBindingInstanceTitleFactory(),
-      ) as HTMLDivElement;
+      final element =
+          await rootElementOf<HostBindingInstanceTitle>(
+                ng.createHostBindingInstanceTitleFactory(),
+              )
+              as HTMLDivElement;
       expect(element.title, 'Hello World');
     });
 
@@ -41,30 +46,38 @@ void main() {
       // instance getter or field and everything would work exactly as intended.
       //
       // https://github.com/angulardart/angular/issues/1272
-      final element = await rootElementOf<HostBindingStaticTitleNotInherited>(
-        ng.createHostBindingStaticTitleNotInheritedFactory(),
-      ) as HTMLDivElement;
+      final element =
+          await rootElementOf<HostBindingStaticTitleNotInherited>(
+                ng.createHostBindingStaticTitleNotInheritedFactory(),
+              )
+              as HTMLDivElement;
       expect(element.title, isEmpty);
     });
 
     test('should assign "title" based on an inherited instance', () async {
-      final element = await rootElementOf<HostBindingInstanceTitleInherited>(
-        ng.createHostBindingInstanceTitleInheritedFactory(),
-      ) as HTMLDivElement;
+      final element =
+          await rootElementOf<HostBindingInstanceTitleInherited>(
+                ng.createHostBindingInstanceTitleInheritedFactory(),
+              )
+              as HTMLDivElement;
       expect(element.title, 'Hello World');
     });
 
     test('should support tabIndex of 0', () async {
-      final element = await rootElementOf<HostBindingTabIndex0>(
-        ng.createHostBindingTabIndex0Factory(),
-      ) as HTMLDivElement;
+      final element =
+          await rootElementOf<HostBindingTabIndex0>(
+                ng.createHostBindingTabIndex0Factory(),
+              )
+              as HTMLDivElement;
       expect(element.tabIndex, 0);
     });
 
     test('should support tabIndex of 0', () async {
-      final element = await rootElementOf<HostBindingTabIndexNegative1>(
-        ng.createHostBindingTabIndexNegative1Factory(),
-      ) as HTMLDivElement;
+      final element =
+          await rootElementOf<HostBindingTabIndexNegative1>(
+                ng.createHostBindingTabIndexNegative1Factory(),
+              )
+              as HTMLDivElement;
       expect(element.tabIndex, -1);
     });
 
@@ -88,16 +101,16 @@ void main() {
       );
       final fixture = await testBed.create();
       final element = fixture.rootElement;
-      expect(element.attributes, isNot(contains('disabled')));
-      expect(element.attributes, isNot(contains('aria-disabled')));
+      expect(element.getAttribute('disabled'), isNull);
+      expect(element.getAttribute('aria-disabled'), isNull);
 
       await fixture.update((c) => c.disabledBackingValue = true);
-      expect(element.attributes, contains('disabled'));
-      expect(element.attributes, contains('aria-disabled'));
+      expect(element.getAttribute('disabled'), isNotNull);
+      expect(element.getAttribute('aria-disabled'), isNotNull);
 
       await fixture.update((c) => c.disabledBackingValue = false);
-      expect(element.attributes, isNot(contains('disabled')));
-      expect(element.attributes, isNot(contains('aria-disabled')));
+      expect(element.getAttribute('disabled'), isNull);
+      expect(element.getAttribute('aria-disabled'), isNull);
     });
 
     test('should support conditional attributes on static members', () async {
@@ -106,8 +119,8 @@ void main() {
       );
       final fixture = await testBed.create();
       final element = fixture.rootElement;
-      expect(element.attributes, contains('disabled'));
-      expect(element.attributes, contains('aria-disabled'));
+      expect(element.getAttribute('disabled'), isNotNull);
+      expect(element.getAttribute('aria-disabled'), isNotNull);
     });
 
     test('should support conditional classes', () async {
@@ -116,18 +129,19 @@ void main() {
       );
       final fixture = await testBed.create();
       final element = fixture.rootElement;
-      expect(element.classList, isNot(contains('fancy')));
+      expect(element.classList.value, isNot(contains('fancy')));
 
       await fixture.update((c) => c.fancy = true);
-      expect(element.classList, contains('fancy'));
+      expect(element.classList.value, contains('fancy'));
 
       await fixture.update((c) => c.fancy = false);
-      expect(element.classList, isNot(contains('fancy')));
+      expect(element.classList.value, isNot(contains('fancy')));
     });
 
     test('should support multiple annotations on a single field', () async {
       final element = await rootElementOf<HostBindingMulti>(
-          ng.createHostBindingMultiFactory()) as HTMLElement;
+        ng.createHostBindingMultiFactory(),
+      );
       expect(element.className, 'hello');
       expect(element.title, 'hello');
     });
@@ -135,8 +149,9 @@ void main() {
 
   group('@HostListener', () {
     test('should support click', () async {
-      final testBed =
-          NgTestBed<HostListenerClick>(ng.createHostListenerClickFactory());
+      final testBed = NgTestBed<HostListenerClick>(
+        ng.createHostListenerClickFactory(),
+      );
       final fixture = await testBed.create();
       fixture.assertOnlyInstance.clickHandler = expectAsync0(() {});
       await fixture.update((_) => (fixture.rootElement as HTMLElement).click());
@@ -144,15 +159,17 @@ void main() {
 
     test('should support click through inheritance', () async {
       final testBed = NgTestBed<HostListenerInheritedClick>(
-          ng.createHostListenerInheritedClickFactory());
+        ng.createHostListenerInheritedClickFactory(),
+      );
       final fixture = await testBed.create();
       fixture.assertOnlyInstance.clickHandler = expectAsync0(() {});
       await fixture.update((_) => (fixture.rootElement as HTMLElement).click());
     });
 
     test('should support multiple annotations on a single field', () async {
-      final testBed =
-          NgTestBed<HostListenerMulti>(ng.createHostListenerMultiFactory());
+      final testBed = NgTestBed<HostListenerMulti>(
+        ng.createHostListenerMultiFactory(),
+      );
       final fixture = await testBed.create();
       fixture.assertOnlyInstance.blurOrFocusHandler = expectAsync0(
         () {},
@@ -168,76 +185,49 @@ void main() {
   });
 }
 
-@Component(
-  selector: 'host-binding-static',
-  template: '',
-)
+@Component(selector: 'host-binding-static', template: '')
 class HostBindingStaticTitle {
   @HostBinding('title')
   static const hostTitle = 'Hello World';
 }
 
-@Component(
-  selector: 'host-binding-instance',
-  template: '',
-)
+@Component(selector: 'host-binding-instance', template: '')
 class HostBindingInstanceTitle {
   @HostBinding('title')
   final hostTitle = 'Hello World';
 }
 
-@Component(
-  selector: 'host-binding-static-not-inherited',
-  template: '',
-)
+@Component(selector: 'host-binding-static-not-inherited', template: '')
 class HostBindingStaticTitleNotInherited extends HostBindingStaticTitle {}
 
-@Component(
-  selector: 'host-binding-instance-inherited',
-  template: '',
-)
+@Component(selector: 'host-binding-instance-inherited', template: '')
 class HostBindingInstanceTitleInherited extends HostBindingInstanceTitle {}
 
-@Component(
-  selector: 'host-binding-tab-index',
-  template: '',
-)
+@Component(selector: 'host-binding-tab-index', template: '')
 class HostBindingTabIndex0 {
   @HostBinding('tabIndex')
   static const hostTabIndex = 0;
 }
 
-@Component(
-  selector: 'host-binding-tab-index',
-  template: '',
-)
+@Component(selector: 'host-binding-tab-index', template: '')
 class HostBindingTabIndexNegative1 {
   @HostBinding('tabIndex')
   static const hostTabIndex = -1;
 }
 
-@Component(
-  selector: 'host-binding-static-class',
-  template: '',
-)
+@Component(selector: 'host-binding-static-class', template: '')
 class HostBindingStaticClass {
   @HostBinding('class')
   static const hostClass = 'themeable';
 }
 
-@Component(
-  selector: 'host-binding-static-class',
-  template: '',
-)
+@Component(selector: 'host-binding-static-class', template: '')
 class HostBindingInstanceClass {
   @HostBinding('class')
   var hostClass = 'themeable';
 }
 
-@Component(
-  selector: 'host-binding-conditional-attribute',
-  template: '',
-)
+@Component(selector: 'host-binding-conditional-attribute', template: '')
 class HostBindingConditionalAttribute {
   // Old Style
   @HostBinding('attr.disabled')
@@ -248,10 +238,7 @@ class HostBindingConditionalAttribute {
   bool disabledBackingValue = false;
 }
 
-@Component(
-  selector: 'host-binding-conditional-attribute-statics',
-  template: '',
-)
+@Component(selector: 'host-binding-conditional-attribute-statics', template: '')
 class HostBindingConditionalStatics {
   @HostBinding('attr.disabled.if')
   static const bool disabled = true;
@@ -261,29 +248,20 @@ class HostBindingConditionalStatics {
   static bool get ariaDisabled => disabled;
 }
 
-@Component(
-  selector: 'host-binding-conditional-attribute',
-  template: '',
-)
+@Component(selector: 'host-binding-conditional-attribute', template: '')
 class HostBindingConditionalClass {
   @HostBinding('class.fancy')
   var fancy = false;
 }
 
-@Component(
-  selector: 'host-binding-multi',
-  template: '',
-)
+@Component(selector: 'host-binding-multi', template: '')
 class HostBindingMulti {
   @HostBinding('class')
   @HostBinding('title')
   static const hostClassAndTitle = 'hello';
 }
 
-@Component(
-  selector: 'host-listener-click',
-  template: '',
-)
+@Component(selector: 'host-listener-click', template: '')
 class HostListenerClick {
   @HostListener('click')
   void onClick() => clickHandler();
@@ -293,16 +271,10 @@ class HostListenerClick {
   void Function() clickHandler = () => throw UnimplementedError();
 }
 
-@Component(
-  selector: 'host-listener-inherited-click',
-  template: '',
-)
+@Component(selector: 'host-listener-inherited-click', template: '')
 class HostListenerInheritedClick extends HostListenerClick {}
 
-@Component(
-  selector: 'host-listener-multi',
-  template: '',
-)
+@Component(selector: 'host-listener-multi', template: '')
 class HostListenerMulti {
   @HostListener('blur')
   @HostListener('focus')

@@ -1,7 +1,7 @@
-import 'package:web/web.dart';
 import 'dart:js_interop';
 
-import '../core/zone/ng_zone.dart';
+import 'package:ngdart/src/core/zone/ng_zone.dart';
+import 'package:web/web.dart';
 
 /// Provides a runtime implementation for "native" DOM events on elements.
 class EventManager {
@@ -42,6 +42,7 @@ class EventManager {
     // If the view compiler knows that a given event is a DOM event (i.e.
     // "click"), it will never be called into EventManager. But of course the
     // browser APIs change, so this is the final fallback.
+    //element.addEventListener(name, callback.toJS);
     element.addEventListener(
       name,
       ((Event event) {
@@ -103,7 +104,10 @@ class _KeyEventsHandler {
     element.addEventListener(
       parsed.domEventName,
       (Event event) {
-        // TODO: Migrate to 3.6 (Need review)
+        //if (event.isA<KeyboardEvent>() && parsed.matches(unsafeCast(event))) {
+        //  callback(event);
+        //}
+        // TODO: Review logic
         //if (event is KeyboardEvent && parsed.matches(event)) {
         if (event.isA<KeyboardEvent>() &&
             parsed.matches(event as KeyboardEvent)) {

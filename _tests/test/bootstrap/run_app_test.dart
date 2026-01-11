@@ -1,12 +1,9 @@
-@JS()
-library;
-
 import 'dart:async';
 import 'dart:js_interop';
-import 'package:web/web.dart';
 
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart';
 
 import 'run_app_test.template.dart' as ng;
 
@@ -28,9 +25,8 @@ void main() {
   /// Verify that the DOM of the page represents the component.
   void verifyDomAndStyles({String innerText = 'Hello World!'}) {
     expect(rootDomContainer.textContent, innerText);
-    final h1 = rootDomContainer.querySelector('h1') as HTMLHeadingElement;
-    //expect(h1.getComputedStyle().height, '100px');
-    expect(h1.style.height, '100px');
+    final h1 = rootDomContainer.querySelector('h1');
+    expect(window.getComputedStyle(h1!).height, '100px');
   }
 
   /// Verify the `Testability` interface is working for this application.
@@ -39,15 +35,19 @@ void main() {
   void verifyTestability() {
     expect(component.injector.get(Testability), isNotNull);
     var jsTestability = getAngularTestability(
-      rootDomContainer.children.item(0),
+      rootDomContainer.children.item(0)!,
     );
-    expect(getAllAngularTestabilities(), isNot(hasLength(0)));
+    expect(getAllAngularTestabilities().length, isNot(equals(0)));
     expect(jsTestability.isStable(), isTrue, reason: 'Expected stability');
-    jsTestability.whenStable(expectAsync0(() {
-      Future(expectAsync0(() {
-        verifyDomAndStyles(innerText: 'Hello Universe!');
-      }));
-    }));
+    jsTestability.whenStable(
+      expectAsync0(() {
+        Future(
+          expectAsync0(() {
+            verifyDomAndStyles(innerText: 'Hello Universe!');
+          }),
+        );
+      }).toJS,
+    );
     runInApp(() => HelloWorldComponent.doAsyncTaskAndThenRename('Universe'));
   }
 
@@ -67,8 +67,10 @@ void main() {
   });
 
   test('runApp should bootstrap from a ComponentFactory', () async {
-    component = runApp(ng.createHelloWorldComponentFactory(),
-        createInjector: testabilityInjector);
+    component = runApp(
+      ng.createHelloWorldComponentFactory(),
+      createInjector: testabilityInjector,
+    );
     verifyDomAndStyles();
     verifyTestability();
   });
@@ -77,9 +79,7 @@ void main() {
     component = runApp(
       ng.createHelloWorldComponentFactory(),
       createInjector: (parent) {
-        return Injector.map({
-          ExceptionHandler: StubExceptionHandler(),
-        }, parent);
+        return Injector.map({ExceptionHandler: StubExceptionHandler()}, parent);
       },
     );
     expect(StubExceptionHandler.instanceWasCreated, isTrue);
@@ -119,9 +119,7 @@ void main() {
 @Component(
   selector: 'hello-world',
   template: '<h1>Hello {{name}}!</h1>',
-  styles: [
-    'h1 { height: 100px; }',
-  ],
+  styles: ['h1 { height: 100px; }'],
 )
 class HelloWorldComponent {
   static var name = 'World';
@@ -167,10 +165,9 @@ class StubExceptionHandler implements ExceptionHandler {
 external JsTestability getAngularTestability(Element e);
 
 @JS()
-external List<JsTestability> getAllAngularTestabilities();
+external JSArray<JsTestability> getAllAngularTestabilities();
 
-@JS()
-abstract class JsTestability {
+extension type JsTestability._(JSObject _) implements JSObject {
   external bool isStable();
-  external void whenStable(void Function() fn);
+  external void whenStable(JSFunction fn);
 }

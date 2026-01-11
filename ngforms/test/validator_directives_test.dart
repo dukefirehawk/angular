@@ -1,7 +1,7 @@
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngforms/ngforms.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 
 import 'validator_directives_test.template.dart' as ng;
 
@@ -11,7 +11,8 @@ void main() {
 
     setUp(() async {
       var testBed = NgTestBed<DynamicRequiredComponent>(
-          ng.createDynamicRequiredComponentFactory());
+        ng.createDynamicRequiredComponentFactory(),
+      );
       fixture = await testBed.create();
     });
 
@@ -22,7 +23,8 @@ void main() {
       // We have to do this in a separate turn, so that new required value has
       // propagated.
       await fixture.update(
-          (cmp) => cmp.dynamicControl!.control!.updateValueAndValidity());
+        (cmp) => cmp.dynamicControl!.control!.updateValueAndValidity(),
+      );
     }
 
     bool dynamicControlValid() =>
@@ -58,7 +60,8 @@ void main() {
 
     setUp(() async {
       var testBed = NgTestBed<DynamicPatternComponent>(
-          ng.createDynamicPatternComponentFactory());
+        ng.createDynamicPatternComponentFactory(),
+      );
       fixture = await testBed.create();
     });
 
@@ -69,7 +72,8 @@ void main() {
       // We have to do this in a separate turn, so that new required value has
       // propagated.
       await fixture.update(
-          (cmp) => cmp.dynamicControl!.control!.updateValueAndValidity());
+        (cmp) => cmp.dynamicControl!.control!.updateValueAndValidity(),
+      );
     }
 
     bool dynamicControlValid() =>
@@ -138,7 +142,9 @@ class DynamicRequiredComponent {
   NgControl? staticControl;
 }
 
-@Component(selector: 'dynamic-pattern', template: '''
+@Component(
+  selector: 'dynamic-pattern',
+  template: '''
 <form ngForm>
   <input
       [(ngModel)]="value"
@@ -151,7 +157,9 @@ class DynamicRequiredComponent {
       #staticControl="ngForm"
       pattern="[A-Za-z]" />
 </form>
-''', directives: [formDirectives])
+''',
+  directives: [formDirectives],
+)
 class DynamicPatternComponent {
   String value = '';
   String pattern = '';

@@ -1,6 +1,6 @@
-import 'package:web/web.dart';
-
 import 'package:meta/dart2js.dart' as dart2js;
+import 'package:ngdart/src/utilities.dart';
+import 'package:web/web.dart';
 
 import '../../utilities/unsafe_cast.dart';
 import 'view_container.dart';

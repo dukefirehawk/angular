@@ -1,6 +1,6 @@
-import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
+import 'package:test/test.dart';
 
 import 'override_test.template.dart' as ng;
 
@@ -8,9 +8,9 @@ void main() {
   tearDown(disposeAnyRunningTest);
 
   test('should support overriding providers', () async {
-    final fixture =
-        await NgTestBed<TestViewComponent>(ng.createTestViewComponentFactory())
-            .create();
+    final fixture = await NgTestBed<TestViewComponent>(
+      ng.createTestViewComponentFactory(),
+    ).create();
     expect(fixture.text, 'Hello World');
   });
 }
@@ -33,19 +33,14 @@ class ViewComponent implements OnInit {
 
 @Component(
   selector: 'test-view-comp',
-  directives: [
-    OverrideDirective,
-    ViewComponent,
-  ],
+  directives: [OverrideDirective, ViewComponent],
   template: '<view-comp override></view-comp>',
 )
 class TestViewComponent {}
 
 @Directive(
   selector: '[override]',
-  providers: [
-    Provider(DataService, useClass: FakeDataService),
-  ],
+  providers: [Provider(DataService, useClass: FakeDataService)],
 )
 class OverrideDirective {}
 

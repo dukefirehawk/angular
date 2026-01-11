@@ -1,7 +1,7 @@
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
-import 'package:test/test.dart';
 import 'package:ngcompiler/v1/angular_compiler.dart';
+import 'package:test/test.dart';
 
 import '../../src/resolve.dart';
 
@@ -18,7 +18,6 @@ void main() {
 
     setUpAll(() async {
       final testLib = await resolveLibrary(r'''
-        
         @listModule
         @newModuleA
         @newModuleB
@@ -197,7 +196,6 @@ void main() {
 
     setUpAll(() async {
       final testLib = await resolveLibrary(r'''
-        
         @aListOfProviders
         @aModuleOfProviders
         @nestedListsAndModules

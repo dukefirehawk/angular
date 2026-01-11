@@ -1,4 +1,4 @@
-import '../../lib/compiler.dart';
+import 'package:_tests/compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
 import 'package:test/test.dart';
 
@@ -14,11 +14,11 @@ void main() {
       class _HeroService {}
     """,
       errors: [
-        allOf([
+        allOf(
           contains('Private classes can not be @Injectable'),
           contains('_HeroService'),
           containsSourceLocation(4, 13),
-        ]),
+        ),
       ],
     );
   });

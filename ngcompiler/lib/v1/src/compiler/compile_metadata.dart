@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
-import 'package:ngcompiler/v1/src/compiler/template_ast.dart';
-import 'package:ngdart/src/meta.dart';
 import 'package:ngcompiler/v1/cli.dart';
+import 'package:ngcompiler/v1/src/compiler/template_ast.dart';
 import 'package:ngcompiler/v2/context.dart';
+import 'package:ngdart/src/meta.dart';
 
 import 'analyzed_class.dart';
 import 'expression_parser/ast.dart' as ast;
@@ -391,7 +391,7 @@ class CompileQueryMetadata {
   /// Name of class member on the component to update with query result.
   final String? propertyName;
 
-  /// Whether this is typed `dart:html`'s `Element` (or a sub-type).
+  /// Whether this is typed `package:web/web.dart`'s `Element` (or a sub-type).
   final bool isElementType;
 
   /// Optional type to read for given match.

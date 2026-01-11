@@ -29,16 +29,17 @@ class Validators {
 
   ///  Validator that requires controls to have a value of a minimum length.
   static ValidatorFn minLength(num minLength) {
-    return /* Map < String , dynamic >? */ (model_module.AbstractControl
-        control) {
+    return /* Map < String , dynamic >? */ (
+      model_module.AbstractControl control,
+    ) {
       if (Validators.required(control) != null) return null;
       final v = control.value as String;
       return v.length < minLength
           ? {
               'minlength': {
                 'requiredLength': minLength,
-                'actualLength': v.length
-              }
+                'actualLength': v.length,
+              },
             }
           : null;
     };
@@ -46,16 +47,17 @@ class Validators {
 
   ///  Validator that requires controls to have a value of a maximum length.
   static ValidatorFn maxLength(num maxLength) {
-    return /* Map < String , dynamic >? */ (model_module.AbstractControl
-        control) {
+    return /* Map < String , dynamic >? */ (
+      model_module.AbstractControl control,
+    ) {
       if (Validators.required(control) != null) return null;
       final v = control.value as String;
       return v.length > maxLength
           ? {
               'maxlength': {
                 'requiredLength': maxLength,
-                'actualLength': v.length
-              }
+                'actualLength': v.length,
+              },
             }
           : null;
     };
@@ -63,15 +65,16 @@ class Validators {
 
   ///  Validator that requires a control to match a regex to its value.
   static ValidatorFn pattern(String pattern) {
-    return /* Map < String , dynamic >? */ (model_module.AbstractControl
-        control) {
+    return /* Map < String , dynamic >? */ (
+      model_module.AbstractControl control,
+    ) {
       if (Validators.required(control) != null) return null;
       var regex = RegExp('^$pattern\$');
       final v = control.value as String;
       return regex.hasMatch(v)
           ? null
           : {
-              'pattern': {'requiredPattern': '^$pattern\$', 'actualValue': v}
+              'pattern': {'requiredPattern': '^$pattern\$', 'actualValue': v},
             };
     };
   }
@@ -104,7 +107,9 @@ class Validators {
 }
 
 Map<String, dynamic>? _executeValidators(
-    model_module.AbstractControl control, List<ValidatorFn> validators) {
+  model_module.AbstractControl control,
+  List<ValidatorFn> validators,
+) {
   var result = <String, dynamic>{};
   for (var i = 0, len = validators.length; i < len; i++) {
     final validator = validators[i];

@@ -1,10 +1,10 @@
 @JS()
 library;
 
-import 'package:web/web.dart';
-
 import 'dart:js_interop';
+
 import 'package:ngdart/angular.dart';
+import 'package:web/web.dart';
 
 import 'queries.template.dart' as ng;
 
@@ -88,9 +88,7 @@ class GoldenComponent {
 
 @Component(
   selector: 'embedded-queries',
-  directives: [
-    AnotherDirective,
-  ],
+  directives: [AnotherDirective],
   template: r'''
     <another></another>
     <template>
@@ -108,19 +106,13 @@ class EmbeddedQueries {
   }
 }
 
-@Directive(
-  selector: 'another',
-)
+@Directive(selector: 'another')
 class AnotherDirective {}
 
 // This closely mimics a piece of internal code that previously crashed.
 @Component(
   selector: 'nested-ng-for-queries',
-  directives: [
-    AnotherDirective,
-    NgFor,
-    NgIf,
-  ],
+  directives: [AnotherDirective, NgFor, NgIf],
   template: r'''
     <div *ngIf="conditionA">
       <div *ngIf="conditionB">

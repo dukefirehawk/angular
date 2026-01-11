@@ -1,7 +1,7 @@
-import 'package:ngdart/src/meta.dart';
-import 'package:web/web.dart' show Element;
+import 'package:ngdart/angular.dart';
+import 'package:sanitize_dom/sanitize_dom.dart';
+import 'package:web/web.dart';
 
-import '../meta/directives.dart';
 import 'dom_sanitization_service.dart' show SafeHtml;
 
 /// Sets [Element.innerHTML] _without_ sanitizing the HTML output.
@@ -42,15 +42,11 @@ class SafeInnerHtmlDirective {
 
   @Input()
   set safeInnerHtml(dynamic safeInnerHtml) {
-    // print('Setting inner html as $safeInnerHtml');
     if (safeInnerHtml is SafeHtml) {
-      //_element.setInnerHtml(
-      //  safeInnerHtml.changingThisWillBypassSecurityTrust,
-      //  treeSanitizer: NodeTreeSanitizer.trusted,
-      //);
-      _element?.textContent = safeInnerHtml.changingThisWillBypassSecurityTrust;
-      // print('$safeInnerHtml is SafeHtml!');
-      // print(_element.innerHTML);
+      _element?.setInnerHtml(
+        safeInnerHtml.changingThisWillBypassSecurityTrust,
+        treeSanitizer: NodeTreeSanitizer.trusted,
+      );
     } else if (safeInnerHtml == null) {
       //_element.setInnerHtml('');
       _element?.textContent = '';

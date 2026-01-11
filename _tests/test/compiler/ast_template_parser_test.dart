@@ -1,10 +1,8 @@
 import 'dart:async';
 
+import 'package:_tests/test_util.dart';
 import 'package:logging/logging.dart';
-import 'package:term_glyph/term_glyph.dart' as term_glyph;
-import 'package:test/test.dart';
 import 'package:ngcompiler/v1/cli.dart';
-import 'package:ngcompiler/v1/src/compiler/analyzed_class.dart';
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart';
 import 'package:ngcompiler/v1/src/compiler/expression_parser/parser.dart';
 import 'package:ngcompiler/v1/src/compiler/identifiers.dart'
@@ -17,8 +15,9 @@ import 'package:ngcompiler/v1/src/compiler/schema/element_schema_registry.dart'
 import 'package:ngcompiler/v1/src/compiler/template_ast.dart';
 import 'package:ngcompiler/v1/src/compiler/template_parser/ast_template_parser.dart';
 import 'package:ngcompiler/v2/context.dart';
+import 'package:term_glyph/term_glyph.dart' as term_glyph;
+import 'package:test/test.dart';
 
-import '../../lib/test_util.dart';
 import 'schema_registry_mock.dart' show MockSchemaRegistry;
 import 'template_humanizer_util.dart';
 
@@ -27,8 +26,8 @@ const someModuleUrl = 'package:someModule';
 typedef ParseTemplate =
     List<TemplateAst> Function(
       String template,
-      List<CompileDirectiveMetadata> directives, [
-      List<CompilePipeMetadata> pipes,
+      List<CompileDirectiveMetadata>? directives, [
+      List<CompilePipeMetadata>? pipes,
     ]);
 
 class ArrayConsole {
@@ -61,10 +60,7 @@ class ArrayConsole {
 
 void main() {
   CompileContext.overrideForTesting();
-
-  setUpAll(() {
-    term_glyph.ascii = true;
-  });
+  term_glyph.ascii = true;
 
   final console = ArrayConsole();
   final ngIf = createCompileDirectiveMetadata(
@@ -82,8 +78,8 @@ void main() {
 
   List<TemplateAst> parse(
     String template, [
-    List<CompileDirectiveMetadata> directive = const [],
-    List<CompilePipeMetadata> pipes = const [],
+    List<CompileDirectiveMetadata>? directive,
+    List<CompilePipeMetadata>? pipes,
   ]) {
     return runZoned(
       () => parseTemplate(template, directive, pipes),
@@ -1387,6 +1383,7 @@ void main() {
 
         test('should internationalize directive property', () {
           final directive = createCompileDirectiveMetadata(
+            type: CompileTypeMetadata(moduleUrl: someModuleUrl, name: 'Comp'),
             selector: 'test',
             inputs: ['input'],
           );
@@ -2458,6 +2455,7 @@ void main() {
 
       test('should report error for invalid internationalized expression', () {
         final directive = createCompileDirectiveMetadata(
+          type: CompileTypeMetadata(moduleUrl: someModuleUrl, name: 'Comp'),
           selector: 'test',
           inputs: ['input'],
         );
@@ -2790,13 +2788,13 @@ void main() {
 }
 
 CompileDirectiveMetadata createCompileDirectiveMetadata({
-  CompileTypeMetadata? type,
+  required CompileTypeMetadata type,
   CompileDirectiveMetadataType metadataType =
       CompileDirectiveMetadataType.directive,
   String? selector,
   String? exportAs,
-  List<String> inputs = const [],
-  List<String> outputs = const [],
+  List<String>? inputs,
+  List<String>? outputs,
   List<CompileProviderMetadata> providers = const [],
   List<CompileProviderMetadata> viewProviders = const [],
   List<CompileQueryMetadata> queries = const [],
@@ -2804,10 +2802,13 @@ CompileDirectiveMetadata createCompileDirectiveMetadata({
 }) {
   final inputsMap = <String, String>{};
   final inputTypeMap = <String, CompileTypeMetadata>{};
-  for (var input in inputs) {
+  for (var input in inputs ?? []) {
     final inputParts = input.split(';');
     final inputName = inputParts[0];
-    final bindingParts = splitAtColon(inputName, [inputName, inputName]);
+    final bindingParts = splitAtColon(inputName, [
+      inputName as String,
+      inputName,
+    ]);
     inputsMap[bindingParts[0]] = bindingParts[1];
     if (inputParts.length > 1) {
       inputTypeMap[bindingParts[0]] = CompileTypeMetadata(name: inputParts[1]);
@@ -2815,8 +2816,8 @@ CompileDirectiveMetadata createCompileDirectiveMetadata({
   }
 
   final outputsMap = <String, String>{};
-  for (var output in outputs) {
-    final bindingParts = splitAtColon(output, [output, output]);
+  for (var output in outputs ?? []) {
+    final bindingParts = splitAtColon(output, [output as String, output]);
     outputsMap[bindingParts[0]] = bindingParts[1];
   }
 
@@ -2835,7 +2836,6 @@ CompileDirectiveMetadata createCompileDirectiveMetadata({
     viewProviders: viewProviders,
     queries: queries,
     template: template ?? CompileTemplateMetadata(),
-    analyzedClass: AnalyzedClass(null),
   );
 }
 
