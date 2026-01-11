@@ -1,7 +1,6 @@
 import 'package:ngdart/src/meta.dart';
 import 'package:web/web.dart' show Element;
 
-import '../meta/directives.dart';
 import 'dom_sanitization_service.dart' show SafeHtml;
 
 /// Sets [Element.innerHTML] _without_ sanitizing the HTML output.

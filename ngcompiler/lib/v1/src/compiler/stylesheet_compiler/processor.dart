@@ -1,8 +1,11 @@
 import 'package:build/build.dart';
+import 'package:logging/logging.dart';
 import 'package:ngcompiler/v1/cli.dart';
 import 'package:ngcompiler/v1/src/compiler/module/ng_compiler_module.dart';
 import 'package:ngcompiler/v1/src/compiler/source_module.dart';
 import 'package:ngcompiler/v1/src/source_gen/common/url_resolver.dart';
+
+final Logger _log = Logger('ngcompiler.processStylesheet');
 
 Future<Map<AssetId, String>> processStylesheet(
   BuildStep buildStep,
@@ -12,6 +15,7 @@ Future<Map<AssetId, String>> processStylesheet(
   final stylesheetUrl = toAssetUri(stylesheetId);
   final templateCompiler = createViewCompiler(buildStep, flags);
   final cssText = await buildStep.readAsString(stylesheetId);
+
   final sourceModules = templateCompiler.compileStylesheet(
     stylesheetUrl,
     cssText,

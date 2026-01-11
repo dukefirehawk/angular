@@ -30,7 +30,7 @@ class _HasTextContent extends Matcher {
     item,
     Description mismatchDescription,
     void _,
-    void __,
+    void _,
   ) {
     mismatchDescription.add(
       'Text content of element: '

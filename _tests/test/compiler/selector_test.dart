@@ -1,4 +1,5 @@
 import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
 import '../../lib/test_util.dart';
 import 'package:ngcompiler/v1/src/compiler/attribute_matcher.dart';
 import 'package:ngcompiler/v1/src/compiler/selector.dart'

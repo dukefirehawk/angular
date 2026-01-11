@@ -2,6 +2,7 @@ import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 
+// ignore: avoid_relative_lib_imports
 import '../../../lib/matchers.dart';
 import 'slice_pipe_test.template.dart' as ng;
 

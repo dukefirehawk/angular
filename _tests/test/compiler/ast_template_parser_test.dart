@@ -18,6 +18,7 @@ import 'package:ngcompiler/v1/src/compiler/template_ast.dart';
 import 'package:ngcompiler/v1/src/compiler/template_parser/ast_template_parser.dart';
 import 'package:ngcompiler/v2/context.dart';
 
+// ignore: avoid_relative_lib_imports
 import '../../lib/test_util.dart';
 import 'schema_registry_mock.dart' show MockSchemaRegistry;
 import 'template_humanizer_util.dart';

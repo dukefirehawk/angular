@@ -10,6 +10,7 @@ resolution: workspace
 dependencies:
 #  js: ^0.7.2
   ngdart: ^9.0.0-dev.1
+  web: ^1.1.1
 
 dev_dependencies:
   build_runner: ^2.3.3

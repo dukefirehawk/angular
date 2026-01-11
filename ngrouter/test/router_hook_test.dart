@@ -16,15 +16,15 @@ void main() {
     late Router router;
 
     setUp(() async {
-      final testBed =
-          NgTestBed<TestAppComponent>(ng.createTestAppComponentFactory())
-              .addInjector(createInjector);
+      final testBed = NgTestBed<TestAppComponent>(
+        ng.createTestAppComponentFactory(),
+      ).addInjector(createInjector);
       final testFixture = await testBed.create();
       router = testFixture.assertOnlyInstance.router;
     });
 
     test('canActivate should block navigation', () async {
-      testRouterHook.canActivateFn = (_, __, newState) async {
+      testRouterHook.canActivateFn = (_, _, newState) async {
         // Block navigation to '/foo' route.
         return newState.path != TestAppComponent.fooPath;
       };
@@ -33,7 +33,7 @@ void main() {
     });
 
     test('canDeactivate should block navigation', () async {
-      testRouterHook.canDeactivateFn = (_, oldState, __) async {
+      testRouterHook.canDeactivateFn = (_, oldState, _) async {
         // Block navigation away from index route.
         return oldState.path != TestAppComponent.indexPath;
       };
@@ -51,7 +51,7 @@ void main() {
     });
 
     test('canReuse should allow reuse', () async {
-      testRouterHook.canReuseFn = (_, oldState, ___) async {
+      testRouterHook.canReuseFn = (_, oldState, _) async {
         // Reuse component instance of index route.
         return oldState.path == TestAppComponent.indexPath;
       };
@@ -64,19 +64,23 @@ void main() {
   });
 
   test('can support cyclic dependency with lazy injection', () async {
-    final testBed =
-        NgTestBed<TestAppComponent>(ng.createTestAppComponentFactory())
-            .addInjector(accumulateQueryHookInjector);
+    final testBed = NgTestBed<TestAppComponent>(
+      ng.createTestAppComponentFactory(),
+    ).addInjector(accumulateQueryHookInjector);
     final testFixture = await testBed.create();
     final router = testFixture.assertOnlyInstance.router;
     expect(router.current!.queryParameters, isEmpty);
     var navigationResult = await router.navigate(
-        '/foo', NavigationParams(queryParameters: {'a': 'b'}));
+      '/foo',
+      NavigationParams(queryParameters: {'a': 'b'}),
+    );
     expect(navigationResult, NavigationResult.success);
     expect(router.current!.queryParameters, {'a': 'b'});
     // Router hook should combine new query parameters with existing ones.
     navigationResult = await router.navigate(
-        '/foo', NavigationParams(queryParameters: {'x': 'y'}));
+      '/foo',
+      NavigationParams(queryParameters: {'x': 'y'}),
+    );
     expect(navigationResult, NavigationResult.success);
     expect(router.current!.queryParameters, {'a': 'b', 'x': 'y'});
   });
@@ -102,7 +106,9 @@ class TestAppComponent {
   static final routes = [
     RouteDefinition(path: fooPath, component: ng.createFooComponentFactory()),
     RouteDefinition(
-        path: indexPath, component: ng.createIndexComponentFactory()),
+      path: indexPath,
+      component: ng.createIndexComponentFactory(),
+    ),
   ];
   final Router router;
 
@@ -200,11 +206,13 @@ class AccumulateQueryHook extends RouterHook {
 
   @override
   Future<NavigationParams> navigationParams(String _, NavigationParams params) {
-    return Future.value(NavigationParams(
-      queryParameters: {
-        ...?router.current?.queryParameters,
-        ...params.queryParameters,
-      },
-    ));
+    return Future.value(
+      NavigationParams(
+        queryParameters: {
+          ...?router.current?.queryParameters,
+          ...params.queryParameters,
+        },
+      ),
+    );
   }
 }

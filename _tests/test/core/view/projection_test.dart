@@ -1,6 +1,7 @@
 import 'package:web/web.dart';
 
 import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
 import '../../../lib/matchers.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';

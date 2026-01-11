@@ -1,12 +1,13 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:test/test.dart';
-import '../../lib/matchers.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/experimental.dart';
 import 'package:ngdart/src/di/injector.dart';
 import 'package:ngtest/angular_test.dart';
 
+// ignore: avoid_relative_lib_imports
+import '../../lib/matchers.dart';
 import 'injector_test.template.dart' as ng;
 
 void main() {
@@ -404,7 +405,7 @@ const unnamedTokenOfDynamic = OpaqueToken();
 const unnamedTokenOfString = OpaqueToken<String>();
 
 Never willNeverBeCalled1(Object _) => throw '';
-Never willNeverBeCalled2(Object _, Object __) => throw '';
+Never willNeverBeCalled2(Object _, Object _) => throw '';
 
 class CustomMultiString extends MultiToken<String> {
   const CustomMultiString();

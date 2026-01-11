@@ -1,5 +1,6 @@
 import 'package:term_glyph/term_glyph.dart' as term_glyph;
 import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
 import '../../lib/compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
 

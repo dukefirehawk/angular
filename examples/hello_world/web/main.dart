@@ -1,5 +1,3 @@
-import 'package:examples_hello_world/app.dart';
-import 'package:examples_hello_world/src/home.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/angular_router.dart';
 import 'package:http/browser_client.dart';

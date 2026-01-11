@@ -1,4 +1,5 @@
 import 'package:build/build.dart';
+import 'package:logging/logging.dart';
 import 'package:ngcompiler/v1/cli.dart';
 
 import 'processor.dart';
@@ -6,6 +7,8 @@ import 'processor.dart';
 const _cssExtension = '.css';
 const _shimmedStylesheetExtension = '.css.shim.dart';
 const _nonShimmedStylesheetExtension = '.css.dart';
+
+final Logger _log = Logger('ngcompiler.stylesheet_compiler');
 
 /// Pre-compiles CSS stylesheet files to Dart code for Angular 2.
 class StylesheetCompiler implements Builder {
@@ -27,6 +30,10 @@ class StylesheetCompiler implements Builder {
       buildStep,
       buildStep.inputId,
       _flags,
+    );
+
+    _log.info(
+      'Generated ${outputs.length} stylesheets for ${buildStep.inputId}',
     );
     outputs.forEach(buildStep.writeAsString);
   }
