@@ -53,22 +53,31 @@ Future<T> runWithContext<T>(CompileContext instance, Future<T> Function() run) {
         e = convert;
       }
       if (e is BuildError) {
+        var errorMsg = 'An error occurred compiling ${instance.path}:\n$e';
         log.severe(
-          'An error occurred compiling ${instance.path}:\n$e',
+          errorMsg,
           // TODO(b/170758093): Add conditional stack traces, perhaps behind a
           // --define flag for developers of the compiler to get information on
           // the exact location of a failure.
         );
+
+        if (!buildCompletedOrFailed.isCompleted) {
+          //buildCompletedOrFailed.complete();
+          throw Exception(errorMsg);
+        }
       } else {
+        var errorMsg = 'Unhandled exception in the AngularDart compiler!';
         log.severe(
-          'Unhandled exception in the AngularDart compiler!\n\n'
+          '$errorMsg\n\n'
           'Please report a bug: ${messages.urlFileBugs}',
           e.toString(),
           s,
         );
-      }
-      if (!buildCompletedOrFailed.isCompleted) {
-        buildCompletedOrFailed.complete();
+
+        if (!buildCompletedOrFailed.isCompleted) {
+          //buildCompletedOrFailed.complete();
+          throw Exception(errorMsg);
+        }
       }
     },
     zoneSpecification: ZoneSpecification(

@@ -413,11 +413,11 @@ class CompileQueryMetadata {
 
 /// Metadata regarding compilation of a template.
 class CompileTemplateMetadata {
-  final ViewEncapsulation? encapsulation;
+  final ViewEncapsulation encapsulation;
   final String? template;
   final String? templateUrl;
   final int templateOffset;
-  final bool? preserveWhitespace;
+  final bool preserveWhitespace;
   final List<String> styles;
   final List<String> styleUrls;
   final List<String> ngContentSelectors;
@@ -615,7 +615,7 @@ CompileDirectiveMetadata createHostComponentMeta(
   CompileTypeMetadata componentType,
   String componentSelector,
   AnalyzedClass? analyzedClass,
-  bool? preserveWhitespace,
+  bool preserveWhitespace,
 ) {
   var template = CssSelector.parse(
     componentSelector,

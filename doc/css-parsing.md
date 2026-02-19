@@ -22,5 +22,6 @@ Runtime DOM styling
 
 ## Classes
 
+* stylesheetCompiler
 * StylesheetCompiler
 * processStylesheet

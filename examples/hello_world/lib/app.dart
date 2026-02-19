@@ -11,5 +11,6 @@ import 'src/home.dart';
   templateUrl: 'app.html',
   directives: [HomeComponent],
   providers: [],
+  encapsulation: ViewEncapsulation.none,
 )
 class MyAppComponent {}

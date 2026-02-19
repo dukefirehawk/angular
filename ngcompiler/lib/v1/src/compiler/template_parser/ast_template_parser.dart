@@ -80,7 +80,7 @@ class AstTemplateParser {
       parsedAst,
       template: template,
       name: name,
-      preserveWhitespace: compMeta.template!.preserveWhitespace ?? false,
+      preserveWhitespace: compMeta.template!.preserveWhitespace,
     );
     CompileContext.current.throwRecoverableErrors();
 

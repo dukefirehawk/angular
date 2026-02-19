@@ -115,15 +115,16 @@ class AngularCompiler {
   ir.ViewEncapsulation _encapsulation(
     NormalizedComponentWithViewDirectives componentWithDirs,
   ) {
-    switch (componentWithDirs.component.template!.encapsulation) {
-      case ViewEncapsulation.emulated:
-        return ir.ViewEncapsulation.emulated;
+    switch (componentWithDirs.component.template?.encapsulation) {
       case ViewEncapsulation.none:
         return ir.ViewEncapsulation.none;
       default:
-        throw ArgumentError.value(
-          componentWithDirs.component.template!.encapsulation,
-        );
+        //case ViewEncapsulation.emulated:
+        return ir.ViewEncapsulation.emulated;
+      // default:
+      //   throw ArgumentError.value(
+      //     componentWithDirs.component.template?.encapsulation,
+      //   );
     }
   }
 

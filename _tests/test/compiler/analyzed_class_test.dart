@@ -1,4 +1,5 @@
 import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/visitor2.dart';
 //import 'package:analyzer/dart/element/visitor.dart';
 import 'package:test/test.dart';
 import 'package:ngcompiler/v1/src/compiler/analyzed_class.dart';
@@ -103,16 +104,17 @@ Future<AnalyzedClass?> analyzeClass(String source) async {
   return library.accept<AnalyzedClass>(visitor);
 }
 
-class AnalyzedClassVisitor extends RecursiveAstVisitor<AnalyzedClass> {
+//class AnalyzedClassVisitor extends RecursiveAstVisitor<AnalyzedClass> {
+class AnalyzedClassVisitor extends RecursiveElementVisitor2<AnalyzedClass> {
   @override
   AnalyzedClass? visitClassElement(ClassElement element) {
     return AnalyzedClass(element);
   }
 
-  @override
-  AnalyzedClass? visitCompilationUnitElement(Fragment element) {
-    return _visitAll(element.libraryFragment?.classes);
-  }
+  // @override
+  // AnalyzedClass? visitCompilationUnit(Fragment element) {
+  //    return _visitAll(element.libraryFragment?.classes);
+  // }
 
   @override
   AnalyzedClass? visitLibraryElement(LibraryElement element) {

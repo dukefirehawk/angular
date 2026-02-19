@@ -152,7 +152,7 @@ class _AstToExpressionVisitor
   /// Trim text in preserve whitespace mode if it contains \n preceding
   /// interpolation.
   String _compressWhitespacePreceding(String value) {
-    if (_metadata.template!.preserveWhitespace! ||
+    if (_metadata.template!.preserveWhitespace ||
         value.contains('\u00A0') ||
         value.contains(ngSpace) ||
         !value.contains('\n')) {
@@ -164,7 +164,7 @@ class _AstToExpressionVisitor
   /// Trim text in preserve whitespace mode if it contains \n following
   /// interpolation.
   String _compressWhitespaceFollowing(String value) {
-    if (_metadata.template!.preserveWhitespace! ||
+    if (_metadata.template!.preserveWhitespace ||
         value.contains('\u00A0') ||
         value.contains(ngSpace) ||
         !value.contains('\n')) {
