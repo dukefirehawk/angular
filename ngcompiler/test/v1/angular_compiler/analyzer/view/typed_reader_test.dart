@@ -248,6 +248,8 @@ void main() {
           contains('Expected an expression of type "Typed", but got "int"'),
         ],
       );
+
+      print('done');
     });
     test('if a concrete type is used as a type argument of "Typed"', () async {
       await compilesExpecting(

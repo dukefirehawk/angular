@@ -161,24 +161,24 @@ class _NormalizedComponentVisitor extends RecursiveElementVisitor2<void> {
       // template parsing in a similar way to #1, but a user will look at the
       // code and not see a problem potentially.
       final annotationImpl = annotation as ElementAnnotationImpl;
-      for (final Expression argument
+      for (final Argument argument
           in annotationImpl.annotationAst.arguments!.arguments) {
-        if (argument is NamedExpression && argument.name.label.name == field) {
-          if (argument.expression is! ListLiteral) {
+        if (argument is NamedArgument && argument.name.stringValue == field) {
+          if (argument.argumentExpression is! ListLiteral) {
             // Something like
             //   directives: 'Ha Ha!'
             //
             // ... was attempted to be used.
             _exceptionHandler.handle(
               UnresolvedExpressionError(
-                [argument.expression],
+                [argument.argumentExpression],
                 element,
                 annotationImpl.libraryFragment,
               ),
             );
             break;
           }
-          final values = argument.expression as ListLiteral;
+          final values = argument.argumentExpression as ListLiteral;
           if (values.elements.isNotEmpty &&
               values.elements.any(_isUnresolvedOrNotAnExpression)) {
             _exceptionHandler.handle(
@@ -895,18 +895,19 @@ class _ComponentVisitor
                 .arguments
                 ?.arguments
                 .firstWhereOrNull(
-                  (Expression argument) =>
-                      argument is NamedExpression &&
-                      argument.name.label.name == 'template',
+                  (Argument argument) =>
+                      argument is NamedArgument &&
+                      argument.name.stringValue == 'template',
                 )
-            as NamedExpression?;
+            as NamedArgument?;
     if (templateExpression != null) {
-      if (templateExpression.expression is SingleStringLiteral) {
-        return (templateExpression.expression as SingleStringLiteral)
+      if (templateExpression.argumentExpression is SingleStringLiteral) {
+        return (templateExpression.argumentExpression as SingleStringLiteral)
             .contentsOffset;
       }
-      if (templateExpression.expression is AdjacentStrings) {
-        var offset = (templateExpression.expression as AdjacentStrings).offset;
+      if (templateExpression.argumentExpression is AdjacentStrings) {
+        var offset =
+            (templateExpression.argumentExpression as AdjacentStrings).offset;
         return offset;
       }
     }
@@ -963,14 +964,14 @@ class _ComponentVisitor
     );
 
     var arguments = annotation.annotationAst.arguments!.arguments;
-    var exportsArg = arguments.whereType<NamedExpression>().firstWhereOrNull(
-      (arg) => arg.name.label.name == 'exports',
+    var exportsArg = arguments.whereType<NamedArgument>().firstWhereOrNull(
+      (arg) => arg.name.stringValue == 'exports',
     );
-    if (exportsArg == null || exportsArg.expression is! ListLiteral) {
+    if (exportsArg == null || exportsArg.argumentExpression is! ListLiteral) {
       return exports;
     }
 
-    var staticNames = (exportsArg.expression as ListLiteral).elements;
+    var staticNames = (exportsArg.argumentExpression as ListLiteral).elements;
     for (var staticName in staticNames) {
       if (staticName is! Identifier) {
         _exceptionHandler.handle(

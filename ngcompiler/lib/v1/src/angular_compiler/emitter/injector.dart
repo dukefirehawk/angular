@@ -83,7 +83,7 @@ class InjectorEmitter implements InjectorVisitor {
   Method createInjectSelfOptional() => Method(
     (b) => b
       ..name = 'injectFromSelfOptional'
-      ..returns = _$Object.rebuild((b) => b.isNullable = true)
+      ..returns = _$Object.rebuild((b) => b.isNullable = false)
       ..annotations.add(_$override)
       ..requiredParameters.add(
         Parameter(

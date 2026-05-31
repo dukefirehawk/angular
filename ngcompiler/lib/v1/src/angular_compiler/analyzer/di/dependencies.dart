@@ -23,8 +23,7 @@ import 'tokens.dart';
 class DependencyReader {
   final TokenReader _tokenReader;
 
-  const DependencyReader({TokenReader tokenReader = const TokenReader()})
-    : _tokenReader = tokenReader;
+  const DependencyReader({this._tokenReader = const TokenReader()});
 
   /// Returns the constructor on a given `class` [element] to use for injection.
   ///

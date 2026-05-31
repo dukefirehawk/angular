@@ -49,7 +49,11 @@ class MockLocationStrategy extends LocationStrategy {
 
   @override
   void replaceState(
-      Object? state, String title, String url, String queryParams) {
+    Object? state,
+    String title,
+    String url,
+    String queryParams,
+  ) {
     internalTitle = title;
     var fullUrl = url + (queryParams.isNotEmpty ? '?$queryParams' : '');
     internalPath = fullUrl;
@@ -62,7 +66,7 @@ class MockLocationStrategy extends LocationStrategy {
     //TODO: Migrate to 3.6. (Need to review)
     //_subject.stream.listen(fn);
     _subject.stream.listen((PopStateEvent event) {
-      fn.callAsFunction(event);
+      fn.callAsFunction(null, event);
     });
   }
 

@@ -378,7 +378,7 @@ class CompileTypeMetadataVisitor
 
   CompileTokenMetadata _annotationToToken(ElementAnnotationImpl annotation) {
     String name;
-    final Expression id = annotation.annotationAst.arguments!.arguments.first;
+    final Argument id = annotation.annotationAst.arguments!.arguments.first;
     if (id is Identifier) {
       if (id is PrefixedIdentifier) {
         name = id.identifier.name;
@@ -696,7 +696,7 @@ class CompileTypeMetadataVisitor
     // Due to https://github.com/dart-lang/sdk/issues/29306, isEnumConstant is
     // not enough, so we also need to skip synthetic fields 'index' and 'value'.
     return clazz.fields.where(
-      (field) => field.isEnumConstant && !field.isSynthetic,
+      (field) => field.isEnumConstant && !field.isOriginGetterSetter,
     );
   }
 

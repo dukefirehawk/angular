@@ -364,7 +364,7 @@ class CaptureInjectInjector extends HierarchicalInjector implements Injector {
   CaptureInjectInjector() : super(Injector.empty());
 
   @override
-  Object? injectFromSelfOptional(
+  Object injectFromSelfOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]) {

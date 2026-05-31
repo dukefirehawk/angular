@@ -28,9 +28,9 @@ class MathService {
   num add(num a, num b) => a + b;
 }
 
-@Component(selector: 'example', template: '{{math?.add(a, b)}}')
+@Component(selector: 'example', template: '{{math.add(a, b)}}')
 class ExampleComp {
-  final MathService? math;
+  final MathService math;
 
   var a = 0;
   var b = 0;

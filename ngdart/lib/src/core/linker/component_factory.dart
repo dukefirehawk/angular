@@ -141,9 +141,9 @@ class ComponentFactory<T extends Object> {
   /// structure. Please reach out before using.
   ComponentRef<T> create(
     Injector injector, [
-    List<List<Object>>? projectableNodes,
+    List<List<Object>> projectableNodes = const [],
   ]) {
     final hostView = _viewFactory();
-    return hostView.create(projectableNodes ?? const [], injector);
+    return hostView.create(projectableNodes, injector);
   }
 }

@@ -17,10 +17,9 @@ class ProviderReader {
   final TokenReader _tokenReader;
 
   const ProviderReader({
-    DependencyReader dependencyReader = const DependencyReader(),
-    TokenReader tokenReader = const TokenReader(),
-  }) : _dependencyReader = dependencyReader,
-       _tokenReader = tokenReader;
+    this._dependencyReader = const DependencyReader(),
+    this._tokenReader = const TokenReader(),
+  });
 
   /// Returns whether an object represents a `Provider`.
   @protected

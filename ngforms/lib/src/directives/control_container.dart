@@ -9,5 +9,5 @@ import 'form_interface.dart' show Form;
 abstract class ControlContainer<T extends AbstractControlGroup>
     extends AbstractControlDirective<T> {
   /// Get the form to which this container belongs.
-  Form get formDirective;
+  Form? get formDirective;
 }

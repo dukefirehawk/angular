@@ -14,18 +14,14 @@ void main() {
     final testBed = NgTestBed<TestComponent>(ng.createTestComponentFactory());
     final testFixture = await testBed.create();
     final router = testFixture.assertOnlyInstance.router;
-    final result = await router.navigate('/');
+    final result = await router?.navigate('/');
     expect(result, NavigationResult.invalidRoute);
   });
 }
 
-@Component(
-  selector: 'test',
-  template: '',
-  providers: routerProvidersTest,
-)
+@Component(selector: 'test', template: '', providers: routerProvidersTest)
 class TestComponent {
-  final Router router;
+  final Router? router;
 
-  TestComponent(this.router);
+  TestComponent(@Optional() this.router);
 }

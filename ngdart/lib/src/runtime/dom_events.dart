@@ -32,7 +32,7 @@ class EventManager {
           element,
           name,
           ((Event event) {
-            callback.callAsFunction(event);
+            callback.callAsFunction(null, event);
           }).toJS,
         );
       });
@@ -45,7 +45,7 @@ class EventManager {
     element.addEventListener(
       name,
       ((Event event) {
-        callback.callAsFunction(event);
+        callback.callAsFunction(null, event);
       }).toJS,
     );
   }
@@ -107,7 +107,7 @@ class _KeyEventsHandler {
         //if (event is KeyboardEvent && parsed.matches(event)) {
         if (event.isA<KeyboardEvent>() &&
             parsed.matches(event as KeyboardEvent)) {
-          callback.callAsFunction(event);
+          callback.callAsFunction(null, event);
         }
       }.toJS,
     );

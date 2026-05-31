@@ -39,7 +39,7 @@ void bindRenderOutputs(
       output.source,
       output.target.type,
     )!;
-    compileElement.view!.addEventListener(
+    compileElement.view?.addEventListener(
       compileElement.renderNode,
       output,
       handlerExpr,

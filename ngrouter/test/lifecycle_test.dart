@@ -22,8 +22,8 @@ void main() {
       '$FirstChildComponent[0].canActivate',
       '$FirstChildComponent[0].onActivate',
     ]);
-    log.clear();
-    expect(await router.navigate('/second-child'), NavigationResult.success);
+    log?.clear();
+    expect(await router?.navigate('/second-child'), NavigationResult.success);
     expect(log, [
       '$FirstChildComponent[0].canNavigate',
       '$SecondChildComponent[0].ngOnInit',
@@ -34,8 +34,8 @@ void main() {
       '$FirstChildComponent[0].ngOnDestroy',
       '$SecondChildComponent[0].onActivate',
     ]);
-    log.clear();
-    expect(await router.navigate('/first-child'), NavigationResult.success);
+    log?.clear();
+    expect(await router?.navigate('/first-child'), NavigationResult.success);
     expect(log, [
       '$SecondChildComponent[0].canNavigate',
       '$FirstChildComponent[1].ngOnInit',
@@ -59,8 +59,8 @@ void main() {
       '$FirstReusableChildComponent[0].canActivate',
       '$FirstReusableChildComponent[0].onActivate',
     ]);
-    log.clear();
-    expect(await router.navigate('/second-child'), NavigationResult.success);
+    log?.clear();
+    expect(await router?.navigate('/second-child'), NavigationResult.success);
     expect(log, [
       '$FirstReusableChildComponent[0].canNavigate',
       '$SecondChildComponent[0].ngOnInit',
@@ -70,9 +70,9 @@ void main() {
       '$FirstReusableChildComponent[0].canReuse',
       '$SecondChildComponent[0].onActivate',
     ]);
-    log.clear();
+    log?.clear();
     expect(
-      await router.navigate('/first-reusable-child'),
+      await router?.navigate('/first-reusable-child'),
       NavigationResult.success,
     );
     expect(log, [
@@ -101,9 +101,9 @@ void main() {
       '$ParentComponent[0].onActivate',
       '$FirstChildComponent[0].onActivate',
     ]);
-    log.clear();
+    log?.clear();
     expect(
-      await router.navigate('/parent/second-child'),
+      await router?.navigate('/parent/second-child'),
       NavigationResult.success,
     );
     expect(log, [
@@ -125,9 +125,9 @@ void main() {
       '$SecondChildComponent[1].ngOnInit',
       '$SecondChildComponent[1].onActivate',
     ]);
-    log.clear();
+    log?.clear();
     expect(
-      await router.navigate('/parent/first-child'),
+      await router?.navigate('/parent/first-child'),
       NavigationResult.success,
     );
     expect(log, [
@@ -167,9 +167,9 @@ void main() {
       '$ReusableParentComponent[0].onActivate',
       '$FirstChildComponent[0].onActivate',
     ]);
-    log.clear();
+    log?.clear();
     expect(
-      await router.navigate('/reusable-parent/second-child'),
+      await router?.navigate('/reusable-parent/second-child'),
       NavigationResult.success,
     );
     expect(log, [
@@ -205,9 +205,9 @@ void main() {
       '$FirstParentComponent[0].onActivate',
       '$FirstChildComponent[0].onActivate',
     ]);
-    log.clear();
+    log?.clear();
     expect(
-      await router.navigate('/second-parent/second-child'),
+      await router?.navigate('/second-parent/second-child'),
       NavigationResult.success,
     );
     expect(log, [
@@ -245,9 +245,9 @@ void main() {
       '$FirstReusableParentComponent[0].onActivate',
       '$FirstChildComponent[0].onActivate',
     ]);
-    log.clear();
+    log?.clear();
     expect(
-      await router.navigate('/second-parent/second-child'),
+      await router?.navigate('/second-parent/second-child'),
       NavigationResult.success,
     );
     expect(log, [
@@ -288,9 +288,9 @@ void main() {
         '$ReusableParentComponent[0].onActivate',
         '$FirstChildComponent[0].onActivate',
       ]);
-      log.clear();
+      log?.clear();
       expect(
-        await router.navigate('/second-reusable-parent/second-child'),
+        await router?.navigate('/second-reusable-parent/second-child'),
         NavigationResult.success,
       );
       expect(log, [
@@ -323,8 +323,8 @@ void main() {
       '$FirstChildComponent[0].canActivate',
       '$FirstChildComponent[0].onActivate',
     ]);
-    log.clear();
-    expect(await router.navigate('/'), NavigationResult.success);
+    log?.clear();
+    expect(await router?.navigate('/'), NavigationResult.success);
     expect(log, ['$FirstChildComponent[0].canNavigate']);
   });
 
@@ -339,9 +339,9 @@ void main() {
       '$FirstChildComponent[0].canActivate',
       '$FirstChildComponent[0].onActivate',
     ]);
-    log.clear();
+    log?.clear();
     expect(
-      await router.navigate('/', NavigationParams(reload: true)),
+      await router?.navigate('/', NavigationParams(reload: true)),
       NavigationResult.success,
     );
     expect(log, [
@@ -367,9 +367,9 @@ void main() {
       '$CantNavigateChildComponent[0].canActivate',
       '$CantNavigateChildComponent[0].onActivate',
     ]);
-    log.clear();
+    log?.clear();
     expect(
-      await router.navigate('/second-child'),
+      await router?.navigate('/second-child'),
       NavigationResult.blockedByGuard,
     );
     expect(log, ['$CantNavigateChildComponent[0].canNavigate']);
@@ -386,8 +386,8 @@ void main() {
       '$FirstChildComponent[0].canActivate',
       '$FirstChildComponent[0].onActivate',
     ]);
-    log.clear();
-    expect(await router.navigate('/foo'), NavigationResult.success);
+    log?.clear();
+    expect(await router?.navigate('/foo'), NavigationResult.success);
     expect(log, [
       '$FirstChildComponent[0].canNavigate',
       '$SecondChildComponent[0].ngOnInit',
@@ -436,60 +436,63 @@ abstract class RouterLifecycleLogger
   late final String _identifier;
 
   /// An ordered list in which lifecycle invocations are recorded.
-  final List<String> lifecycleLog;
+  final List<String>? lifecycleLog;
 
   RouterLifecycleLogger(
     String name,
-    Map<String, int> instanceIds,
-    this.lifecycleLog,
+    @Optional() Map<String, int>? instanceIds,
+    @Optional() this.lifecycleLog,
   ) {
-    final id = instanceIds.containsKey(name) ? instanceIds[name]! + 1 : 0;
-    instanceIds[name] = id;
+    var localInstanceIds = instanceIds ?? {};
+    final id = localInstanceIds.containsKey(name)
+        ? localInstanceIds[name]! + 1
+        : 0;
+    localInstanceIds[name] = id;
     _identifier = '$name[$id]';
   }
 
   @override
   Future<bool> canActivate(_, _) async {
-    lifecycleLog.add('$_identifier.canActivate');
+    lifecycleLog?.add('$_identifier.canActivate');
     return true;
   }
 
   @override
   Future<bool> canDeactivate(_, _) async {
-    lifecycleLog.add('$_identifier.canDeactivate');
+    lifecycleLog?.add('$_identifier.canDeactivate');
     return true;
   }
 
   @override
   Future<bool> canNavigate() async {
-    lifecycleLog.add('$_identifier.canNavigate');
+    lifecycleLog?.add('$_identifier.canNavigate');
     return true;
   }
 
   @override
   Future<bool> canReuse(_, _) async {
-    lifecycleLog.add('$_identifier.canReuse');
+    lifecycleLog?.add('$_identifier.canReuse');
     return false;
   }
 
   @override
   void onActivate(_, _) {
-    lifecycleLog.add('$_identifier.onActivate');
+    lifecycleLog?.add('$_identifier.onActivate');
   }
 
   @override
   void onDeactivate(_, _) {
-    lifecycleLog.add('$_identifier.onDeactivate');
+    lifecycleLog?.add('$_identifier.onDeactivate');
   }
 
   @override
   void ngOnDestroy() {
-    lifecycleLog.add('$_identifier.ngOnDestroy');
+    lifecycleLog?.add('$_identifier.ngOnDestroy');
   }
 
   @override
   void ngOnInit() {
-    lifecycleLog.add('$_identifier.ngOnInit');
+    lifecycleLog?.add('$_identifier.ngOnInit');
   }
 }
 
@@ -502,8 +505,8 @@ class FirstChildComponent extends RouterLifecycleLogger {
   );
 
   FirstChildComponent(
-    @instanceIdsToken Map<String, int> instanceIds,
-    @lifecycleLogToken List<String> lifecycleLog,
+    @Optional() @instanceIdsToken Map<String, int>? instanceIds,
+    @Optional() @lifecycleLogToken List<String>? lifecycleLog,
   ) : super('$FirstChildComponent', instanceIds, lifecycleLog);
 }
 
@@ -515,8 +518,8 @@ class SecondChildComponent extends RouterLifecycleLogger {
   );
 
   SecondChildComponent(
-    @instanceIdsToken Map<String, int> instanceIds,
-    @lifecycleLogToken List<String> lifecycleLog,
+    @Optional() @instanceIdsToken Map<String, int>? instanceIds,
+    @Optional() @lifecycleLogToken List<String>? lifecycleLog,
   ) : super('$SecondChildComponent', instanceIds, lifecycleLog);
 }
 
@@ -529,8 +532,8 @@ class FirstReusableChildComponent extends RouterLifecycleLogger {
   );
 
   FirstReusableChildComponent(
-    @instanceIdsToken Map<String, int> instanceIds,
-    @lifecycleLogToken List<String> lifecycleLog,
+    @Optional() @instanceIdsToken Map<String, int>? instanceIds,
+    @Optional() @lifecycleLogToken List<String>? lifecycleLog,
   ) : super('$FirstReusableChildComponent', instanceIds, lifecycleLog);
 
   @override
@@ -549,8 +552,8 @@ class CantNavigateChildComponent extends RouterLifecycleLogger {
   );
 
   CantNavigateChildComponent(
-    @instanceIdsToken Map<String, int> instanceIds,
-    @lifecycleLogToken List<String> lifecycleLog,
+    @Optional() @instanceIdsToken Map<String, int>? instanceIds,
+    @Optional() @lifecycleLogToken List<String>? lifecycleLog,
   ) : super('$CantNavigateChildComponent', instanceIds, lifecycleLog);
 
   @override
@@ -578,8 +581,8 @@ class ParentComponent extends RouterLifecycleLogger {
   ];
 
   ParentComponent(
-    @instanceIdsToken Map<String, int> instanceIds,
-    @lifecycleLogToken List<String> lifecycleLog,
+    @Optional() @instanceIdsToken Map<String, int>? instanceIds,
+    @Optional() @lifecycleLogToken List<String>? lifecycleLog,
   ) : super('$ParentComponent', instanceIds, lifecycleLog);
 }
 
@@ -601,8 +604,8 @@ class ReusableParentComponent extends RouterLifecycleLogger {
   ];
 
   ReusableParentComponent(
-    @instanceIdsToken Map<String, int> instanceIds,
-    @lifecycleLogToken List<String> lifecycleLog,
+    @Optional() @instanceIdsToken Map<String, int>? instanceIds,
+    @Optional() @lifecycleLogToken List<String>? lifecycleLog,
   ) : super('$ReusableParentComponent', instanceIds, lifecycleLog);
 
   @override
@@ -627,8 +630,8 @@ class FirstParentComponent extends RouterLifecycleLogger {
   final List<RouteDefinition> routes = [FirstChildComponent.routeDefinition];
 
   FirstParentComponent(
-    @instanceIdsToken Map<String, int> instanceIds,
-    @lifecycleLogToken List<String> lifecycleLog,
+    @Optional() @instanceIdsToken Map<String, int>? instanceIds,
+    @Optional() @lifecycleLogToken List<String>? lifecycleLog,
   ) : super('$FirstParentComponent', instanceIds, lifecycleLog);
 }
 
@@ -646,8 +649,8 @@ class SecondParentComponent extends RouterLifecycleLogger {
   final List<RouteDefinition> routes = [SecondChildComponent.routeDefinition];
 
   SecondParentComponent(
-    @instanceIdsToken Map<String, int> instanceIds,
-    @lifecycleLogToken List<String> lifecycleLog,
+    @Optional() @instanceIdsToken Map<String, int>? instanceIds,
+    @Optional() @lifecycleLogToken List<String>? lifecycleLog,
   ) : super('$SecondParentComponent', instanceIds, lifecycleLog);
 }
 
@@ -666,8 +669,8 @@ class FirstReusableParentComponent extends RouterLifecycleLogger {
   final List<RouteDefinition> routes = [FirstChildComponent.routeDefinition];
 
   FirstReusableParentComponent(
-    @instanceIdsToken Map<String, int> instanceIds,
-    @lifecycleLogToken List<String> lifecycleLog,
+    @Optional() @instanceIdsToken Map<String, int>? instanceIds,
+    @Optional() @lifecycleLogToken List<String>? lifecycleLog,
   ) : super('$FirstReusableParentComponent', instanceIds, lifecycleLog);
 
   @override
@@ -683,14 +686,17 @@ class FirstReusableParentComponent extends RouterLifecycleLogger {
   directives: [RouterOutlet],
 )
 class TestNavigateToSibling {
-  final List<String> lifecycleLog;
-  final Router router;
+  final List<String>? lifecycleLog;
+  final Router? router;
   final List<RouteDefinition> routes = [
     FirstChildComponent.routeDefinition,
     SecondChildComponent.routeDefinition,
   ];
 
-  TestNavigateToSibling(@lifecycleLogToken this.lifecycleLog, this.router);
+  TestNavigateToSibling(
+    @Optional() @lifecycleLogToken this.lifecycleLog,
+    @Optional() this.router,
+  );
 }
 
 @Component(
@@ -699,16 +705,16 @@ class TestNavigateToSibling {
   directives: [RouterOutlet],
 )
 class TestNavigateToSiblingFromReusableChild {
-  final List<String> lifecycleLog;
-  final Router router;
+  final List<String>? lifecycleLog;
+  final Router? router;
   final List<RouteDefinition> routes = [
     FirstReusableChildComponent.routeDefinition,
     SecondChildComponent.routeDefinition,
   ];
 
   TestNavigateToSiblingFromReusableChild(
-    @lifecycleLogToken this.lifecycleLog,
-    this.router,
+    @Optional() @lifecycleLogToken this.lifecycleLog,
+    @Optional() this.router,
   );
 }
 
@@ -718,13 +724,13 @@ class TestNavigateToSiblingFromReusableChild {
   directives: [RouterOutlet],
 )
 class TestNavigateToNestedSibling {
-  final List<String> lifecycleLog;
-  final Router router;
+  final List<String>? lifecycleLog;
+  final Router? router;
   final List<RouteDefinition> routes = [ParentComponent.routeDefinition];
 
   TestNavigateToNestedSibling(
-    @lifecycleLogToken this.lifecycleLog,
-    this.router,
+    @Optional() @lifecycleLogToken this.lifecycleLog,
+    @Optional() this.router,
   );
 }
 
@@ -734,15 +740,15 @@ class TestNavigateToNestedSibling {
   directives: [RouterOutlet],
 )
 class TestNavigateToNestedSiblingWithSharedParent {
-  final List<String> lifecycleLog;
-  final Router router;
+  final List<String>? lifecycleLog;
+  final Router? router;
   final List<RouteDefinition> routes = [
     ReusableParentComponent.routeDefinition,
   ];
 
   TestNavigateToNestedSiblingWithSharedParent(
-    @lifecycleLogToken this.lifecycleLog,
-    this.router,
+    @Optional() @lifecycleLogToken this.lifecycleLog,
+    @Optional() this.router,
   );
 }
 
@@ -752,16 +758,16 @@ class TestNavigateToNestedSiblingWithSharedParent {
   directives: [RouterOutlet],
 )
 class TestNavigateBetweenNestedRoutes {
-  final List<String> lifecycleLog;
-  final Router router;
+  final List<String>? lifecycleLog;
+  final Router? router;
   final List<RouteDefinition> routes = [
     FirstParentComponent.routeDefinition,
     SecondParentComponent.routeDefinition,
   ];
 
   TestNavigateBetweenNestedRoutes(
-    @lifecycleLogToken this.lifecycleLog,
-    this.router,
+    @Optional() @lifecycleLogToken this.lifecycleLog,
+    @Optional() this.router,
   );
 }
 
@@ -771,16 +777,16 @@ class TestNavigateBetweenNestedRoutes {
   directives: [RouterOutlet],
 )
 class TestNavigateBetweenNestedRoutesWithReusableParent {
-  final List<String> lifecycleLog;
-  final Router router;
+  final List<String>? lifecycleLog;
+  final Router? router;
   final List<RouteDefinition> routes = [
     FirstReusableParentComponent.routeDefinition,
     SecondParentComponent.routeDefinition,
   ];
 
   TestNavigateBetweenNestedRoutesWithReusableParent(
-    @lifecycleLogToken this.lifecycleLog,
-    this.router,
+    @Optional() @lifecycleLogToken this.lifecycleLog,
+    @Optional() this.router,
   );
 }
 
@@ -790,8 +796,8 @@ class TestNavigateBetweenNestedRoutesWithReusableParent {
   directives: [RouterOutlet],
 )
 class TestNavigateBetweenNestedRoutesWithSameReusableParent {
-  final List<String> lifecycleLog;
-  final Router router;
+  final List<String>? lifecycleLog;
+  final Router? router;
   final List<RouteDefinition> routes = [
     RouteDefinition(
       path: 'first-reusable-parent',
@@ -805,8 +811,8 @@ class TestNavigateBetweenNestedRoutesWithSameReusableParent {
   ];
 
   TestNavigateBetweenNestedRoutesWithSameReusableParent(
-    @lifecycleLogToken this.lifecycleLog,
-    this.router,
+    @Optional() @lifecycleLogToken this.lifecycleLog,
+    @Optional() this.router,
   );
 }
 
@@ -816,14 +822,17 @@ class TestNavigateBetweenNestedRoutesWithSameReusableParent {
   directives: [RouterOutlet],
 )
 class TestPreventNavigation {
-  final List<String> lifecycleLog;
-  final Router router;
+  final List<String>? lifecycleLog;
+  final Router? router;
   final List<RouteDefinition> routes = [
     CantNavigateChildComponent.routeDefinition,
     SecondChildComponent.routeDefinition,
   ];
 
-  TestPreventNavigation(@lifecycleLogToken this.lifecycleLog, this.router);
+  TestPreventNavigation(
+    @Optional() @lifecycleLogToken this.lifecycleLog,
+    @Optional() this.router,
+  );
 }
 
 @Component(
@@ -832,8 +841,8 @@ class TestPreventNavigation {
   directives: [RouterOutlet],
 )
 class TestRedirectToSibling {
-  final List<String> lifecycleLog;
-  final Router router;
+  final List<String>? lifecycleLog;
+  final Router? router;
   final List<RouteDefinition> routes = [
     FirstChildComponent.routeDefinition,
     SecondChildComponent.routeDefinition,
@@ -843,5 +852,8 @@ class TestRedirectToSibling {
     ),
   ];
 
-  TestRedirectToSibling(@lifecycleLogToken this.lifecycleLog, this.router);
+  TestRedirectToSibling(
+    @Optional() @lifecycleLogToken this.lifecycleLog,
+    @Optional() this.router,
+  );
 }

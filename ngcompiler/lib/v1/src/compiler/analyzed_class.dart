@@ -158,7 +158,7 @@ bool isImmutable(ast.AST expression, AnalyzedClass? analyzedClass) {
           : analyzedClass;
       var field = _getField(clazz, expression.name);
       if (field != null) {
-        return !field.isSynthetic && (field.isFinal || field.isConst);
+        return !field.isOriginGetterSetter && (field.isFinal || field.isConst);
       }
       if (_getMethod(clazz, expression.name) != null) {
         // methods are immutable

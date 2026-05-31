@@ -42,7 +42,7 @@ List<o.Statement> bindingToUpdateStatements(
     appViewInstance,
     currValExpr,
   );
-  return [if (devToolsStatement != null) devToolsStatement, updateStatement];
+  return [?devToolsStatement, updateStatement];
 }
 
 class _UpdateStatementsVisitor

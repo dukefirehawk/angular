@@ -78,12 +78,13 @@ Future<void> _collectTypeParametersFromUnit(
   // Collect generic type parameters for directives.
   for (final declaration in unit.declarations) {
     if (declaration is ClassDeclaration &&
-        declaration.typeParameters != null &&
-        typeParameters.containsKey(declaration.name.type.name)) {
-      typeParameters[declaration.name.type.name] = source.substring(
-        declaration.typeParameters!.offset,
-        declaration.typeParameters!.end,
-      );
+        declaration.namePart.typeParameters != null &&
+        typeParameters.containsKey(declaration.namePart.typeName.stringValue)) {
+      typeParameters[declaration.namePart.typeName.stringValue!] = source
+          .substring(
+            declaration.namePart.typeParameters!.offset,
+            declaration.namePart.typeParameters!.end,
+          );
     }
   }
 }

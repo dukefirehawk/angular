@@ -2,7 +2,7 @@
 
 ## 6.0.0-dev.1
 
-- Minimum SDK > 3.6
+- Minimum SDK > 3.10
 - Updated dependencies
 - Migrate `dart:html` to `package:web/web`
 - Migrate `dart:js` to `dart:js_interop`

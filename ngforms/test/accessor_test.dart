@@ -18,8 +18,8 @@ void main() {
     test('should have error on invalid input', () async {
       NgTestFixture<AccessorTestComponent> fixture =
           await NgTestBed<AccessorTestComponent>(
-                  ng.createAccessorTestComponentFactory())
-              .create();
+            ng.createAccessorTestComponentFactory(),
+          ).create();
 
       await fixture.update((AccessorTestComponent c) {
         var model = c.model!;
@@ -35,8 +35,8 @@ void main() {
     test('shouldn\'t have error on valid input', () async {
       NgTestFixture<AccessorTestComponent> fixture =
           await NgTestBed<AccessorTestComponent>(
-                  ng.createAccessorTestComponentFactory())
-              .create();
+            ng.createAccessorTestComponentFactory(),
+          ).create();
 
       await fixture.update((AccessorTestComponent c) {
         var model = c.model!;
@@ -45,8 +45,11 @@ void main() {
         expect(c.value, 5);
         expect(model.value, 5);
         expect(model.control.rawValue, '5');
-        expect(model.control.errors, null,
-            reason: 'Valid value should not have an error');
+        expect(
+          model.control.errors,
+          null,
+          reason: 'Valid value should not have an error',
+        );
       });
     });
   });
@@ -73,7 +76,7 @@ typedef ChangeFunctionSimple = dynamic Function(dynamic value);
   ],
 )
 class IntValueAccessor implements ControlValueAccessor<dynamic>, Validator {
-  final HtmlElement _elementRef;
+  final HtmlElement? _elementRef;
 
   @HostListener('input')
   void onChangeBinding() => onChange(null);
@@ -89,7 +92,7 @@ class IntValueAccessor implements ControlValueAccessor<dynamic>, Validator {
   // ignore: prefer_function_declarations_over_variables
   TouchFunction onTouched = () {};
 
-  IntValueAccessor(this._elementRef);
+  IntValueAccessor(@Optional() this._elementRef);
 
   @override
   void writeValue(dynamic value) {
@@ -97,7 +100,7 @@ class IntValueAccessor implements ControlValueAccessor<dynamic>, Validator {
     //var normalizedValue = value!.toString();
     //js_util.setProperty(_elementRef, 'value', normalizedValue);
     var normalizedValue = value?.toString() ?? '';
-    _elementRef.setProperty('value'.toJS, normalizedValue.toJS);
+    _elementRef?.setProperty('value'.toJS, normalizedValue.toJS);
   }
 
   @override

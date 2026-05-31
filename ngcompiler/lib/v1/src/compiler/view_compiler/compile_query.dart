@@ -347,11 +347,9 @@ class _ListCompileQuery extends CompileQuery {
     this._storage,
     CompileView queryRoot,
     ProviderSource? boundDirective, {
-    required int? nodeIndex,
-    required int queryIndex,
-  }) : _nodeIndex = nodeIndex,
-       _queryIndex = queryIndex,
-       super._base(metadata, queryRoot, boundDirective);
+    required this._nodeIndex,
+    required this._queryIndex,
+  }) : super._base(metadata, queryRoot, boundDirective);
 
   ViewStorageItem? _dirtyFieldIfNeeded;
 

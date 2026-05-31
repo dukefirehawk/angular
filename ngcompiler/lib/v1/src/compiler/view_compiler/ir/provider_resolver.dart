@@ -260,11 +260,7 @@ class ExpressionProviderSource extends ProviderSource {
   final o.Expression _value;
   final o.Expression? _changeDetectorRef;
 
-  ExpressionProviderSource(
-    super.token,
-    this._value, {
-    o.Expression? changeDetectorRef,
-  }) : _changeDetectorRef = changeDetectorRef;
+  ExpressionProviderSource(super.token, this._value, {this._changeDetectorRef});
 
   @override
   o.Expression build() => _value;
@@ -314,8 +310,8 @@ class ClassProviderSource extends ProviderSource {
     super.token,
     this._classType,
     this._parameters, {
-    List<o.OutputType> typeArguments = const [],
-  }) : _typeArguments = typeArguments;
+    this._typeArguments = const [],
+  });
 
   @override
   o.Expression build() {
@@ -351,18 +347,18 @@ class DynamicProviderSource extends ProviderSource {
     this._element,
     this._resolver,
     this._source, {
-    required bool isOptional,
-  }) : _isOptional = isOptional;
+    required this._isOptional,
+  });
 
   @override
   o.Expression build() {
     final value = _source?.build() ?? _injectFromViewParent();
     final parent = _element.findElementByResolver(_resolver)!;
-    return getPropertyInView(value, _element.view!, parent.view!);
+    return getPropertyInView(value, _element.view, parent.view!);
   }
 
   o.Expression _injectFromViewParent() {
-    return injectFromViewParentInjector(_element.view!, token!, _isOptional);
+    return injectFromViewParentInjector(_element.view, token!, _isOptional);
   }
 
   @override

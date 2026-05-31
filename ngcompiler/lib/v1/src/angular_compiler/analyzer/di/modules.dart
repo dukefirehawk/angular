@@ -13,8 +13,7 @@ import 'providers.dart';
 class ModuleReader {
   final ProviderReader _providerReader;
 
-  const ModuleReader({ProviderReader providerReader = const ProviderReader()})
-    : _providerReader = providerReader;
+  const ModuleReader({this._providerReader = const ProviderReader()});
 
   /// Returns whether an object represents a constant [List].
   @protected

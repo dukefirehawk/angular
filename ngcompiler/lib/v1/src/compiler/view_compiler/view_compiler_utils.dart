@@ -42,7 +42,7 @@ o.Expression unsafeCast(o.Expression expression, [o.OutputType? cast]) {
 
 o.Expression getPropertyInView(
   o.Expression property,
-  CompileView callingView,
+  CompileView? callingView,
   CompileView definedView,
 ) {
   if (identical(callingView, definedView)) {
@@ -51,8 +51,8 @@ o.Expression getPropertyInView(
     o.Expression? viewProp;
     var currView = callingView;
     while (!identical(currView, definedView) &&
-        currView.declarationElement.view != null) {
-      currView = currView.declarationElement.view!;
+        currView?.declarationElement.view != null) {
+      currView = currView?.declarationElement.view!;
       viewProp = viewProp == null
           ? o.ReadClassMemberExpr('parentView')
           : viewProp.prop('parentView');
@@ -114,11 +114,11 @@ class _ReplaceReadClassMemberTransformer extends o.ExpressionTransformer<void> {
 }
 
 o.Expression injectFromViewParentInjector(
-  CompileView view,
+  CompileView? view,
   CompileTokenMetadata token,
   bool optional,
 ) {
-  final viewExpr = (view.viewType == ViewType.host)
+  final viewExpr = (view?.viewType == ViewType.host)
       ? o.thisExpr
       : o.ReadClassMemberExpr('parentView').notNull();
   return viewExpr.callMethod(optional ? 'injectorGetOptional' : 'injectorGet', [

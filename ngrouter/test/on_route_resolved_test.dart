@@ -15,7 +15,7 @@ void main() {
     test('fires on navigation', () async {
       final testBed = NgTestBed<TestComponent>(ng.createTestComponentFactory());
       final testFixture = await testBed.create();
-      final router = testFixture.assertOnlyInstance.router;
+      final router = testFixture.assertOnlyInstance.router!;
       await expectLater(
         navigate(router, '/destination'),
         emitsInOrder([
@@ -30,7 +30,7 @@ void main() {
         ng.createTestComponentFactory(),
       ).addInjector((i) => Injector.map({canNavigateToken: false}, i));
       final testFixture = await testBed.create();
-      final router = testFixture.assertOnlyInstance.router;
+      final router = testFixture.assertOnlyInstance.router!;
       await expectLater(
         navigate(router, '/destination'),
         emits(NavigationResult.blockedByGuard),
@@ -42,7 +42,7 @@ void main() {
         ng.createTestComponentFactory(),
       ).addInjector((i) => Injector.map({canDeactivateToken: false}, i));
       final testFixture = await testBed.create();
-      final router = testFixture.assertOnlyInstance.router;
+      final router = testFixture.assertOnlyInstance.router!;
       await expectLater(
         navigate(router, '/destination'),
         emitsInOrder([
@@ -55,8 +55,8 @@ void main() {
     test('fires on popstate', () async {
       final testBed = NgTestBed<TestComponent>(ng.createTestComponentFactory());
       final testFixture = await testBed.create();
-      final router = testFixture.assertOnlyInstance.router;
-      final locationStrategy = testFixture.assertOnlyInstance.locationStrategy;
+      final router = testFixture.assertOnlyInstance.router!;
+      final locationStrategy = testFixture.assertOnlyInstance.locationStrategy!;
       await expectLater(
         popState(router, locationStrategy, '/destination'),
         emits('#RouterState {/destination} popstate:true'),
@@ -66,7 +66,7 @@ void main() {
     test('fires only once on redirect', () async {
       final testBed = NgTestBed<TestComponent>(ng.createTestComponentFactory());
       final testFixture = await testBed.create();
-      final router = testFixture.assertOnlyInstance.router;
+      final router = testFixture.assertOnlyInstance.router!;
       await expectLater(
         navigate(router, '/redirection'),
         emitsInOrder([
@@ -128,8 +128,8 @@ class DestinationComponent {}
   providers: [routerProvidersTest],
 )
 class TestComponent {
-  final Router router;
-  final LocationStrategy locationStrategy;
+  final Router? router;
+  final LocationStrategy? locationStrategy;
   final List<RouteDefinition> routes = [
     RouteDefinition(
       path: 'home',
@@ -143,5 +143,5 @@ class TestComponent {
     RouteDefinition.redirect(path: 'redirection', redirectTo: 'destination'),
   ];
 
-  TestComponent(this.router, this.locationStrategy);
+  TestComponent(@Optional() this.router, @Optional() this.locationStrategy);
 }

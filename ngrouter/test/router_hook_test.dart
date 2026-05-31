@@ -20,7 +20,7 @@ void main() {
         ng.createTestAppComponentFactory(),
       ).addInjector(createInjector);
       final testFixture = await testBed.create();
-      router = testFixture.assertOnlyInstance.router;
+      router = testFixture.assertOnlyInstance.router!;
     });
 
     test('canActivate should block navigation', () async {
@@ -68,14 +68,14 @@ void main() {
       ng.createTestAppComponentFactory(),
     ).addInjector(accumulateQueryHookInjector);
     final testFixture = await testBed.create();
-    final router = testFixture.assertOnlyInstance.router;
+    final router = testFixture.assertOnlyInstance.router!;
     expect(router.current!.queryParameters, isEmpty);
     var navigationResult = await router.navigate(
       '/foo',
       NavigationParams(queryParameters: {'a': 'b'}),
     );
     expect(navigationResult, NavigationResult.success);
-    expect(router.current!.queryParameters, {'a': 'b'});
+    expect(router.current?.queryParameters, {'a': 'b'});
     // Router hook should combine new query parameters with existing ones.
     navigationResult = await router.navigate(
       '/foo',
@@ -110,9 +110,9 @@ class TestAppComponent {
       component: ng.createIndexComponentFactory(),
     ),
   ];
-  final Router router;
+  final Router? router;
 
-  TestAppComponent(this.router);
+  TestAppComponent(@Optional() this.router);
 }
 
 @Component(selector: 'foo', template: '')

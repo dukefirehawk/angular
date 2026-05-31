@@ -74,7 +74,7 @@ abstract class Injector {
   ///
   /// **NOTE**: This is an internal-only method and may be removed.
   @protected
-  T provideUntyped<T>(Object token, [Object? orElse = throwIfNotFound]) {
+  T provideUntyped<T>(Object token, [Object orElse = throwIfNotFound]) {
     errors.debugInjectorEnter(token);
     var result = injectFromSelfOptional(token, orElse);
     if (identical(result, orElse)) {
@@ -107,9 +107,9 @@ abstract class Injector {
   /// ancestry of injectors. This is equivalent to constructor parameters
   /// annotated with `@Self`.
   @protected
-  Object? injectFromSelfOptional(
+  Object injectFromSelfOptional(
     Object token, [
-    Object? orElse = throwIfNotFound,
+    Object orElse = throwIfNotFound,
   ]);
 
   /// Injects and returns an object representing [token] from the parent.
@@ -135,9 +135,9 @@ abstract class Injector {
   /// parent injector, not this injector, or further ancestors. This is
   /// equivalent to constructor parameters annotated with `@Host`.
   @protected
-  Object? injectFromParentOptional(
+  Object injectFromParentOptional(
     Object token, [
-    Object? orElse = throwIfNotFound,
+    Object orElse = throwIfNotFound,
   ]);
 
   /// Injects and returns an object representing [token] from ancestors.
@@ -163,9 +163,9 @@ abstract class Injector {
   /// injector, not this injector. This is equivalent to the constructor
   /// parameters annotated with `@SkipSelf`.
   @protected
-  Object? injectFromAncestryOptional(
+  Object injectFromAncestryOptional(
     Object token, [
-    Object? orElse = throwIfNotFound,
+    Object orElse = throwIfNotFound,
   ]);
 
   /// Returns an instance from the injector based on the provided [token].
@@ -180,7 +180,7 @@ abstract class Injector {
   ///
   /// An injector always returns itself if [Injector] is given as a token.
   @mustCallSuper
-  dynamic get(Object token, [Object? notFoundValue = throwIfNotFound]) {
+  dynamic get(Object token, [Object notFoundValue = throwIfNotFound]) {
     errors.debugInjectorEnter(token);
     final result = provideUntyped(token, notFoundValue);
     if (identical(result, throwIfNotFound)) {
@@ -219,10 +219,10 @@ abstract class Injector {
   /// * [T] is explicitly or implicitly bound to `dynamic`.
   /// * If [T] is not `Object`, the DI [token] is not the *same* as [T].
   @nonVirtual
-  T? provideTypeOptional<T extends Object>(Type token) {
+  T provideTypeOptional<T extends Object>(Type token) {
     // See provideType.
     assert(T != dynamic, 'Returning a dynamic is not supported');
-    return unsafeCast(get(token, null));
+    return unsafeCast(get(token));
   }
 
   /// Finds and returns an object instance provided for a [token].
@@ -267,8 +267,8 @@ abstract class Injector {
   /// }
   /// ```
   @nonVirtual
-  T? provideTokenOptional<T extends Object>(OpaqueToken<T> token) {
-    return unsafeCast(get(token, null));
+  T provideTokenOptional<T extends Object>(OpaqueToken<T> token) {
+    return unsafeCast(get(token));
   }
 }
 
@@ -289,17 +289,17 @@ abstract class HierarchicalInjector extends Injector {
     : _parent = parent ?? const _EmptyInjector();
 
   @override
-  Object? injectFromAncestryOptional(
+  Object injectFromAncestryOptional(
     Object token, [
-    Object? orElse = throwIfNotFound,
+    Object orElse = throwIfNotFound,
   ]) {
     return _parent.provideUntyped(token, orElse);
   }
 
   @override
-  Object? injectFromParentOptional(
+  Object injectFromParentOptional(
     Object token, [
-    Object? orElse = throwIfNotFound,
+    Object orElse = throwIfNotFound,
   ]) {
     return _parent.injectFromSelfOptional(token, orElse);
   }
@@ -310,23 +310,23 @@ class _EmptyInjector extends Injector {
   const _EmptyInjector();
 
   @override
-  Object? injectFromSelfOptional(
+  Object injectFromSelfOptional(
     Object token, [
-    Object? orElse = throwIfNotFound,
+    Object orElse = throwIfNotFound,
   ]) => identical(token, Injector) ? this : orElse;
 
   @override
-  Object? injectFromParentOptional(
+  Object injectFromParentOptional(
     Object token, [
-    Object? orElse = throwIfNotFound,
+    Object orElse = throwIfNotFound,
   ]) {
     return orElse;
   }
 
   @override
-  Object? injectFromAncestryOptional(
+  Object injectFromAncestryOptional(
     Object token, [
-    Object? orElse = throwIfNotFound,
+    Object orElse = throwIfNotFound,
   ]) {
     return orElse;
   }
@@ -343,9 +343,9 @@ class _MapInjector extends HierarchicalInjector implements Injector {
   }
 
   @override
-  Object? injectFromSelfOptional(
+  Object injectFromSelfOptional(
     Object token, [
-    Object? orElse = throwIfNotFound,
+    Object orElse = throwIfNotFound,
   ]) {
     var result = _providers[token];
     if (result == null) {

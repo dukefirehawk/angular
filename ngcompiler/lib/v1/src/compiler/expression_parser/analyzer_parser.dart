@@ -328,8 +328,8 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
   ast.BindingPipe _createPipeOrThrow(
     MethodInvocation astNode,
     ast.PropertyRead receiver,
-    List<Expression> posArgs,
-    List<NamedExpression> namedArgs,
+    List<Argument> posArgs,
+    List<NamedArgument> namedArgs,
   ) {
     if (!allowPipes) {
       return _notSupported('Pipes are not allowed in this context', astNode);
@@ -349,7 +349,7 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
     return _createPipeUsage(astNode.methodName.name, posArgs);
   }
 
-  ast.BindingPipe _createPipeUsage(String name, List<Expression> posArgs) {
+  ast.BindingPipe _createPipeUsage(String name, List<Argument> posArgs) {
     return ast.BindingPipe(
       posArgs.first.accept(this)!,
       name,
@@ -378,10 +378,10 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
       return _notSupported('Generic type arguments not supported.', call);
     }
     final allArgs = call.argumentList.arguments;
-    final posArgs = <Expression>[];
-    final namedArgs = <NamedExpression>[];
+    final posArgs = <Argument>[];
+    final namedArgs = <NamedArgument>[];
     for (final arg in allArgs) {
-      if (arg is NamedExpression) {
+      if (arg is NamedArgument) {
         namedArgs.add(arg);
       } else {
         posArgs.add(arg);
@@ -400,7 +400,12 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
         .whereType<ast.AST>()
         .toList();
     final callNamed = namedArgs
-        .map((a) => ast.NamedExpr(a.name.label.name, a.expression.accept(this)))
+        .map(
+          (a) => ast.NamedExpr(
+            a.name.stringValue!,
+            a.argumentExpression.accept(this),
+          ),
+        )
         .toList();
     if (methodName != null) {
       if (_isNullAwareCall(call)) {

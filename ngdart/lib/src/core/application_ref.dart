@@ -76,12 +76,11 @@ class ApplicationRef extends ChangeDetectionHost {
         final testability = injector.provideTypeOptional<Testability>(
           Testability,
         );
-        if (testability != null) {
-          final registry = _injector.provideType<TestabilityRegistry>(
-            TestabilityRegistry,
-          );
-          registry.registerApplication(component.location, testability);
-        }
+        final registry = _injector.provideType<TestabilityRegistry>(
+          TestabilityRegistry,
+        );
+        registry.registerApplication(component.location, testability);
+
         _loadedRootComponent(component, replacement);
         return component;
       }),

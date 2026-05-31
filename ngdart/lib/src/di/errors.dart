@@ -3,7 +3,7 @@ import 'package:meta/dart2js.dart' as dart2js;
 import '../utilities/is_dev_mode.dart';
 
 /// Current stack of tokens being requested for an injection.
-List<Object>? _tokenStack;
+List<Object> _tokenStack = [];
 
 /// In debug mode, trace entering an injection lookup of [token] in [injector].
 ///
@@ -20,7 +20,7 @@ List<Object>? _tokenStack;
 void debugInjectorEnter(Object token) {
   // Tree-shake out in Dart2JS.
   if (isDevMode) {
-    (_tokenStack ??= []).add(token);
+    _tokenStack.add(token);
   }
 }
 
@@ -29,7 +29,7 @@ void debugInjectorEnter(Object token) {
 void debugInjectorLeave(Object token) {
   // Tree-shake out in Dart2JS.
   if (isDevMode) {
-    final removed = _tokenStack!.removeLast();
+    final removed = _tokenStack.removeLast();
     assert(identical(removed, token));
   }
 }
@@ -49,7 +49,7 @@ Error noProviderError(Object token) {
   if (isDevMode) {
     final error = NoProviderError._(token, _tokenStack);
     // IMPORTANT: Clears the stack after reporting the error.
-    _tokenStack = null;
+    _tokenStack.clear();
     return error;
   }
   return ArgumentError(_noProviderError(token));

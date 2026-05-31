@@ -127,7 +127,7 @@ class ViewContainer extends ComponentLoader implements ViewContainerRef {
     final contextInjector = injector ?? parentInjector;
     final componentRef = componentFactory.create(
       contextInjector,
-      projectableNodes,
+      projectableNodes ?? const [],
     );
     insert(componentRef.hostView as ViewRef, index);
     return componentRef;

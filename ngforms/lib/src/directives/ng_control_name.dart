@@ -65,13 +65,11 @@ import 'shared.dart' show controlPath;
 /// ```
 @Directive(
   selector: '[ngControl]',
-  providers: [
-    ExistingProvider(NgControl, NgControlName),
-  ],
+  providers: [ExistingProvider(NgControl, NgControlName)],
   exportAs: 'ngForm',
 )
 class NgControlName extends NgControl implements AfterChanges, OnDestroy {
-  final ControlContainer _parent;
+  final ControlContainer? _parent;
   final _update = StreamController.broadcast();
 
   bool _modelChanged = false;
@@ -90,7 +88,7 @@ class NgControlName extends NgControl implements AfterChanges, OnDestroy {
   bool _disabledChanged = false;
 
   NgControlName(
-    @SkipSelf() this._parent,
+    @Optional() @SkipSelf() this._parent,
     @Optional() @Self() @Inject(ngValidators) List<dynamic>? validators,
     @Optional()
     @Self()
@@ -122,11 +120,11 @@ class NgControlName extends NgControl implements AfterChanges, OnDestroy {
       _modelChanged = false;
       if (!identical(_model, viewModel)) {
         viewModel = _model;
-        formDirective.updateModel(this, _model);
+        formDirective?.updateModel(this, _model);
       }
     }
     if (!_added) {
-      formDirective.addControl(this);
+      formDirective?.addControl(this);
       _added = true;
     }
     if (_disabledChanged) {
@@ -139,7 +137,7 @@ class NgControlName extends NgControl implements AfterChanges, OnDestroy {
 
   @override
   void ngOnDestroy() {
-    formDirective.removeControl(this);
+    formDirective?.removeControl(this);
   }
 
   @override
@@ -151,8 +149,8 @@ class NgControlName extends NgControl implements AfterChanges, OnDestroy {
   @override
   List<String?> get path => controlPath(name, _parent);
 
-  Form get formDirective => _parent.formDirective;
+  Form? get formDirective => _parent?.formDirective;
 
   @override
-  Control? get control => formDirective.getControl(this);
+  Control? get control => formDirective?.getControl(this);
 }

@@ -62,8 +62,7 @@ Future<T> runWithContext<T>(CompileContext instance, Future<T> Function() run) {
         );
 
         if (!buildCompletedOrFailed.isCompleted) {
-          //buildCompletedOrFailed.complete();
-          throw Exception(errorMsg);
+          buildCompletedOrFailed.complete();
         }
       } else {
         var errorMsg = 'Unhandled exception in the AngularDart compiler!';
@@ -75,8 +74,7 @@ Future<T> runWithContext<T>(CompileContext instance, Future<T> Function() run) {
         );
 
         if (!buildCompletedOrFailed.isCompleted) {
-          //buildCompletedOrFailed.complete();
-          throw Exception(errorMsg);
+          buildCompletedOrFailed.complete();
         }
       }
     },

@@ -56,7 +56,7 @@ To use `ngtest`, configure your package's `pubspec.yaml` as follows:
 dev_dependencies:
   build_runner: ^2.3.0
   build_test: ^2.1.0
-  build_web_compilers: ^4.1.0
+  build_web_compilers: ^4.6.0
 ```
 
 **IMPORTANT**: `ngtest` will not run without these dependencies set.

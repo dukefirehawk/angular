@@ -17,7 +17,8 @@ const numberValueAccessor = ExistingProvider.forToken(
 ///
 ///  <input type="number" [(ngModel)]="age">
 @Directive(
-  selector: 'input[type=number][ngControl],'
+  selector:
+      'input[type=number][ngControl],'
       'input[type=number][ngFormControl],'
       'input[type=number][ngModel]',
   providers: [numberValueAccessor],
@@ -25,10 +26,10 @@ const numberValueAccessor = ExistingProvider.forToken(
 class NumberValueAccessor extends Object
     with TouchHandler, ChangeHandler<double?>
     implements ControlValueAccessor<Object?> {
-  final HTMLInputElement _element;
+  final HTMLInputElement? _element;
 
-  NumberValueAccessor(HtmlElement element)
-      : _element = element as HTMLInputElement;
+  NumberValueAccessor(@Optional() HtmlElement? element)
+    : _element = element as HTMLInputElement?;
 
   @HostListener('change', ['\$event.target.value'])
   @HostListener('input', ['\$event.target.value'])
@@ -38,11 +39,11 @@ class NumberValueAccessor extends Object
 
   @override
   void writeValue(value) {
-    _element.value = '$value';
+    _element?.value = '$value';
   }
 
   @override
   void onDisabledChanged(bool isDisabled) {
-    _element.disabled = isDisabled;
+    _element?.disabled = isDisabled;
   }
 }

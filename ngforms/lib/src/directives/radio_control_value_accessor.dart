@@ -37,7 +37,7 @@ class RadioControlRegistry {
 
   void select(RadioControlValueAccessor accessor) {
     for (var c in _accessors) {
-      if (identical(c[0].control.root, accessor._control.control?.root) &&
+      if (identical(c[0].control.root, accessor._control?.control?.root) &&
           !identical(c[1], accessor)) {
         c[1].fireUncheck();
       }
@@ -71,7 +71,8 @@ class RadioButtonState {
 /// }
 /// ```
 @Directive(
-  selector: 'input[type=radio][ngControl],'
+  selector:
+      'input[type=radio][ngControl],'
       'input[type=radio][ngFormControl],'
       'input[type=radio][ngModel]',
   providers: [radioValueAccessor],
@@ -79,32 +80,38 @@ class RadioButtonState {
 class RadioControlValueAccessor extends Object
     with TouchHandler, ChangeHandler<RadioButtonState>
     implements ControlValueAccessor<RadioButtonState>, OnDestroy, OnInit {
-  final HtmlElement _element;
-  final RadioControlRegistry _registry;
-  final Injector _injector;
+  final HtmlElement? _element;
+  final RadioControlRegistry? _registry;
+  final Injector? _injector;
   RadioButtonState? _state;
-  late NgControl _control;
+  late NgControl? _control;
 
   @Input()
   String? name;
 
-  RadioControlValueAccessor(this._element, this._registry, this._injector);
+  RadioControlValueAccessor(
+    @Optional() this._element,
+    @Optional() this._registry,
+    @Optional() this._injector,
+  );
 
   @HostListener('change')
   void changeHandler() {
     onChange(RadioButtonState(true, _state!.value), rawValue: _state!.value);
-    _registry.select(this);
+    _registry?.select(this);
   }
 
   @override
   void ngOnInit() {
-    _control = _injector.provideType(NgControl);
-    _registry.add(_control, this);
+    _control = _injector?.provideType(NgControl);
+    if (_control != null) {
+      _registry?.add(_control!, this);
+    }
   }
 
   @override
   void ngOnDestroy() {
-    _registry.remove(this);
+    _registry?.remove(this);
   }
 
   @override
@@ -113,7 +120,7 @@ class RadioControlValueAccessor extends Object
     if (value?.checked ?? false) {
       // TODO: Migrate to 3.6 (Need review)
       //js_util.setProperty(_element, 'checked', true);
-      _element.setProperty('checked'.toJS, true.toJS);
+      _element?.setProperty('checked'.toJS, true.toJS);
     }
   }
 

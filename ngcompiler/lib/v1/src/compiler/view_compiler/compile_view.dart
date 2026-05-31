@@ -91,13 +91,9 @@ class NodeReference {
       _initialValue = null;
 
   /// Create a [NodeReference] for a `Text` node.
-  NodeReference.textNode(
-    this._storage,
-    int nodeIndex, {
-    o.Expression? initialValue,
-  }) : _type = o.importType(Identifiers.textNode),
-       _name = '_text_$nodeIndex',
-       _initialValue = initialValue;
+  NodeReference.textNode(this._storage, int nodeIndex, {this._initialValue})
+    : _type = o.importType(Identifiers.textNode),
+      _name = '_text_$nodeIndex';
 
   /// Creates a [NodeReference] for a ng-content node.
   NodeReference.ngContent(this._storage, int nodeIndex)
@@ -822,7 +818,7 @@ class CompileView {
               // that this tag is one we should add the generic type argument
               // <HtmlElement> (which ends up just being an unsafeCast behind the
               // scenes).
-              if (coerceToTypedElement != null) coerceToTypedElement,
+              ?coerceToTypedElement,
             ],
           );
       _createMethod.addStmt(elementRef.toWriteStmt(createExpr));

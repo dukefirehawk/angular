@@ -34,7 +34,7 @@ void main() {
 
     await onStable();
     expect(_logs, isEmpty);
-    expect(locationStrategy.path(), isEmpty);
+    expect(locationStrategy?.path(), isEmpty);
     expect(routeContainer.textContent, contains('Home Page'));
 
     // "Navigate" to /another
@@ -122,17 +122,17 @@ class AppComponent {
     ),
   ];
 
-  final MockLocationStrategy _locationStrategy;
-  final NgZone _ngZone;
-  final Testability _testability;
+  final MockLocationStrategy? _locationStrategy;
+  final NgZone? _ngZone;
+  final Testability? _testability;
 
   AppComponent(
-    @Inject(LocationStrategy) this._locationStrategy,
-    this._ngZone,
-    this._testability,
+    @Optional() @Inject(LocationStrategy) this._locationStrategy,
+    @Optional() this._ngZone,
+    @Optional() this._testability,
   );
 
-  String get currentUrl => _locationStrategy.path();
+  String get currentUrl => _locationStrategy?.path() ?? '';
 
   /// Returns a future that completes when [Testability] reports stability.
   Future<void> get onStable async {
@@ -141,7 +141,7 @@ class AppComponent {
 
     // Then wait for an async completion.
     final completer = Completer<void>();
-    _testability.whenStable(completer.complete.toJS);
+    _testability?.whenStable((() => completer.complete()).toJS);
     return completer.future;
   }
 
@@ -152,10 +152,14 @@ class AppComponent {
   /// Returns a [Future] that completes (a) after changing and (b) after stable.
   Future<void> updateUrl(String newUrl) {
     // Enters the zone manually if needed.
-    return _ngZone.run(() {
-      _locationStrategy.simulatePopState(newUrl);
-      return onStable;
-    });
+    if (_ngZone != null) {
+      return _ngZone.run(() {
+        _locationStrategy?.simulatePopState(newUrl);
+        return onStable;
+      });
+    }
+
+    return Future.value();
   }
 }
 
@@ -175,9 +179,9 @@ class AnotherComponent {}
   ''',
 )
 class ThrowingComponent {
-  final ServiceThatThrows service;
+  final ServiceThatThrows? service;
 
-  ThrowingComponent(this.service);
+  ThrowingComponent(@Optional() this.service);
 }
 
 class IntentionalException implements Exception {}
