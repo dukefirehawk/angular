@@ -6,7 +6,6 @@ import '../../di/injector.dart' show Injector;
 import '../../utilities/unsafe_cast.dart';
 import 'component_factory.dart' show ComponentFactory, ComponentRef;
 import 'component_loader.dart';
-import 'element_ref.dart';
 import 'template_ref.dart';
 import 'view_container_ref.dart';
 import 'view_ref.dart' show EmbeddedViewRef, ViewRef;
@@ -32,8 +31,8 @@ class ViewContainer extends ComponentLoader implements ViewContainerRef {
     this.nativeElement,
   );
 
-  @Deprecated('Use .nativeElement instead')
-  ElementRef get elementRef => ElementRef(nativeElement);
+  //@Deprecated('Use .nativeElement instead')
+  //ElementRef get elementRef => ElementRef(nativeElement);
 
   /// Returns the [ViewRef] for the View located in this container at the
   /// specified index.
@@ -52,7 +51,7 @@ class ViewContainer extends ComponentLoader implements ViewContainerRef {
   /// Anchor element that specifies the location of this container in the
   /// containing View.
   @override
-  ElementRef get element => elementRef;
+  HTMLElement get element => nativeElement as HTMLElement;
 
   @override
   Injector get parentInjector => parentView!.injector(parentIndex);

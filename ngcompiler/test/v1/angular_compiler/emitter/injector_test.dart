@@ -78,7 +78,7 @@ void main() {
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
-            return orElse;
+            return orElse!;
           }
         }
       '''),
@@ -124,7 +124,7 @@ void main() {
             if (identical(token, Foo)) {
               return _getFooImpl$0();
             }
-            return orElse;
+            return orElse!;
           }
         }
         '''),
@@ -157,7 +157,7 @@ void main() {
             if (identical(token, FooPrime)) {
               return _getExisting$0();
             }
-            return orElse;
+            return orElse!;
           }
         }
         '''),
@@ -202,7 +202,7 @@ void main() {
             if (identical(token, Foo)) {
               return _getFoo$0();
             }
-            return orElse;
+            return orElse!;
           }
         }
         '''),
@@ -235,7 +235,7 @@ void main() {
             if (identical(token, Foo)) {
               return _getFoo$0();
             }
-            return orElse;
+            return orElse!;
           }
         }
         '''),
@@ -290,7 +290,7 @@ void main() {
                 _getint$1(),
               ];
             }
-            return orElse;
+            return orElse!;
           }
         }
         '''),

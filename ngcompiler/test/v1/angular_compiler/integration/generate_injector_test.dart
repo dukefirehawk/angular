@@ -64,7 +64,7 @@ void main() {
               if (identical(token, Injector)) {
                 return _getInjector$1();
               }
-              return orElse;
+              return orElse!;
             }
           }
         '''),
