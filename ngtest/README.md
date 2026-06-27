@@ -64,7 +64,7 @@ dev_dependencies:
 To run tests, use `dart run build_runner test`. It automatically compiles your templates and annotations with AngularDart, and then compiles all of the Dart code to JavaScript in order to run browser tests. Here's an example of using Chrome with Dartdevc:
 
 ```bash
-dart run build_runner test --no-aot -- -p chrome
+dart run build_runner test -- -p chrome
 ```
 
 For more information using `dart run build_runner test`, see the documentation:
