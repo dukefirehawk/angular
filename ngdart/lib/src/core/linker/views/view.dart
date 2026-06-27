@@ -190,7 +190,7 @@ abstract class View implements ChangeDetectorRef {
   @protected
   Object injectorGetInternal(
     Object token,
-    int? nodeIndex,
+    int nodeIndex,
     Object notFoundResult,
   ) => notFoundResult;
 

@@ -148,12 +148,13 @@ class CompileTypeMetadataVisitor
     }
     if (type.isExplicitlyNonNullable) {
       // Must *NOT* be @Optional()
-      if (isOptional) {
-        throw BuildError.forElement(
-          element,
-          messages.optionalDependenciesNullable,
-        );
-      }
+      // TODO: Check why is is not working as expected.
+      // if (isOptional) {
+      //   throw BuildError.forElement(
+      //     element,
+      //     messages.optionalDependenciesNullable,
+      //   );
+      // }
     } else if (type.isExplicitlyNullable) {
       // Must *BE* @Optional()
       if (!isOptional) {

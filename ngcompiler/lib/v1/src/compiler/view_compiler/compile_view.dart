@@ -1573,12 +1573,12 @@ class CompileView {
     return o.ClassMethod(
       'injectorGetInternal',
       [
-        o.FnParam(InjectMethodVars.token.name!, o.dynamicType),
+        o.FnParam(InjectMethodVars.token.name!, o.objectType),
         o.FnParam(InjectMethodVars.nodeIndex.name!, o.intType),
-        o.FnParam(InjectMethodVars.notFoundResult.name!, o.dynamicType),
+        o.FnParam(InjectMethodVars.notFoundResult.name!, o.objectType),
       ],
       _addReturnValueIfNotEmpty(statements, InjectMethodVars.notFoundResult),
-      o.dynamicType,
+      o.objectType,
       null,
       [o.importExpr(Identifiers.dartCoreOverride)],
     );

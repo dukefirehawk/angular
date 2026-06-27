@@ -94,7 +94,7 @@ abstract class Injector {
   @protected
   @nonVirtual
   T injectFromSelf<T>(Object token) {
-    final result = injectFromSelfOptional(token);
+    final Object result = injectFromSelfOptional(token);
     if (identical(result, throwIfNotFound)) {
       throw errors.noProviderError(token);
     }

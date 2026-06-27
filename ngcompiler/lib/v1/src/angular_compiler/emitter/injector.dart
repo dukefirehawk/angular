@@ -96,7 +96,7 @@ class InjectorEmitter implements InjectorVisitor {
         Parameter(
           (b) => b
             ..name = 'orElse'
-            ..type = _$Object.rebuild((b) => b.isNullable = true)
+            ..type = _$Object.rebuild((b) => b.isNullable = false)
             ..defaultTo = _$throwIfNotFound.expression.code,
         ),
       )

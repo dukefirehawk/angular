@@ -54,8 +54,8 @@ To use `ngtest`, configure your package's `pubspec.yaml` as follows:
 ```yaml
 # Use the latest versions if possible.
 dev_dependencies:
-  build_runner: ^2.3.0
-  build_test: ^2.1.0
+  build_runner: ^2.10.0
+  build_test: ^3.0.0
   build_web_compilers: ^4.6.0
 ```
 
@@ -64,7 +64,7 @@ dev_dependencies:
 To run tests, use `dart run build_runner test`. It automatically compiles your templates and annotations with AngularDart, and then compiles all of the Dart code to JavaScript in order to run browser tests. Here's an example of using Chrome with Dartdevc:
 
 ```bash
-dart run build_runner test -- -p chrome
+dart run build_runner test --no-aot -- -p chrome
 ```
 
 For more information using `dart run build_runner test`, see the documentation:

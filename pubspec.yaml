@@ -15,7 +15,7 @@ workspace:
   #- _tests
 
 dev_dependencies:
-  melos: ^7.8.0
+  melos: ^8.0.0
   lints: ^6.0.0
 
 melos:
