@@ -366,7 +366,7 @@ class CaptureInjectInjector extends HierarchicalInjector implements Injector {
   @override
   Object injectFromSelfOptional(
     Object token, [
-    Object orElse = throwIfNotFound,
+    Object? orElse = throwIfNotFound,
   ]) {
     lastToken = token;
     lastOrElse = orElse;

@@ -280,8 +280,8 @@ class _ElementInjector extends Injector {
   _ElementInjector(this._view, this._nodeIndex);
 
   @override
-  T provideUntyped<T>(Object token, [Object orElse = throwIfNotFound]) =>
-      unsafeCast(_view.inject(token, _nodeIndex, orElse));
+  T provideUntyped<T>(Object token, [Object? orElse = throwIfNotFound]) =>
+      unsafeCast(_view.inject(token, _nodeIndex, orElse!));
 
   @override
   Object injectFromAncestryOptional(

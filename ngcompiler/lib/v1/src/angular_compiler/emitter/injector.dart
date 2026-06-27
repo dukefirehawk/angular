@@ -96,7 +96,7 @@ class InjectorEmitter implements InjectorVisitor {
         Parameter(
           (b) => b
             ..name = 'orElse'
-            ..type = _$Object.rebuild((b) => b.isNullable = false)
+            ..type = _$Object.rebuild((b) => b.isNullable = true)
             ..defaultTo = _$throwIfNotFound.expression.code,
         ),
       )
@@ -104,7 +104,7 @@ class InjectorEmitter implements InjectorVisitor {
         (b) => b
           ..statements.addAll(_injectSelfBody)
           ..statements.addAll(_createMultiBody())
-          ..statements.add(refer('orElse').returned.statement),
+          ..statements.add(refer('orElse').nullChecked.returned.statement),
       ),
   );
 
