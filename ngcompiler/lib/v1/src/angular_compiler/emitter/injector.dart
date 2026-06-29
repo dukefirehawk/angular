@@ -78,12 +78,13 @@ class InjectorEmitter implements InjectorVisitor {
       ..body = refer(_className!).newInstanceNamed('_', [refer('parent')]).code,
   );
 
-  /// Returns the `Object injectSelfOptional(...)` method for the `class`.
+  /// Returns the `Object? injectSelfOptional(...)` method for the `class`.
   @visibleForTesting
   Method createInjectSelfOptional() => Method(
     (b) => b
       ..name = 'injectFromSelfOptional'
-      ..returns = _$Object.rebuild((b) => b.isNullable = false)
+      //..returns = _$Object.rebuild((b) => b.isNullable = true)
+      ..returns = refer('Object?')
       ..annotations.add(_$override)
       ..requiredParameters.add(
         Parameter(
@@ -104,7 +105,7 @@ class InjectorEmitter implements InjectorVisitor {
         (b) => b
           ..statements.addAll(_injectSelfBody)
           ..statements.addAll(_createMultiBody())
-          ..statements.add(refer('orElse').nullChecked.returned.statement),
+          ..statements.add(refer('orElse').returned.statement),
       ),
   );
 

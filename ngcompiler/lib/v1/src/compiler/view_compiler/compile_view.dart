@@ -1575,10 +1575,10 @@ class CompileView {
       [
         o.FnParam(InjectMethodVars.token.name!, o.objectType),
         o.FnParam(InjectMethodVars.nodeIndex.name!, o.intType),
-        o.FnParam(InjectMethodVars.notFoundResult.name!, o.objectType),
+        o.FnParam(InjectMethodVars.notFoundResult.name!, o.objectType.asNullable()),
       ],
       _addReturnValueIfNotEmpty(statements, InjectMethodVars.notFoundResult),
-      o.objectType,
+      o.objectType.asNullable(),
       null,
       [o.importExpr(Identifiers.dartCoreOverride)],
     );

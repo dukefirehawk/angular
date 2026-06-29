@@ -14,16 +14,16 @@ void main() {
   group('navigateByUrl', () {
     setUp(() {
       mockRouter = MockRouter();
+      when(
+        mockRouter.navigate('', any),
+      ).thenAnswer((_) => Future.value(NavigationResult.success));
       router = DelegatingRouter(mockRouter);
     });
 
     test('invokes navigate', () {
       router.navigateByUrl('/to/path');
       expect(
-        verify(mockRouter.navigate(
-          captureAny ?? '',
-          captureAny,
-        )).captured,
+        verify(mockRouter.navigate(captureAny ?? '', captureAny)).captured,
         ['/to/path', navigationParams()],
       );
     });
@@ -31,10 +31,7 @@ void main() {
     test('invokes navigate with query parameters', () {
       router.navigateByUrl('/to/path?q=hello%20world');
       expect(
-        verify(mockRouter.navigate(
-          captureAny ?? '',
-          captureAny,
-        )).captured,
+        verify(mockRouter.navigate(captureAny ?? '', captureAny)).captured,
         [
           '/to/path',
           navigationParams(queryParameters: {'q': 'hello world'}),
@@ -45,42 +42,24 @@ void main() {
     test('invokes navigate with fragment identifier', () {
       router.navigateByUrl('/to/path#with-fragment');
       expect(
-        verify(mockRouter.navigate(
-          captureAny ?? '',
-          captureAny,
-        )).captured,
-        [
-          '/to/path',
-          navigationParams(fragment: 'with-fragment'),
-        ],
+        verify(mockRouter.navigate(captureAny ?? '', captureAny)).captured,
+        ['/to/path', navigationParams(fragment: 'with-fragment')],
       );
     });
 
     test('invokes navigate with reload', () {
       router.navigateByUrl('/to/path', reload: true);
       expect(
-        verify(mockRouter.navigate(
-          captureAny ?? '',
-          captureAny,
-        )).captured,
-        [
-          '/to/path',
-          navigationParams(reload: true),
-        ],
+        verify(mockRouter.navigate(captureAny ?? '', captureAny)).captured,
+        ['/to/path', navigationParams(reload: true)],
       );
     });
 
     test('invokes navigate with replace', () {
       router.navigateByUrl('/to/path', replace: true);
       expect(
-        verify(mockRouter.navigate(
-          captureAny ?? '',
-          captureAny,
-        )).captured,
-        [
-          '/to/path',
-          navigationParams(replace: true),
-        ],
+        verify(mockRouter.navigate(captureAny ?? '', captureAny)).captured,
+        ['/to/path', navigationParams(replace: true)],
       );
     });
   });
@@ -92,14 +71,13 @@ class DelegatingRouter extends RouterImpl {
   final Router _delegate;
 
   DelegatingRouter(this._delegate)
-      : super(Location(MockLocationStrategy()), null);
+    : super(Location(MockLocationStrategy()), null);
 
   @override
   Future<NavigationResult> navigate(
     String path, [
     NavigationParams? navigationParams,
-  ]) =>
-      _delegate.navigate(path, navigationParams);
+  ]) => _delegate.navigate(path, navigationParams);
 }
 
 Matcher navigationParams({
@@ -107,13 +85,14 @@ Matcher navigationParams({
   String fragment = '',
   bool reload = false,
   bool replace = false,
-}) =>
-    NavigationParamsMatcher(NavigationParams(
-      queryParameters: queryParameters,
-      fragment: fragment,
-      reload: reload,
-      replace: replace,
-    ));
+}) => NavigationParamsMatcher(
+  NavigationParams(
+    queryParameters: queryParameters,
+    fragment: fragment,
+    reload: reload,
+    replace: replace,
+  ),
+);
 
 class NavigationParamsMatcher extends Matcher {
   final NavigationParams navigationParams;
@@ -123,8 +102,10 @@ class NavigationParamsMatcher extends Matcher {
   @override
   bool matches(item, void _) {
     return item is NavigationParams &&
-        const MapEquality()
-            .equals(item.queryParameters, navigationParams.queryParameters) &&
+        const MapEquality().equals(
+          item.queryParameters,
+          navigationParams.queryParameters,
+        ) &&
         item.fragment == navigationParams.fragment &&
         item.reload == navigationParams.reload &&
         item.replace == navigationParams.replace &&
@@ -134,7 +115,9 @@ class NavigationParamsMatcher extends Matcher {
   @override
   Description describe(Description description) {
     return _describeNavigationParams(
-        description.add('NavigationParams with '), navigationParams);
+      description.add('NavigationParams with '),
+      navigationParams,
+    );
   }
 
   @override

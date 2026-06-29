@@ -73,7 +73,7 @@ class _LazyInjector extends HierarchicalInjector {
   const _LazyInjector(this._providers, [super.parent]);
 
   @override
-  Object injectFromSelfOptional(
+  Object? injectFromSelfOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]) {
@@ -82,7 +82,7 @@ class _LazyInjector extends HierarchicalInjector {
       if (identical(token, Injector)) {
         return this;
       }
-      return orElse!;
+      return orElse;
     }
     return result();
   }

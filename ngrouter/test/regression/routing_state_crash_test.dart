@@ -179,9 +179,9 @@ class AnotherComponent {}
   ''',
 )
 class ThrowingComponent {
-  final ServiceThatThrows? service;
+  final ServiceThatThrows service;
 
-  ThrowingComponent(@Optional() this.service);
+  ThrowingComponent(this.service);
 }
 
 class IntentionalException implements Exception {}

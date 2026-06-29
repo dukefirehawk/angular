@@ -76,7 +76,7 @@ abstract class Injector {
   @protected
   T provideUntyped<T>(Object token, [Object? orElse = throwIfNotFound]) {
     errors.debugInjectorEnter(token);
-    var result = injectFromSelfOptional(token, orElse!);
+    var result = injectFromSelfOptional(token, orElse);
     if (identical(result, orElse)) {
       result = injectFromAncestryOptional(token, orElse);
     }
@@ -94,7 +94,7 @@ abstract class Injector {
   @protected
   @nonVirtual
   T injectFromSelf<T>(Object token) {
-    final Object result = injectFromSelfOptional(token);
+    final Object? result = injectFromSelfOptional(token);
     if (identical(result, throwIfNotFound)) {
       throw errors.noProviderError(token);
     }
@@ -107,7 +107,7 @@ abstract class Injector {
   /// ancestry of injectors. This is equivalent to constructor parameters
   /// annotated with `@Self`.
   @protected
-  Object injectFromSelfOptional(
+  Object? injectFromSelfOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]);
@@ -135,7 +135,7 @@ abstract class Injector {
   /// parent injector, not this injector, or further ancestors. This is
   /// equivalent to constructor parameters annotated with `@Host`.
   @protected
-  Object injectFromParentOptional(
+  Object? injectFromParentOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]);
@@ -163,7 +163,7 @@ abstract class Injector {
   /// injector, not this injector. This is equivalent to the constructor
   /// parameters annotated with `@SkipSelf`.
   @protected
-  Object injectFromAncestryOptional(
+  Object? injectFromAncestryOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]);
@@ -289,7 +289,7 @@ abstract class HierarchicalInjector extends Injector {
     : _parent = parent ?? const _EmptyInjector();
 
   @override
-  Object injectFromAncestryOptional(
+  Object? injectFromAncestryOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]) {
@@ -297,7 +297,7 @@ abstract class HierarchicalInjector extends Injector {
   }
 
   @override
-  Object injectFromParentOptional(
+  Object? injectFromParentOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]) {
@@ -310,25 +310,25 @@ class _EmptyInjector extends Injector {
   const _EmptyInjector();
 
   @override
-  Object injectFromSelfOptional(
+  Object? injectFromSelfOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
-  ]) => identical(token, Injector) ? this : orElse!;
+  ]) => identical(token, Injector) ? this : orElse;
 
   @override
-  Object injectFromParentOptional(
+  Object? injectFromParentOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]) {
-    return orElse!;
+    return orElse;
   }
 
   @override
-  Object injectFromAncestryOptional(
+  Object? injectFromAncestryOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]) {
-    return orElse!;
+    return orElse;
   }
 }
 
@@ -343,7 +343,7 @@ class _MapInjector extends HierarchicalInjector implements Injector {
   }
 
   @override
-  Object injectFromSelfOptional(
+  Object? injectFromSelfOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]) {
@@ -355,6 +355,6 @@ class _MapInjector extends HierarchicalInjector implements Injector {
       );
       result = identical(token, Injector) ? this : orElse;
     }
-    return result!;
+    return result;
   }
 }

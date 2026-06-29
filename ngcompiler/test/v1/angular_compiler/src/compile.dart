@@ -26,11 +26,15 @@ Future<T> _recordLogs<T>(
   final records = <LogRecord>[];
   final subscription = logger.onRecord.listen(records.add);
   return scopeLogAsync(() async {
-    return runWithContext(CompileContext.forTesting(), run).then((result) {
-      subscription.cancel();
+    try {
+      return await runWithContext(CompileContext.forTesting(), run);
+    } on BuildError catch (_) {
+      // TODO: Revisit
+      return null as T;
+    } finally {
+      await subscription.cancel();
       onLog(records);
-      return result;
-    });
+    }
   }, logger);
 }
 

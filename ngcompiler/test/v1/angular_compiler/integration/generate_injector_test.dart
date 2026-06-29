@@ -54,7 +54,7 @@ void main() {
             Injector _getInjector$1() => this;
             
             @override
-            Object injectFromSelfOptional(
+            Object? injectFromSelfOptional(
               Object token, [
               Object orElse = throwIfNotFound,
             ]) {
@@ -64,7 +64,7 @@ void main() {
               if (identical(token, Injector)) {
                 return _getInjector$1();
               }
-              return orElse!;
+              return orElse;
             }
           }
         '''),

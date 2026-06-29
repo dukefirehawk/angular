@@ -1,7 +1,6 @@
 //import 'dart:html' show Element;
 import 'package:web/web.dart' show Element;
 
-import 'package:meta/dart2js.dart' as dart2js;
 import 'package:meta/meta.dart';
 import '../../../core/change_detection/change_detection.dart'
     hide ChangeDetectorState, ChangeDetectionStrategy;
@@ -170,10 +169,9 @@ abstract class View implements ChangeDetectorRef {
   /// Alternative to [injectorGet] that may return `null` if missing.
   ///
   /// Used to reduce code-size for dynamic lookups sourced from `@Optional()`.
-  @dart2js.noInline
   T injectorGetOptional<T extends Object?>(Object token, int? nodeIndex) {
     debugInjectorEnter(token);
-    final result = inject(token, nodeIndex, throwIfNotFound);
+    final result = inject(token, nodeIndex, null);
     debugInjectorLeave(token);
     return unsafeCast(result);
   }
@@ -188,10 +186,10 @@ abstract class View implements ChangeDetectorRef {
   /// Generated views retain some of the information for it's children's
   /// providers, with each child node representing a different [nodeIndex].
   @protected
-  Object injectorGetInternal(
+  Object? injectorGetInternal(
     Object token,
     int nodeIndex,
-    Object notFoundResult,
+    Object? notFoundResult,
   ) => notFoundResult;
 
   /// The dependency lookup implementation for [injectorGet].
@@ -199,8 +197,8 @@ abstract class View implements ChangeDetectorRef {
   /// This indirection allows [injectorGet] to wrap the invocation of this
   /// method with [debugInjectorEnter] and [debugInjectorLeave].
   @protected
-  Object inject(Object token, int? nodeIndex, Object notFoundResult) {
-    Object result = _providerNotFound;
+  Object? inject(Object token, int? nodeIndex, Object? notFoundResult) {
+    Object? result = _providerNotFound;
     // This is null when the requests originates from the `parentInjector` field
     // of a view container declared at the top-level of a template.
     if (nodeIndex != null) {
@@ -219,7 +217,7 @@ abstract class View implements ChangeDetectorRef {
   /// This should be implemented by specific base view types, as each has a
   /// unique way of delegating dependency injection to an ancestor.
   @protected
-  Object injectFromAncestry(Object token, Object notFoundResult);
+  Object? injectFromAncestry(Object token, Object? notFoundResult);
 }
 
 /// The interface for [View] data bundled together as an optimization.
@@ -281,22 +279,22 @@ class _ElementInjector extends Injector {
 
   @override
   T provideUntyped<T>(Object token, [Object? orElse = throwIfNotFound]) =>
-      unsafeCast(_view.inject(token, _nodeIndex, orElse!));
+      unsafeCast(_view.inject(token, _nodeIndex, orElse));
 
   @override
-  Object injectFromAncestryOptional(
+  Object? injectFromAncestryOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]) => throw UnimplementedError();
 
   @override
-  Object injectFromParentOptional(
+  Object? injectFromParentOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]) => throw UnimplementedError();
 
   @override
-  Object injectFromSelfOptional(
+  Object? injectFromSelfOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
   ]) => throw UnimplementedError();

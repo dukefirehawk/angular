@@ -53,7 +53,7 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
 
   /// Reference to optional view container created for this element.
   o.ReadClassMemberExpr? appViewContainer;
-  late o.Expression elementRef;
+  late o.Expression htmlElement;
 
   /// Expression that contains reference to componentView (root View class).
   final o.Expression? componentView;
@@ -103,14 +103,10 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
       }
     }
 
-    // Create new ElementRef(_el_#) expression and provide as instance.
-    elementRef = o.importExpr(Identifiers.elementRef).instantiate([
-      renderNode.toReadExpr(),
-    ]);
+    htmlElement = renderNode.toReadExpr();
 
-    _providers.add(Identifiers.elementRefToken, elementRef);
-    _providers.add(Identifiers.elementToken, renderNode.toReadExpr());
-    _providers.add(Identifiers.htmlElementToken, renderNode.toReadExpr());
+    _providers.add(Identifiers.elementToken, htmlElement);
+    _providers.add(Identifiers.htmlElementToken, htmlElement);
     var readInjectorExpr = o.InvokeMemberMethodExpr('injector', [
       o.literal(nodeIndex),
     ]);
@@ -287,7 +283,7 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
           // HtmlElement, use that.
           value = queryWithRead.query.metadata.isElementType
               ? renderNode.toReadExpr()
-              : elementRef;
+              : htmlElement;
         }
       }
 

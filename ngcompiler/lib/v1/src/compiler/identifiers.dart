@@ -197,11 +197,11 @@ class Identifiers {
     moduleUrl: '$_angularLib/src/core/linker/view_container.dart',
   );
   static final viewContainerToken = identifierToken(viewContainer);
-  static final elementRef = CompileIdentifierMetadata(
-    name: 'ElementRef',
-    moduleUrl: '$_angularLib/src/core/linker/element_ref.dart',
-  );
-  static final elementRefToken = identifierToken(elementRef);
+  // static final elementRef = CompileIdentifierMetadata(
+  //   name: 'ElementRef',
+  //   moduleUrl: '$_angularLib/src/core/linker/element_ref.dart',
+  // );
+  // static final elementRefToken = identifierToken(elementRef);
   static final viewContainerRef = CompileIdentifierMetadata(
     name: 'ViewContainerRef',
     moduleUrl: 'asset:ngdart/lib/src/core/linker/view_container_ref.dart',

@@ -311,8 +311,8 @@ class ProviderElementContext implements ElementProviderUsage {
       // access built-ins
       if (requestingProviderType == ProviderAstType.directive ||
           requestingProviderType == ProviderAstType.component) {
-        if (token.equalsTo(Identifiers.elementRefToken) ||
-            token.equalsTo(Identifiers.htmlElementToken) ||
+        if ( //token.equalsTo(Identifiers.elementRefToken) ||
+        token.equalsTo(Identifiers.htmlElementToken) ||
             token.equalsTo(Identifiers.elementToken) ||
             token.equalsTo(Identifiers.changeDetectorRefToken) ||
             token.equalsTo(Identifiers.ngContentRefToken) ||

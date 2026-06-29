@@ -74,11 +74,11 @@ void main() {
           FooInjector._(Injector parent) : super(parent);
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
-            return orElse!;
+            return orElse;
           }
         }
       '''),
@@ -117,14 +117,14 @@ void main() {
           );
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
             if (identical(token, Foo)) {
               return _getFooImpl$0();
             }
-            return orElse!;
+            return orElse;
           }
         }
         '''),
@@ -150,14 +150,14 @@ void main() {
           Foo _getExisting$0() => this.get(Foo);
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
             if (identical(token, FooPrime)) {
               return _getExisting$0();
             }
-            return orElse!;
+            return orElse;
           }
         }
         '''),
@@ -195,14 +195,14 @@ void main() {
           );
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
             if (identical(token, Foo)) {
               return _getFoo$0();
             }
-            return orElse!;
+            return orElse;
           }
         }
         '''),
@@ -228,14 +228,14 @@ void main() {
           Foo _getFoo$0() => const Foo();
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
             if (identical(token, Foo)) {
               return _getFoo$0();
             }
-            return orElse!;
+            return orElse;
           }
         }
         '''),
@@ -280,7 +280,7 @@ void main() {
           int _getint$1() => 2;
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
@@ -290,7 +290,7 @@ void main() {
                 _getint$1(),
               ];
             }
-            return orElse!;
+            return orElse;
           }
         }
         '''),

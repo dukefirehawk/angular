@@ -148,7 +148,7 @@ class RouterOutlet implements OnInit, OnDestroy {
         // If both routes render the same component, don't detach it from DOM.
         if (identical(_activeComponentFactory, componentFactory)) return;
         // Detach the active component, keeping it cached for reuse.
-        for (var i = _viewContainerRef?.length ?? 1 - 1; i >= 0; --i) {
+        for (var i = (_viewContainerRef?.length ?? 1) - 1; i >= 0; --i) {
           _viewContainerRef?.detach(i);
         }
       } else {
