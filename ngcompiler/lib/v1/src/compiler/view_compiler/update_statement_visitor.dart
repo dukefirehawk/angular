@@ -287,7 +287,7 @@ class _UpdateStatementsVisitor
     return eventManagerExpr.callMethod('addEventListener', [
       renderNode?.toReadExpr() ?? appViewInstance!,
       o.literal(customEvent.name),
-      renderValue!,
+      _toJsEventHandler(renderValue!),
     ]).toStmt();
   }
 
@@ -309,8 +309,19 @@ class _UpdateStatementsVisitor
     o.Expression? renderValue,
   ]) => (renderNode?.toReadExpr() ?? appViewInstance!).callMethod(
     'addEventListener',
-    [o.literal(nativeEvent.name), renderValue!],
+    [o.literal(nativeEvent.name), _toJsEventHandler(renderValue!)],
   ).toStmt();
+
+  o.Expression _toJsEventHandler(o.Expression renderValue) {
+    if (renderValue is o.InvokeMemberMethodExpr &&
+        renderValue.methodName.startsWith('eventHandler')) {
+      return o.InvokeMemberMethodExpr(
+        'js${renderValue.methodName.substring(0, 1).toUpperCase()}${renderValue.methodName.substring(1)}',
+        renderValue.args,
+      );
+    }
+    return renderValue;
+  }
 }
 
 o.Expression _sanitizedValue(

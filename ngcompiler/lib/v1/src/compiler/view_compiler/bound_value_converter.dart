@@ -101,6 +101,7 @@ abstract class BoundValueConverter
   @override
   o.Expression visitComplexEventHandler(ir.ComplexEventHandler handler, [_]) {
     var statements = _convertToStatements(handler);
+
     return _wrapHandler(_createEventHandler(statements), 1);
   }
 

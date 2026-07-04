@@ -68,12 +68,18 @@ typedef ValidatorFn = Map<String, dynamic>? Function(AbstractControl c);
   ],
 )
 class RequiredValidator implements Validator {
+  bool _required = false;
+
+  bool get required => _required;
+
   @Input()
-  bool required = true;
+  set required(Object? value) {
+    _required = value != null && value != false && value != 'false';
+  }
 
   @override
   Map<String, dynamic>? validate(AbstractControl c) =>
-      required ? Validators.required(c) : null;
+      _required ? Validators.required(c) : null;
 }
 
 /// A [Directive] adding minimum-length validator to controls with `minlength`.

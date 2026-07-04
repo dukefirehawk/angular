@@ -130,20 +130,19 @@ abstract class RenderView extends View {
   ///   during the next change detection cycle, in case it uses a non-default
   ///   change detection strategy.
   // TODO: Migrated to dart 3.6 (Need to review)
-  JSFunction? eventHandler0(void Function() handler) {
+  JSFunction? jsEventHandler0(void Function() handler) {
     return (Event event) {
       markForCheck();
       appViewUtils.eventManager.zone.runGuarded(handler);
     }.toJS;
   }
-  /*
+
   void Function(E) eventHandler0<E>(void Function() handler) {
     return (E event) {
       markForCheck();
       appViewUtils.eventManager.zone.runGuarded(handler);
     };
   }
-  */
 
   /// The same as [eventHandler0], but [handler] is passed an event parameter.
   ///
@@ -159,8 +158,21 @@ abstract class RenderView extends View {
   /// of the event listener is a subclass of [Event]. The [Event] passed in from
   /// [EventTarget.addEventListener] can then be safely coerced back to its
   /// known type.
-  //void Function(E) eventHandler1<E, F extends E>(void Function(F) handler) {
-  JSFunction? eventHandler1<E, F extends E>(void Function(F) handler) {
+  void Function(E) eventHandler1<E, F extends E>(void Function(F) handler) {
+    assert(
+      E == Null || F != Null,
+      "Event handler '$handler' isn't assignable to expected type "
+      "'($E) => void'",
+    );
+    return (E event) {
+      markForCheck();
+      appViewUtils.eventManager.zone.runGuarded(
+        () => handler(unsafeCast<F>(event)),
+      );
+    };
+  }
+
+  JSFunction? jsEventHandler1<E, F extends E>(void Function(F) handler) {
     assert(
       E == Null || F != Null,
       "Event handler '$handler' isn't assignable to expected type "
