@@ -339,12 +339,22 @@ class Identifiers {
     name: 'Element',
     moduleUrl: 'package:web/web.dart',
   );
+  static final elementDom = CompileIdentifierMetadata(
+    name: 'Element',
+    moduleUrl: 'asset:web/lib/src/dom/dom.dart',
+  );
   static final elementToken = identifierToken(element);
+  static final elementDomToken = identifierToken(elementDom);
   static final htmlElement = CompileIdentifierMetadata(
     name: 'HTMLElement',
     moduleUrl: 'package:web/web.dart',
   );
+  static final htmlElementDom = CompileIdentifierMetadata(
+    name: 'HTMLElement',
+    moduleUrl: 'asset:web/lib/src/dom/html.dart',
+  );
   static final htmlElementToken = identifierToken(htmlElement);
+  static final htmlElementDomToken = identifierToken(htmlElementDom);
   static final svgSvgElement = CompileIdentifierMetadata(
     name: 'SVGSVGElement',
     moduleUrl: 'dart:svg',

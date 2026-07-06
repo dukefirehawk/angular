@@ -3,14 +3,26 @@ import 'package:test/test.dart';
 import 'package:ngrouter/ngrouter.dart';
 
 class MockPlatformLocation extends Mock implements PlatformLocation {
-  /*
   @override
-  String get pathname => super.noSuchMethod(Invocation.getter(#pathname), returnValue: '') as String;
+  String get pathname => super.noSuchMethod(
+        Invocation.getter(#pathname),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+
   @override
-  String get search => super.noSuchMethod(Invocation.getter(#search), returnValue: '') as String;
+  String get search => super.noSuchMethod(
+        Invocation.getter(#search),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+
   @override
-  String get hash => super.noSuchMethod(Invocation.getter(#hash), returnValue: '') as String;
-  */
+  String get hash => super.noSuchMethod(
+        Invocation.getter(#hash),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
 }
 
 void main() {

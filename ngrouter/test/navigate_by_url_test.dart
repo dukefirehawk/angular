@@ -8,7 +8,7 @@ import 'package:ngtest/angular_test.dart';
 
 void main() {
   tearDown(disposeAnyRunningTest);
-  late Router mockRouter;
+  late MockRouter mockRouter;
   late Router router;
 
   group('navigateByUrl', () {
@@ -23,7 +23,7 @@ void main() {
     test('invokes navigate', () {
       router.navigateByUrl('/to/path');
       expect(
-        verify(mockRouter.navigate(captureAny ?? '', captureAny)).captured,
+        verify(mockRouter.navigate(captureAny, captureAny)).captured,
         ['/to/path', navigationParams()],
       );
     });
@@ -31,7 +31,7 @@ void main() {
     test('invokes navigate with query parameters', () {
       router.navigateByUrl('/to/path?q=hello%20world');
       expect(
-        verify(mockRouter.navigate(captureAny ?? '', captureAny)).captured,
+        verify(mockRouter.navigate(captureAny, captureAny)).captured,
         [
           '/to/path',
           navigationParams(queryParameters: {'q': 'hello world'}),
@@ -42,7 +42,7 @@ void main() {
     test('invokes navigate with fragment identifier', () {
       router.navigateByUrl('/to/path#with-fragment');
       expect(
-        verify(mockRouter.navigate(captureAny ?? '', captureAny)).captured,
+        verify(mockRouter.navigate(captureAny, captureAny)).captured,
         ['/to/path', navigationParams(fragment: 'with-fragment')],
       );
     });
@@ -50,7 +50,7 @@ void main() {
     test('invokes navigate with reload', () {
       router.navigateByUrl('/to/path', reload: true);
       expect(
-        verify(mockRouter.navigate(captureAny ?? '', captureAny)).captured,
+        verify(mockRouter.navigate(captureAny, captureAny)).captured,
         ['/to/path', navigationParams(reload: true)],
       );
     });
@@ -58,14 +58,25 @@ void main() {
     test('invokes navigate with replace', () {
       router.navigateByUrl('/to/path', replace: true);
       expect(
-        verify(mockRouter.navigate(captureAny ?? '', captureAny)).captured,
+        verify(mockRouter.navigate(captureAny, captureAny)).captured,
         ['/to/path', navigationParams(replace: true)],
       );
     });
   });
 }
 
-class MockRouter extends Mock implements Router {}
+class MockRouter extends Mock implements Router {
+  @override
+  Future<NavigationResult> navigate(
+    String? path, [
+    NavigationParams? navigationParams,
+  ]) =>
+      super.noSuchMethod(
+        Invocation.method(#navigate, [path, navigationParams]),
+        returnValue: Future<NavigationResult>.value(NavigationResult.success),
+        returnValueForMissingStub: Future<NavigationResult>.value(NavigationResult.success),
+      ) as Future<NavigationResult>;
+}
 
 class DelegatingRouter extends RouterImpl {
   final Router _delegate;

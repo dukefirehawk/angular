@@ -106,7 +106,9 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
     htmlElement = renderNode.toReadExpr();
 
     _providers.add(Identifiers.elementToken, htmlElement);
+    _providers.add(Identifiers.elementDomToken, htmlElement);
     _providers.add(Identifiers.htmlElementToken, htmlElement);
+    _providers.add(Identifiers.htmlElementDomToken, htmlElement);
     var readInjectorExpr = o.InvokeMemberMethodExpr('injector', [
       o.literal(nodeIndex),
     ]);

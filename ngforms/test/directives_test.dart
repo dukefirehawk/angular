@@ -1,5 +1,6 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'package:web/web.dart' as web;
 import 'package:ngforms/ngforms.dart';
 import 'package:ngforms/src/directives/shared.dart';
 
@@ -45,24 +46,24 @@ void main() {
       expect(selectValueAccessor([defaultAccessor]), defaultAccessor);
     });
     test('should return checkbox accessor when provided', () {
-      var checkboxAccessor = CheckboxControlValueAccessor(null);
+      var checkboxAccessor = CheckboxControlValueAccessor(web.document.createElement('input') as web.HtmlElement);
       expect(selectValueAccessor([defaultAccessor, checkboxAccessor]),
           checkboxAccessor);
     });
     test('should return select accessor when provided', () {
-      var selectAccessor = SelectControlValueAccessor(null);
+      var selectAccessor = SelectControlValueAccessor(web.document.createElement('select') as web.HtmlElement);
       expect(selectValueAccessor([defaultAccessor, selectAccessor]),
           selectAccessor);
     });
     test('should throw when more than one build-in accessor is provided', () {
-      var checkboxAccessor = CheckboxControlValueAccessor(null);
-      var selectAccessor = SelectControlValueAccessor(null);
+      var checkboxAccessor = CheckboxControlValueAccessor(web.document.createElement('input') as web.HtmlElement);
+      var selectAccessor = SelectControlValueAccessor(web.document.createElement('select') as web.HtmlElement);
       expect(() => selectValueAccessor([checkboxAccessor, selectAccessor]),
           throwsWith('More than one built-in value accessor matches'));
     });
     test('should return custom accessor when provided', () {
       var customAccessor = MockValueAccessor();
-      var checkboxAccessor = CheckboxControlValueAccessor(null);
+      var checkboxAccessor = CheckboxControlValueAccessor(web.document.createElement('input') as web.HtmlElement);
       expect(
           selectValueAccessor(
               [defaultAccessor, customAccessor, checkboxAccessor]),

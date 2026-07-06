@@ -168,6 +168,16 @@ window['$_createKeyboardEventName'] = function(
 }
 ''';
 
+@JS('__dart_createKeyboardEvent')
+external Event _createKeyboardEventInterop(
+  String type,
+  int keyCode,
+  bool ctrlKey,
+  bool altKey,
+  bool shiftKey,
+  bool metaKey,
+);
+
 Event createKeyboardEvent(
   String type,
   int keyCode, {
@@ -176,9 +186,7 @@ Event createKeyboardEvent(
   bool shiftKey = false,
   bool metaKey = false,
 }) {
-  // TODO: Migrate to 3.6 (Need review)
-  //if (!context.hasProperty(_createKeyboardEventName)) {
-  if (globalContext
+  if (!globalContext
       .getProperty(_createKeyboardEventName.toJS)
       .isDefinedAndNotNull) {
     final script = document.createElement('script')
@@ -187,29 +195,12 @@ Event createKeyboardEvent(
     document.body!.append(script);
   }
 
-  // TODO: Migrate to 3.6 (Need review)
-  /*
-  return context.callMethod(
-    _createKeyboardEventName,
-    [
-      type,
-      keyCode,
-      ctrlKey,
-      altKey,
-      shiftKey,
-      metaKey,
-    ],
-  ) as Event;
-  */
-  return globalContext.callMethod(
-    _createKeyboardEventName.toJS,
-    [
-      type,
-      keyCode,
-      ctrlKey,
-      altKey,
-      shiftKey,
-      metaKey,
-    ].toJSBox,
-  ) as Event;
+  return _createKeyboardEventInterop(
+    type,
+    keyCode,
+    ctrlKey,
+    altKey,
+    shiftKey,
+    metaKey,
+  );
 }
