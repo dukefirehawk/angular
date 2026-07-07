@@ -32,7 +32,28 @@ void main() {
 
 PlatformLocation platformLocationFactory() => platformLocation;
 
-class MockPlatformLocation extends Mock implements BrowserPlatformLocation {}
+class MockPlatformLocation extends Mock implements BrowserPlatformLocation {
+  @override
+  String get pathname => super.noSuchMethod(
+        Invocation.getter(#pathname),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+
+  @override
+  String get search => super.noSuchMethod(
+        Invocation.getter(#search),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+
+  @override
+  String get hash => super.noSuchMethod(
+        Invocation.getter(#hash),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+}
 
 @GenerateInjector([
   routerProvidersHash,
@@ -49,11 +70,11 @@ InjectorFactory injectorFactory = ng.injectorFactory$Injector;
   directives: [RouterLink, RouterOutlet],
 )
 class AppComponent {
-  static final fooRoute = RouteDefinition(
+  final RouteDefinition fooRoute = RouteDefinition(
     path: '/foo',
     component: ng.createFooComponentFactory(),
   );
-  static final routes = [fooRoute];
+  late final List<RouteDefinition> routes = [fooRoute];
 
   @ViewChild('routerLink')
   HtmlElement? anchor;
