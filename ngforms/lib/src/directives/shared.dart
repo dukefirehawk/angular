@@ -112,7 +112,7 @@ ControlValueAccessor<dynamic>? selectValueAccessor(
   return null;
 }
 
-void setElementDisabled(HtmlElement? element, bool isDisabled) {
+void setElementDisabled(Element? element, bool isDisabled) {
   // TODO: Migrate to 3.6 (Need review)
   //js_util.setProperty(element, 'disabled', isDisabled);
   element?.setProperty('disabled'.toJS, isDisabled.toJS);
