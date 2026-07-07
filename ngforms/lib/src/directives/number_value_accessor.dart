@@ -28,7 +28,7 @@ class NumberValueAccessor extends Object
     implements ControlValueAccessor<Object?> {
   final HTMLInputElement? _element;
 
-  NumberValueAccessor(@Optional() HtmlElement? element)
+  NumberValueAccessor(@Optional() Element? element)
     : _element = element as HTMLInputElement?;
 
   @HostListener('change', ['\$event.target.value'])

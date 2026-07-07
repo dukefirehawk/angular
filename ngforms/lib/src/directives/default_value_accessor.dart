@@ -1,3 +1,6 @@
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+
 import 'package:web/web.dart';
 //import 'dart:js_util' as js_util;
 
@@ -17,7 +20,8 @@ const defaultValueAccessor = ExistingProvider.forToken(
 /// ### Example
 ///     <input type="text" ngControl="searchQuery">
 @Directive(
-  selector: 'input:not([type=checkbox])[ngControl],'
+  selector:
+      'input:not([type=checkbox])[ngControl],'
       'textarea[ngControl],'
       'input:not([type=checkbox])[ngFormControl],'
       'textarea[ngFormControl],'
@@ -28,7 +32,7 @@ const defaultValueAccessor = ExistingProvider.forToken(
 class DefaultValueAccessor extends Object
     with TouchHandler, ChangeHandler<String>
     implements ControlValueAccessor<dynamic> {
-  final HtmlElement? _element;
+  final Element? _element;
 
   DefaultValueAccessor(@Optional() this._element);
 
@@ -40,10 +44,17 @@ class DefaultValueAccessor extends Object
   @override
   void writeValue(value) {
     var normalizedValue = value ?? '';
+    final e = _element;
+    if (e == null) return;
 
-    // TODO: Migrate to 3.6 (Need review)
-    //js_util.setProperty(_element, 'value', normalizedValue);
-    _element?.textContent = normalizedValue.toString();
+    // TODO: Fix this type checking
+    if (e is HTMLInputElement) {
+      e.value = normalizedValue.toString();
+    } else if (e is HTMLTextAreaElement) {
+      e.value = normalizedValue.toString();
+    } else {
+      e.setProperty('value'.toJS, normalizedValue.toString().toJS);
+    }
   }
 
   @override

@@ -13,7 +13,8 @@ import 'package:web/web.dart' hide document;
 import 'package:meta/dart2js.dart' as dart2js;
 import '../utilities.dart';
 
-import 'dom_helpers.dart' as js;
+// TODO: use js interop instead of dart:js_util
+import 'dart:js_util' as js;
 
 /// https://developer.mozilla.org/en-US/docs/Web/API/Document/createTextNode
 Text _createTextNode(String text) => Text(text);

@@ -45,7 +45,7 @@ class SelectControlValueAccessor extends Object
   final Map<String, Object?> _optionMap = <String, Object?>{};
   num _idCounter = 0;
 
-  SelectControlValueAccessor(@Optional() HtmlElement? element)
+  SelectControlValueAccessor(@Optional() Element? element)
     : _element = element as HTMLSelectElement;
 
   @HostListener('change', ['\$event.target.value'])
@@ -93,7 +93,7 @@ class NgSelectOption implements OnDestroy {
   final SelectControlValueAccessor? _select;
   late final String id;
   NgSelectOption(
-    @Optional() HtmlElement? element,
+    @Optional() Element? element,
     @Optional() @Host() this._select,
   ) : _element = element as HTMLOptionElement? {
     if (_select != null) id = _select._registerOption();

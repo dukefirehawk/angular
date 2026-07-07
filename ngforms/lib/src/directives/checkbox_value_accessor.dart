@@ -28,7 +28,7 @@ class CheckboxControlValueAccessor extends Object
     implements ControlValueAccessor<bool> {
   final HTMLInputElement _element;
 
-  CheckboxControlValueAccessor(@Optional() HtmlElement? element)
+  CheckboxControlValueAccessor(@Optional() Element? element)
       : _element = element as HTMLInputElement;
 
   @HostListener('change', ['\$event.target.checked'])

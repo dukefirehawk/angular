@@ -80,7 +80,7 @@ class RadioButtonState {
 class RadioControlValueAccessor extends Object
     with TouchHandler, ChangeHandler<RadioButtonState>
     implements ControlValueAccessor<RadioButtonState>, OnDestroy, OnInit {
-  final HtmlElement? _element;
+  final Element? _element;
   final RadioControlRegistry? _registry;
   final Injector? _injector;
   RadioButtonState? _state;
