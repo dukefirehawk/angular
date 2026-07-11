@@ -1,7 +1,8 @@
+import 'package:web/web.dart';
+
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'i18n_escape_test.template.dart' as ng;
 
@@ -39,7 +40,7 @@ void main() {
           ng.createShouldEscapeI18nPropertyFactory());
       final testFixture = await testBed.create();
       final imgElement =
-          testFixture.rootElement.querySelector('img') as HTMLImageElement;
+          testFixture.rootElement.querySelector('img') as ImageElement;
       expect(imgElement.alt, matches(regExp));
     });
 

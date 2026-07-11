@@ -2,19 +2,23 @@ import 'dart:io';
 
 import 'package:build/build.dart';
 import 'package:build/experiments.dart';
-import 'package:build_resolvers/build_resolvers.dart';
-import 'package:build_test/build_test.dart' hide testBuilder;
+import 'package:build_test/build_test.dart';
 import 'package:glob/glob.dart';
 import 'package:logging/logging.dart';
-import 'package:ngcompiler/v2/context.dart';
-import 'package:ngdart/src/build.dart';
+import 'package:ngcompiler/v1/src/compiler/stylesheet_compiler/builder.dart';
+import 'package:ngcompiler/v1/src/compiler/template_compiler.dart';
 import 'package:test/test.dart';
+import 'package:ngcompiler/v2/context.dart';
 
 /// A 'test' build process (similar to the normal one).
-final Builder _testAngularBuilder = MultiplexingBuilder([
-  templateCompiler(BuilderOptions({})),
-  stylesheetCompiler(BuilderOptions({})),
-]);
+final Builder _testAngularBuilder = TemplateCompiler(
+  BuilderOptions({}),
+  null,
+  null,
+  null,
+);
+
+final Builder _testAngularBuilder2 = StylesheetCompiler(BuilderOptions({}));
 
 // Here to be configurable.
 //
@@ -59,12 +63,11 @@ Future<void> _testBuilder(
   String? rootPackage,
 }) async {
   // Setup the readers/writers for assets.
-  final sources = InMemoryAssetReader(rootPackage: rootPackage);
+  final sources = TestReaderWriter(rootPackage: rootPackage);
   final packages = await _packageAssets;
-  final reader = MultiAssetReader([
-    sources,
-    packages,
-  ]);
+
+  final reader = PackageAssetReader.forPackages([sources, packages]);
+  //final reader = MultiAssetReader([sources, packages]);
 
   // Sanity check.
   if (!await reader.canRead(AssetId(ngPackage, 'lib/angular.dart'))) {
@@ -72,11 +75,12 @@ Future<void> _testBuilder(
   }
 
   // Load user sources.
-  final writer = InMemoryAssetWriter();
+  final writer = TestReaderWriter();
   final inputIds = runBuilderOn ?? [];
   sourceAssets.forEach((serializedId, contents) {
     final id = makeAssetId(serializedId);
-    sources.cacheStringAsset(id, contents);
+    //sources.cacheStringAsset(id, contents);
+    sources.writeAsString(id, contents);
     if (runBuilderOn == null) {
       inputIds.add(id);
     }
@@ -90,7 +94,8 @@ Future<void> _testBuilder(
   // TODO: Can we cache and re-use this once per test suite?
   final framework = packages.findAssets(_ngFiles, package: ngPackage);
   await for (final file in framework) {
-    sources.cacheStringAsset(file, await packages.readAsString(file));
+    //sources.cacheStringAsset(file, await packages.readAsString(file));
+    await sources.writeAsString(file, await packages.readAsString(file));
   }
 
   final logger = Logger('_testBuilder');
@@ -101,14 +106,22 @@ Future<void> _testBuilder(
     CompileContext.forTesting(),
     () {
       return withEnabledExperiments(
-        () => runBuilder(
+        () => testBuilder(
           builder,
           inputIds,
-          reader,
-          writer,
-          AnalyzerResolvers.custom(),
-          logger: logger,
+          rootPackage: rootPackage,
+          readerWriter: writer,
+          //resolvers: AnalyzerResolvers(),
+          onLog: logger,
         ),
+        // () => runBuilder(
+        //   builder,
+        //   inputIds,
+        //   reader,
+        //   writer,
+        //   AnalyzerResolvers(),
+        //   logger: logger,
+        // ),
         ['non-nullable'],
       );
     },
@@ -150,7 +163,7 @@ Future<void> compilesExpecting(
   include ??= const {};
 
   // Complete list of input sources.
-  final sources = <String, String>{inputSource: input, ...include};
+  final sources = <String, String>{inputSource: input}..addAll(include);
 
   // Run the builder.
   final records = <Level, List<LogRecord>>{};
@@ -166,23 +179,23 @@ Future<void> compilesExpecting(
   expectLogRecords(records[Level.SEVERE], errors, 'Errors');
   expectLogRecords(records[Level.WARNING], warnings, 'Warnings');
   expectLogRecords(records[Level.INFO], notices, 'Notices');
+
+  if (outputs != null) {
+    // TODO: Add an output verification or consider a golden file mechanism.
+    throw UnimplementedError();
+  }
 }
 
-void expectLogRecords(
-  List<LogRecord>? logs,
-  Object? matcher,
-  String reasonPrefix,
-) {
+void expectLogRecords(List<LogRecord>? logs, matcher, String reasonPrefix) {
   if (matcher == null) {
     return;
   }
   logs ??= [];
   expect(
     logs.map(formattedLogMessage),
-    matcher is Iterable ? containsAllInOrder(matcher) : matcher,
-    reason: '$reasonPrefix: \n${logs.map((l) {
-      return '${formattedLogMessage(l)} at:\n ${l.stackTrace}';
-    })}',
+    matcher,
+    reason:
+        '$reasonPrefix: \n${logs.map((l) => '${formattedLogMessage(l)} at:\n ${l.stackTrace}')}',
   );
 }
 
@@ -202,17 +215,16 @@ Future<void> compilesNormally(
   String? inputSource,
   Map<String, String>? include,
   Set<AssetId>? runBuilderOn,
-}) {
-  return compilesExpecting(
-    input,
-    inputSource: inputSource,
-    runBuilderOn: runBuilderOn,
-    include: include,
-  );
-}
+}) => compilesExpecting(
+  input,
+  inputSource: inputSource,
+  runBuilderOn: runBuilderOn,
+  include: include,
+  errors: isEmpty,
+  warnings: isEmpty,
+);
 
 /// Match for a source location, but don't require tests to manage package
 /// names.
-Matcher containsSourceLocation(int line, int column) {
-  return contains('line $line, column $column of ');
-}
+Matcher containsSourceLocation(int line, int column) =>
+    contains('line $line, column $column of ');

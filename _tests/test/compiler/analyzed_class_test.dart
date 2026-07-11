@@ -1,39 +1,44 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/visitor.dart';
+import 'package:analyzer/dart/element/visitor2.dart';
+//import 'package:analyzer/dart/element/visitor.dart';
+import 'package:test/test.dart';
 import 'package:ngcompiler/v1/src/compiler/analyzed_class.dart';
 import 'package:ngcompiler/v1/src/compiler/expression_parser/ast.dart';
-import 'package:test/test.dart';
 
 import '../resolve_util.dart';
 
 void main() {
   group('inferExpressionType', () {
-    test('should resolve return type of method with implicit receiver',
-        () async {
-      final analyzedClass = await analyzeClass('''
+    test(
+      'should resolve return type of method with implicit receiver',
+      () async {
+        final analyzedClass = await analyzeClass('''
         class AppComponent {
           final List<String> _names;
           List<String> getNames() => _names;
         }''');
-      final expression = MethodCall(ImplicitReceiver(), 'getNames', []);
-      final type = getExpressionType(expression, analyzedClass);
-      expect(typeToCode(type), 'List<String>');
-    });
+        final expression = MethodCall(ImplicitReceiver(), 'getNames', []);
+        final type = getExpressionType(expression, analyzedClass);
+        expect(typeToCode(type), 'List<String>');
+      },
+    );
 
-    test('should resolve return type of method with explicit receiver',
-        () async {
-      final analyzedClass = await analyzeClass('''
+    test(
+      'should resolve return type of method with explicit receiver',
+      () async {
+        final analyzedClass = await analyzeClass('''
         class AppComponent {
           final List<String> names;
         }''');
-      final namesExpr = PropertyRead(ImplicitReceiver(), 'names');
-      final rangeExpr = MethodCall(namesExpr, 'getRange', [
-        LiteralPrimitive(1),
-        LiteralPrimitive(4),
-      ]);
-      final type = getExpressionType(rangeExpr, analyzedClass);
-      expect(typeToCode(type), 'Iterable<String>');
-    });
+        final namesExpr = PropertyRead(ImplicitReceiver(), 'names');
+        final rangeExpr = MethodCall(namesExpr, 'getRange', [
+          LiteralPrimitive(1),
+          LiteralPrimitive(4),
+        ]);
+        final type = getExpressionType(rangeExpr, analyzedClass);
+        expect(typeToCode(type), 'Iterable<String>');
+      },
+    );
 
     test('should resolve property type with implicit receiver', () async {
       final analyzedClass = await analyzeClass('''
@@ -82,7 +87,7 @@ void main() {
           final int eight = 8;
         }
       ''');
-      var analyzedClass = AnalyzedClass(library.getClass('SubComponent')!);
+      var analyzedClass = AnalyzedClass(library.getClass('SubComponent'));
       final sevenExpr = PropertyRead(ImplicitReceiver(), 'seven');
       final eightExpr = PropertyRead(ImplicitReceiver(), 'eight');
       final someNumberExpr = PropertyRead(ImplicitReceiver(), 'someNumber');
@@ -93,26 +98,27 @@ void main() {
   });
 }
 
-Future<AnalyzedClass> analyzeClass(String source) async {
+Future<AnalyzedClass?> analyzeClass(String source) async {
   final library = await resolve(source);
   final visitor = AnalyzedClassVisitor();
-  return library.accept(visitor)!;
+  return library.accept<AnalyzedClass>(visitor);
 }
 
-class AnalyzedClassVisitor extends RecursiveElementVisitor<AnalyzedClass> {
+//class AnalyzedClassVisitor extends RecursiveAstVisitor<AnalyzedClass> {
+class AnalyzedClassVisitor extends RecursiveElementVisitor2<AnalyzedClass> {
   @override
   AnalyzedClass? visitClassElement(ClassElement element) {
     return AnalyzedClass(element);
   }
 
-  @override
-  AnalyzedClass? visitCompilationUnitElement(CompilationUnitElement element) {
-    return _visitAll(element.classes);
-  }
+  // @override
+  // AnalyzedClass? visitCompilationUnit(Fragment element) {
+  //    return _visitAll(element.libraryFragment?.classes);
+  // }
 
   @override
   AnalyzedClass? visitLibraryElement(LibraryElement element) {
-    return _visitAll(element.units);
+    return _visitAll(element.fragments);
   }
 
   AnalyzedClass? _visitAll(List<Element> elements) {

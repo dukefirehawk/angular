@@ -1,6 +1,6 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
+import 'package:ngcompiler/v1/angular_compiler.dart';
 
 const DependencyReader dependencyReader = DependencyReader();
 
@@ -9,18 +9,20 @@ const DependencyReader dependencyReader = DependencyReader();
 // checks elements with `@Injectable()` annotation.
 void checkInjectables(LibraryElement library) {
   for (var unit in allUnits(library)) {
-    for (var type in unit.classes) {
-      checkClass(type);
-      checkFunctions(type.methods);
+    var clazz = unit.libraryFragment?.classes ?? [];
+    for (var type in clazz) {
+      checkClass(type.element);
+      checkFunctions(type.element.methods);
     }
 
-    checkFunctions(unit.functions);
+    var topLevelFunctions = unit.libraryFragment?.functions ?? [];
+    checkFunctions(topLevelFunctions.map((e) => e.element));
   }
 }
 
-Iterable<CompilationUnitElement> allUnits(LibraryElement library) sync* {
-  yield library.definingCompilationUnit;
-  yield* library.units;
+Iterable<Fragment> allUnits(LibraryElement library) sync* {
+  yield library.firstFragment;
+  yield* library.fragments;
 }
 
 void checkClass(ClassElement element) {

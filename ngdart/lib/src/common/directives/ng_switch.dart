@@ -1,20 +1,23 @@
-import 'package:ngdart/src/core/linker.dart';
-import 'package:ngdart/src/meta.dart';
+import '../../core/linker.dart';
+import '../../meta/di_arguments.dart';
+import '../../meta/directives.dart';
+import '../../meta/visibility.dart';
 
 const _whenDefault = Object();
 
 class SwitchView {
-  final ViewContainerRef _viewContainerRef;
-  final TemplateRef _templateRef;
+  final ViewContainerRef? _viewContainerRef;
+  final TemplateRef? _templateRef;
 
-  SwitchView(this._viewContainerRef, this._templateRef);
+  SwitchView(@Optional() this._viewContainerRef, @Optional() this._templateRef);
 
   void create() {
-    _viewContainerRef.createEmbeddedView(_templateRef);
+    if (_templateRef == null) return;
+    _viewContainerRef?.createEmbeddedView(_templateRef);
   }
 
   void destroy() {
-    _viewContainerRef.clear();
+    _viewContainerRef?.clear();
   }
 }
 
@@ -72,10 +75,7 @@ class SwitchView {
 /// [ex]: https://angulardart.dev/examples/template-syntax#ngSwitch
 /// [guide]: https://webdev.dartlang.org/angular/guide/structural-directives.html#ngSwitch
 ///
-@Directive(
-  selector: '[ngSwitch]',
-  visibility: Visibility.all,
-)
+@Directive(selector: '[ngSwitch]', visibility: Visibility.all)
 class NgSwitch {
   dynamic _switchValue;
   bool _useDefault = false;
@@ -167,20 +167,18 @@ class NgSwitch {
 ///
 /// See [NgSwitch] for more details and example.
 ///
-@Directive(
-  selector: '[ngSwitchWhen],[ngSwitchCase]',
-)
+@Directive(selector: '[ngSwitchWhen],[ngSwitchCase]')
 class NgSwitchWhen {
-  final NgSwitch _switch;
+  final NgSwitch? _switch;
   final SwitchView _view;
 
   /// Used as a marker for an uninitialized value.
   dynamic _value = _whenDefault;
 
   NgSwitchWhen(
-    ViewContainerRef viewContainer,
-    TemplateRef templateRef,
-    @Host() this._switch,
+    @Optional() ViewContainerRef? viewContainer,
+    @Optional() TemplateRef? templateRef,
+    @Optional() @Host() this._switch,
   ) : _view = SwitchView(viewContainer, templateRef);
 
   @Input()
@@ -191,7 +189,7 @@ class NgSwitchWhen {
   @Input()
   set ngSwitchWhen(dynamic value) {
     if (identical(value, _value)) return;
-    _switch._onWhenValueChanged(_value, value, _view);
+    _switch?._onWhenValueChanged(_value, value, _view);
     _value = value;
   }
 }
@@ -201,13 +199,16 @@ class NgSwitchWhen {
 ///
 /// See [NgSwitch] for more details and example.
 ///
-@Directive(
-  selector: '[ngSwitchDefault]',
-)
+@Directive(selector: '[ngSwitchDefault]')
 class NgSwitchDefault {
-  NgSwitchDefault(ViewContainerRef viewContainer, TemplateRef templateRef,
-      @Host() NgSwitch switchDirective) {
-    switchDirective._registerView(
-        _whenDefault, SwitchView(viewContainer, templateRef));
+  NgSwitchDefault(
+    @Optional() ViewContainerRef? viewContainer,
+    @Optional() TemplateRef? templateRef,
+    @Optional() @Host() NgSwitch? switchDirective,
+  ) {
+    switchDirective?._registerView(
+      _whenDefault,
+      SwitchView(viewContainer, templateRef),
+    );
   }
 }

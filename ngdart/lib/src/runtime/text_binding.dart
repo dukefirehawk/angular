@@ -1,6 +1,7 @@
-import 'package:meta/dart2js.dart' as dart2js;
-import 'package:ngdart/src/runtime/check_binding.dart';
 import 'package:web/web.dart';
+
+import 'package:meta/dart2js.dart' as dart2js;
+import '../runtime/check_binding.dart';
 
 import 'interpolate.dart';
 
@@ -24,7 +25,7 @@ class TextBinding {
   /// Update the [Text] node if [newValue] differs from the previous value.
   void updateText(String newValue) {
     if (checkBinding(_currentValue, newValue)) {
-      element.textContent = newValue;
+      element.text = newValue;
       _currentValue = newValue;
     }
   }
@@ -33,7 +34,7 @@ class TextBinding {
   /// and differs from the previous value.
   void updateTextWithPrimitive(Object? newValue) {
     if (checkBinding(_currentValue, newValue)) {
-      element.textContent = interpolate0(newValue);
+      element.text = interpolate0(newValue);
       _currentValue = newValue;
     }
   }

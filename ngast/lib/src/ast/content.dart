@@ -58,7 +58,8 @@ abstract mixin class EmbeddedContentAst implements StandaloneTemplateAst {
   /// Reference assignment.
   ReferenceAst? get reference;
 
-  /// `</ng-content>` that is paired to this `<ng-content>`.
+  // ignore: unintended_html_in_doc_comment
+  /// </ng-content> that is paired to this <ng-content>.
   CloseElementAst get closeComplement;
   set closeComplement(CloseElementAst closeComplement);
 
@@ -73,7 +74,11 @@ abstract mixin class EmbeddedContentAst implements StandaloneTemplateAst {
 
   @override
   int get hashCode => Object.hash(
-      selector.hashCode, ngProjectAs.hashCode, reference, closeComplement);
+    selector.hashCode,
+    ngProjectAs.hashCode,
+    reference,
+    closeComplement,
+  );
 
   @override
   String toString() =>
@@ -106,11 +111,7 @@ class ParsedEmbeddedContentAst extends TemplateAst with EmbeddedContentAst {
     this.selectAttribute,
     this.ngProjectAsAttribute,
     this.reference,
-  ]) : super.parsed(
-          startElementToken,
-          endElementToken,
-          sourceFile,
-        );
+  ]) : super.parsed(startElementToken, endElementToken, sourceFile);
 
   @override
   String? get selector {
@@ -142,8 +143,11 @@ class _SyntheticEmbeddedContentAst extends SyntheticTemplateAst
   @override
   late CloseElementAst closeComplement;
 
-  _SyntheticEmbeddedContentAst(
-      [this.selector = '*', this.ngProjectAs, this.reference]) {
+  _SyntheticEmbeddedContentAst([
+    this.selector = '*',
+    this.ngProjectAs,
+    this.reference,
+  ]) {
     closeComplement = CloseElementAst('ng-content');
   }
 

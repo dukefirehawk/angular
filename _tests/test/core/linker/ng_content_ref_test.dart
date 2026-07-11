@@ -1,7 +1,8 @@
-import 'package:_tests/matchers.dart';
+import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
+import '../../../lib/matchers.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 
 import 'ng_content_ref_test.template.dart' as ng;
 
@@ -21,7 +22,8 @@ void main() {
 
         test('without select', () async {
           var testBed = NgTestBed<WithoutSelectorAndEmpty>(
-              ng.createWithoutSelectorAndEmptyFactory());
+            ng.createWithoutSelectorAndEmptyFactory(),
+          );
           var testFixture = await testBed.create();
           var element = testFixture.rootElement;
           var childElement = element.querySelector('no-select-has-content');
@@ -29,23 +31,30 @@ void main() {
         });
 
         test('Api on Dart', () async {
-          var testBed =
-              NgTestBed<ItsEmptyOnDart>(ng.createItsEmptyOnDartFactory());
+          var testBed = NgTestBed<ItsEmptyOnDart>(
+            ng.createItsEmptyOnDartFactory(),
+          );
           var testFixture = await testBed.create();
           expect(
-              testFixture.assertOnlyInstance.child!.byRef!.hasContent, isFalse);
-          expect(testFixture.assertOnlyInstance.child!.byType!.hasContent,
-              isFalse);
+            testFixture.assertOnlyInstance.child!.byRef!.hasContent,
+            isFalse,
+          );
           expect(
-              testFixture.assertOnlyInstance.child!.byTypes!.single.hasContent,
-              isFalse);
+            testFixture.assertOnlyInstance.child!.byType!.hasContent,
+            isFalse,
+          );
+          expect(
+            testFixture.assertOnlyInstance.child!.byTypes!.single.hasContent,
+            isFalse,
+          );
         });
       });
 
       group('returns true when there\'s projected content', () {
         test('with select', () async {
           var testBed = NgTestBed<ItHasProjectedContent>(
-              ng.createItHasProjectedContentFactory());
+            ng.createItHasProjectedContentFactory(),
+          );
           var testFixture = await testBed.create();
           var element = testFixture.rootElement;
           var childElement = element.querySelector('has-content-api');
@@ -54,7 +63,8 @@ void main() {
 
         test('without select', () async {
           var testBed = NgTestBed<WithoutSelectorAndHasContents>(
-              ng.createWithoutSelectorAndHasContentsFactory());
+            ng.createWithoutSelectorAndHasContentsFactory(),
+          );
           var testFixture = await testBed.create();
           var element = testFixture.rootElement;
           var childElement = element.querySelector('no-select-has-content');
@@ -63,15 +73,21 @@ void main() {
 
         test('Api on Dart', () async {
           var testBed = NgTestBed<ItHasProjectedContentOnDart>(
-              ng.createItHasProjectedContentOnDartFactory());
+            ng.createItHasProjectedContentOnDartFactory(),
+          );
           var testFixture = await testBed.create();
           expect(
-              testFixture.assertOnlyInstance.child!.byRef!.hasContent, isTrue);
+            testFixture.assertOnlyInstance.child!.byRef!.hasContent,
+            isTrue,
+          );
           expect(
-              testFixture.assertOnlyInstance.child!.byType!.hasContent, isTrue);
+            testFixture.assertOnlyInstance.child!.byType!.hasContent,
+            isTrue,
+          );
           expect(
-              testFixture.assertOnlyInstance.child!.byTypes!.single.hasContent,
-              isTrue);
+            testFixture.assertOnlyInstance.child!.byTypes!.single.hasContent,
+            isTrue,
+          );
         });
       });
     });
@@ -79,7 +95,8 @@ void main() {
     group('ngProjectAs', () {
       test('hasContent is true when there\'s a projected element', () async {
         var testBed = NgTestBed<HasMatchNgProjectAs>(
-            ng.createHasMatchNgProjectAsFactory());
+          ng.createHasMatchNgProjectAsFactory(),
+        );
         var testFixture = await testBed.create();
         var element = testFixture.rootElement;
         var childElement = element.querySelector('has-content-api');
@@ -110,8 +127,9 @@ void main() {
 
     group('NgFor', () {
       test('hasContent is false when list of *ngFor is empty', () async {
-        var testBed =
-            NgTestBed<NgForComponent>(ng.createNgForComponentFactory());
+        var testBed = NgTestBed<NgForComponent>(
+          ng.createNgForComponentFactory(),
+        );
         var testFixture = await testBed.create();
         var element = testFixture.rootElement;
         var childElement = element.querySelector('no-select-has-content');
@@ -119,8 +137,9 @@ void main() {
       });
 
       test('hasContent is true when list of *ngFor has items', () async {
-        var testBed =
-            NgTestBed<NgForComponent>(ng.createNgForComponentFactory());
+        var testBed = NgTestBed<NgForComponent>(
+          ng.createNgForComponentFactory(),
+        );
         var testFixture = await testBed.create();
         await testFixture.update((NgForComponent component) {
           component.items = [1];
@@ -136,12 +155,14 @@ void main() {
       var testFixture = await testBed.create();
       expect(testFixture.assertOnlyInstance.child!.hasContent, isTrue);
       // set false
-      await testFixture
-          .update((component) => component.child!.isContentVisible = false);
+      await testFixture.update(
+        (component) => component.child!.isContentVisible = false,
+      );
       expect(testFixture.assertOnlyInstance.child!.ref, isNull);
       // set back to true
-      await testFixture
-          .update((component) => component.child!.isContentVisible = true);
+      await testFixture.update(
+        (component) => component.child!.isContentVisible = true,
+      );
       expect(testFixture.assertOnlyInstance.child!.hasContent, isTrue);
     });
   });
@@ -169,7 +190,8 @@ class ItHasProjectedContent {}
 
 @Component(
   selector: 'has-content-api',
-  template: 'hasContent:{{fooRef.hasContent}}'
+  template:
+      'hasContent:{{fooRef.hasContent}}'
       '<ng-content select=".foo" #fooRef></ng-content>',
 )
 class HasContentApiComponent {}

@@ -16,5 +16,4 @@
 /// ```
 @pragma('dart2js:tryInline') // Required for next pragma to be effective.
 @pragma('dart2js:as:trust') // Omits `as T`.
-@pragma('wasm:prefer-inline')
 T unsafeCast<T>(dynamic any) => any as T;

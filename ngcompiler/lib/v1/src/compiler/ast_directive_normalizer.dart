@@ -1,8 +1,8 @@
+import 'package:ngdart/src/meta.dart';
 import 'package:ngast/ngast.dart' as ast;
 import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:ngcompiler/v1/cli.dart';
 import 'package:ngcompiler/v2/context.dart';
-import 'package:ngdart/src/meta.dart';
 
 import 'compile_metadata.dart';
 import 'parse_util.dart';
@@ -25,10 +25,7 @@ class AstDirectiveNormalizer {
     }
     return CompileDirectiveMetadata.from(
       directive,
-      template: await _normalizeTemplate(
-        directive.type,
-        directive.template,
-      ),
+      template: await _normalizeTemplate(directive.type, directive.template),
     );
   }
 
@@ -154,7 +151,7 @@ class AstDirectiveNormalizer {
     // Optimization: Turn off encapsulation when there are no styles to apply.
     var encapsulation = templateMeta.encapsulation;
     if (encapsulation == ViewEncapsulation.emulated &&
-        templateMeta.styles.isEmpty &&
+        templateMeta.styleUrls.isEmpty &&
         allExternalStyles.isEmpty) {
       encapsulation = ViewEncapsulation.none;
     }
@@ -182,7 +179,7 @@ class AstDirectiveNormalizer {
         else
           throw BuildError.withoutContext(
             'Invalid Style URL: "$url" (from "$moduleUrl").',
-          )
+          ),
     ];
   }
 

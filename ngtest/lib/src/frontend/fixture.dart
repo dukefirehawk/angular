@@ -1,6 +1,7 @@
+import 'package:web/web.dart';
+
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/src/utilities.dart';
-import 'package:web/web.dart';
 
 import 'bed.dart';
 import 'stabilizer.dart';
@@ -35,7 +36,10 @@ class NgTestFixture<T> {
   Future<void> dispose() async {
     await update();
     // Remove the test bed's host element.
-    _rootComponentRef.location.parentElement!.remove();
+
+    // TODO: Migrate to Dart 3.6 (Need to review)
+    //_rootComponentRef.location.node!.remove();
+    _rootComponentRef.location.remove();
     _applicationRef.dispose();
     if (isDevMode) {
       debugClearComponentStyles();

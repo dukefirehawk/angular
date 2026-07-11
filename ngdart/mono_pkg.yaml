@@ -1,15 +1,8 @@
 sdk:
+  - 3.12.0
   - pubspec
-  - stable
-  # - dev
 
 stages:
   - analyze:
-      - format:
-        sdk:
-          - pubspec
-      - analyze: --fatal-infos .
-
-cache:
-  directories:
-    - .dart_tool/build
+      - format
+      - analyze

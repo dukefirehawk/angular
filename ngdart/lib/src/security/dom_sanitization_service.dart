@@ -1,10 +1,9 @@
-import 'package:ngdart/di.dart' show Injectable;
-
-import 'package:ngdart/src/utilities.dart';
+import '../meta/di_arguments.dart';
+import '../utilities.dart';
 import 'html_sanitizer.dart';
-import 'sanitization_service.dart';
 import 'style_sanitizer.dart';
 import 'url_sanitizer.dart';
+import 'sanitization_service.dart';
 
 abstract class SafeValue {
   /// Named this way to allow security teams to
@@ -84,7 +83,8 @@ class DomSanitizationService implements SanitizationService {
     }
     if (value is SafeValue) {
       throw UnsupportedError(
-          'Unexpected SecurityContext $value, expecting html');
+        'Unexpected SecurityContext $value, expecting html',
+      );
     }
     // print('Uh oh, falling back to internal sanitizing...');
     return sanitizeHtmlInternal(unsafeCast(value));
@@ -97,8 +97,10 @@ class DomSanitizationService implements SanitizationService {
       return value.changingThisWillBypassSecurityTrust;
     }
     if (value is SafeValue) {
-      throw UnsupportedError('Unexpected SecurityContext $value, '
-          'expecting style');
+      throw UnsupportedError(
+        'Unexpected SecurityContext $value, '
+        'expecting style',
+      );
     }
     if (value == null) return null;
     return internalSanitizeStyle(value is String ? value : value.toString());
@@ -109,8 +111,10 @@ class DomSanitizationService implements SanitizationService {
     if (value == null) return null;
     if (value is SafeUrl) return value.changingThisWillBypassSecurityTrust;
     if (value is SafeValue) {
-      throw UnsupportedError('Unexpected SecurityContext $value, '
-          'expecting url');
+      throw UnsupportedError(
+        'Unexpected SecurityContext $value, '
+        'expecting url',
+      );
     }
     return internalSanitizeUrl(value.toString());
   }
@@ -122,11 +126,14 @@ class DomSanitizationService implements SanitizationService {
       return value.changingThisWillBypassSecurityTrust;
     }
     if (value is SafeValue) {
-      throw UnsupportedError('Unexpected SecurityContext $value, '
-          'expecting resource url');
+      throw UnsupportedError(
+        'Unexpected SecurityContext $value, '
+        'expecting resource url',
+      );
     }
     throw UnsupportedError(
-        'Security violation in resource url. Create SafeValue');
+      'Security violation in resource url. Create SafeValue',
+    );
   }
 
   /// Bypass security and trust the given value to be safe HTML.

@@ -1,3 +1,6 @@
+/// A support library imported by `additional_expression_test.dart`.
+library;
+
 /// A class with static members to be referenced by a template.
 class ExternalStaticClass {
   static String? nullString;

@@ -1,17 +1,18 @@
 import 'dart:async';
+import 'package:web/web.dart';
 
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/core/change_detection/host.dart';
-import 'package:ngdart/src/core/linker/style_encapsulation.dart';
-import 'package:ngdart/src/core/linker/view_container.dart';
-import 'package:ngdart/src/core/linker/view_fragment.dart';
-import 'package:ngdart/src/core/linker/view_ref.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/runtime/dom_helpers.dart';
-import 'package:ngdart/src/utilities.dart';
-import 'package:web/web.dart';
+import '../../../core/change_detection/host.dart';
+import '../../../core/linker/style_encapsulation.dart';
+import '../../../core/linker/view_container.dart';
+import '../../../core/linker/view_fragment.dart';
+import '../../../core/linker/view_ref.dart';
+import '../../../meta/change_detection_constants.dart';
+import '../../../runtime/dom_helpers.dart';
 
+import '../../../utilities/is_dev_mode.dart';
+import '../../../utilities/unsafe_cast.dart';
 import 'dynamic_view.dart';
 import 'render_view.dart';
 
@@ -31,7 +32,7 @@ import 'render_view.dart';
 abstract class EmbeddedView<T> extends RenderView
     implements DynamicView, EmbeddedViewRef {
   EmbeddedView(RenderView parentView, int parentIndex)
-      : _data = _EmbeddedViewData(parentView, parentIndex);
+    : _data = _EmbeddedViewData(parentView, parentIndex);
 
   final _EmbeddedViewData<T> _data;
 
@@ -226,13 +227,12 @@ class _EmbeddedViewData<T> implements DynamicViewData, RenderViewData {
   }
 
   _EmbeddedViewData._(this.parentView, this.parentIndex)
-      :
-        // The `parentView` is always a `ComponentView<T>` or `EmbeddedView<T>`
-        // but `RenderView` lacks this type parameter (to avoid the cost of
-        // reifying it), so the cast is necessary, but safe.
-        ctx = unsafeCast(parentView.ctx),
-        componentStyles = parentView.componentStyles,
-        projectedNodes = parentView.projectedNodes;
+    : // The `parentView` is always a `ComponentView<T>` or `EmbeddedView<T>`
+      // but `RenderView` lacks this type parameter (to avoid the cost of
+      // reifying it), so the cast is necessary, but safe.
+      ctx = unsafeCast(parentView.ctx),
+      componentStyles = parentView.componentStyles,
+      projectedNodes = parentView.projectedNodes;
 
   /// Storage for [RenderView.ctx].
   final T ctx;
@@ -316,7 +316,8 @@ class _EmbeddedViewData<T> implements DynamicViewData, RenderViewData {
   }
 
   void _updateShouldSkipChangeDetection() {
-    _shouldSkipChangeDetection = _changeDetectionMode ==
+    _shouldSkipChangeDetection =
+        _changeDetectionMode ==
             ChangeDetectionCheckedState.waitingToBeAttached ||
         _changeDetectorState == ChangeDetectorState.errored;
   }

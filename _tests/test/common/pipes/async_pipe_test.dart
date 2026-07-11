@@ -175,5 +175,5 @@ class FakeChangeDetectorRef implements ChangeDetectorRef {
   }
 
   @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  dynamic noSuchMethod(a) => super.noSuchMethod(a);
 }

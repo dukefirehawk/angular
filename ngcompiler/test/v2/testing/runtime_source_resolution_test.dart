@@ -1,23 +1,21 @@
 import 'package:build/build.dart';
 import 'package:test/test.dart';
-
-import 'runtime_source_resolution.dart';
+import 'package:ngcompiler/v2/testing.dart';
 
 void main() {
   test('should resolve a component', () async {
-    final library = await resolve(
-      '''
+    final library = await resolve('''
       @Component(
         selector: 'example',
         template: 'Hello World',
       )
       class Example {}
-      ''',
-    );
+      ''');
     expect(
       library
           .getClass('Example')!
           .metadata
+          .annotations
           .first
           .computeConstantValue()!
           .getField('template')!
@@ -27,18 +25,20 @@ void main() {
   });
 
   test('should fail to resolve a component', () async {
-    final library = await resolve(
-      '''
+    final library = await resolve('''
       @Component(
         selector: 'example',
         template: 'Hello World',
       )
       class Example {}
-      ''',
-      includeAngularDeps: false,
-    );
+      ''', includeAngularDeps: false);
     expect(
-      library.getClass('Example')!.metadata.first.computeConstantValue(),
+      library
+          .getClass('Example')!
+          .metadata
+          .annotations
+          .first
+          .computeConstantValue(),
       isNull,
       reason: 'Angular was not loaded',
     );
@@ -55,15 +55,14 @@ void main() {
         class Example extends Base {}
       ''',
       additionalFiles: {
-        AssetId('test_lib', 'lib/another.dart'): 'class Base {}'
+        AssetId('test_lib', 'lib/another.dart'): 'class Base {}',
       },
     );
     final clazz = library.getClass('Example')!;
+
+    var annotation = clazz.metadata.annotations.first;
     expect(
-      clazz.metadata.first
-          .computeConstantValue()!
-          .getField('template')!
-          .toStringValue(),
+      annotation.computeConstantValue()!.getField('template')!.toStringValue(),
       'Hello World',
     );
     expect(clazz.supertype!.element.name, 'Base');

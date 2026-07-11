@@ -1,14 +1,15 @@
 import 'dart:async';
-
-import 'package:meta/dart2js.dart' as dart2js;
-import 'package:ngdart/src/core/linker/app_view_utils.dart';
-import 'package:ngdart/src/core/linker/style_encapsulation.dart';
-import 'package:ngdart/src/core/linker/view_container.dart';
-import 'package:ngdart/src/core/linker/view_fragment.dart';
-import 'package:ngdart/src/runtime/dom_helpers.dart';
-import 'package:ngdart/src/utilities.dart';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
+import 'package:meta/dart2js.dart' as dart2js;
+import '../../../core/linker/app_view_utils.dart';
+import '../../../core/linker/style_encapsulation.dart';
+import '../../../core/linker/view_container.dart';
+import '../../../core/linker/view_fragment.dart';
+import '../../../runtime/dom_helpers.dart';
+
+import '../../../utilities/unsafe_cast.dart';
 import 'view.dart';
 
 /// A view that renders a portion of a component template.
@@ -128,7 +129,15 @@ abstract class RenderView extends View {
   ///   * Calls [markForCheck] on this view to ensure it gets change detected
   ///   during the next change detection cycle, in case it uses a non-default
   ///   change detection strategy.
-  void Function(E event) eventHandler0<E>(void Function() handler) {
+  // TODO: Migrated to dart 3.6 (Need to review)
+  JSFunction? jsEventHandler0(void Function() handler) {
+    return (Event event) {
+      markForCheck();
+      appViewUtils.eventManager.zone.runGuarded(handler);
+    }.toJS;
+  }
+
+  void Function(E) eventHandler0<E>(void Function() handler) {
     return (E event) {
       markForCheck();
       appViewUtils.eventManager.zone.runGuarded(handler);
@@ -151,22 +160,37 @@ abstract class RenderView extends View {
   /// known type.
   void Function(E) eventHandler1<E, F extends E>(void Function(F) handler) {
     assert(
-        E == Null || F != Null,
-        "Event handler '$handler' isn't assignable to expected type "
-        "'($E) => void'");
+      E == Null || F != Null,
+      "Event handler '$handler' isn't assignable to expected type "
+      "'($E) => void'",
+    );
     return (E event) {
       markForCheck();
       appViewUtils.eventManager.zone.runGuarded(
-        () => handler(unsafeCast(event)),
+        () => handler(unsafeCast<F>(event)),
       );
     };
   }
 
+  JSFunction? jsEventHandler1<E, F extends E>(void Function(F) handler) {
+    assert(
+      E == Null || F != Null,
+      "Event handler '$handler' isn't assignable to expected type "
+      "'($E) => void'",
+    );
+    return (JSAny? event) {
+      markForCheck();
+      appViewUtils.eventManager.zone.runGuarded(
+        () => handler(unsafeCast<F>(event)),
+      );
+    }.toJS;
+  }
+
   // Styling -------------------------------------------------------------------
 
-  /// Equivalent to [addShimE], but optimized for [HTMLElement].
+  /// Equivalent to [addShimE], but optimized for [HtmlElement].
   @dart2js.tryInline
-  void addShimC(HTMLElement element) {
+  void addShimC(HtmlElement element) {
     componentStyles.addContentShimClassHtmlElement(element);
   }
 
@@ -176,7 +200,7 @@ abstract class RenderView extends View {
   /// shim class is needed for any styles to match [element].
   ///
   /// This should only be used for SVG or custom elements. For a plain
-  /// [HTMLElement], use [addShimC] instead.
+  /// [HtmlElement], use [addShimC] instead.
   @dart2js.tryInline
   void addShimE(Element element) {
     componentStyles.addContentShimClass(element);
@@ -189,7 +213,7 @@ abstract class RenderView extends View {
   ///
   /// For example, through the `[class]="..."` or `[attr.class]="..."` syntax.
   @dart2js.noInline
-  void updateChildClass(HTMLElement element, String newClass) {
+  void updateChildClass(HtmlElement element, String newClass) {
     componentStyles.updateChildClassHtmlElement(element, newClass);
   }
 

@@ -1,6 +1,10 @@
 import 'output_ast.dart' as o;
 
-final _singleQuoteEscape = RegExp(r'' "'" r'|\\|\n|\r|\$');
+final _singleQuoteEscape = RegExp(
+  r''
+  "'"
+  r'|\\|\n|\r|\$',
+);
 final catchErrorVar = o.variable('error');
 final catchStackVar = o.variable('stack');
 
@@ -84,9 +88,11 @@ class EmitterVisitorContext {
       lines = lines.sublist(0, lines.length - 1);
     }
     return lines
-        .map((line) => line.parts.isNotEmpty
-            ? _createIndent(line.indent) + line.parts.join('')
-            : '')
+        .map(
+          (line) => line.parts.isNotEmpty
+              ? _createIndent(line.indent) + line.parts.join('')
+              : '',
+        )
         .toList()
         .join('\n');
   }
@@ -114,7 +120,8 @@ abstract class AbstractEmitterVisitor
     var sourceComment = '';
     var sourceReference = stmt.sourceReference;
     if (sourceReference != null) {
-      sourceComment = '/* REF:'
+      sourceComment =
+          '/* REF:'
           '${sourceReference.sourceUrl}'
           ':'
           '${sourceReference.startOffset}'
@@ -420,10 +427,7 @@ abstract class AbstractEmitterVisitor
   }
 
   @override
-  void visitIfNullExpr(
-    o.IfNullExpr ast,
-    EmitterVisitorContext context,
-  ) {
+  void visitIfNullExpr(o.IfNullExpr ast, EmitterVisitorContext context) {
     context.print('(');
     ast.condition.visitExpression(this, context);
     context.print('?? ');
@@ -473,10 +477,7 @@ abstract class AbstractEmitterVisitor
   }
 
   @override
-  void visitReadPropExpr(
-    o.ReadPropExpr ast,
-    EmitterVisitorContext context,
-  ) {
+  void visitReadPropExpr(o.ReadPropExpr ast, EmitterVisitorContext context) {
     ast.receiver.visitExpression(this, context);
     if (ast.checked) {
       context.print('?');
@@ -501,8 +502,13 @@ abstract class AbstractEmitterVisitor
     var useNewLine = ast.entries.length > 1;
     context.print('[', useNewLine);
     context.incIndent();
-    visitAllExpressions(ast.entries, context, ',',
-        newLine: useNewLine, keepOnSameLine: true);
+    visitAllExpressions(
+      ast.entries,
+      context,
+      ',',
+      newLine: useNewLine,
+      keepOnSameLine: true,
+    );
     context.decIndent();
     context.print(']', useNewLine);
   }
@@ -522,8 +528,9 @@ abstract class AbstractEmitterVisitor
           firstEntry.visitExpression(this, context);
         } else {
           final firstEntryCasted = firstEntry as String;
-          context.print(escapeSingleQuoteString(
-              firstEntryCasted, _escapeDollarInStrings)!);
+          context.print(
+            escapeSingleQuoteString(firstEntryCasted, _escapeDollarInStrings)!,
+          );
         }
         context.print(': ');
         entry[1].visitExpression(this, context);

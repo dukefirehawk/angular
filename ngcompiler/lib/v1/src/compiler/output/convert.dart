@@ -20,7 +20,7 @@ o.OutputType? fromDartType(DartType? dartType, {bool resolveBounds = true}) {
     // an explicit type, such as a generic type parameter bound.
     return null;
   }
-  if (dartType.isVoid) {
+  if (dartType is VoidType) {
     return o.voidType;
   }
   if (dartType.isDartCoreNull) {
@@ -38,11 +38,16 @@ o.OutputType? fromDartType(DartType? dartType, {bool resolveBounds = true}) {
   if (dartType is TypeParameterType && resolveBounds) {
     // Resolve generic type to its bound or dynamic if it has none.
     final dynamicType = dartType.element.library!.typeProvider.dynamicType;
-    dartType = dartType.resolveToBound(dynamicType);
+    var propertyType = dartType.element.library?.typeSystem;
+
+    // TODO: Migrate to dart 3.6 (Need to review)
+    //print('=== ResolveToBound(dartType) ===');
+    //dartType = dartType.resolveToBound(dynamicType);
+    dartType = propertyType?.resolveToBound(dynamicType);
   }
   // Note this check for dynamic should come after the check for a type
   // parameter, since a type parameter could resolve to dynamic.
-  if (dartType.isDynamic) {
+  if (dartType is DynamicType) {
     return o.dynamicType;
   }
   final typeArguments = <o.OutputType>[];
@@ -60,15 +65,15 @@ o.OutputType? fromDartType(DartType? dartType, {bool resolveBounds = true}) {
   }
   var outputType = o.ExternalType(
     CompileIdentifierMetadata(
-      name: dartType.name!,
-      moduleUrl: moduleUrl(dartType.element!),
+      name: (dartType?.name)!,
+      moduleUrl: moduleUrl((dartType?.element)!),
       // Most o.ExternalTypes are not created, but those that are (like
       // OpaqueToken<...> need this generic type.
       typeArguments: typeArguments,
     ),
     typeArguments,
   );
-  if (dartType.nullabilitySuffix == NullabilitySuffix.question) {
+  if (dartType?.nullabilitySuffix == NullabilitySuffix.question) {
     outputType = outputType.asNullable();
   }
   return outputType;
@@ -105,7 +110,7 @@ o.OutputType fromTypeLink(TypeLink? typeLink, LibraryReader library) {
 o.FunctionType fromFunctionType(FunctionType functionType) {
   final returnType = fromDartType(functionType.returnType);
   final paramTypes = <o.OutputType>[];
-  for (var parameter in functionType.parameters) {
+  for (var parameter in functionType.formalParameters) {
     paramTypes.add(fromDartType(parameter.type)!);
   }
   var outputType = o.FunctionType(returnType, paramTypes);

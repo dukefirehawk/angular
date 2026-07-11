@@ -1,6 +1,6 @@
+import 'package:source_span/source_span.dart';
 import 'package:ngast/ngast.dart' as ast;
 import 'package:ngcompiler/v2/context.dart';
-import 'package:source_span/source_span.dart';
 
 import 'i18n/builder.dart';
 import 'i18n/message.dart';
@@ -24,19 +24,15 @@ List<ng.TemplateAst> internationalize(
 ) {
   final i18nMessage = _message(parent.childNodes, metadata);
   if (i18nMessage == null) {
-    CompileContext.current.reportAndRecover(BuildError.forSourceSpan(
-      parent.sourceSpan,
-      'Internationalized messages must contain text',
-    ));
+    CompileContext.current.reportAndRecover(
+      BuildError.forSourceSpan(
+        parent.sourceSpan,
+        'Internationalized messages must contain text',
+      ),
+    );
     return [];
   }
-  return [
-    ng.I18nTextAst(
-      i18nMessage,
-      ngContentIndex,
-      _spanWithin(parent),
-    )
-  ];
+  return [ng.I18nTextAst(i18nMessage, ngContentIndex, _spanWithin(parent))];
 }
 
 /// Creates an internationalized messages from [nodes].

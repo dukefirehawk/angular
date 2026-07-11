@@ -1,24 +1,21 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/src/dart/element/element.dart';
+import 'package:source_gen/source_gen.dart';
+import 'package:ngdart/src/meta.dart';
 import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:ngcompiler/v1/cli.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:source_gen/source_gen.dart';
 
 // See internal bug b/35319372 for details.
 
 /// Wraps an annotation [matcher] so that an error is not thrown.
-AnnotationMatcher safeMatcher(
-  AnnotationMatcher matcher,
-) =>
-    (annotation) {
-      try {
-        return matcher(annotation);
-      } on ArgumentError catch (e) {
-        logWarning('Could not resolve $annotation: $e');
-        return false;
-      }
-    };
+AnnotationMatcher safeMatcher(AnnotationMatcher matcher) => (annotation) {
+  try {
+    return matcher(annotation);
+  } on ArgumentError catch (e) {
+    logWarning('Could not resolve $annotation: $e');
+    return false;
+  }
+};
 
 /// Checks if an [ElementAnnotation] node implements [Component].
 bool isComponent(ElementAnnotation annotation) =>
@@ -48,21 +45,19 @@ bool matchAnnotation(TypeChecker typeChecker, ElementAnnotation annotation) {
   try {
     return typeChecker.isExactlyType(object!.type!);
   } catch (_) {
-    var message = ''
+    var message =
+        ''
         'Could not determine type of annotation. It resolved to '
         '${annotation.computeConstantValue()}. '
         'Are you missing a dependency?';
     if (annotation is ElementAnnotationImpl) {
-      message += ''
+      message +=
+          ''
           '\n'
           '${annotation.annotationAst.toSource()} in '
-          '${annotation.librarySource.uri.toString()}';
+          '${annotation.libraryFragment.source.uri.toString()}';
     }
-    throw ArgumentError.value(
-      annotation,
-      'annotation',
-      message,
-    );
+    throw ArgumentError.value(annotation, 'annotation', message);
   }
 }
 

@@ -1,7 +1,8 @@
+import 'package:web/web.dart';
+
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'query_html_element_test.template.dart' as ng;
 
@@ -14,9 +15,9 @@ void main() {
     expect(fixture.assertOnlyInstance.element!.textContent, '1');
   });
 
-  test('should support @ViewChild with HTMLElement', () async {
+  test('should support @ViewChild with HtmlElement', () async {
     final fixture =
-        await NgTestBed<UsesHTMLElement>(ng.createUsesHTMLElementFactory())
+        await NgTestBed<UsesHtmlElement>(ng.createUsesHtmlElementFactory())
             .create();
     expect(fixture.assertOnlyInstance.element!.textContent, '2');
   });
@@ -29,9 +30,9 @@ void main() {
         ['1', '2']);
   });
 
-  test('should support @ViewChildren with HTMLElement', () async {
-    final fixture = await NgTestBed<UsesListOfHTMLElement>(
-            ng.createUsesListOfHTMLElementFactory())
+  test('should support @ViewChildren with HtmlElement', () async {
+    final fixture = await NgTestBed<UsesListOfHtmlElement>(
+            ng.createUsesListOfHtmlElementFactory())
         .create();
     expect(fixture.assertOnlyInstance.elements!.map((e) => e.textContent),
         ['1', '2']);
@@ -51,9 +52,9 @@ class UsesElement {
   selector: 'uses-element',
   template: '<div #div>2</div>',
 )
-class UsesHTMLElement {
+class UsesHtmlElement {
   @ViewChild('div')
-  HTMLElement? element;
+  HtmlElement? element;
 }
 
 @Component(
@@ -69,7 +70,7 @@ class UsesListOfElement {
   selector: 'uses-list-of-element',
   template: '<div #div>1</div><div #div>2</div>',
 )
-class UsesListOfHTMLElement {
+class UsesListOfHtmlElement {
   @ViewChildren('div')
-  List<HTMLElement>? elements;
+  List<HtmlElement>? elements;
 }

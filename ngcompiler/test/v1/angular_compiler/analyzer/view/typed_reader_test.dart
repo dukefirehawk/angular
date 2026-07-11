@@ -1,6 +1,6 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:test/test.dart';
+import 'package:ngcompiler/v1/angular_compiler.dart';
 
 import '../../src/compile.dart';
 import '../../src/resolve.dart';
@@ -8,18 +8,20 @@ import '../../src/resolve.dart';
 const testImport = 'asset:test_lib/lib/test_lib.dart';
 
 Future<TypedElement> parse(String source) async {
-  final amendedSource = '''
-    @Component(selector: '')
+  final amendedSource =
+      '''
+    @Component()
     class GenericComponent<T> {}
 
-    @Directive(selector: '')
+    @Directive()
     class GenericDirective<K, V> {}
 
     $source
   ''';
-  final element = (await resolveClass(amendedSource, 'Example'))!;
-  final typedReader = TypedReader(element);
-  final typedValue = element.metadata
+  final element = await resolveClass(amendedSource, 'Example');
+
+  final typedReader = TypedReader(element!);
+  final typedValue = element.metadata.annotations
       .firstWhere((annotation) => annotation.element!.name == 'typed')
       .computeConstantValue()!;
   return typedReader.parse(typedValue);
@@ -29,27 +31,25 @@ void main() {
   group('parses', () {
     group('Typed()', () {
       test('with single concrete type argument', () async {
-        final typedElement = await parse('''
+        final typedElement = await parse(r'''
           const typed = Typed<GenericComponent<String>>();
 
           @typed
           class Example {}
         ''');
-        expect(
-          typedElement,
-          TypedElement(
-            TypeLink(
-              'GenericComponent',
-              testImport,
-              generics: [
-                TypeLink('String', 'dart:core'),
-              ],
-            ),
+
+        var expectedResult = TypedElement(
+          TypeLink(
+            'GenericComponent',
+            testImport,
+            generics: [TypeLink('String', 'dart:core')],
           ),
         );
+
+        expect(typedElement, expectedResult);
       });
       test('with multiple concrete type arguments', () async {
-        final typedElement = await parse('''
+        final typedElement = await parse(r'''
           const typed = Typed<GenericDirective<String, Object>>();
 
           @typed
@@ -86,9 +86,7 @@ void main() {
                 TypeLink(
                   'List',
                   'dart:core',
-                  generics: [
-                    TypeLink('String', 'dart:core'),
-                  ],
+                  generics: [TypeLink('String', 'dart:core')],
                 ),
               ],
             ),
@@ -108,9 +106,7 @@ void main() {
             TypeLink(
               'GenericComponent',
               testImport,
-              generics: [
-                TypeLink('String', 'dart:core'),
-              ],
+              generics: [TypeLink('String', 'dart:core')],
             ),
             on: 'strings',
           ),
@@ -132,9 +128,7 @@ void main() {
             TypeLink(
               'GenericComponent',
               testImport,
-              generics: [
-                TypeLink('X', null),
-              ],
+              generics: [TypeLink('X', null)],
             ),
           ),
         );
@@ -152,9 +146,7 @@ void main() {
             TypeLink(
               'GenericComponent',
               testImport,
-              generics: [
-                TypeLink('int', 'dart:core'),
-              ],
+              generics: [TypeLink('int', 'dart:core')],
             ),
           ),
         );
@@ -176,9 +168,7 @@ void main() {
                 TypeLink(
                   'List',
                   'dart:core',
-                  generics: [
-                    TypeLink('int', 'dart:core'),
-                  ],
+                  generics: [TypeLink('int', 'dart:core')],
                 ),
               ],
             ),
@@ -227,9 +217,7 @@ void main() {
             TypeLink(
               'GenericComponent',
               testImport,
-              generics: [
-                TypeLink('X', null),
-              ],
+              generics: [TypeLink('X', null)],
             ),
             on: 'flow',
           ),
@@ -242,7 +230,8 @@ void main() {
     Future<void> parseTyped(LibraryElement element) async {
       final example = element.getClass('Example')!;
       final typedReader = TypedReader(example);
-      final typedValue = example.metadata.first.computeConstantValue()!;
+      final typedValue = example.metadata.annotations.first
+          .computeConstantValue()!;
       typedReader.parse(typedValue);
     }
 
@@ -259,6 +248,8 @@ void main() {
           contains('Expected an expression of type "Typed", but got "int"'),
         ],
       );
+
+      print('done');
     });
     test('if a concrete type is used as a type argument of "Typed"', () async {
       await compilesExpecting(
@@ -275,14 +266,14 @@ void main() {
           allOf(
             contains('Expected a generic type'),
             contains('got concrete type "ConcreteDirective"'),
-          )
+          ),
         ],
       );
     });
     test('if a non-existent type parameter is flowed', () async {
       await compilesExpecting(
         '''
-        @Component(selector: '')
+        @Component()
         class GenericComponent<T> {}
         const typed = Typed<GenericComponent>.of([#X]);
 
@@ -301,7 +292,7 @@ void main() {
     test("if a type argument isn't a supported type", () async {
       await compilesExpecting(
         '''
-        @Component(selector: '')
+        @Component()
         class GenericComponent<T> {}
         const typed = Typed<GenericComponent>.of([12]);
 
@@ -320,7 +311,7 @@ void main() {
     test('if "Typed.on" is specified anywhere other than the root', () async {
       await compilesExpecting(
         '''
-       @Component(selector: '')
+       @Component()
         class GenericComponent<T> {}
         const typed = Typed<GenericComponent>.of([
           Typed<List>.of([#X], on: 'foo'),
@@ -332,8 +323,9 @@ void main() {
         parseTyped,
         errors: [
           contains(
-              'The "on" argument is only supported on the root "Typed" of a '
-              '"Typed" expression')
+            'The "on" argument is only supported on the root "Typed" of a '
+            '"Typed" expression',
+          ),
         ],
       );
     });
@@ -349,8 +341,9 @@ void main() {
         parseTyped,
         errors: [
           contains(
-              'Expected a "Typed" expression with a "Component" or "Directive" '
-              'annotated type, but got "Typed<List>"')
+            'Expected a "Typed" expression with a "Component" or "Directive" '
+            'annotated type, but got "Typed<List>"',
+          ),
         ],
       );
     });
@@ -358,7 +351,7 @@ void main() {
     test('if a private type argument is used', () async {
       await compilesExpecting(
         '''
-        @Component(selector: '')
+        @Component()
         class GenericComponent<T> {}
         class _Private {}
         const typed = Typed<GenericComponent<_Private>>();
@@ -369,8 +362,9 @@ void main() {
         parseTyped,
         errors: [
           contains(
-              'Directive type arguments must be public, but "GenericComponent" '
-              'was given private type argument "_Private" by "Example".')
+            'Directive type arguments must be public, but "GenericComponent" '
+            'was given private type argument "_Private" by "Example".',
+          ),
         ],
       );
     });

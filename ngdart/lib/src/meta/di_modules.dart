@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/meta.dart';
+
+import 'di_providers.dart';
 
 /// Encapsulates a reusable set of dependency injection configurations.
 ///
@@ -44,22 +45,17 @@ class Module {
   final List<Provider<Object>> provide;
 
   @literal
-  const factory Module({
-    List<Module> include,
-    List<Provider<Object>> provide,
-  }) = Module._;
+  const factory Module({List<Module> include, List<Provider<Object>> provide}) =
+      Module._;
 
-  const Module._({
-    this.include = const [],
-    this.provide = const [],
-  });
+  const Module._({this.include = const [], this.provide = const []});
 }
 
 /// Compatibility layer for expressing a [Module] as a `List<...>`.
 ///
 /// **DO NOT USE**: This function may break or change at any time.
 List<Provider<Object>> internalModuleToList(Module module) => [
-      for (final includedModule in module.include)
-        ...internalModuleToList(includedModule),
-      ...module.provide,
-    ];
+  for (final includedModule in module.include)
+    ...internalModuleToList(includedModule),
+  ...module.provide,
+];

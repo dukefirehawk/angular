@@ -1,5 +1,7 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
+import 'package:source_gen/source_gen.dart';
+import 'package:ngdart/src/meta.dart';
 import 'package:ngcompiler/v1/src/compiler/ast_directive_normalizer.dart';
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart';
 import 'package:ngcompiler/v1/src/compiler/compiler_utils.dart';
@@ -10,8 +12,6 @@ import 'package:ngcompiler/v1/src/compiler/template_compiler.dart';
 import 'package:ngcompiler/v1/src/compiler/template_parser/ast_template_parser.dart';
 import 'package:ngcompiler/v1/src/source_gen/template_compiler/component_visitor_exceptions.dart';
 import 'package:ngcompiler/v1/src/source_gen/template_compiler/find_components.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:source_gen/source_gen.dart';
 
 /// The bulk of "compilation" for AngularDart's components and templates.
 ///
@@ -107,7 +107,7 @@ class AngularCompiler {
       styleUrls: componentWithDirs.component.template!.styleUrls,
       views: [
         _componentView(componentWithDirs),
-        _hostView(componentWithDirs.component)
+        _hostView(componentWithDirs.component),
       ],
     );
   }
@@ -115,15 +115,16 @@ class AngularCompiler {
   ir.ViewEncapsulation _encapsulation(
     NormalizedComponentWithViewDirectives componentWithDirs,
   ) {
-    switch (componentWithDirs.component.template!.encapsulation) {
-      case ViewEncapsulation.emulated:
-        return ir.ViewEncapsulation.emulated;
+    switch (componentWithDirs.component.template?.encapsulation) {
       case ViewEncapsulation.none:
         return ir.ViewEncapsulation.none;
       default:
-        throw ArgumentError.value(
-          componentWithDirs.component.template!.encapsulation,
-        );
+        //case ViewEncapsulation.emulated:
+        return ir.ViewEncapsulation.emulated;
+      // default:
+      //   throw ArgumentError.value(
+      //     componentWithDirs.component.template?.encapsulation,
+      //   );
     }
   }
 

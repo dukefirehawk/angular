@@ -1,10 +1,11 @@
-import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
+import 'package:web/web.dart';
+import 'dart:js_interop';
+
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'key_events_test.template.dart' as ng;
 
@@ -173,9 +174,11 @@ class ModifiersListener {
   bool receivedModifiers = false;
 }
 
-const createKeyboardEventName = '__dart_createKeyboardEvent';
-const createkeyboardEventScript = '''
-window['$createKeyboardEventName'] = function(
+// ignore: constant_identifier_names
+const CREATE_KEYBOARD_EVENT_NAME = '__dart_createKeyboardEvent';
+// ignore: constant_identifier_names
+const CREATE_KEYBOARD_EVENT_SCRIPT = '''
+window['$CREATE_KEYBOARD_EVENT_NAME'] = function(
     type, keyCode, ctrlKey, altKey, shiftKey, metaKey) {
   var event = document.createEvent('KeyboardEvent');
 
@@ -206,18 +209,20 @@ Event createKeyboardEvent(
   bool shiftKey = false,
   bool metaKey = false,
 }) {
-  if (!globalContext.has(createKeyboardEventName)) {
+  if (globalContext
+      .getProperty(CREATE_KEYBOARD_EVENT_NAME)
+      .isDefinedAndNotNull) {
     var script = document.createElement('script')
       ..setAttribute('type', 'text/javascript')
-      ..textContent = createkeyboardEventScript;
+      ..text = CREATE_KEYBOARD_EVENT_SCRIPT;
     document.body!.append(script);
   }
-  return globalContext.callMethodVarArgs(createKeyboardEventName.toJS, [
-    type.toJS,
-    keyCode.toJS,
-    ctrlKey.toJS,
-    altKey.toJS,
-    shiftKey.toJS,
-    metaKey.toJS,
+  return globalContext.callMethod(CREATE_KEYBOARD_EVENT_NAME, [
+    type,
+    keyCode,
+    ctrlKey,
+    altKey,
+    shiftKey,
+    metaKey,
   ]) as Event;
 }

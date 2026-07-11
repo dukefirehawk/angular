@@ -1,6 +1,10 @@
-import 'dart:js_interop';
+@JS()
+library;
 
-import 'package:web/web.dart';
+//import 'dart:html' as html;
+//import 'dart:js_interop';
+import 'dart:js_interop';
+import 'package:web/web.dart' as html;
 
 import 'devtools/inspector.dart';
 import 'utilities.dart';
@@ -20,6 +24,15 @@ bool _isDevToolsEnabled = false;
 void enableDevTools() {
   if (isDevMode) {
     _isDevToolsEnabled = true;
+    /*
+    _getComponentElement = allowInterop(
+      Inspector.instance.getComponentElement,
+    );
+    
+    _getComponentIdForNode = allowInterop(
+      Inspector.instance.getComponentIdForNode,
+    );
+    */
     _getComponentElement = Inspector.instance.getComponentElement.toJS;
     _getComponentIdForNode = Inspector.instance.getComponentIdForNode.toJS;
   }
@@ -29,7 +42,7 @@ void enableDevTools() {
 ///
 /// This method should be used to register elements that are not contained by
 /// the app's root component.
-void registerContentRoot(Element element) {
+void registerContentRoot(html.Element element) {
   if (isDevToolsEnabled) {
     Inspector.instance.registerContentRoot(element);
   }
@@ -37,7 +50,13 @@ void registerContentRoot(Element element) {
 
 /// Specifies a function to look up an element by component ID in JavaScript.
 @JS('getAngularComponentElement')
+//external set _getComponentElement(
+//  html.HtmlElement Function(int) implementation,
+//);
 external set _getComponentElement(JSFunction implementation);
 
 @JS('getAngularComponentIdForNode')
+//external set _getComponentIdForNode(
+//  void Function(html.Node, String) implementation,
+//);
 external set _getComponentIdForNode(JSFunction implementation);

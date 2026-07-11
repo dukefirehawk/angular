@@ -1,7 +1,8 @@
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/core/linker/template_ref.dart';
-import 'package:ngdart/src/core/linker/view_container_ref.dart';
-import 'package:ngdart/src/meta.dart';
+import '../../core/linker/template_ref.dart';
+import '../../core/linker/view_container_ref.dart';
+import '../../meta/di_arguments.dart';
+import '../../meta/directives.dart';
 
 /// An alternative to [NgFor] optimized for immutable/unmodified collections.
 ///
@@ -17,30 +18,26 @@ import 'package:ngdart/src/meta.dart';
 /// * Only supports the `$implicit` and `index` local variables.
 ///
 /// This API is **experimental** and subject to change or removal.
-@Directive(
-  selector: '[ngForIdentity][ngForIdentityOf]',
-)
+@Directive(selector: '[ngForIdentity][ngForIdentityOf]')
 @experimental
 class NgForIdentity<T> {
-  final TemplateRef _template;
-  final ViewContainerRef _container;
+  final TemplateRef? _template;
+  final ViewContainerRef? _container;
 
-  const NgForIdentity(
-    this._template,
-    this._container,
-  );
+  const NgForIdentity(@Optional() this._template, @Optional() this._container);
 
   @Input()
   set ngForIdentityOf(Iterable<T>? elements) {
-    _container.clear();
+    _container?.clear();
     if (elements == null || elements.isEmpty) {
       return;
     }
     var i = 0;
     for (final element in elements) {
-      final view = _container.createEmbeddedView(_template);
-      view.setLocal(r'$implicit', element);
-      view.setLocal(r'index', i++);
+      if (_template == null) return;
+      final view = _container?.createEmbeddedView(_template);
+      view?.setLocal(r'$implicit', element);
+      view?.setLocal(r'index', i++);
       // TODO: Consider if we want all of the NgFor local variables available.
     }
   }

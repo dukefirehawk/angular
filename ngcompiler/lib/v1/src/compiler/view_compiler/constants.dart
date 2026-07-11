@@ -16,10 +16,12 @@ final parentRenderNodeVar = o.variable('parentRenderNode');
 ///
 /// Otherwise the generated code refers to arbitrary integer values.
 o.Expression changeDetectionCheckToConst(String name) {
-  return o.importExpr(CompileIdentifierMetadata(
-    name: 'ChangeDetectionCheckedState.$name',
-    moduleUrl: Identifiers.changeDetectionCheckedState.moduleUrl,
-  ));
+  return o.importExpr(
+    CompileIdentifierMetadata(
+      name: 'ChangeDetectionCheckedState.$name',
+      moduleUrl: Identifiers.changeDetectionCheckedState.moduleUrl,
+    ),
+  );
 }
 
 class ViewConstructorVars {

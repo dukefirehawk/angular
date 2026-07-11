@@ -1,22 +1,24 @@
 name: angular_workspace
-publish_to: none
 
 environment:
-  sdk: ">=3.6.0 <4.0.0"
+  sdk: ">=3.12.0 <4.0.0"
 
 workspace:
   - ngast
   - ngcompiler
   - ngdart
+  - ngtest
   - ngforms
   - ngrouter
-  - ngtest
-
-  - examples/hello_world
-
-  - _tests
   - goldens
+  - examples/hello_world
+  # - ngcomponents
+  #- _tests
 
 dev_dependencies:
-  lints: ^5.1.0
-  melos: ^6.2.0
+  melos: ^8.0.0
+  lints: ^6.0.0
+
+melos:
+  # All the content of your previous melos.yaml file goes here
+  # (e.g., scripts, command configs, etc.)

@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
-import 'package:web/web.dart';
 
 import '../bootstrap.dart';
 import '../errors.dart';
@@ -69,6 +69,8 @@ Future<void> disposeAnyRunningTest() async {
 /// ```
 class NgTestBed<T extends Object> {
   static Element _defaultHost() {
+    // TODO: Migrate to 3.6 (Need review)
+    //final host = Element.tag('ng-test-bed');
     final host = document.createElement('ng-test-bed');
     document.body!.append(host);
     return host;

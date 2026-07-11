@@ -1,30 +1,37 @@
-import 'package:_tests/compiler.dart';
-import 'package:ngcompiler/v2/context.dart';
 import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
+import '../../lib/compiler.dart';
+import 'package:ngcompiler/v2/context.dart';
 
 void main() {
   CompileContext.overrideForTesting();
 
   group('should prevent providing an app-wide, singleton service', () {
     test('from a generated injector', () async {
-      await compilesExpecting("""
+      await compilesExpecting(
+        """
         import '$ngImport';
 
         @GenerateInjector([
           ClassProvider(NgZone),
         ])
         final injectorFactory = null; // OK for compiler tests.
-      """, errors: [
-        allOf(
-          contains('singleton service provided by the framework that cannot be '
-              'overridden or manually provided'),
-          containsSourceLocation(6, 15),
-        ),
-      ]);
+      """,
+        errors: [
+          allOf([
+            contains(
+              'singleton service provided by the framework that cannot be '
+              'overridden or manually provided',
+            ),
+            containsSourceLocation(6, 15),
+          ]),
+        ],
+      );
     });
 
     test('from a component', () async {
-      await compilesExpecting("""
+      await compilesExpecting(
+        """
         import '$ngImport';
 
         @Component(
@@ -33,13 +40,17 @@ void main() {
           providers: [ClassProvider(NgZone)],
         )
         class Foo {}
-      """, errors: [
-        allOf(
-          contains('singleton service provided by the framework that cannot be '
-              'overridden or manually provided'),
-          containsSourceLocation(3, 9),
-        ),
-      ]);
+      """,
+        errors: [
+          allOf([
+            contains(
+              'singleton service provided by the framework that cannot be '
+              'overridden or manually provided',
+            ),
+            containsSourceLocation(3, 9),
+          ]),
+        ],
+      );
     });
   });
 }

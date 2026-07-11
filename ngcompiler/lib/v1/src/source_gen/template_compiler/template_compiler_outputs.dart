@@ -9,8 +9,5 @@ class TemplateCompilerOutputs {
   /// For each `@Component`, how to generate the backing views.
   final DartSourceOutput? templateSource;
 
-  const TemplateCompilerOutputs(
-    this.templateSource,
-    this.injectorsOutput,
-  );
+  const TemplateCompilerOutputs(this.templateSource, this.injectorsOutput);
 }

@@ -1,8 +1,8 @@
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:meta/meta.dart';
 import 'package:ngcompiler/v2/context.dart';
+import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
 import '../link.dart';
@@ -17,8 +17,10 @@ class TokenReader {
   /// Returns [object] parsed into a [TokenElement].
   ///
   /// Only a [DartType] or `OpaqueToken` are currently supported.
-  TokenElement parseTokenObject(DartObject object,
-      [ParameterElement? element]) {
+  TokenElement parseTokenObject(
+    DartObject object, [
+    FormalParameterElement? element,
+  ]) {
     final constant = ConstantReader(object);
     if (constant.isNull) {
       final errorMsg = 'Annotation on element has errors and was unresolvable.';
@@ -104,10 +106,11 @@ class TokenReader {
     if (clazz.constructors.length != 1 ||
         clazz.unnamedConstructor == null ||
         !clazz.unnamedConstructor!.isConst ||
-        clazz.unnamedConstructor!.parameters.isNotEmpty ||
+        clazz.unnamedConstructor!.formalParameters.isNotEmpty ||
         clazz.typeParameters.isNotEmpty) {
-      var supertypeName =
-          clazz.supertype!.getDisplayString(withNullability: false);
+      var supertypeName = clazz.supertype!.getDisplayString(
+        withNullability: false,
+      );
       throw BuildError.forElement(
         type.element!,
         ''
@@ -139,17 +142,17 @@ class TokenReader {
   /// Returns [element] parsed into a [TokenElement].
   ///
   /// Uses the type definition, unless `@Inject` is specified.
-  TokenElement parseTokenParameter(ParameterElement element) {
+  TokenElement parseTokenParameter(FormalParameterElement element) {
     final constTypeOrToken =
         $Inject.firstAnnotationOfExact(element)?.getField('token') ??
-            $OpaqueToken.firstAnnotationOf(element);
+        $OpaqueToken.firstAnnotationOf(element);
     return constTypeOrToken != null
         ? parseTokenObject(constTypeOrToken, element)
         : parseTokenType(element);
   }
 
   /// Returns the type of [element] as a [TokenElement].
-  TypeTokenElement parseTokenType(ParameterElement element) {
+  TypeTokenElement parseTokenType(FormalParameterElement element) {
     return _parseType(element.type);
   }
 

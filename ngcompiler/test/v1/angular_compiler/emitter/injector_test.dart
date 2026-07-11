@@ -1,14 +1,53 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
-import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:test/test.dart';
+import 'package:ngcompiler/v1/angular_compiler.dart';
 
 void main() {
-  final dartfmt = DartFormatter();
+  final dartfmt = DartFormatter(
+    languageVersion: DartFormatter.latestLanguageVersion,
+  );
   EqualsDart.format = dartfmt.format;
 
   TokenElement dummyToken = TypeTokenElement(TypeLink('Token', null));
   late InjectorEmitter emitter;
+
+  /*
+  void printClass(Class clazz) {
+    print('Class: ${clazz.name}');
+
+    if (clazz.extend != null) {
+      print('extends: ${clazz.extend?.symbol}');
+    }
+
+    if (clazz.implements.isNotEmpty) {
+      print('implements: ');
+      for (var c in clazz.implements) {
+        print('- ${c.symbol}');
+      }
+    }
+
+    if (clazz.constructors.isNotEmpty) {
+      print('constructors: ');
+      for (var c in clazz.constructors) {
+        print('- ${c.name}');
+      }
+    }
+
+    if (clazz.methods.isNotEmpty) {
+      print('methods: ');
+      for (var m in clazz.methods) {
+        if (m.annotations.isNotEmpty) {
+          print('  annotations: ');
+          for (var a in m.annotations) {
+            print('  - ${(a as Reference).symbol}');
+          }
+        }
+        print('  name: ${m.name}');
+      }
+    }
+  }
+  */
 
   setUp(() {
     emitter = InjectorEmitter()..visitMeta('FooInjector', 'fooInjector');
@@ -26,14 +65,16 @@ void main() {
 
   group('createClass should return a class', () {
     test('empty case', () {
+      var result = emitter.createClass();
+
       expect(
-        emitter.createClass(),
+        result,
         equalsDart(r'''
         class FooInjector extends HierarchicalInjector implements Injector {
           FooInjector._(Injector parent) : super(parent);
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
@@ -60,8 +101,10 @@ void main() {
         ],
         false,
       );
+
+      var result = emitter.createClass();
       expect(
-        emitter.createClass(),
+        result,
         equalsDart(r'''
         class FooInjector extends HierarchicalInjector implements Injector {
           FooInjector._(Injector parent) : super(parent);
@@ -74,7 +117,7 @@ void main() {
           );
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
@@ -107,7 +150,7 @@ void main() {
           Foo _getExisting$0() => this.get(Foo);
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
@@ -135,8 +178,11 @@ void main() {
         ],
         false,
       );
+
+      var result = emitter.createClass();
+
       expect(
-        emitter.createClass(),
+        result,
         equalsDart(r'''
         class FooInjector extends HierarchicalInjector implements Injector {
           FooInjector._(Injector parent) : super(parent);
@@ -149,7 +195,7 @@ void main() {
           );
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
@@ -182,7 +228,7 @@ void main() {
           Foo _getFoo$0() => const Foo();
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {
@@ -234,7 +280,7 @@ void main() {
           int _getint$1() => 2;
 
           @override
-          Object injectFromSelfOptional(
+          Object? injectFromSelfOptional(
             Object token, [
             Object orElse = throwIfNotFound,
           ]) {

@@ -1,1 +1,3 @@
-See https://angulardart.xyz for examples.
+# README
+
+See <https://angulardart.xyz> for examples.

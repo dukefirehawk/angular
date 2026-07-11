@@ -29,24 +29,6 @@ class DevTools {
   );
 }
 
-class JsInterop {
-  const JsInterop._();
-
-  static final functionToJSExportedDartFunction = CompileIdentifierMetadata(
-    name: 'FunctionToJSExportedDartFunction',
-    moduleUrl: 'dart:js_interop',
-  );
-
-  static final jsObject = CompileIdentifierMetadata(
-    name: 'JSObject',
-    moduleUrl: 'dart:_interceptors',
-  );
-
-  static final jsObjectToken = CompileTokenMetadata(
-    identifier: jsObject,
-  );
-}
-
 /// A collection of methods for manipulating the DOM from generated code.
 class DomHelpers {
   const DomHelpers._();
@@ -211,67 +193,102 @@ class Identifiers {
     moduleUrl: _appViewUtilsModuleUrl,
   );
   static final viewContainer = CompileIdentifierMetadata(
-      name: 'ViewContainer',
-      moduleUrl: '$_angularLib/src/core/linker/view_container.dart');
+    name: 'ViewContainer',
+    moduleUrl: '$_angularLib/src/core/linker/view_container.dart',
+  );
   static final viewContainerToken = identifierToken(viewContainer);
-  static final elementRef = CompileIdentifierMetadata(
-      name: 'ElementRef',
-      moduleUrl: '$_angularLib/src/core/linker/element_ref.dart');
-  static final elementRefToken = identifierToken(elementRef);
+  // static final elementRef = CompileIdentifierMetadata(
+  //   name: 'ElementRef',
+  //   moduleUrl: '$_angularLib/src/core/linker/element_ref.dart',
+  // );
+  // static final elementRefToken = identifierToken(elementRef);
   static final viewContainerRef = CompileIdentifierMetadata(
-      name: 'ViewContainerRef',
-      moduleUrl: 'asset:ngdart/lib/src/core/linker/view_container_ref.dart');
-  static final viewContainerRefToken =
-      identifierToken(Identifiers.viewContainerRef);
+    name: 'ViewContainerRef',
+    moduleUrl: 'asset:ngdart/lib/src/core/linker/view_container_ref.dart',
+  );
+  static final viewContainerRefToken = identifierToken(
+    Identifiers.viewContainerRef,
+  );
   static final componentLoader = CompileIdentifierMetadata(
-      name: 'ComponentLoader',
-      moduleUrl: 'asset:ngdart/lib/src/core/linker/component_loader.dart');
+    name: 'ComponentLoader',
+    moduleUrl: 'asset:ngdart/lib/src/core/linker/component_loader.dart',
+  );
   static final componentLoaderToken = identifierToken(componentLoader);
   static final changeDetectorRef = CompileIdentifierMetadata(
-      name: 'ChangeDetectorRef',
-      moduleUrl: 'asset:ngdart/lib/src/core/change_detection/'
-          'change_detector_ref.dart');
-  static final changeDetectorRefToken =
-      identifierToken(Identifiers.changeDetectorRef);
+    name: 'ChangeDetectorRef',
+    moduleUrl:
+        'asset:ngdart/lib/src/core/change_detection/'
+        'change_detector_ref.dart',
+  );
+  static final changeDetectorRefToken = identifierToken(
+    Identifiers.changeDetectorRef,
+  );
   static final componentFactory = CompileIdentifierMetadata(
-      name: 'ComponentFactory', moduleUrl: _angularRootUrl);
+    name: 'ComponentFactory',
+    moduleUrl: _angularRootUrl,
+  );
   static final directiveChangeDetector = CompileIdentifierMetadata(
-      name: 'DirectiveChangeDetector',
-      moduleUrl: 'asset:ngdart/lib/src/core/'
-          'change_detection/directive_change_detector.dart');
+    name: 'DirectiveChangeDetector',
+    moduleUrl:
+        'asset:ngdart/lib/src/core/'
+        'change_detection/directive_change_detector.dart',
+  );
   static final componentRef = CompileIdentifierMetadata(
-      name: 'ComponentRef', moduleUrl: _angularRootUrl);
+    name: 'ComponentRef',
+    moduleUrl: _angularRootUrl,
+  );
   static final templateRef = CompileIdentifierMetadata(
-      name: 'TemplateRef',
-      moduleUrl: '$_angularLib/src/core/linker/template_ref.dart');
+    name: 'TemplateRef',
+    moduleUrl: '$_angularLib/src/core/linker/template_ref.dart',
+  );
   static final templateRefToken = identifierToken(Identifiers.templateRef);
   static final injector = CompileIdentifierMetadata(
-      name: 'Injector', moduleUrl: '$_angularLib/src/di/injector.dart');
+    name: 'Injector',
+    moduleUrl: '$_angularLib/src/di/injector.dart',
+  );
   static final injectorToken = identifierToken(Identifiers.injector);
   static final viewType = CompileIdentifierMetadata(
-      name: 'ViewType',
-      moduleUrl: '$_angularLib/src/core/linker/view_type.dart');
+    name: 'ViewType',
+    moduleUrl: '$_angularLib/src/core/linker/view_type.dart',
+  );
   static final changeDetectionStrategy = CompileIdentifierMetadata(
-      name: 'ChangeDetectionStrategy', moduleUrl: _cdModuleUrl);
+    name: 'ChangeDetectionStrategy',
+    moduleUrl: _cdModuleUrl,
+  );
   static final changeDetectionCheckedState = CompileIdentifierMetadata(
-      name: 'ChangeDetectionCheckedState',
-      moduleUrl: '$_angularLib/src/meta/change_detection_constants.dart');
+    name: 'ChangeDetectionCheckedState',
+    moduleUrl: '$_angularLib/src/meta/change_detection_constants.dart',
+  );
   static final identical = CompileIdentifierMetadata(name: 'identical');
   static final profileSetup = CompileIdentifierMetadata(
-      name: 'profileSetup', moduleUrl: _profileRuntimeModuleUrl);
+    name: 'profileSetup',
+    moduleUrl: _profileRuntimeModuleUrl,
+  );
   static final profileMarkStart = CompileIdentifierMetadata(
-      name: 'profileMarkStart', moduleUrl: _profileRuntimeModuleUrl);
+    name: 'profileMarkStart',
+    moduleUrl: _profileRuntimeModuleUrl,
+  );
   static final profileMarkEnd = CompileIdentifierMetadata(
-      name: 'profileMarkEnd', moduleUrl: _profileRuntimeModuleUrl);
+    name: 'profileMarkEnd',
+    moduleUrl: _profileRuntimeModuleUrl,
+  );
   static final debugInjectorEnter = CompileIdentifierMetadata(
-      name: 'debugInjectorEnter', moduleUrl: _debugInjectorModuleUrl);
+    name: 'debugInjectorEnter',
+    moduleUrl: _debugInjectorModuleUrl,
+  );
   static final debugInjectorLeave = CompileIdentifierMetadata(
-      name: 'debugInjectorLeave', moduleUrl: _debugInjectorModuleUrl);
+    name: 'debugInjectorLeave',
+    moduleUrl: _debugInjectorModuleUrl,
+  );
   static final debugInjectorWrap = CompileIdentifierMetadata(
-      name: 'debugInjectorWrap', moduleUrl: _debugInjectorModuleUrl);
+    name: 'debugInjectorWrap',
+    moduleUrl: _debugInjectorModuleUrl,
+  );
 
   static final createTrustedHtml = CompileIdentifierMetadata(
-      name: 'createTrustedHtml', moduleUrl: _appViewUtilsModuleUrl);
+    name: 'createTrustedHtml',
+    moduleUrl: _appViewUtilsModuleUrl,
+  );
   static final pureProxies = [
     null,
     CompileIdentifierMetadata(name: 'pureProxy1', moduleUrl: _proxiesModuleUrl),
@@ -283,81 +300,157 @@ class Identifiers {
     CompileIdentifierMetadata(name: 'pureProxy7', moduleUrl: _proxiesModuleUrl),
     CompileIdentifierMetadata(name: 'pureProxy8', moduleUrl: _proxiesModuleUrl),
     CompileIdentifierMetadata(name: 'pureProxy9', moduleUrl: _proxiesModuleUrl),
-    CompileIdentifierMetadata(name: 'pureProxy10', moduleUrl: _proxiesModuleUrl)
+    CompileIdentifierMetadata(
+      name: 'pureProxy10',
+      moduleUrl: _proxiesModuleUrl,
+    ),
   ];
 
-  static final ngIfDirective =
-      CompileIdentifierMetadata(name: 'NgIf', moduleUrl: _ngIfUrl);
-  static final ngForDirective =
-      CompileIdentifierMetadata(name: 'NgFor', moduleUrl: _ngForUrl);
+  static final ngIfDirective = CompileIdentifierMetadata(
+    name: 'NgIf',
+    moduleUrl: _ngIfUrl,
+  );
+  static final ngForDirective = CompileIdentifierMetadata(
+    name: 'NgFor',
+    moduleUrl: _ngForUrl,
+  );
 
   // Runtime is initialized by output interpreter. Compiler executes in VM and
-  // can't import `package:web/web.dart` to initialize here.
-  static var event = CompileIdentifierMetadata(
-      name: 'Event', moduleUrl: 'asset:web/lib/src/dom/dom.dart');
+  // can't import dart:html to initialize here.
+
+  // TODO: Migrate to dart 3.6
   static var commentNode = CompileIdentifierMetadata(
-      name: 'Comment', moduleUrl: 'asset:web/lib/src/dom/dom.dart');
+    name: 'Comment',
+    moduleUrl: 'package:web/web.dart',
+  );
   static var textNode = CompileIdentifierMetadata(
-      name: 'Text', moduleUrl: 'asset:web/lib/src/dom/dom.dart');
+    name: 'Text',
+    moduleUrl: 'package:web/web.dart',
+  );
   static var document = CompileIdentifierMetadata(
-      name: 'document', moduleUrl: 'asset:web/lib/src/dom/dom.dart');
+    name: 'document',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final documentFragment = CompileIdentifierMetadata(
-      name: 'DocumentFragment', moduleUrl: 'asset:web/lib/src/dom/dom.dart');
+    name: 'DocumentFragment',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final element = CompileIdentifierMetadata(
-      name: 'Element', moduleUrl: 'asset:web/lib/src/dom/dom.dart');
+    name: 'Element',
+    moduleUrl: 'package:web/web.dart',
+  );
+  static final elementDom = CompileIdentifierMetadata(
+    name: 'Element',
+    moduleUrl: 'asset:web/lib/src/dom/dom.dart',
+  );
   static final elementToken = identifierToken(element);
+  static final elementDomToken = identifierToken(elementDom);
   static final htmlElement = CompileIdentifierMetadata(
-      name: 'HTMLElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLElement',
+    moduleUrl: 'package:web/web.dart',
+  );
+  static final htmlElementDom = CompileIdentifierMetadata(
+    name: 'HTMLElement',
+    moduleUrl: 'asset:web/lib/src/dom/html.dart',
+  );
   static final htmlElementToken = identifierToken(htmlElement);
+  static final htmlElementDomToken = identifierToken(htmlElementDom);
   static final svgSvgElement = CompileIdentifierMetadata(
-      name: 'SVGSVGElement', moduleUrl: 'asset:web/lib/src/dom/svg.dart');
+    name: 'SVGSVGElement',
+    moduleUrl: 'dart:svg',
+  );
   static final svgElement = CompileIdentifierMetadata(
-      name: 'SVGElement', moduleUrl: 'asset:web/lib/src/dom/svg.dart');
+    name: 'SVGElement',
+    moduleUrl: 'dart:svg',
+  );
   static final anchorElement = CompileIdentifierMetadata(
-      name: 'HTMLAnchorElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLAnchorElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final divElement = CompileIdentifierMetadata(
-      name: 'HTMLDivElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLDivElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final areaElement = CompileIdentifierMetadata(
-      name: 'HTMLAreaElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLAreaElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final audioElement = CompileIdentifierMetadata(
-      name: 'HTMLAudioElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLAudioElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final buttonElement = CompileIdentifierMetadata(
-      name: 'HTMLButtonElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLButtonElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final canvasElement = CompileIdentifierMetadata(
-      name: 'HTMLCanvasElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLCanvasElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final formElement = CompileIdentifierMetadata(
-      name: 'HTMLFormElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLFormElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final iframeElement = CompileIdentifierMetadata(
-      name: 'HTMLIFrameElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLIFrameElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final imageElement = CompileIdentifierMetadata(
-      name: 'HTMLImageElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'ImageElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final inputElement = CompileIdentifierMetadata(
-      name: 'HTMLInputElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLInputElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final textareaElement = CompileIdentifierMetadata(
-      name: 'HTMLTextAreaElement',
-      moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLTextAreaElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final mediaElement = CompileIdentifierMetadata(
-      name: 'HTMLMediaElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLMediaElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final menuElement = CompileIdentifierMetadata(
-      name: 'HTMLMenuElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLMenuElement',
+    moduleUrl: 'package:web/web.dart',
+  );
+  static final nodeTreeSanitizer = CompileIdentifierMetadata(
+    name: 'NodeTreeSanitizer',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final optionElement = CompileIdentifierMetadata(
-      name: 'HTMLOptionElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLOptionElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final oListElement = CompileIdentifierMetadata(
-      name: 'HTMLOListElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLOListElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final selectElement = CompileIdentifierMetadata(
-      name: 'HTMLSelectElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLSelectElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final tableElement = CompileIdentifierMetadata(
-      name: 'HTMLTableElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLTableElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final tableRowElement = CompileIdentifierMetadata(
-      name: 'HTMLTableRowElement',
-      moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLTableRowElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final tableColElement = CompileIdentifierMetadata(
-      name: 'HTMLTableColElement',
-      moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'TableColElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final uListElement = CompileIdentifierMetadata(
-      name: 'HTMLUListElement', moduleUrl: 'asset:web/lib/src/dom/html.dart');
+    name: 'HTMLUListElement',
+    moduleUrl: 'package:web/web.dart',
+  );
   static final node = CompileIdentifierMetadata(
-      name: 'Node', moduleUrl: 'asset:web/lib/src/dom/dom.dart');
+    name: 'Node',
+    moduleUrl: 'package:web/web.dart',
+  );
 
   /// A class used for message internationalization.
   static final intl = CompileIdentifierMetadata(
@@ -370,9 +463,7 @@ class Identifiers {
     moduleUrl: 'package:meta/dart2js.dart',
   );
 
-  static final dartCoreOverride = CompileIdentifierMetadata(
-    name: 'override',
-  );
+  static final dartCoreOverride = CompileIdentifierMetadata(name: 'override');
 
   static final dartCoreDeprecated = CompileIdentifierMetadata(
     name: 'Deprecated',

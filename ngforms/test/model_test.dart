@@ -1,5 +1,5 @@
-import 'package:ngforms/ngforms.dart';
 import 'package:test/test.dart';
+import 'package:ngforms/ngforms.dart';
 
 void main() {
   group('Form Model', () {

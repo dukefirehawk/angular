@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../../ast.dart';
 
-final _listEquals = const ListEquality();
+final _listEquals = const ListEquality<dynamic>();
 
 /// A de-sugared form of longer pseudo expression.
 class NgMicroAst {
@@ -14,10 +14,7 @@ class NgMicroAst {
   final List<PropertyAst> properties;
 
   @literal
-  const NgMicroAst({
-    required this.letBindings,
-    required this.properties,
-  });
+  const NgMicroAst({required this.letBindings, required this.properties});
 
   @override
   bool operator ==(Object other) {
@@ -29,7 +26,9 @@ class NgMicroAst {
   @override
   int get hashCode {
     return Object.hash(
-        _listEquals.hash(letBindings), _listEquals.hash(properties));
+      _listEquals.hash(letBindings),
+      _listEquals.hash(properties),
+    );
   }
 
   @override

@@ -2,9 +2,9 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:test/test.dart';
 import 'package:ngcompiler/v1/angular_compiler.dart';
 import 'package:ngcompiler/v2/context.dart';
-import 'package:test/test.dart';
 
 import '../../src/resolve.dart';
 
@@ -28,7 +28,7 @@ void main() {
       class Example {
         const Example();
       }
-    '''))!.metadata.first.computeConstantValue()!.toListValue()!;
+    '''))!.metadata.annotations.first.computeConstantValue()!.toListValue()!;
     });
 
     test('Type', () {
@@ -43,10 +43,7 @@ void main() {
     test('OpaqueToken', () {
       final token = reader.parseTokenObject(tokens[1]);
       expect(token, const TypeMatcher<OpaqueTokenElement>());
-      expect(
-        (token as OpaqueTokenElement).identifier,
-        'exampleToken',
-      );
+      expect((token as OpaqueTokenElement).identifier, 'exampleToken');
     });
 
     group('LiteralToken throws', () {

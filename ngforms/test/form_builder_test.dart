@@ -1,5 +1,5 @@
-import 'package:ngforms/ngforms.dart';
 import 'package:test/test.dart';
+import 'package:ngforms/ngforms.dart';
 
 Map<String, dynamic>? _syncValidator(AbstractControl c) {
   return null;

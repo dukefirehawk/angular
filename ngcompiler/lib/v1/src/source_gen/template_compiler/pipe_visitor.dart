@@ -1,11 +1,11 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:analyzer/dart/element/visitor.dart';
+import 'package:analyzer/dart/element/visitor2.dart';
+import 'package:source_gen/source_gen.dart';
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart';
 import 'package:ngcompiler/v1/src/compiler/output/convert.dart';
 import 'package:ngcompiler/v1/src/source_gen/common/annotation_matcher.dart';
 import 'package:ngcompiler/v2/context.dart';
-import 'package:source_gen/source_gen.dart';
 
 import 'annotation_information.dart';
 import 'compile_metadata.dart';
@@ -13,7 +13,7 @@ import 'component_visitor_exceptions.dart';
 import 'dart_object_utils.dart';
 import 'lifecycle_hooks.dart';
 
-class PipeVisitor extends RecursiveElementVisitor<CompilePipeMetadata> {
+class PipeVisitor extends RecursiveElementVisitor2<CompilePipeMetadata> {
   final LibraryReader _library;
   final ComponentVisitorExceptionHandler _exceptionHandler;
 
@@ -25,16 +25,17 @@ class PipeVisitor extends RecursiveElementVisitor<CompilePipeMetadata> {
 
     if (annotationInfo == null) return null;
     if (annotationInfo.hasErrors) {
-      _exceptionHandler.handle(AngularAnalysisError(
-          annotationInfo.constantEvaluationErrors, annotationInfo));
+      _exceptionHandler.handle(
+        AngularAnalysisError(
+          annotationInfo.constantEvaluationErrors,
+          annotationInfo,
+        ),
+      );
       return null;
     }
     if (element.isPrivate) {
       CompileContext.current.reportAndRecover(
-        BuildError.forElement(
-          element,
-          'Pipes must be public',
-        ),
+        BuildError.forElement(element, 'Pipes must be public'),
       );
       return null;
     }
@@ -47,16 +48,20 @@ class PipeVisitor extends RecursiveElementVisitor<CompilePipeMetadata> {
   ) {
     var elementType = annotation.element.thisType;
     FunctionType? transformType;
-    final transformMethod =
-        elementType.lookUpMethod2('transform', annotation.element.library);
+    final transformMethod = elementType.lookUpMethod(
+      'transform',
+      annotation.element.library,
+    );
     if (transformMethod != null) {
       // The pipe defines a 'transform' method.
       transformType = transformMethod.type;
     } else {
       // The pipe may define a function-typed 'transform' property. This is
       // supported for backwards compatibility.
-      final transformGetter =
-          elementType.lookUpGetter2('transform', annotation.element.library);
+      final transformGetter = elementType.lookUpGetter(
+        'transform',
+        annotation.element.library,
+      );
       final transformGetterType = transformGetter?.returnType;
       if (transformGetterType is FunctionType) {
         transformType = transformGetterType;

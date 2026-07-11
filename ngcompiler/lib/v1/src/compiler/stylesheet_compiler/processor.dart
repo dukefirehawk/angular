@@ -12,6 +12,7 @@ Future<Map<AssetId, String>> processStylesheet(
   final stylesheetUrl = toAssetUri(stylesheetId);
   final templateCompiler = createViewCompiler(buildStep, flags);
   final cssText = await buildStep.readAsString(stylesheetId);
+
   final sourceModules = templateCompiler.compileStylesheet(
     stylesheetUrl,
     cssText,

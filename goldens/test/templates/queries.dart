@@ -1,9 +1,9 @@
 @JS()
-library golden;
+library;
 
-import 'dart:html';
+import 'package:web/web.dart';
 
-import 'package:js/js.dart';
+import 'dart:js_interop';
 import 'package:ngdart/angular.dart';
 
 import 'queries.template.dart' as ng;
@@ -65,8 +65,8 @@ class GoldenComponent {
     deopt(value);
   }
 
-  @ViewChild('q2', read: ElementRef)
-  set readDIFromElementRef(ElementRef? value) {
+  @ViewChild('q2', read: HTMLElement)
+  set readDIFromElementRef(HTMLElement? value) {
     deopt(value);
   }
 
@@ -88,9 +88,7 @@ class GoldenComponent {
 
 @Component(
   selector: 'embedded-queries',
-  directives: [
-    AnotherDirective,
-  ],
+  directives: [AnotherDirective],
   template: r'''
     <another></another>
     <template>
@@ -108,19 +106,13 @@ class EmbeddedQueries {
   }
 }
 
-@Directive(
-  selector: 'another',
-)
+@Directive(selector: 'another')
 class AnotherDirective {}
 
 // This closely mimics a piece of internal code that previously crashed.
 @Component(
   selector: 'nested-ng-for-queries',
-  directives: [
-    AnotherDirective,
-    NgFor,
-    NgIf,
-  ],
+  directives: [AnotherDirective, NgFor, NgIf],
   template: r'''
     <div *ngIf="conditionA">
       <div *ngIf="conditionB">

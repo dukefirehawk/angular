@@ -2,7 +2,7 @@
 
 export 'linker/component_factory.dart' show ComponentRef, ComponentFactory;
 export 'linker/component_loader.dart' show ComponentLoader;
-export 'linker/element_ref.dart' show ElementRef;
+//export 'linker/element_ref.dart' show ElementRef;
 export 'linker/ng_content_ref.dart' show NgContentRef;
 export 'linker/style_encapsulation.dart' show debugClearComponentStyles;
 export 'linker/template_ref.dart' show TemplateRef;

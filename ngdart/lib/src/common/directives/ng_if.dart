@@ -1,6 +1,7 @@
-import 'package:ngdart/src/core/linker.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/runtime/check_binding.dart';
+import '../../core/linker.dart';
+import '../../meta/directives.dart';
+import '../../meta/di_arguments.dart';
+import '../../runtime/check_binding.dart';
 
 /// Causes an element and its contents to be conditionally added/removed from
 /// the DOM based on the value of the given boolean template expression.
@@ -27,16 +28,14 @@ import 'package:ngdart/src/runtime/check_binding.dart';
 /// ```
 ///
 /// [guide]: https://webdev.dartlang.org/angular/guide/template-syntax.html#ngIf
-@Directive(
-  selector: '[ngIf]',
-)
+@Directive(selector: '[ngIf]')
 class NgIf {
-  final TemplateRef _templateRef;
-  final ViewContainerRef _viewContainer;
+  final TemplateRef? _templateRef;
+  final ViewContainerRef? _viewContainer;
 
   bool _prevCondition = false;
 
-  NgIf(this._viewContainer, this._templateRef);
+  NgIf(@Optional() this._viewContainer, @Optional() this._templateRef);
 
   /// Whether the content of the directive should be visible.
   @Input()
@@ -47,9 +46,10 @@ class NgIf {
       return;
     }
     if (newCondition) {
-      _viewContainer.createEmbeddedView(_templateRef);
+      if (_templateRef == null) return;
+      _viewContainer?.createEmbeddedView(_templateRef);
     } else {
-      _viewContainer.clear();
+      _viewContainer?.clear();
     }
     _prevCondition = newCondition;
   }

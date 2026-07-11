@@ -1,8 +1,8 @@
-import 'package:_tests/matchers.dart';
+import 'package:web/web.dart';
+
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'projection_integration_test.template.dart' as ng;
 
@@ -198,19 +198,18 @@ void main() {
           NgTestBed<SwitchOrderTest>(ng.createSwitchOrderTestFactory());
       var fixture = await testBed.create();
       expect(
-          fixture.rootElement,
-          hasInnerHtml('<cmp-a><cmp-b><cmp-d><d>cmp-d</d></cmp-d></cmp-b>'
-              '<cmp-c><c>cmp-c</c></cmp-c></cmp-a>'));
+          fixture.rootElement.innerHTML,
+          '<cmp-a><cmp-b><cmp-d><d>cmp-d</d></cmp-d></cmp-b>'
+          '<cmp-c><c>cmp-c</c></cmp-c></cmp-a>');
     });
     test('should create nested components in the right order', () async {
       var testBed =
           NgTestBed<CorrectOrderTest>(ng.createCorrectOrderTestFactory());
       var fixture = await testBed.create();
       expect(
-          fixture.rootElement,
-          hasInnerHtml(
-              '<cmp-a1>a1<cmp-b11>b11</cmp-b11><cmp-b12>b12</cmp-b12></cmp-a1>'
-              '<cmp-a2>a2<cmp-b21>b21</cmp-b21><cmp-b22>b22</cmp-b22></cmp-a2>'));
+          fixture.rootElement.innerHTML,
+          '<cmp-a1>a1<cmp-b11>b11</cmp-b11><cmp-b12>b12</cmp-b12></cmp-a1>'
+          '<cmp-a2>a2<cmp-b21>b21</cmp-b21><cmp-b22>b22</cmp-b22></cmp-a2>');
     });
     test('should project filled view containers into a view container',
         () async {

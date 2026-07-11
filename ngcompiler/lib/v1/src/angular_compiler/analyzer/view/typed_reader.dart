@@ -2,8 +2,8 @@ import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:ngcompiler/v2/context.dart';
 import 'package:source_gen/source_gen.dart';
+import 'package:ngcompiler/v2/context.dart';
 
 import '../common.dart';
 import '../link.dart';
@@ -99,7 +99,15 @@ class TypedReader {
   TypedElement _parseTyped(DartObject typedObject, {bool root = false}) {
     final type = typeArgumentOf(typedObject);
     if (type is ParameterizedType && type.typeArguments.isNotEmpty) {
-      if (root && !$Directive.hasAnnotationOf(type.element!)) {
+      var hasTypeElement = $Directive.hasAnnotationOf(type.element!);
+      // TODO: Migrated to dart 3.6 (Need to review)
+      //       Check if the 'typedObject' has component annotation if
+      //       there is no directive annotation
+      if (!hasTypeElement) {
+        hasTypeElement = $Component.hasAnnotationOf(type.element!);
+      }
+
+      if (root && !hasTypeElement) {
         throw BuildError.withoutContext(
           'Expected a "Typed" expression with a "Component" or "Directive" '
           'annotated type, but got "Typed<${type.name}>"',

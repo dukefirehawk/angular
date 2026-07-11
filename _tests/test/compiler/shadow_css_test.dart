@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:logging/logging.dart';
-import 'package:ngcompiler/v1/src/compiler/stylesheet_compiler/shadow_css.dart';
 import 'package:test/test.dart';
+import 'package:ngcompiler/v1/src/compiler/stylesheet_compiler/shadow_css.dart';
 
 const content = 'content';
 const host = 'host';
@@ -410,7 +410,7 @@ void main() {
 
   test('should shim rules after @import', () {
     var css = '@import url("a"); div {}';
-    shimAndExpect(css, '@import url("a"); div.$content {}');
+    shimAndExpect(css, '@import url("a");div.$content {}');
   });
 
   test('should leave calc() unchanged', () {

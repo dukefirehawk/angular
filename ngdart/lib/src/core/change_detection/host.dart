@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:meta/dart2js.dart' as dart2js;
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/core/linker/views/view.dart';
-import 'package:ngdart/src/runtime/check_binding.dart';
-import 'package:ngdart/src/utilities.dart';
+import '../../core/linker/views/view.dart';
+import '../../runtime/check_binding.dart';
 
+import '../../utilities/is_dev_mode.dart';
+import '../../utilities/unsafe_cast.dart';
 import 'change_detector_ref.dart';
 
 /// A host for tracking the current application.
@@ -128,7 +129,7 @@ abstract class ChangeDetectionHost {
       final detector = detectors[i];
       if (detector is View) {
         final view = detector;
-        _lastGuardedView = view;
+        _lastGuardedView = view as View?;
         view.detectChanges();
       }
     }
@@ -170,11 +171,7 @@ abstract class ChangeDetectionHost {
 
   /// Disables the [view] as an error, and forwards to [reportException].
   @dart2js.noInline
-  void reportViewException(
-    View view,
-    Object error, [
-    StackTrace? trace,
-  ]) {
+  void reportViewException(View view, Object error, [StackTrace? trace]) {
     view.disableChangeDetection();
     handleUncaughtException(error, trace);
   }
@@ -207,14 +204,17 @@ abstract class ChangeDetectionHost {
         result = callback();
         if (result is Future<Object>) {
           final resultCast = unsafeCast<Future<R>>(result);
-          resultCast.then((result) {
-            completer.complete(result);
-          }, onError: (e, s) {
-            final sCasted = unsafeCast<StackTrace>(s);
-            final eCasted = unsafeCast<Object>(e);
-            completer.completeError(eCasted, sCasted);
-            handleUncaughtException(eCasted, sCasted);
-          });
+          resultCast.then(
+            (result) {
+              completer.complete(result);
+            },
+            onError: (e, s) {
+              final sCasted = unsafeCast<StackTrace>(s);
+              final eCasted = unsafeCast<Object>(e);
+              completer.completeError(eCasted, sCasted);
+              handleUncaughtException(eCasted, sCasted);
+            },
+          );
         }
       } catch (e, s) {
         handleUncaughtException(e, s);

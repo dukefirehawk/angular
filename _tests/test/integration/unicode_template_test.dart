@@ -9,7 +9,14 @@ void main() {
   test('should be able to compile templates with unicode', () async {
     final testBed = NgTestBed<App>(ng.createAppFactory());
     final fixture = await testBed.create();
-    expect(fixture.text, allOf(contains('🎂'), contains('ΓΔ'), contains('↔↕')));
+    expect(
+      fixture.text,
+      allOf([
+        contains('🎂'),
+        contains('ΓΔ'),
+        contains('↔↕'),
+      ]),
+    );
   });
 }
 

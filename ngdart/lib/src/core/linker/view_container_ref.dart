@@ -1,8 +1,9 @@
-import 'package:ngdart/src/di/injector.dart' show Injector;
+import 'package:web/web.dart';
+
+import '../../di/injector.dart' show Injector;
 
 import 'component_factory.dart' show ComponentFactory, ComponentRef;
 import 'component_loader.dart';
-import 'element_ref.dart';
 import 'template_ref.dart';
 import 'view_ref.dart' show EmbeddedViewRef, ViewRef;
 
@@ -30,7 +31,7 @@ abstract class ViewContainerRef implements ComponentLoader {
   int get length;
 
   /// Anchor element (the location of this container in the containing view).
-  ElementRef get element;
+  HTMLElement get element;
 
   /// Injector context for the view container within the larger app.
   Injector get injector;

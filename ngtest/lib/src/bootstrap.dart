@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/src/bootstrap/run.dart';
 import 'package:ngdart/src/core/application_ref.dart';
-import 'package:web/web.dart';
+
+/// Used as a "tear-off" of [NgZone].
+NgZone _createNgZone() => NgZone();
 
 /// Returns a future that completes with a new instantiated component.
 ///
@@ -19,7 +22,7 @@ Future<ComponentRef<E>> bootstrapForTest<E extends Object>(
   InjectorFactory userInjector, {
   FutureOr<void> Function(Injector)? beforeComponentCreated,
   FutureOr<void> Function(E)? beforeChangeDetection,
-  NgZone Function() createNgZone = NgZone.new,
+  NgZone Function() createNgZone = _createNgZone,
 }) async {
   // This should be kept in sync with 'runApp' as much as possible.
   final injector = appInjector(userInjector, createNgZone: createNgZone);

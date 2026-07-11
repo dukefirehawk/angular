@@ -5,9 +5,6 @@ presets:
   browser:
     platforms:
       - chrome
-    compilers:
-      - dart2js
-      - dart2wasm
     paths:
       - test/bootstrap
       - test/common
@@ -29,5 +26,4 @@ presets:
     paths:
       - test/compiler
       - test/compiler_integration
-      - test/source_gen
     add_presets: [ci]

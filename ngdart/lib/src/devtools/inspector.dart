@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:convert' show json;
 import 'dart:developer';
 import 'dart:js_interop';
+import 'package:web/web.dart';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 import 'package:meta/meta.dart';
 import 'package:stream_transform/stream_transform.dart';
-import 'package:web/web.dart';
 
 import '../core/application_ref.dart';
 import '../core/linker/views/component_view.dart';
@@ -70,11 +70,13 @@ class Inspector {
   /// inspecting another.
   void inspect(ApplicationRef applicationRef) {
     if (_applicationRef != null) {
-      console.error('''
+      console.error(
+        '''
 AngularDart DevTools does not yet support apps with multiple runApp()
 invocations. Please contact angulardart-eng@ if you encounter this error.
 '''
-          .toJS);
+            .toJS,
+      );
       return;
     }
 
@@ -89,8 +91,8 @@ invocations. Please contact angulardart-eng@ if you encounter this error.
     final onTurnStartSubscription = applicationRef.zone.onTurnStart
         .throttle(updateInterval, trailing: true)
         .listen((_) {
-      postEvent('angular.update', {});
-    });
+          postEvent('angular.update', {});
+        });
 
     _applicationRef = applicationRef
       ..registerDisposeListener(() {
@@ -171,23 +173,26 @@ invocations. Please contact angulardart-eng@ if you encounter this error.
         completer.completeError('The inspected app was disposed');
       }
 
-      return completer.future.then((result) {
-        return ServiceExtensionResponse.result(result);
-      }, onError: (Object exception, StackTrace stackTrace) {
-        final context =
-            'The following exception was thrown while handling the service '
-            'extension "$method"';
-        // This could be null if the error was thrown because there's no active
-        // application.
-        applicationRef?.exceptionHandler('$context:\n$exception', stackTrace);
-        return ServiceExtensionResponse.error(
-          ServiceExtensionResponse.extensionError,
-          json.encode({
-            'exception': exception.toString(),
-            'stackTrace': stackTrace.toString(),
-          }),
-        );
-      });
+      return completer.future.then(
+        (result) {
+          return ServiceExtensionResponse.result(result);
+        },
+        onError: (Object exception, StackTrace stackTrace) {
+          final context =
+              'The following exception was thrown while handling the service '
+              'extension "$method"';
+          // This could be null if the error was thrown because there's no active
+          // application.
+          applicationRef?.exceptionHandler('$context:\n$exception', stackTrace);
+          return ServiceExtensionResponse.error(
+            ServiceExtensionResponse.extensionError,
+            json.encode({
+              'exception': exception.toString(),
+              'stackTrace': stackTrace.toString(),
+            }),
+          );
+        },
+      );
     });
   }
 
@@ -230,7 +235,7 @@ invocations. Please contact angulardart-eng@ if you encounter this error.
   }
 
   /// Returns the root element of the component for [id].
-  HTMLElement getComponentElement(int id) {
+  HtmlElement getComponentElement(int id) {
     final componentView =
         _referenceCounter.toObject(id) as ComponentView<Object>;
     return componentView.rootElement;
@@ -249,7 +254,7 @@ invocations. Please contact angulardart-eng@ if you encounter this error.
       if (componentView != null) {
         return _referenceCounter.toId(componentView, groupName);
       }
-      current = current.parentElement;
+      current = current.parentNode;
     }
     return -1;
   }
@@ -281,11 +286,11 @@ invocations. Please contact angulardart-eng@ if you encounter this error.
   @visibleForTesting
   List<Map<String, Object>> getComponents(String groupName) {
     final json = <Map<String, Object>>[];
+    var showElement = 1;
     for (final element in _contentRoots) {
-      final treeWalker = document.createTreeWalker(
-        element,
-        /* NodeFilter.SHOW_ELEMENT */ 0x1,
-      );
+      // TODO: Migrate to 3.6 (Need Review)
+      //final treeWalker = TreeWalker(element, NodeFilter.SHOW_ELEMENT);
+      final treeWalker = document.createTreeWalker(element, showElement);
       _collectJson(treeWalker, groupName, json);
     }
     return json;
@@ -297,13 +302,17 @@ invocations. Please contact angulardart-eng@ if you encounter this error.
   /// at least until [groupName] is disposed.
   @visibleForTesting
   BuiltList<InspectorNode> getNodes(String groupName) {
+    var showElement = 1;
+    var showComment = 128;
     return BuiltList.build((b) {
-      final whatToShow = /* NodeFilter.SHOW_ELEMENT */
-          0x1 | /* NodeFilter.SHOW_COMMENT */ 0x80;
-
       for (final element in _contentRoots) {
+        // TODO: Migrate to 3.6 (Need Review)
         // Structural directives can be anchored on comments.
+        //final whatToShow = NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT;
+        //final treeWalker = TreeWalker(element, whatToShow);
+        final whatToShow = showElement | showComment;
         final treeWalker = document.createTreeWalker(element, whatToShow);
+
         _collectNodes(treeWalker, groupName, b);
       }
     });
@@ -322,9 +331,11 @@ invocations. Please contact angulardart-eng@ if you encounter this error.
     final data = _nodeToData[currentNode];
 
     void collectChildNodes(ListBuilder<InspectorNode> b) {
-      for (var node = treeWalker.firstChild();
-          node != null;
-          node = treeWalker.nextSibling()) {
+      for (
+        var node = treeWalker.firstChild();
+        node != null;
+        node = treeWalker.nextSibling()
+      ) {
         _collectNodes(treeWalker, groupName, b);
       }
     }
@@ -358,9 +369,11 @@ invocations. Please contact angulardart-eng@ if you encounter this error.
       if (data.directives.isNotEmpty) {
         b.directives.replace([
           for (final directive in data.directives)
-            InspectorDirective((b) => b
-              ..name = directive.runtimeType.toString()
-              ..id = _referenceCounter.toId(directive, groupName)),
+            InspectorDirective(
+              (b) => b
+                ..name = directive.runtimeType.toString()
+                ..id = _referenceCounter.toId(directive, groupName),
+            ),
         ]);
       }
       b.children.update(updateChildren);
@@ -383,9 +396,11 @@ invocations. Please contact angulardart-eng@ if you encounter this error.
     final currentNode = treeWalker.currentNode;
     final componentView = _nodeToData[currentNode]?.componentView;
     final children = componentView != null ? <Map<String, Object>>[] : result;
-    for (var node = treeWalker.firstChild();
-        node != null;
-        node = treeWalker.nextSibling()) {
+    for (
+      var node = treeWalker.firstChild();
+      node != null;
+      node = treeWalker.nextSibling()
+    ) {
       _collectJson(treeWalker, groupName, children);
     }
     if (componentView != null) {

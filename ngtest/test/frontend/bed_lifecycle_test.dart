@@ -1,9 +1,8 @@
-import 'dart:js_interop';
+import 'package:web/web.dart';
 
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'bed_lifecycle_test.template.dart' as ng;
 
@@ -12,6 +11,9 @@ void main() {
   late Element testRoot;
 
   setUp(() {
+    // TODO: Migrate to 3.6 (Need review)
+    //docRoot = Element.tag('doc-root');
+    //testRoot = Element.tag('ng-test-bed-example-test');
     docRoot = document.createElement('doc-root');
     testRoot = document.createElement('ng-test-bed-example-test');
     docRoot.append(testRoot);
@@ -30,9 +32,9 @@ void main() {
     final NgTestFixture<AngularLifecycle> fixture = await testBed.create();
     expect(docRoot.textContent, isEmpty);
     await fixture.update((c) => c.value = 'New value');
-    expect(docRoot.textContent, equals('New value'));
+    expect(docRoot.textContent, 'New value');
     await fixture.dispose();
-    print((docRoot.innerHTML as JSString).toDart);
+    print(docRoot.textContent);
     expect(docRoot.textContent, isEmpty);
   });
 

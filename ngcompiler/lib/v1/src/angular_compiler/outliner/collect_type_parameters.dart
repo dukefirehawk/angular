@@ -29,19 +29,25 @@ import 'package:build/build.dart';
 /// }
 /// ```
 Future<Map<String, String>> collectTypeParameters(
-    Iterable<ClassElement> directives, BuildStep buildStep) async {
+  Iterable<ClassElement> directives,
+  BuildStep buildStep,
+) async {
   final typeParameters = <String, String>{};
   final assetsToParse = <AssetId>{};
   final resolver = buildStep.resolver;
   for (final directive in directives) {
-    typeParameters[directive.name] = '';
+    typeParameters[directive.displayName] = '';
     assetsToParse.add(await resolver.assetIdForElement(directive));
   }
   // Avoid parsing source if there are no directives with generic type
   // parameters to collect.
   if (assetsToParse.isNotEmpty) {
-    await Future.wait(assetsToParse.map((asset) =>
-        _collectTypeParametersFromUnit(asset, buildStep, typeParameters)));
+    await Future.wait(
+      assetsToParse.map(
+        (asset) =>
+            _collectTypeParametersFromUnit(asset, buildStep, typeParameters),
+      ),
+    );
   }
   return typeParameters;
 }
@@ -72,12 +78,13 @@ Future<void> _collectTypeParametersFromUnit(
   // Collect generic type parameters for directives.
   for (final declaration in unit.declarations) {
     if (declaration is ClassDeclaration &&
-        declaration.typeParameters != null &&
-        typeParameters.containsKey(declaration.name.type.name)) {
-      typeParameters[declaration.name.type.name] = source.substring(
-        declaration.typeParameters!.offset,
-        declaration.typeParameters!.end,
-      );
+        declaration.namePart.typeParameters != null &&
+        typeParameters.containsKey(declaration.namePart.typeName.stringValue)) {
+      typeParameters[declaration.namePart.typeName.stringValue!] = source
+          .substring(
+            declaration.namePart.typeParameters!.offset,
+            declaration.namePart.typeParameters!.end,
+          );
     }
   }
 }

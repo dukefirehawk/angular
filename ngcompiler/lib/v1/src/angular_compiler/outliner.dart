@@ -6,12 +6,12 @@ import 'analyzer.dart';
 import 'outliner/collect_type_parameters.dart';
 
 const _angularImports = '''
+import 'package:web/web.dart' as _html;
 import 'package:ngdart/angular.dart' as _ng;
 import 'package:ngdart/src/core/change_detection/directive_change_detector.dart' as _ng;
 import 'package:ngdart/src/core/linker/views/component_view.dart' as _ng;
 import 'package:ngdart/src/core/linker/views/render_view.dart' as _ng;
 import 'package:ngdart/src/core/linker/views/view.dart' as _ng;
-import 'package:web/web.dart' as _html;
 ''';
 
 const _analyzerIgnores =
@@ -41,10 +41,10 @@ class TemplateOutliner implements Builder {
   TemplateOutliner({
     required String extension,
     required this.exportUserCodeFromTemplate,
-  })  : _extension = extension,
-        buildExtensions = {
-          '.dart': [extension],
-        };
+  }) : _extension = extension,
+       buildExtensions = {
+         '.dart': [extension],
+       };
 
   @override
   Future<void> build(BuildStep buildStep) async {
@@ -85,8 +85,9 @@ class TemplateOutliner implements Builder {
     // Unlike the main compiler, we do not do an allow-list check here; this is
     // both to speed up the outliner (reducing duplicate checks) and because we
     // do not have a configured CompileContext when the outliner is run.
-    final emitNullSafeCode = library.isNonNullableByDefault;
-    final languageVersion = emitNullSafeCode ? '' : '// @dart=2.9\n\n';
+    //final emitNullSafeCode = library.isNonNullableByDefault;
+    final emitNullSafeCode = !library.metadata.hasJS;
+    final languageVersion = emitNullSafeCode ? '' : '\n\n';
     final output = StringBuffer('$languageVersion$_analyzerIgnores\n');
     if (exportUserCodeFromTemplate) {
       output
@@ -108,8 +109,10 @@ class TemplateOutliner implements Builder {
     }
 
     output.writeln('// Required for "type inference" (scoping).');
-    for (final l in library.libraryImports) {
-      if (l.prefix is! DeferredImportElementPrefix) {
+    for (final l in library.firstFragment.libraryImports) {
+      //if (l.prefix is! DeferredImportElementPrefix) {
+      var libPrefix = l.prefix;
+      if (libPrefix != null && !libPrefix.isDeferred) {
         var directive = "import '${l.uri}'";
         if (l.prefix != null) {
           directive += ' as ${l.prefix!.element.name}';
@@ -135,7 +138,9 @@ class TemplateOutliner implements Builder {
     }
     output.writeln();
     final directiveTypeParameters = await collectTypeParameters(
-        components.followedBy(directives), buildStep);
+      components.followedBy(directives),
+      buildStep,
+    );
     if (components.isNotEmpty) {
       for (final component in components) {
         final componentName = component.name;

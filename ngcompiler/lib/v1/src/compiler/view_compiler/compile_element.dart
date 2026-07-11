@@ -8,7 +8,7 @@ import '../compile_metadata.dart'
         CompileQueryMetadata,
         CompileProviderMetadata;
 import '../i18n/message.dart';
-import '../identifiers.dart' show Identifiers, JsInterop, identifierToken;
+import '../identifiers.dart' show Identifiers, identifierToken;
 import '../output/output_ast.dart' as o;
 import '../template_ast.dart'
     show TemplateAst, ProviderAst, ProviderAstType, ReferenceAst;
@@ -28,12 +28,7 @@ class CompileNode {
   /// Expression that resolves to reference to instance of of node.
   final NodeReference renderNode;
 
-  CompileNode(
-    this.parent,
-    this.view,
-    this.nodeIndex,
-    this.renderNode,
-  );
+  CompileNode(this.parent, this.view, this.nodeIndex, this.renderNode);
 
   /// Whether node is the root of the view.
   bool get isRootElement => view != parent!.view;
@@ -58,7 +53,7 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
 
   /// Reference to optional view container created for this element.
   o.ReadClassMemberExpr? appViewContainer;
-  late o.Expression elementRef;
+  late o.Expression htmlElement;
 
   /// Expression that contains reference to componentView (root View class).
   final o.Expression? componentView;
@@ -102,22 +97,21 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
       for (final reference in references) {
         final token = reference.value;
         referenceTokens[reference.name] = token;
-        _publishesTemplateRef = _publishesTemplateRef ||
+        _publishesTemplateRef =
+            _publishesTemplateRef ||
             token != null && token.equalsTo(Identifiers.templateRefToken);
       }
     }
 
-    // Create new ElementRef(_el_#) expression and provide as instance.
-    elementRef = o
-        .importExpr(Identifiers.elementRef)
-        .instantiate([renderNode.toReadExpr()]);
+    htmlElement = renderNode.toReadExpr();
 
-    _providers.add(Identifiers.elementRefToken, elementRef);
-    _providers.add(JsInterop.jsObjectToken, renderNode.toReadExpr());
-    _providers.add(Identifiers.elementToken, renderNode.toReadExpr());
-    _providers.add(Identifiers.htmlElementToken, renderNode.toReadExpr());
-    var readInjectorExpr =
-        o.InvokeMemberMethodExpr('injector', [o.literal(nodeIndex)]);
+    _providers.add(Identifiers.elementToken, htmlElement);
+    _providers.add(Identifiers.elementDomToken, htmlElement);
+    _providers.add(Identifiers.htmlElementToken, htmlElement);
+    _providers.add(Identifiers.htmlElementDomToken, htmlElement);
+    var readInjectorExpr = o.InvokeMemberMethodExpr('injector', [
+      o.literal(nodeIndex),
+    ]);
     _providers.add(Identifiers.injectorToken, readInjectorExpr);
 
     if (hasViewContainer || hasEmbeddedView) {
@@ -155,8 +149,19 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
   }
 
   CompileElement.root()
-      : this(null, null, null, NodeReference.rootElement(), null, null, [], [],
-            false, false, []);
+    : this(
+        null,
+        null,
+        null,
+        NodeReference.rootElement(),
+        null,
+        null,
+        [],
+        [],
+        false,
+        false,
+        [],
+      );
 
   void setEmbeddedView(CompileView view) {
     if (appViewContainer == null) {
@@ -165,13 +170,17 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
     embeddedView = view;
     var createTemplateRefExpr = o
         .importExpr(Identifiers.templateRef)
-        .instantiate([appViewContainer!, view.viewFactory],
-            type: o.importType(Identifiers.templateRef));
+        .instantiate([
+          appViewContainer!,
+          view.viewFactory,
+        ], type: o.importType(Identifiers.templateRef));
     var provider = CompileProviderMetadata(
-        token: identifierToken(Identifiers.templateRef),
-        useValue: createTemplateRefExpr);
+      token: identifierToken(Identifiers.templateRef),
+      useValue: createTemplateRefExpr,
+    );
 
-    final isReferencedOutsideBuild = _publishesTemplateRef ||
+    final isReferencedOutsideBuild =
+        _publishesTemplateRef ||
         _getQueriesFor(Identifiers.templateRefToken).isNotEmpty;
     // Add TemplateRef as first provider as it does not have deps on other
     // providers
@@ -197,7 +206,9 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
 
     // Access builtins with special visibility.
     _providers.add(
-        Identifiers.changeDetectorRefToken, componentView ?? o.thisExpr);
+      Identifiers.changeDetectorRefToken,
+      componentView ?? o.thisExpr,
+    );
 
     // ComponentLoader is currently just an alias for ViewContainerRef with
     // a smaller API that is also usable outside of the context of a
@@ -221,8 +232,11 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
     var queriesWithReads = <_QueryWithRead>[];
     for (var resolvedProvider in _resolvedProvidersArray) {
       var queriesForProvider = _getQueriesFor(resolvedProvider.token);
-      queriesWithReads.addAll(queriesForProvider
-          .map((query) => _QueryWithRead(query, resolvedProvider.token)));
+      queriesWithReads.addAll(
+        queriesForProvider.map(
+          (query) => _QueryWithRead(query, resolvedProvider.token),
+        ),
+      );
     }
 
     // For each reference token create CompileTokenMetadata to read query.
@@ -233,8 +247,11 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
             : renderNode.toReadExpr();
         view!.nameResolver.addLocal(varName, varValue);
         var varToken = CompileTokenMetadata(value: varName);
-        queriesWithReads.addAll(_getQueriesFor(varToken)
-            .map((query) => _QueryWithRead(query, varToken)));
+        queriesWithReads.addAll(
+          _getQueriesFor(
+            varToken,
+          ).map((query) => _QueryWithRead(query, varToken)),
+        );
       });
     }
 
@@ -265,10 +282,10 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
         } else {
           // If we can't find a valid query type, then we fall back to
           // ElementRef. HOWEVER, if specifically typed as Element or
-          // HTMLElement, use that.
+          // HtmlElement, use that.
           value = queryWithRead.query.metadata.isElementType
               ? renderNode.toReadExpr()
-              : elementRef;
+              : htmlElement;
         }
       }
 
@@ -322,7 +339,9 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
   /// Note that [childNodeCount] can be greater than [children.length], as it
   /// counts nodes that can't produce providers such as HTML text and comments.
   ProviderNode createProviderNode(
-      int childNodeCount, List<ProviderNode> children) {
+    int childNodeCount,
+    List<ProviderNode> children,
+  ) {
     final providers = <ProviderInstance>[];
     final nodeIndex = this.nodeIndex!;
     if (childNodeCount == 0) {
@@ -338,11 +357,9 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
       final viewProviders = <ProviderInstance>[];
       _createProviderInstances(providers, viewProviders);
       if (viewProviders.isNotEmpty) {
-        children.add(ProviderNode(
-          nodeIndex,
-          nodeIndex,
-          providers: viewProviders,
-        ));
+        children.add(
+          ProviderNode(nodeIndex, nodeIndex, providers: viewProviders),
+        );
       }
     }
     return ProviderNode(
@@ -371,8 +388,8 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
 
   ProviderSource? getDirectiveSource(CompileDirectiveMetadata? directive) =>
       directive != null
-          ? _providers.get(identifierToken(directive.type))
-          : null;
+      ? _providers.get(identifierToken(directive.type))
+      : null;
 
   // NodeProvidersHost implementation.
   @override
@@ -448,9 +465,9 @@ class CompileElement extends CompileNode implements ProviderResolverHost {
     while (currentEl.parent != null) {
       queries = currentEl._queries.get(token);
       if (queries != null) {
-        result.addAll(queries.where(
-          (query) => query.metadata.descendants || distance <= 1,
-        ));
+        result.addAll(
+          queries.where((query) => query.metadata.descendants || distance <= 1),
+        );
       }
       if (currentEl._directives.isNotEmpty) {
         distance++;

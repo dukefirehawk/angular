@@ -1,7 +1,8 @@
+import 'package:web/web.dart';
+
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'query_integration_test.template.dart' as ng;
 
@@ -838,7 +839,7 @@ class LabeledElementViewChildrenComponent {
   List<String> list = <String>['3', '1', '4'];
 
   @ViewChildren('divLabel')
-  List<HTMLElement>? elementRefs;
+  List<HtmlElement>? elementRefs;
 }
 
 @Component(
@@ -853,5 +854,5 @@ class TestSingleDynamicResult {
   var showEmbeddedViews = false;
 
   @ViewChild('label')
-  HTMLElement? div;
+  HtmlElement? div;
 }

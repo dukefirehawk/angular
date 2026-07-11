@@ -3,11 +3,11 @@ import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/error/error.dart';
 import 'package:build/build.dart';
+import 'package:source_span/source_span.dart';
 import 'package:ngcompiler/v1/cli.dart';
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart';
 import 'package:ngcompiler/v1/src/source_gen/common/annotation_matcher.dart';
 import 'package:ngcompiler/v2/context.dart';
-import 'package:source_span/source_span.dart';
 
 class IndexedAnnotation<T extends Element> {
   final T element;
@@ -32,7 +32,8 @@ class ComponentVisitorExceptionHandler {
   Future<void> maybeReportErrors(Resolver resolver) async {
     if (_warnings.isNotEmpty) {
       final buildWarnings = await Future.wait(
-          _warnings.map((warning) => warning.resolve(resolver)));
+        _warnings.map((warning) => warning.resolve(resolver)),
+      );
       for (var buildWarning in buildWarnings) {
         logWarning(buildWarning.toString());
       }
@@ -47,7 +48,7 @@ class ComponentVisitorExceptionHandler {
   }
 }
 
-Future<ElementDeclarationResult> _resolvedClassResult(
+Future<FragmentDeclarationResult> _resolvedClassResult(
   Resolver resolver,
   Element element,
 ) async {
@@ -55,7 +56,9 @@ Future<ElementDeclarationResult> _resolvedClassResult(
   try {
     assetId = await resolver.assetIdForElement(element);
   } on UnresolvableAssetException catch (_) {
-    _throwInvalidSummaryError(element.source!.fullName);
+    _throwInvalidSummaryError(
+      element.library?.firstFragment.source.fullName ?? 'Unknown',
+    );
   }
   // A `part of` dart file is not a standalone dart library. Thus,
   // [library] is null when an error occurs in a `part of` dart file.
@@ -65,23 +68,18 @@ Future<ElementDeclarationResult> _resolvedClassResult(
   if (!await resolver.isLibrary(assetId)) {
     throw BuildError.withoutContext('Errors in part file $assetId');
   }
-  final library = await resolver.libraryFor(
-    assetId,
-    allowSyntaxErrors: true,
-  );
+  final library = await resolver.libraryFor(assetId, allowSyntaxErrors: true);
   final result = await element.session!.getResolvedLibraryByElement(library);
   if (result is ResolvedLibraryResult) {
-    return result.getElementDeclaration(element)!;
+    return result.getFragmentDeclaration(element.firstFragment)!;
   }
-  _throwInvalidSummaryError(library.source.fullName);
+  _throwInvalidSummaryError(library.firstFragment.source.fullName);
 }
 
 Never _throwInvalidSummaryError(String summaryName) {
   // We don't have access to source information in summarized libraries,
   // but another build step will likely emit the root cause errors.
-  throw BuildError.withoutContext(
-    'Errors in summarized library $summaryName',
-  );
+  throw BuildError.withoutContext('Errors in summarized library $summaryName');
 }
 
 abstract class AsyncBuildError {
@@ -105,8 +103,9 @@ class AngularAnalysisError extends AsyncBuildError {
   Future<BuildError> resolve(Resolver resolver) async {
     final annotationSource = indexedAnnotation.annotation.toSource();
 
-    var hasOffsetInformation =
-        constantEvaluationErrors.any((error) => error.offset >= 0);
+    var hasOffsetInformation = constantEvaluationErrors.any(
+      (error) => error.offset >= 0,
+    );
 
     // If this code is called from a tool using [AnalysisResolvers], then
     //   1) [constantEvaluationErrors] already has source location information
@@ -114,11 +113,16 @@ class AngularAnalysisError extends AsyncBuildError {
     // So, we return immediately with the information in
     // [constantEvaluationErrors].
     if (hasOffsetInformation) {
-      return Future.value(_buildErrorForAnalysisErrors(constantEvaluationErrors,
-          indexedAnnotation.element, annotationSource));
+      return Future.value(
+        _buildErrorForAnalysisErrors(
+          constantEvaluationErrors,
+          indexedAnnotation.element,
+          annotationSource,
+        ),
+      );
     }
 
-    ElementDeclarationResult result;
+    FragmentDeclarationResult result;
     try {
       result = await _resolvedClassResult(resolver, indexedAnnotation.element);
     } on BuildError catch (buildError) {
@@ -134,18 +138,25 @@ class AngularAnalysisError extends AsyncBuildError {
 
     // Only include the errors that are inside the annotation.
     return _buildErrorForAnalysisErrors(
-        result.resolvedUnit!.errors.where((error) =>
+      result.resolvedUnit!.errors.where(
+        (error) =>
             error.offset >= resolvedAnnotation.offset &&
-            error.offset <= resolvedAnnotation.end),
-        indexedAnnotation.element,
-        annotationSource);
+            error.offset <= resolvedAnnotation.end,
+      ),
+      indexedAnnotation.element,
+      annotationSource,
+    );
   }
 
-  BuildError _buildErrorForAnalysisErrors(Iterable<AnalysisError> errors,
-      Element element, String annnotationSouce) {
+  BuildError _buildErrorForAnalysisErrors(
+    Iterable<AnalysisError> errors,
+    Element element,
+    String annnotationSouce,
+  ) {
     String reason;
     if (element is ClassElement && annnotationSouce.startsWith('@Component')) {
-      reason = ''
+      reason =
+          ''
           'Compiling @Component-annotated class "${element.name}" '
           'failed.\n\n${messages.analysisFailureReasons}';
     } else {
@@ -162,11 +173,13 @@ class AngularAnalysisError extends AsyncBuildError {
           // TODO(b/180549869): remove the negative length check.
           if (sourceContent.isEmpty || e.length.isNegative) {
             return SourceSpanMessageTuple(
-                SourceSpan(
-                    SourceLocation(0, sourceUrl: sourceUrl, line: 0, column: 0),
-                    SourceLocation(0, sourceUrl: sourceUrl, line: 0, column: 0),
-                    ''),
-                '${e.message} [with offsets into source file missing]');
+              SourceSpan(
+                SourceLocation(0, sourceUrl: sourceUrl, line: 0, column: 0),
+                SourceLocation(0, sourceUrl: sourceUrl, line: 0, column: 0),
+                '',
+              ),
+              '${e.message} [with offsets into source file missing]',
+            );
           }
 
           return SourceSpanMessageTuple(
@@ -188,21 +201,58 @@ class AngularAnalysisError extends AsyncBuildError {
 class UnresolvedExpressionError extends AsyncBuildError {
   final Iterable<AstNode> expressions;
   final ClassElement componentType;
-  final CompilationUnitElement compilationUnit;
+  //final CompilationUnitElement compilationUnit;
+  final Fragment compilationUnit;
 
   UnresolvedExpressionError(
-      this.expressions, this.componentType, this.compilationUnit);
+    this.expressions,
+    this.componentType,
+    this.compilationUnit,
+  );
 
   @override
-  Future<BuildError> resolve(Resolver resolver) =>
-      Future.value(_buildErrorForUnresolvedExpressions(
-          expressions, componentType, compilationUnit));
+  Future<BuildError> resolve(Resolver resolver) => Future.value(
+    _buildErrorForUnresolvedExpressions(
+      expressions,
+      componentType,
+      compilationUnit,
+    ),
+  );
+
+  // Replacement for ClassElement.contetns.data
+  Iterable<Element> allClassMembers(ClassElement cls) sync* {
+    // Fields (include synthetic accessors)
+    for (var field in cls.fields) {
+      yield field;
+      if (field.getter case var g when g != null) yield g;
+      if (field.setter case var s when s != null) yield s;
+    }
+
+    // Methods
+    yield* cls.methods;
+
+    // Constructors
+    yield* cls.constructors;
+  }
+
+  String allClassMembersContentData(ClassElement cls) {
+    var contents = allClassMembers(cls);
+    var buffer = StringBuffer();
+    for (var member in contents) {
+      buffer.write('${member.name}\n');
+    }
+
+    return buffer.toString();
+  }
 
   // TODO(deboer): Since we are checking ElementAnnotation.constantValueErrors,
   // all code paths that call this function are unreachable.
   // If we don't see any errors in the wild, delete this code.
-  BuildError _buildErrorForUnresolvedExpressions(Iterable<AstNode> expressions,
-      ClassElement componentType, CompilationUnitElement compilationUnit) {
+  BuildError _buildErrorForUnresolvedExpressions(
+    Iterable<AstNode> expressions,
+    ClassElement componentType,
+    Fragment compilationUnit,
+  ) {
     return BuildError.withoutContext(
       messages.unresolvedSource(
         expressions.map((e) {
@@ -210,13 +260,14 @@ class UnresolvedExpressionError extends AsyncBuildError {
             sourceSpanWithLineInfo(
               e.offset,
               e.length,
-              componentType.source.contents.data,
-              componentType.source.uri,
+              allClassMembersContentData(componentType),
+              componentType.library.firstFragment.source.uri,
             ),
             'This argument *may* have not been resolved',
           );
         }),
-        reason: ''
+        reason:
+            ''
             'Compiling @Component annotated class "${componentType.name}" '
             'failed.\n'
             'NOTE: Your build triggered an error in the Angular error reporting\n'
@@ -232,20 +283,25 @@ class UnusedDirectiveTypeError extends ErrorMessageForAnnotation {
   final CompileTypedMetadata directiveType;
 
   static IndexedAnnotation firstComponentAnnotation(ClassElement element) {
-    final index = element.metadata.indexWhere(isComponent);
+    final index = element.metadata.annotations.indexWhere(isComponent);
     if (index == -1) {
       throw ArgumentError('[element] must have a @Component annotation');
     }
-    return IndexedAnnotation(element, element.metadata[index], index);
+    return IndexedAnnotation(
+      element,
+      element.metadata.annotations[index],
+      index,
+    );
   }
 
   UnusedDirectiveTypeError(this.element, this.directiveType)
-      : super(
-            firstComponentAnnotation(element),
-            'Entry in "directiveTypes" missing corresponding entry in '
-            '"directives" for "${directiveType.name}".\n\n'
-            'If you recently removed "${directiveType.name}" from "directives", '
-            'please also remove its corresponding entry from "directiveTypes".');
+    : super(
+        firstComponentAnnotation(element),
+        'Entry in "directiveTypes" missing corresponding entry in '
+        '"directives" for "${directiveType.name}".\n\n'
+        'If you recently removed "${directiveType.name}" from "directives", '
+        'please also remove its corresponding entry from "directiveTypes".',
+      );
 }
 
 /// Find the ancestor node that should have the metadata and return
@@ -253,10 +309,10 @@ class UnusedDirectiveTypeError extends ErrorMessageForAnnotation {
 /// Angular only looks at metadata on class declarations,
 /// class members and formal parameters.
 List<Annotation> _metadataFromAncestry(AstNode node) {
-// NOTE: We check for [ClassMember] or [ClassDeclaration] explicitly
-// as some [AnnotatedNode]s in the ancestor chain do not have
-// the metadata we are looking for.  See
-// 519_missing_query_selector_test.dart for an example of this condition.
+  // NOTE: We check for [ClassMember] or [ClassDeclaration] explicitly
+  // as some [AnnotatedNode]s in the ancestor chain do not have
+  // the metadata we are looking for.  See
+  // 519_missing_query_selector_test.dart for an example of this condition.
   if (node is ClassMember ||
       node is ClassDeclaration ||
       node is EnumDeclaration ||
@@ -271,16 +327,13 @@ List<Annotation> _metadataFromAncestry(AstNode node) {
 class ErrorMessageForAnnotation extends AsyncBuildError {
   final IndexedAnnotation indexedAnnotation;
 
-  ErrorMessageForAnnotation(
-    this.indexedAnnotation,
-    super.message,
-  );
+  ErrorMessageForAnnotation(this.indexedAnnotation, super.message);
 
   @override
   Future<BuildError> resolve(Resolver resolver) async {
     final annotationIndex = indexedAnnotation.annotationIndex;
 
-    ElementDeclarationResult result;
+    FragmentDeclarationResult result;
     try {
       result = await _resolvedClassResult(resolver, indexedAnnotation.element);
     } on BuildError catch (buildError) {

@@ -1,3 +1,4 @@
+import 'package:ngdart/src/meta.dart';
 import 'package:ngcompiler/v1/src/compiler/analyzed_class.dart';
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart' as core;
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart';
@@ -7,7 +8,6 @@ import 'package:ngcompiler/v1/src/compiler/semantic_analysis/binding_converter.d
 import 'package:ngcompiler/v1/src/compiler/template_ast.dart' as ast;
 import 'package:ngcompiler/v1/src/compiler/view_compiler/compile_element.dart';
 import 'package:ngcompiler/v1/src/compiler/view_compiler/ir/provider_source.dart';
-import 'package:ngdart/src/meta.dart';
 
 /// Converts a list of [ast.DirectiveAst] nodes into [ir.MatchedDirective]
 /// instances.
@@ -27,8 +27,14 @@ List<ir.MatchedDirective> convertMatchedDirectives(
   for (var directive in directives) {
     index++;
     var providerSource = compileElement.directiveInstances[index];
-    matchedDirectives.add(convertMatchedDirective(
-        directive, providerSource, compileElement, compileDirectiveMetadata));
+    matchedDirectives.add(
+      convertMatchedDirective(
+        directive,
+        providerSource,
+        compileElement,
+        compileDirectiveMetadata,
+      ),
+    );
   }
   return matchedDirectives;
 }
@@ -78,11 +84,14 @@ ir.MatchedDirective convertMatchedDirective(
   );
 }
 
-Set<ir.Lifecycle> _lifecycles(core.CompileDirectiveMetadata directive) =>
-    ir.Lifecycle.values
-        .where((lifecycle) =>
-            directive.lifecycleHooks.contains(_lifecyclesAsIr[lifecycle]))
-        .toSet();
+Set<ir.Lifecycle> _lifecycles(core.CompileDirectiveMetadata directive) => ir
+    .Lifecycle
+    .values
+    .where(
+      (lifecycle) =>
+          directive.lifecycleHooks.contains(_lifecyclesAsIr[lifecycle]),
+    )
+    .toSet();
 
 const _lifecyclesAsIr = {
   ir.Lifecycle.afterChanges: core.LifecycleHooks.afterChanges,

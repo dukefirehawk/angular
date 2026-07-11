@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'event_handler_test.template.dart' as ng;
 
@@ -218,19 +218,19 @@ void main() {
 )
 class ClickHandler extends SuperClick {
   @ViewChild('noArg')
-  HTMLElement? noArgButton;
+  HtmlElement? noArgButton;
 
   @ViewChild('oneArg')
-  HTMLElement? oneArgButton;
+  HtmlElement? oneArgButton;
 
   @ViewChild('noArgTearoff')
-  HTMLElement? noArgTearoffButton;
+  HtmlElement? noArgTearoffButton;
 
   @ViewChild('oneArgTearoff')
-  HTMLElement? oneArgTearoffButton;
+  HtmlElement? oneArgTearoffButton;
 
   @ViewChild('superTearoff')
-  HTMLElement? superTearoffButton;
+  HtmlElement? superTearoffButton;
 
   void onClick() {
     _clicks.add(null);

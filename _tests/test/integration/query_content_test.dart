@@ -1,7 +1,8 @@
-import 'package:_tests/query_tests.dart';
+import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
+import '../../lib/query_tests.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 
 import 'query_content_test.template.dart' as ng;
 
@@ -18,20 +19,14 @@ void main() {
   });
 }
 
-@Component(
-  selector: 'content',
-  template: '<ng-content></ng-content>',
-)
+@Component(selector: 'content', template: '<ng-content></ng-content>')
 class ContentChildrenComponent extends HasChildren<ValueDirective> {
   @override
   @ContentChildren(ValueDirective)
   List<ValueDirective>? children;
 }
 
-@Component(
-  selector: 'content',
-  template: '<ng-content></ng-content>',
-)
+@Component(selector: 'content', template: '<ng-content></ng-content>')
 class ContentChildComponent extends HasChild<ValueDirective> {
   @override
   @ContentChild(ValueDirective)
@@ -40,10 +35,7 @@ class ContentChildComponent extends HasChild<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    ContentChildrenComponent,
-    ValueDirective,
-  ],
+  directives: [ContentChildrenComponent, ValueDirective],
   template: r'''
     <content #comp>
       <value [value]="1"></value>
@@ -62,10 +54,7 @@ class TestContentChildren extends HasChildren<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    ContentChildComponent,
-    ValueDirective,
-  ],
+  directives: [ContentChildComponent, ValueDirective],
   template: r'''
     <content #comp>
       <value [value]="1"></value>
@@ -80,10 +69,7 @@ class TestContentChild extends HasChild<ValueDirective> {
   ValueDirective? get child => content!.child;
 }
 
-@Component(
-  selector: 'content',
-  template: '<ng-content></ng-content>',
-)
+@Component(selector: 'content', template: '<ng-content></ng-content>')
 class ContentChildrenComponentList extends HasChildren<ValueDirective> {
   @override
   @ContentChildren(ValueDirective)
@@ -92,10 +78,7 @@ class ContentChildrenComponentList extends HasChildren<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    ContentChildrenComponentList,
-    ValueDirective,
-  ],
+  directives: [ContentChildrenComponentList, ValueDirective],
   template: r'''
     <content #comp>
       <value [value]="1"></value>

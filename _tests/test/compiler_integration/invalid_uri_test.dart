@@ -1,6 +1,7 @@
-import 'package:_tests/compiler.dart';
-import 'package:ngcompiler/v2/context.dart';
 import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
+import '../../lib/compiler.dart';
+import 'package:ngcompiler/v2/context.dart';
 
 void main() {
   CompileContext.overrideForTesting();

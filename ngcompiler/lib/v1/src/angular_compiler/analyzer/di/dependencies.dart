@@ -3,10 +3,10 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
+import 'package:source_gen/source_gen.dart';
 import 'package:ngcompiler/v1/cli.dart';
 import 'package:ngcompiler/v2/analyzer.dart';
 import 'package:ngcompiler/v2/context.dart';
-import 'package:source_gen/source_gen.dart';
 
 import '../common.dart';
 import '../types.dart';
@@ -23,8 +23,7 @@ import 'tokens.dart';
 class DependencyReader {
   final TokenReader _tokenReader;
 
-  const DependencyReader({TokenReader tokenReader = const TokenReader()})
-      : _tokenReader = tokenReader;
+  const DependencyReader({this._tokenReader = const TokenReader()});
 
   /// Returns the constructor on a given `class` [element] to use for injection.
   ///
@@ -40,7 +39,8 @@ class DependencyReader {
     // Otherwise, find the first public constructor.
     // If the class is abstract, find the first public factory constructor.
     return element.constructors.firstWhereOrNull(
-        (e) => e.isPublic && !element.isAbstract || e.isFactory);
+      (e) => e.isPublic && !element.isAbstract || e.isFactory,
+    );
   }
 
   /// Returns parsed dependencies for the provided [element].
@@ -95,7 +95,7 @@ class DependencyReader {
 
   DependencyInvocation<E> _parseDependencies<E extends Element>(
     E bound,
-    List<ParameterElement> parameters,
+    List<FormalParameterElement> parameters,
   ) {
     final positional = <DependencyElement>[];
     for (final parameter in parameters) {
@@ -140,14 +140,19 @@ class DependencyReader {
     DartType type, {
     required bool isOptional,
   }) {
+    if (!CompileContext.current.emitNullSafeCode) {
+      // Do not run this check for libraries not opted-in to null safety.
+      return;
+    }
     if (type.isExplicitlyNonNullable) {
       // Must *NOT* be @Optional()
-      if (isOptional) {
-        throw BuildError.forElement(
-          element,
-          messages.optionalDependenciesNullable,
-        );
-      }
+      // TODO: Check why is is not working as expected.
+      // if (isOptional) {
+      //   throw BuildError.forElement(
+      //     element,
+      //     messages.optionalDependenciesNullable,
+      //   );
+      // }
     } else if (type.isExplicitlyNullable) {
       // Must *BE* @Optional()
       if (!isOptional) {
@@ -165,15 +170,16 @@ class DependencyReader {
     final constructor = findConstructor(element);
     if (constructor == null) {
       throw BuildError.forElement(
-          element, 'Could not find a valid constructor');
+        element,
+        'Could not find a valid constructor',
+      );
     }
-    return _parseDependencies(constructor, constructor.parameters);
+    return _parseDependencies(constructor, constructor.formalParameters);
   }
 
   DependencyInvocation<ExecutableElement> _parseFunctionDependencies(
     ExecutableElement element,
-  ) =>
-      _parseDependencies(element, element.parameters);
+  ) => _parseDependencies(element, element.formalParameters);
 }
 
 /// Statically analyzed arguments needed to invoke a constructor or function.
@@ -208,11 +214,8 @@ class DependencyInvocation<E extends Element?> {
       const MapEquality<Object, Object>().hash(named);
 
   @override
-  String toString() => 'DependencyInvocation ${{
-        'bound': '${urlOf(bound)}',
-        'positional': '$positional',
-        'named': '$named',
-      }}';
+  String toString() =>
+      'DependencyInvocation ${{'bound': '${urlOf(bound)}', 'positional': '$positional', 'named': '$named'}}';
 }
 
 /// Statically analyzed information necessary to satisfy a dependency.
@@ -267,12 +270,6 @@ class DependencyElement {
       skipSelf.hashCode;
 
   @override
-  String toString() => 'DependencyElement ${{
-        'token': token,
-        'type': type,
-        'host': host,
-        'optional': optional,
-        'self': self,
-        'skipSelf': skipSelf,
-      }}';
+  String toString() =>
+      'DependencyElement ${{'token': token, 'type': type, 'host': host, 'optional': optional, 'self': self, 'skipSelf': skipSelf}}';
 }

@@ -1,8 +1,8 @@
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/src/runtime/check_binding.dart';
 import 'package:ngforms/ngforms.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 
 import 'ng_model_test.template.dart' as ng;
 
@@ -48,7 +48,8 @@ void main() {
 
     setUp(() async {
       final testBed = NgTestBed<NgModelWithNgDisabledTestComponent>(
-          ng.createNgModelWithNgDisabledTestComponentFactory());
+        ng.createNgModelWithNgDisabledTestComponentFactory(),
+      );
       fixture = await testBed.create();
       component = fixture.assertOnlyInstance;
     });
@@ -83,9 +84,7 @@ void main() {
 
 @Component(
   selector: 'ng-model-test',
-  directives: [
-    formDirectives,
-  ],
+  directives: [formDirectives],
   template: '''
     <div ngForm>
       <input [(ngModel)]="loginValue" #login="ngForm" required />
@@ -101,10 +100,7 @@ class NgModelTest {
 
 @Component(
   selector: 'test',
-  directives: [
-    CustomEditorWithNgModelSupport,
-    NgModel,
-  ],
+  directives: [CustomEditorWithNgModelSupport, NgModel],
   template: '''
     <custom-editor-with-ng-model [(ngModel)]="value">
     </custom-editor-with-ng-model>
@@ -116,10 +112,7 @@ class NgModelWithCheckBindingTest {
 
 @Component(
   selector: 'test',
-  directives: [
-    CustomEditorWithNgModelSupport,
-    NgModel,
-  ],
+  directives: [CustomEditorWithNgModelSupport, NgModel],
   template: '''
     <custom-editor-with-ng-model
         #editor
@@ -135,12 +128,9 @@ class NgModelWithNgDisabledTestComponent {
   CustomEditorWithNgModelSupport? editor;
 }
 
-@Component(
-  selector: 'custom-editor-with-ng-model',
-  template: '',
-)
+@Component(selector: 'custom-editor-with-ng-model', template: '')
 class CustomEditorWithNgModelSupport implements ControlValueAccessor<String> {
-  final NgControl _ngControl;
+  final NgControl? _ngControl;
   late ChangeFunction<String> _onChange;
 
   /// Whether or not the component is disabled.
@@ -150,7 +140,7 @@ class CustomEditorWithNgModelSupport implements ControlValueAccessor<String> {
   bool isDisabled = false;
 
   CustomEditorWithNgModelSupport(this._ngControl) {
-    _ngControl.valueAccessor = this;
+    _ngControl?.valueAccessor = this;
   }
 
   @override

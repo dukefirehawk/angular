@@ -1,9 +1,8 @@
-import 'dart:js_interop';
+import 'package:web/web.dart';
 
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'template_test.template.dart' as ng;
 
@@ -15,18 +14,18 @@ void main() {
         ng.createTemplateDirectiveComponentFactory());
     final testFixture = await testBed.create();
     // 1 template + 2 copies.
-    expect(testFixture.rootElement.childNodes.length, equals(3));
-    expect(testFixture.rootElement.childNodes.item(1)!.textContent, 'hello');
-    expect(testFixture.rootElement.childNodes.item(2)!.textContent, 'again');
+    expect(testFixture.rootElement.childNodes, hasLength(3));
+    expect(testFixture.rootElement.childNodes.item(0)?.textContent, 'hello');
+    expect(testFixture.rootElement.childNodes.item(2)?.textContent, 'again');
   });
 
   test('should not detach views when parent is destroyed', () async {
     final testBed = NgTestBed<DestroyParentViewComponent>(
         ng.createDestroyParentViewComponentFactory());
     final testFixture = await testBed.create();
-    final ngIfElement = testFixture.rootElement.children.item(0)!;
+    final ngIfElement = testFixture.rootElement.children.item(0);
     final someViewport = testFixture.assertOnlyInstance.viewport!;
-    expect(ngIfElement.children, hasLength(2));
+    expect(ngIfElement?.children, hasLength(2));
     expect(someViewport.container, hasLength(2));
     await testFixture.update((component) => component.visible = false);
     expect(testFixture.rootElement.children, hasLength(0));
@@ -39,7 +38,7 @@ void main() {
     final testFixture = await testBed.create();
     final childNodes = testFixture.rootElement.childNodes;
     expect(childNodes, hasLength(1));
-    expect(childNodes.item(0).isA<Comment>(), isTrue);
+    expect(childNodes.item(0), TypeMatcher<Comment>());
   });
 
   test('should transplant TemplateRef into another ViewContainer', () async {

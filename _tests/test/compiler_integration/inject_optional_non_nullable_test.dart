@@ -1,12 +1,15 @@
-import 'package:_tests/compiler.dart';
-import 'package:ngcompiler/v2/context.dart';
+import 'package:build/build.dart';
 import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
+import '../../lib/compiler.dart';
+import 'package:ngcompiler/v2/context.dart';
 
 void main() {
-  CompileContext.overrideForTesting();
+  setUp(CompileContext.overrideForTesting);
 
   test('should fail on an injector with a nullable non-optional', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       class Engine {
@@ -17,13 +20,14 @@ void main() {
         ClassProvider(Engine),
       ])
       final injectorFactory = null; // OK for compiler tests.
-    """, errors: [
-      contains('must be annotated @Optional()'),
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should fail on an injector with a nullable FutureOr', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import 'dart:async';
       import '$ngImport';
 
@@ -35,13 +39,14 @@ void main() {
         ClassProvider(Engine),
       ])
       final injectorFactory = null; // OK for compiler tests.
-    """, errors: [
-      contains('must be annotated @Optional()'),
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should fail on an injector with a non-nullable optional', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       class Engine {
@@ -52,9 +57,9 @@ void main() {
         ClassProvider(Engine),
       ])
       final injectorFactory = null; // OK for compiler tests.
-    """, errors: [
-      contains('must be annotated @Optional()'),
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should allow optional FactoryProvider deps in injector', () async {
@@ -108,7 +113,8 @@ void main() {
   });
 
   test('should fail on a component with a non-nullable optional', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       class Engine {}
@@ -120,13 +126,14 @@ void main() {
       class CarComponent {
         CarComponent(@Optional() Engine engine);
       }
-    """, errors: [
-      contains('must be annotated @Optional()'),
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should fail on a component with a nullable non-optional', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import '$ngImport';
 
       class Engine {}
@@ -138,13 +145,14 @@ void main() {
       class CarComponent {
         CarComponent(Engine? engine);
       }
-    """, errors: [
-      contains('must be annotated @Optional()'),
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should fail on an component with a nullable FutureOr', () async {
-    await compilesExpecting("""
+    await compilesExpecting(
+      """
       import 'dart:async';
       import '$ngImport';
 
@@ -157,9 +165,9 @@ void main() {
       class CarComponent {
         CarComponent(FutureOr<Engine?> engine);
       }
-    """, errors: [
-      contains('must be annotated @Optional()'),
-    ]);
+    """,
+      errors: [allOf(contains('must be annotated @Optional()'))],
+    );
   });
 
   test('should allow a nullable attribute that is not optional', () async {
@@ -176,5 +184,61 @@ void main() {
         CarComponent(@Attribute('title') String? title);
       }
     """);
+  });
+
+  group('should allow opted-out to use opted-in import w/o error', () {
+    final clientLibSource =
+        """
+      
+      import '$ngImport';
+      import 'opted_in_library.dart';
+
+      @Component(
+        selector: 'example-comp',
+        template: '',
+        providers: [
+          ClassProvider(Clock),
+        ],
+      )
+      class ExampleComp {
+        ExampleComp(Clock clock);
+      }
+    """;
+
+    setUp(() {
+      CompileContext.overrideForTesting(
+        CompileContext.forTesting(emitNullSafeCode: false),
+      );
+    });
+
+    test('[expected nullable]', () async {
+      final importLibSource = '''
+        typedef DateTimeGetter = DateTime Function();
+        class Clock {
+          static DateTime _defaultGetTime() => DateTime.now();
+          Clock([DateTimeGetter getTime = _defaultGetTime]);
+        }
+      ''';
+      await compilesNormally(
+        clientLibSource,
+        include: {'pkg|lib/opted_in_library.dart': importLibSource},
+        inputSource: 'pkg|lib/opted_out_client.dart',
+        runBuilderOn: {AssetId('pkg', 'lib/opted_out_client.dart')},
+      );
+    });
+
+    test('[expected @Optional]', () async {
+      final importLibSource = '''
+        class Clock {
+          Clock(DateTime? expectedToBeOptional);
+        }
+      ''';
+      await compilesNormally(
+        clientLibSource,
+        include: {'pkg|lib/opted_in_library.dart': importLibSource},
+        inputSource: 'pkg|lib/opted_out_client.dart',
+        runBuilderOn: {AssetId('pkg', 'lib/opted_out_client.dart')},
+      );
+    });
   });
 }

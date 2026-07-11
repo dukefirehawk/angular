@@ -1,3 +1,6 @@
+// **DO NOT CHANGE**. The analyzer looks for this _specific name_.
+library;
+
 export 'meta/change_detection_constants.dart';
 export 'meta/change_detection_link.dart';
 export 'meta/di_arguments.dart';
@@ -25,7 +28,7 @@ export 'meta/visibility.dart';
 ///
 /// ```dart
 /// // my_component.dart
-/// import 'package:ngdart/angular.dart';
+/// import '../angular.dart';
 ///
 /// @Component(
 ///   selector: 'my-comp',

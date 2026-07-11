@@ -1,11 +1,13 @@
 import 'dart:js_interop';
-import 'dart:js_interop_unsafe';
 
+import 'package:web/web.dart';
+import 'dart:js_interop_unsafe' as js_util;
+//import 'dart:js_util' as js_util;
+
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngforms/ngforms.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'accessor_test.template.dart' as ng;
 
@@ -16,8 +18,8 @@ void main() {
     test('should have error on invalid input', () async {
       NgTestFixture<AccessorTestComponent> fixture =
           await NgTestBed<AccessorTestComponent>(
-                  ng.createAccessorTestComponentFactory())
-              .create();
+            ng.createAccessorTestComponentFactory(),
+          ).create();
 
       await fixture.update((AccessorTestComponent c) {
         var model = c.model!;
@@ -33,8 +35,8 @@ void main() {
     test('shouldn\'t have error on valid input', () async {
       NgTestFixture<AccessorTestComponent> fixture =
           await NgTestBed<AccessorTestComponent>(
-                  ng.createAccessorTestComponentFactory())
-              .create();
+            ng.createAccessorTestComponentFactory(),
+          ).create();
 
       await fixture.update((AccessorTestComponent c) {
         var model = c.model!;
@@ -43,8 +45,11 @@ void main() {
         expect(c.value, 5);
         expect(model.value, 5);
         expect(model.control.rawValue, '5');
-        expect(model.control.errors, null,
-            reason: 'Valid value should not have an error');
+        expect(
+          model.control.errors,
+          null,
+          reason: 'Valid value should not have an error',
+        );
       });
     });
   });
@@ -71,7 +76,7 @@ typedef ChangeFunctionSimple = dynamic Function(dynamic value);
   ],
 )
 class IntValueAccessor implements ControlValueAccessor<dynamic>, Validator {
-  final HTMLElement _elementRef;
+  final HtmlElement? _elementRef;
 
   @HostListener('input')
   void onChangeBinding() => onChange(null);
@@ -87,12 +92,15 @@ class IntValueAccessor implements ControlValueAccessor<dynamic>, Validator {
   // ignore: prefer_function_declarations_over_variables
   TouchFunction onTouched = () {};
 
-  IntValueAccessor(this._elementRef);
+  IntValueAccessor(@Optional() this._elementRef);
 
   @override
   void writeValue(dynamic value) {
-    var normalizedValue = value!.toString();
-    _elementRef['value'] = normalizedValue.toJS;
+    // TODO: Migrate to 3.6 (Need review)
+    //var normalizedValue = value!.toString();
+    //js_util.setProperty(_elementRef, 'value', normalizedValue);
+    var normalizedValue = value?.toString() ?? '';
+    _elementRef?.setProperty('value'.toJS, normalizedValue.toJS);
   }
 
   @override

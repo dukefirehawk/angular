@@ -1,8 +1,8 @@
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:meta/meta.dart';
-import 'package:ngcompiler/v2/context.dart';
 import 'package:source_gen/source_gen.dart';
+import 'package:ngcompiler/v2/context.dart';
 
 import '../types.dart';
 
@@ -12,8 +12,8 @@ import '../types.dart';
 /// currently within the `angular` package. As such, this helps, but does not
 /// completely implement compiler logic.
 class DirectiveVisitor {
-  static void _noopClassMember(Element _, DartObject __) {}
-  static void _noopClassMethod(MethodElement _, DartObject __) {}
+  static void _noopClassMember(Element _, DartObject _) {}
+  static void _noopClassMethod(MethodElement _, DartObject _) {}
 
   /// Invoked for every _valid_ member annotated with `@HostBinding`.
   ///
@@ -34,7 +34,9 @@ class DirectiveVisitor {
 
   /// Throws a [BuildError] if [element] is not an instance-level member.
   static void _assertInstance(Element element, String message) {
-    if (element is ClassMemberElement && !element.isStatic) {
+    //if (element is ClassMemberElement && !element.isStatic) {
+    //if (element is PropertyAccessorElement && !element.isStatic) {
+    if (element is MethodElement && !element.isStatic) {
       return;
     }
     throw BuildError.forElement(element, message);
@@ -48,11 +50,11 @@ class DirectiveVisitor {
     throw BuildError.forElement(element, message);
   }
 
-  static bool _isRequired(ParameterElement e) => e.isRequiredPositional;
+  static bool _isRequired(FormalParameterElement e) => e.isRequiredPositional;
 
   static void _assertExactArgs(Element element, String message, int exactArgs) {
     if (element is MethodElement &&
-        element.parameters.where(_isRequired).length != exactArgs) {
+        element.formalParameters.where(_isRequired).length != exactArgs) {
       throw BuildError.forElement(element, message);
     }
   }
@@ -64,15 +66,18 @@ class DirectiveVisitor {
   /// * [onHostListener]
   ///
   /// **NOTE**: There is no verification [element] has the annotation.
-  void visitDirective(ClassElement element) {
-    for (final superType in element.allSupertypes.reversed) {
+  void visitDirective(ClassFragment fragment) {
+    for (final superType in fragment.element.allSupertypes.reversed) {
       _visitDirectiveOrSupertype(superType.element);
     }
-    _visitDirectiveOrSupertype(element);
+    _visitDirectiveOrSupertype(fragment.element);
   }
 
   void _visitDirectiveOrSupertype(InterfaceElement element) {
-    for (final accessor in element.accessors) {
+    for (final accessor in element.getters) {
+      _visitMember(accessor);
+    }
+    for (final accessor in element.setters) {
       _visitMember(accessor);
     }
     for (final method in element.methods) {

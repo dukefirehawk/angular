@@ -1,14 +1,16 @@
-import 'package:_tests/compiler.dart';
-import 'package:ngcompiler/v2/context.dart';
 import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
+import '../../lib/compiler.dart';
+import 'package:ngcompiler/v2/context.dart';
 
 void main() {
   CompileContext.overrideForTesting();
 
-  test('should throw meaningful error message if it is in part of dart file',
-      () async {
-    await compilesExpecting(
-      """
+  test(
+    'should throw meaningful error message if it is in part of dart file',
+    () async {
+      await compilesExpecting(
+        """
       import '$ngImport';
 
       part 'rest.dart';
@@ -19,8 +21,8 @@ void main() {
       )
       class MajorComp {}
     """,
-      include: {
-        'pkg|lib/rest.dart': """
+        include: {
+          'pkg|lib/rest.dart': """
         part of 'input.dart';
 
         @Component(
@@ -30,13 +32,14 @@ void main() {
         )
         class RestComp {}
         """,
-      },
-      errors: [
-        allOf(
-          contains('Unsupported extension in styleUrls:'),
-          contains('Only ".css" is supported'),
-        ),
-      ],
-    );
-  });
+        },
+        errors: [
+          allOf(
+            contains('Unsupported extension in styleUrls:'),
+            contains('Only ".css" is supported'),
+          ),
+        ],
+      );
+    },
+  );
 }

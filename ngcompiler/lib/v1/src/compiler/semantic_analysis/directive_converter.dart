@@ -1,3 +1,4 @@
+import 'package:source_span/source_span.dart';
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart';
 import 'package:ngcompiler/v1/src/compiler/expression_parser/ast.dart' as ast;
 import 'package:ngcompiler/v1/src/compiler/ir/model.dart' as ir;
@@ -5,7 +6,6 @@ import 'package:ngcompiler/v1/src/compiler/schema/element_schema_registry.dart';
 import 'package:ngcompiler/v1/src/compiler/semantic_analysis/binding_converter.dart';
 import 'package:ngcompiler/v1/src/compiler/template_ast.dart' as ast;
 import 'package:ngcompiler/v1/src/compiler/template_parser.dart';
-import 'package:source_span/source_span.dart';
 
 /// Converts [CompileDirectiveMetadata] objects into
 /// [ir.Directive] instances.
@@ -20,13 +20,17 @@ class DirectiveConverter {
       ir.Directive(
         name: directiveMeta.identifier!.name,
         typeParameters: directiveMeta.originType!.typeParameters,
-        hostProperties:
-            _hostProperties(directiveMeta.hostProperties, directiveMeta),
+        hostProperties: _hostProperties(
+          directiveMeta.hostProperties,
+          directiveMeta,
+        ),
         metadata: directiveMeta,
       );
 
-  List<ir.Binding> _hostProperties(Map<String, ast.AST> hostProps,
-      CompileDirectiveMetadata? compileDirectiveMetadata) {
+  List<ir.Binding> _hostProperties(
+    Map<String, ast.AST> hostProps,
+    CompileDirectiveMetadata? compileDirectiveMetadata,
+  ) {
     // TODO(b/130184376): Create better HostProperties representation in
     //  CompileMetadata.
     final hostProperties = hostProps.entries.map((entry) {
@@ -41,8 +45,10 @@ class DirectiveConverter {
       );
     }).toList();
 
-    return convertAllToBinding(hostProperties,
-        compileDirectiveMetadata: compileDirectiveMetadata);
+    return convertAllToBinding(
+      hostProperties,
+      compileDirectiveMetadata: compileDirectiveMetadata,
+    );
   }
 
   static const _securityContextElementName = 'div';

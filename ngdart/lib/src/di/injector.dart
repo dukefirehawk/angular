@@ -1,9 +1,9 @@
 import 'dart:collection';
 
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/utilities.dart';
 
+import '../meta.dart';
+import '../utilities/unsafe_cast.dart';
 import 'errors.dart' as errors;
 
 /// **INTERNAL ONLY**: Sentinel value for determining a missing DI instance.
@@ -65,10 +65,8 @@ abstract class Injector {
   /// It is considered _unsupported_ to provide `Injector` as a key or `null`
   /// as either a key or a value, and assertion may be thrown in development
   /// mode.
-  factory Injector.map(
-    Map<Object, Object> providers, [
-    Injector parent,
-  ]) = _MapInjector;
+  factory Injector.map(Map<Object, Object> providers, [Injector parent]) =
+      _MapInjector;
 
   /// Injects and returns an object representing [token].
   ///
@@ -76,10 +74,7 @@ abstract class Injector {
   ///
   /// **NOTE**: This is an internal-only method and may be removed.
   @protected
-  T provideUntyped<T>(
-    Object token, [
-    Object? orElse = throwIfNotFound,
-  ]) {
+  T provideUntyped<T>(Object token, [Object? orElse = throwIfNotFound]) {
     errors.debugInjectorEnter(token);
     var result = injectFromSelfOptional(token, orElse);
     if (identical(result, orElse)) {
@@ -99,7 +94,7 @@ abstract class Injector {
   @protected
   @nonVirtual
   T injectFromSelf<T>(Object token) {
-    final result = injectFromSelfOptional(token);
+    final Object? result = injectFromSelfOptional(token);
     if (identical(result, throwIfNotFound)) {
       throw errors.noProviderError(token);
     }
@@ -185,10 +180,7 @@ abstract class Injector {
   ///
   /// An injector always returns itself if [Injector] is given as a token.
   @mustCallSuper
-  dynamic get(
-    Object token, [
-    Object? notFoundValue = throwIfNotFound,
-  ]) {
+  dynamic get(Object token, [Object? notFoundValue = throwIfNotFound]) {
     errors.debugInjectorEnter(token);
     final result = provideUntyped(token, notFoundValue);
     if (identical(result, throwIfNotFound)) {
@@ -227,10 +219,10 @@ abstract class Injector {
   /// * [T] is explicitly or implicitly bound to `dynamic`.
   /// * If [T] is not `Object`, the DI [token] is not the *same* as [T].
   @nonVirtual
-  T? provideTypeOptional<T extends Object>(Type token) {
+  T provideTypeOptional<T extends Object>(Type token) {
     // See provideType.
     assert(T != dynamic, 'Returning a dynamic is not supported');
-    return unsafeCast(get(token, null));
+    return unsafeCast(get(token));
   }
 
   /// Finds and returns an object instance provided for a [token].
@@ -275,8 +267,8 @@ abstract class Injector {
   /// }
   /// ```
   @nonVirtual
-  T? provideTokenOptional<T extends Object>(OpaqueToken<T> token) {
-    return unsafeCast(get(token, null));
+  T provideTokenOptional<T extends Object>(OpaqueToken<T> token) {
+    return unsafeCast(get(token));
   }
 }
 
@@ -294,7 +286,7 @@ abstract class HierarchicalInjector extends Injector {
 
   @visibleForTemplate
   const HierarchicalInjector([Injector? parent])
-      : _parent = parent ?? const _EmptyInjector();
+    : _parent = parent ?? const _EmptyInjector();
 
   @override
   Object? injectFromAncestryOptional(
@@ -321,8 +313,7 @@ class _EmptyInjector extends Injector {
   Object? injectFromSelfOptional(
     Object token, [
     Object? orElse = throwIfNotFound,
-  ]) =>
-      identical(token, Injector) ? this : orElse;
+  ]) => identical(token, Injector) ? this : orElse;
 
   @override
   Object? injectFromParentOptional(
@@ -346,10 +337,8 @@ class _EmptyInjector extends Injector {
 class _MapInjector extends HierarchicalInjector implements Injector {
   final Map<Object, Object> _providers;
 
-  _MapInjector(
-    Map<Object, Object> providers, [
-    super.parent,
-  ]) : _providers = HashMap.identity()..addAll(providers) {
+  _MapInjector(Map<Object, Object> providers, [super.parent])
+    : _providers = HashMap.identity()..addAll(providers) {
     assert(!providers.containsKey(Injector));
   }
 

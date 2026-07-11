@@ -1,8 +1,10 @@
-import 'package:meta/dart2js.dart' as dart2js;
-import 'package:ngdart/src/core/linker/app_view_utils.dart';
-import 'package:ngdart/src/runtime/dom_helpers.dart';
-import 'package:ngdart/src/utilities.dart';
 import 'package:web/web.dart';
+
+import 'package:meta/dart2js.dart' as dart2js;
+import '../../core/linker/app_view_utils.dart';
+import '../../runtime/dom_helpers.dart';
+import '../../utilities/is_dev_mode.dart';
+import '../../utilities/unsafe_cast.dart';
 
 /// Clears all component styles from the DOM.
 ///
@@ -108,18 +110,16 @@ class ComponentStyles {
 
   /// Creates a [ComponentStyles] that directly appends [styles] to the DOM.
   @dart2js.noInline
-  factory ComponentStyles.unscoped(
-    List<Object> styles,
-    String? componentUrl,
-  ) = _UnscopedComponentStyles;
+  factory ComponentStyles.unscoped(List<Object> styles, String? componentUrl) =
+      _UnscopedComponentStyles;
 
   /// Adds a CSS shim class to [element].
   void addContentShimClass(Element element) {
     updateClassBindingNonHtml(element, _contentPrefix, true);
   }
 
-  /// An optimized variant of [addShimClass] for [HTMLElement]s.
-  void addContentShimClassHtmlElement(HTMLElement element) {
+  /// An optimized variant of [addShimClass] for [HtmlElement]s.
+  void addContentShimClassHtmlElement(HtmlElement element) {
     updateClassBinding(element, _contentPrefix, true);
   }
 
@@ -128,8 +128,8 @@ class ComponentStyles {
     updateClassBindingNonHtml(element, _hostPrefix, true);
   }
 
-  /// An optimized variant of [addHostShimClass] for [HTMLElement]s.
-  void addHostShimClassHtmlElement(HTMLElement element) {
+  /// An optimized variant of [addHostShimClass] for [HtmlElement]s.
+  void addHostShimClassHtmlElement(HtmlElement element) {
     updateClassBinding(element, _hostPrefix, true);
   }
 
@@ -139,8 +139,8 @@ class ComponentStyles {
     updateAttribute(element, 'class', '$newClass $_contentPrefix');
   }
 
-  /// An optimized variant of [updateChildClass] for [HTMLElement]s.
-  void updateChildClassHtmlElement(HTMLElement element, String newClass) {
+  /// An optimized variant of [updateChildClass] for [HtmlElement]s.
+  void updateChildClassHtmlElement(HtmlElement element, String newClass) {
     element.className = '$newClass $_contentPrefix';
   }
 
@@ -150,9 +150,9 @@ class ComponentStyles {
     updateAttribute(element, 'class', '$newClass $_hostPrefix');
   }
 
-  /// An optimized variant of [updateChildClassForHost] for [HTMLElement]s.
+  /// An optimized variant of [updateChildClassForHost] for [HtmlElement]s.
   void updateChildClassForHostHtmlElement(
-    HTMLElement element,
+    HtmlElement element,
     String newClass,
   ) {
     element.className = '$newClass $_hostPrefix';
@@ -166,7 +166,7 @@ class ComponentStyles {
       target.add('/* From: $_componentUrl*/');
     }
     final styles = _flattenStyles(_styles, target, _componentId).join();
-    final styleElement = HTMLStyleElement()..textContent = styles;
+    final styleElement = HTMLStyleElement()..text = styles;
     if (isDevMode) {
       // Remove style element from the DOM on hot restart.
       debugOnClear(() {
@@ -178,10 +178,7 @@ class ComponentStyles {
 }
 
 class _UnscopedComponentStyles extends ComponentStyles {
-  _UnscopedComponentStyles(
-    super.styles,
-    super.componentUrl,
-  ) : super._();
+  _UnscopedComponentStyles(super.styles, super.componentUrl) : super._();
 
   @override
   void addContentShimClass(Element element) {
@@ -189,7 +186,7 @@ class _UnscopedComponentStyles extends ComponentStyles {
   }
 
   @override
-  void addContentShimClassHtmlElement(HTMLElement element) {
+  void addContentShimClassHtmlElement(HtmlElement element) {
     // Intentionally left blank; unscoped syles do not apply shim classes.
   }
 
@@ -199,7 +196,7 @@ class _UnscopedComponentStyles extends ComponentStyles {
   }
 
   @override
-  void addHostShimClassHtmlElement(HTMLElement element) {
+  void addHostShimClassHtmlElement(HtmlElement element) {
     // Intentionally left blank; unscoped syles do not apply shim classes.
   }
 
@@ -211,7 +208,7 @@ class _UnscopedComponentStyles extends ComponentStyles {
   }
 
   @override
-  void updateChildClassHtmlElement(HTMLElement element, String newClass) {
+  void updateChildClassHtmlElement(HtmlElement element, String newClass) {
     element.className = newClass;
   }
 
@@ -224,7 +221,7 @@ class _UnscopedComponentStyles extends ComponentStyles {
 
   @override
   void updateChildClassForHostHtmlElement(
-    HTMLElement element,
+    HtmlElement element,
     String newClass,
   ) {
     // Straight applies the class without any prefixing.

@@ -1,6 +1,6 @@
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 
 import 'do_check_test.template.dart' as ng;
 
@@ -10,8 +10,8 @@ void main() {
   tearDown(disposeAnyRunningTest);
 
   test('should call ngDoCheck initially', () async {
-    final testBed =
-        NgTestBed<TestDoCheckHook>(ng.createTestDoCheckHookFactory());
+    final testBed = NgTestBed<TestDoCheckHook>(
+        ng.createTestDoCheckHookFactory() as ComponentFactory<TestDoCheckHook>);
     final fixture = await testBed.create(
       beforeChangeDetection: (i) => i.animals = ['Dog', 'Cat', 'Dog'],
     );
@@ -19,8 +19,9 @@ void main() {
   });
 
   test('should call input setters initially', () async {
-    final testBed =
-        NgTestBed<TestDoCheckSetter>(ng.createTestDoCheckSetterFactory());
+    final testBed = NgTestBed<TestDoCheckSetter>(
+        ng.createTestDoCheckSetterFactory()
+            as ComponentFactory<TestDoCheckSetter>);
     final fixture = await testBed.create(
       beforeChangeDetection: (i) => i.animals = ['Dog', 'Cat', 'Dog'],
     );
@@ -28,8 +29,8 @@ void main() {
   });
 
   test('should call ngDoCheck after each update', () async {
-    final testBed =
-        NgTestBed<TestDoCheckHook>(ng.createTestDoCheckHookFactory());
+    final testBed = NgTestBed<TestDoCheckHook>(
+        ng.createTestDoCheckHookFactory() as ComponentFactory<TestDoCheckHook>);
     final fixture = await testBed.create(
       beforeChangeDetection: (i) => i.animals = ['Dog', 'Cat', 'Dog'],
     );
@@ -40,8 +41,9 @@ void main() {
   });
 
   test('should call input setters only when changed', () async {
-    final testBed =
-        NgTestBed<TestDoCheckSetter>(ng.createTestDoCheckSetterFactory());
+    final testBed = NgTestBed<TestDoCheckSetter>(
+        ng.createTestDoCheckSetterFactory()
+            as ComponentFactory<TestDoCheckSetter>);
     final fixture = await testBed.create(
       beforeChangeDetection: (i) => i.animals = ['Dog', 'Cat', 'Dog'],
     );

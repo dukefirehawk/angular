@@ -28,6 +28,7 @@ class StylesheetCompiler implements Builder {
       buildStep.inputId,
       _flags,
     );
+
     outputs.forEach(buildStep.writeAsString);
   }
 }

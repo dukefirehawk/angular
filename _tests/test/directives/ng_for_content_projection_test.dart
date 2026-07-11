@@ -1,7 +1,8 @@
+import 'package:web/web.dart';
+
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'ng_for_content_projection_test.template.dart' as ng;
 
@@ -19,7 +20,8 @@ void main() {
 
     test('@ContentChildren', () async {
       fixture = await NgTestBed<TestNgForReorderContentChildren>(
-        ng.createTestNgForReorderContentChildrenFactory(),
+        ng.createTestNgForReorderContentChildrenFactory()
+            as ComponentFactory<TestNgForReorderContentChildren>,
       ).create(
         beforeChangeDetection: (c) => c.items = [1, 2, 3],
       );
@@ -37,7 +39,8 @@ void main() {
 
     test('@ContentChildren, when nested', () async {
       fixture = await NgTestBed<TestNestedNgForReorderContentChildren>(
-              ng.createTestNestedNgForReorderContentChildrenFactory())
+              ng.createTestNestedNgForReorderContentChildrenFactory()
+                  as ComponentFactory<TestNestedNgForReorderContentChildren>)
           .create(
         beforeChangeDetection: (c) => c.items = [1, 2, 3],
       );
@@ -54,8 +57,9 @@ void main() {
     });
 
     test('@ContentChildren, when nested with a #referenced child', () async {
-      fixture = await NgTestBed<TestReferencedNgForReorderContentChildren>(
-              ng.createTestReferencedNgForReorderContentChildrenFactory())
+      fixture = await NgTestBed<TestReferencedNgForReorderContentChildren>(ng
+                  .createTestReferencedNgForReorderContentChildrenFactory()
+              as ComponentFactory<TestReferencedNgForReorderContentChildren>)
           .create(
         beforeChangeDetection: (c) => c.items = [1, 2, 3],
       );
@@ -74,7 +78,8 @@ void main() {
 
     test('@ViewChildren', () async {
       fixture = await NgTestBed<TestNgForReorderViewChildren>(
-              ng.createTestNgForReorderViewChildrenFactory())
+              ng.createTestNgForReorderViewChildrenFactory()
+                  as ComponentFactory<TestNgForReorderViewChildren>)
           .create(
         beforeChangeDetection: (c) => c.items = [1, 2, 3],
       );
@@ -92,7 +97,8 @@ void main() {
 
     test('@ViewChildren, when nested', () async {
       fixture = await NgTestBed<TestNestedNgForReorderViewChildren>(
-              ng.createTestNestedNgForReorderViewChildrenFactory())
+              ng.createTestNestedNgForReorderViewChildrenFactory()
+                  as ComponentFactory<TestNestedNgForReorderViewChildren>)
           .create(
         beforeChangeDetection: (c) => c.items = [1, 2, 3],
       );
@@ -110,7 +116,8 @@ void main() {
 
     test('@ViewChildren, when nested with a #referenced child', () async {
       fixture = await NgTestBed<TestReferencedNgForReorderViewChildren>(
-              ng.createTestReferencedNgForReorderViewChildrenFactory())
+              ng.createTestReferencedNgForReorderViewChildrenFactory()
+                  as ComponentFactory<TestReferencedNgForReorderViewChildren>)
           .create(
         beforeChangeDetection: (c) => c.items = [1, 2, 3],
       );
@@ -133,7 +140,7 @@ abstract class TestNgForBase {
   @Input()
   List<int>? items;
 
-  List<HTMLElement>? get children;
+  List<HtmlElement>? get children;
 }
 
 @Component(
@@ -155,7 +162,7 @@ class TestNgForReorderContentChildren extends TestNgForBase {
   ContentProjectedChild? child;
 
   @override
-  List<HTMLElement>? get children => child!.children;
+  List<HtmlElement>? get children => child!.children;
 }
 
 @Component(
@@ -180,7 +187,7 @@ class TestNestedNgForReorderContentChildren extends TestNgForBase {
   ContentProjectedChild? child;
 
   @override
-  List<HTMLElement>? get children => child!.children;
+  List<HtmlElement>? get children => child!.children;
 }
 
 @Component(
@@ -206,7 +213,7 @@ class TestReferencedNgForReorderContentChildren extends TestNgForBase {
   ContentProjectedChild? child;
 
   @override
-  List<HTMLElement>? get children => child!.children;
+  List<HtmlElement>? get children => child!.children;
 }
 
 @Component(
@@ -215,7 +222,7 @@ class TestReferencedNgForReorderContentChildren extends TestNgForBase {
 )
 class ContentProjectedChild {
   @ContentChildren('listItem')
-  List<HTMLElement>? children;
+  List<HtmlElement>? children;
 }
 
 @Component(
@@ -232,7 +239,7 @@ class ContentProjectedChild {
 class TestNgForReorderViewChildren extends TestNgForBase {
   @ViewChildren('listItem')
   @override
-  List<HTMLElement>? children;
+  List<HtmlElement>? children;
 }
 
 @Component(
@@ -252,7 +259,7 @@ class TestNgForReorderViewChildren extends TestNgForBase {
 class TestNestedNgForReorderViewChildren extends TestNgForBase {
   @ViewChildren('listItem')
   @override
-  List<HTMLElement>? children;
+  List<HtmlElement>? children;
 }
 
 @Component(
@@ -272,5 +279,5 @@ class TestNestedNgForReorderViewChildren extends TestNgForBase {
 class TestReferencedNgForReorderViewChildren extends TestNgForBase {
   @ViewChildren('listItem')
   @override
-  List<HTMLElement>? children;
+  List<HtmlElement>? children;
 }

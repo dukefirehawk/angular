@@ -1,5 +1,6 @@
 import 'dart:js_interop';
 
+import 'package:web/helpers.dart';
 import 'package:web/web.dart';
 
 /// Provides a hook for receiving unhandled errors/exceptions.
@@ -9,7 +10,7 @@ import 'package:web/web.dart';
 ///
 /// It's possible to instead write a _custom exception handler_:
 /// ```
-/// import 'package:ngdart/angular.dart';
+/// import '../angular.dart';
 ///
 /// import 'main.template.dart' as ng;
 ///
@@ -66,10 +67,8 @@ class ExceptionHandler {
     Object? stackTrace,
     @Deprecated('No longer supported. Remove this argument.') String? reason,
   ]) {
-    console.error(ExceptionHandler.exceptionToString(
-      exception,
-      stackTrace,
-      reason,
-    ).toJS);
+    console.error(
+      ExceptionHandler.exceptionToString(exception, stackTrace, reason).toJS,
+    );
   }
 }

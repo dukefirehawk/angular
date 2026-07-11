@@ -1,10 +1,9 @@
 #!/bin/bash
-# Created with package:mono_repo v6.6.3
+# Created with package:mono_repo v6.5.7
 
 # Support built in commands on windows out of the box.
-
 # When it is a flutter repo (check the pubspec.yaml for "sdk: flutter")
-# then "flutter pub" is called instead of "dart pub".
+# then "flutter" is called instead of "pub".
 # This assumes that the Flutter SDK has been installed in a previous step.
 function pub() {
   if grep -Fq "sdk: flutter" "${PWD}/pubspec.yaml"; then
@@ -13,13 +12,18 @@ function pub() {
     command dart pub "$@"
   fi
 }
-
-function format() {
-  command dart format "$@"
-}
-
 # When it is a flutter repo (check the pubspec.yaml for "sdk: flutter")
-# then "flutter analyze" is called instead of "dart analyze".
+# then "flutter" is called instead of "pub".
+# This assumes that the Flutter SDK has been installed in a previous step.
+function format() {
+  if grep -Fq "sdk: flutter" "${PWD}/pubspec.yaml"; then
+    command flutter format "$@"
+  else
+    command dart format "$@"
+  fi
+}
+# When it is a flutter repo (check the pubspec.yaml for "sdk: flutter")
+# then "flutter" is called instead of "pub".
 # This assumes that the Flutter SDK has been installed in a previous step.
 function analyze() {
   if grep -Fq "sdk: flutter" "${PWD}/pubspec.yaml"; then
@@ -63,33 +67,37 @@ for PKG in ${PKGS}; do
       echo
       echo -e "\033[1mPKG: ${PKG}; TASK: ${TASK}\033[22m"
       case ${TASK} in
-      analyze)
-        echo 'dart analyze --fatal-infos .'
-        dart analyze --fatal-infos . || EXIT_CODE=$?
+      analyze_0)
+        echo 'dart analyze --fatal-infos'
+        dart analyze --fatal-infos || EXIT_CODE=$?
+        ;;
+      analyze_1)
+        echo 'dart analyze'
+        dart analyze || EXIT_CODE=$?
         ;;
       command_0)
-        echo 'dart run build_runner build --delete-conflicting-outputs --fail-on-severe'
-        dart run build_runner build --delete-conflicting-outputs --fail-on-severe || EXIT_CODE=$?
+        echo 'dart run build_runner build --fail-on-severe'
+        dart run build_runner build --fail-on-severe || EXIT_CODE=$?
         ;;
       command_1)
-        echo 'dart test -P vm'
-        dart test -P vm || EXIT_CODE=$?
+        echo 'dart run test -P vm'
+        dart run test -P vm || EXIT_CODE=$?
         ;;
       command_2)
-        echo 'dart run build_runner test --delete-conflicting-outputs --fail-on-severe -- -P browser'
-        dart run build_runner test --delete-conflicting-outputs --fail-on-severe -- -P browser || EXIT_CODE=$?
+        echo 'dart run build_runner test --fail-on-severe -- -P browser'
+        dart run build_runner test --fail-on-severe -- -P browser || EXIT_CODE=$?
         ;;
       command_3)
-        echo 'dart run build_runner test --delete-conflicting-outputs --fail-on-severe -- -P ci'
-        dart run build_runner test --delete-conflicting-outputs --fail-on-severe -- -P ci || EXIT_CODE=$?
+        echo 'dart test -P ci'
+        dart test -P ci || EXIT_CODE=$?
+        ;;
+      command_4)
+        echo 'dart run build_runner test --fail-on-severe -- -P ci'
+        dart run build_runner test --fail-on-severe -- -P ci || EXIT_CODE=$?
         ;;
       format)
         echo 'dart format --output=none --set-exit-if-changed .'
         dart format --output=none --set-exit-if-changed . || EXIT_CODE=$?
-        ;;
-      test)
-        echo 'dart test -P ci'
-        dart test -P ci || EXIT_CODE=$?
         ;;
       *)
         echo -e "\033[31mUnknown TASK '${TASK}' - TERMINATING JOB\033[0m"

@@ -13,7 +13,7 @@ class DirectiveCompileResult {
   final List<o.Statement> statements;
 
   DirectiveCompileResult(o.ClassStmt changeDetectorClass)
-      : statements = [changeDetectorClass];
+    : statements = [changeDetectorClass];
 }
 
 class DirectiveCompiler {
@@ -74,9 +74,7 @@ class DirectiveCompiler {
     storage.allocate(
       'instance',
       outputType: instanceType,
-      modifiers: [
-        o.StmtModifier.finalStmt,
-      ],
+      modifiers: [o.StmtModifier.finalStmt],
     );
     final constructorArgs = [o.FnParam('this.instance')];
     return o.Constructor(params: constructorArgs);
@@ -133,14 +131,10 @@ class DirectiveCompiler {
     // We create a method that can detect a host RenderView/rootElement.
     //
     // void detectHostChanges(RenderView view, Element el) { ... }
-    return o.ClassMethod(
-      'detectHostChanges',
-      [
-        o.FnParam('view', o.importType(Views.renderView)),
-        o.FnParam('el', o.importType(Identifiers.element)),
-      ],
-      statements,
-    );
+    return o.ClassMethod('detectHostChanges', [
+      o.FnParam('view', o.importType(Views.renderView)),
+      o.FnParam('el', o.importType(Identifiers.element)),
+    ], statements);
   }
 }
 

@@ -1,8 +1,14 @@
 import 'package:analyzer/dart/element/element.dart';
-import 'package:ngcompiler/v1/angular_compiler.dart';
+import 'package:ngcompiler/v1/src/angular_compiler/analyzer/types.dart';
 import 'package:test/test.dart';
 
 import '../src/resolve.dart';
+
+//const $Directive = TypeChecker.fromUrl('package:ngdart/angular.dart#Directive');
+//const $Component = TypeChecker.fromUrl('package:ngdart/angular.dart#Component');
+//const $Service = TypeChecker.fromUrl('package:ngdart/angular.dart#Service');
+//const $Injectable =
+//    TypeChecker.fromUrl('package:ngdart/angular.dart#Injectable');
 
 void main() {
   group('should resolve', () {
@@ -10,10 +16,11 @@ void main() {
 
     setUpAll(() async {
       testLib = await resolveLibrary(r'''
-        @Directive(selector: '')
+
+        @Directive()
         class ADirective {}
 
-        @Component(selector: '')
+        @Component()
         class AComponent {}
 
         @Injectable()
@@ -47,11 +54,12 @@ void main() {
     });
 
     group('injection annotations', () {
-      Element getParameterFrom(String name) =>
-          testLib.definingCompilationUnit.functions
-              .firstWhere((e) => e.name == name)
-              .parameters
-              .first;
+      FormalParameterFragment getParameterFrom(String name) => testLib
+          .firstFragment
+          .functions
+          .firstWhere((e) => e.name == name)
+          .formalParameters
+          .first;
 
       const {
         'hasHost': $Host,
@@ -62,7 +70,7 @@ void main() {
       }.forEach((name, type) {
         test('of $type should find "$name"', () {
           final parameter = getParameterFrom(name);
-          expect(type.firstAnnotationOfExact(parameter), isNotNull);
+          expect(type.firstAnnotationOfExact(parameter.element), isNotNull);
         });
       });
     });

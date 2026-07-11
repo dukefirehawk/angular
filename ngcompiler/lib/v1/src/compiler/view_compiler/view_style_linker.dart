@@ -1,7 +1,7 @@
+import 'package:ngdart/src/meta.dart';
 import 'package:ngcompiler/v1/src/compiler/identifiers.dart';
 import 'package:ngcompiler/v1/src/compiler/output/output_ast.dart' as o;
 import 'package:ngcompiler/v1/src/compiler/view_type.dart';
-import 'package:ngdart/src/meta.dart';
 
 import 'compile_view.dart';
 
@@ -28,9 +28,11 @@ class _ViewStyleLinker {
   bool get _hasScopedStyles =>
       _view.component.template!.encapsulation == ViewEncapsulation.emulated;
 
-  o.ExternalExpr get _styleType => o.importExpr(_hasScopedStyles
-      ? StyleEncapsulation.componentStylesScoped
-      : StyleEncapsulation.componentStylesUnscoped);
+  o.ExternalExpr get _styleType => o.importExpr(
+    _hasScopedStyles
+        ? StyleEncapsulation.componentStylesScoped
+        : StyleEncapsulation.componentStylesUnscoped,
+  );
 
   void initStyleEncapsulation() {
     // We need to call initComponentStyles() before we handle any constant
@@ -60,22 +62,19 @@ class _ViewStyleLinker {
             ),
           ),
         ],
-        o.BuiltinType(
-            o.BuiltinTypeName.stringName, [o.TypeModifier.nullableModifier]),
-        [
-          o.StmtModifier.staticStmt,
-        ],
+        o.BuiltinType(o.BuiltinTypeName.stringName, [
+          o.TypeModifier.nullableModifier,
+        ]),
+        [o.StmtModifier.staticStmt],
       ),
     );
   }
 
   static final _componentStyles = o.ClassField(
     _componentStylesStatic,
-    outputType: o.importType(
-      StyleEncapsulation.componentStyles,
-      [],
-      [o.TypeModifier.nullableModifier],
-    ),
+    outputType: o.importType(StyleEncapsulation.componentStyles, [], [
+      o.TypeModifier.nullableModifier,
+    ]),
     modifiers: const [o.StmtModifier.staticStmt],
   );
 
@@ -85,15 +84,15 @@ class _ViewStyleLinker {
 
   void _implementDebugClearComponentStyles() {
     // Static._componentStyles = null
-    final nullifyStaticComponentStyles =
-        o.WriteStaticMemberExpr(_componentStylesStatic, o.nullExpr).toStmt();
+    final nullifyStaticComponentStyles = o.WriteStaticMemberExpr(
+      _componentStylesStatic,
+      o.nullExpr,
+    ).toStmt();
     _class.methods.add(
       o.ClassMethod(
         _debugClearComponentStyles,
         const [],
-        [
-          nullifyStaticComponentStyles,
-        ],
+        [nullifyStaticComponentStyles],
         o.voidType,
         const [o.StmtModifier.staticStmt],
       ),
@@ -118,30 +117,24 @@ class _ViewStyleLinker {
     //      ComponentStyles.debugOnClear(_debugClearComponentStyles);
     //   }
     // }
-    final ifStylesNullInit = o.IfStmt(
-      readStyles.equals(o.nullExpr),
-      [
-        o.WriteStaticMemberExpr(
-          _componentStylesStatic,
-          o.WriteVarExpr(
-            localStylesVar,
-            _styleType.instantiate([
-              _view.styles,
-              o.ReadVarExpr(_debugComponentUrl),
-            ]),
-          ),
-        ).toStmt(),
-        o.IfStmt(
-          o.importExpr(Runtime.isDevMode),
-          [
-            o.importExpr(StyleEncapsulation.componentStyles).callMethod(
-              'debugOnClear',
-              [o.ReadStaticMemberExpr(_debugClearComponentStyles)],
-            ).toStmt(),
-          ],
+    final ifStylesNullInit = o.IfStmt(readStyles.equals(o.nullExpr), [
+      o.WriteStaticMemberExpr(
+        _componentStylesStatic,
+        o.WriteVarExpr(
+          localStylesVar,
+          _styleType.instantiate([
+            _view.styles,
+            o.ReadVarExpr(_debugComponentUrl),
+          ]),
         ),
-      ],
-    );
+      ).toStmt(),
+      o.IfStmt(o.importExpr(Runtime.isDevMode), [
+        o.importExpr(StyleEncapsulation.componentStyles).callMethod(
+          'debugOnClear',
+          [o.ReadStaticMemberExpr(_debugClearComponentStyles)],
+        ).toStmt(),
+      ]),
+    ]);
 
     // this.componentStyles = styles;
     final assignMember = o.WriteClassMemberExpr(
@@ -150,15 +143,11 @@ class _ViewStyleLinker {
     ).toStmt();
 
     _class.methods.add(
-      o.ClassMethod(
-        _initComponentStyles,
-        const [],
-        [
-          defineStyles,
-          ifStylesNullInit,
-          assignMember,
-        ],
-      ),
+      o.ClassMethod(_initComponentStyles, const [], [
+        defineStyles,
+        ifStylesNullInit,
+        assignMember,
+      ]),
     );
   }
 }

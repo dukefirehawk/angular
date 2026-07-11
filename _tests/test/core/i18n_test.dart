@@ -1,7 +1,8 @@
+import 'package:web/web.dart';
+
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'i18n_test.template.dart' as ng;
 
@@ -19,7 +20,7 @@ void main() {
         NgTestBed<TestI18nAttribute>(ng.createTestI18nAttributeFactory());
     final testFixture = await testBed.create();
     final imgElement =
-        testFixture.rootElement.querySelector('img') as HTMLImageElement;
+        testFixture.rootElement.querySelector('img') as ImageElement;
     expect(imgElement.alt, 'A puppy!');
   });
 

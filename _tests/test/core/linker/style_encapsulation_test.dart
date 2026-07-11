@@ -1,30 +1,37 @@
-import 'dart:js_interop';
+import 'package:web/web.dart';
 
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'style_encapsulation_test.template.dart' as ng;
 
 void main() {
   tearDown(() {
-    JSArray.from<HTMLElement>(document.head!.querySelectorAll('style'))
-        .toDart
-        .forEach((style) {
-      style.remove();
-    });
+    // TODO: Migrate to dart 3.6 (Need to review)
+    //document.head!.querySelectorAll('style').forEach((e) => e.remove());
+    var el = document.head!.querySelectorAll('style');
+    for (var i = el.length; i > 0; i--) {
+      var item = el.item(i) as HTMLElement;
+      item.remove();
+    }
 
     return disposeAnyRunningTest();
   });
 
   String failureReason(Element target) {
+    // TODO: Migrate to dart 3.6 (Need to review)
     final lastStyles = document.head!.querySelectorAll('style');
-    final styleText = JSArray.from<HTMLStyleElement>(lastStyles)
-        .toDart
-        .map((e) => e.textContent)
-        .join('\n');
-    return 'HTML:\n\n${(target.outerHTML as JSString).toDart}\nCSS:\n\n$styleText';
+    //final styleText = lastStyles.map((e) => e.text).join('\n');
+    var list = [];
+    for (var i = 0; i < lastStyles.length; i++) {
+      var item = lastStyles.item(i) as HTMLElement;
+      list.add(item);
+    }
+    final styleText = list.join('\n');
+
+    var t = target as HTMLElement;
+    return 'HTML:\n\n${t.outerHTML}\nCSS:\n\n$styleText';
   }
 
   test('should encapsulate usages of [class]=', () async {
@@ -43,9 +50,17 @@ void main() {
     final testBed = NgTestBed<TestSetClassAttribute>(
         ng.createTestSetClassAttributeFactory());
     final fixture = await testBed.create();
-    final element = fixture.rootElement.querySelector('div')!;
+    final element = fixture.rootElement.querySelector('div') as HTMLDivElement;
+    /*
     expect(
-      window.getComputedStyle(element).position,
+      element.getComputedStyle().position,
+      'absolute',
+      reason: failureReason(element),
+    );
+    */
+
+    expect(
+      element.style.backgroundPosition,
       'absolute',
       reason: failureReason(element),
     );

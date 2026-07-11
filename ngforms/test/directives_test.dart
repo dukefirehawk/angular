@@ -1,11 +1,8 @@
-import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
+import 'package:web/web.dart' as web;
 import 'package:ngforms/ngforms.dart';
 import 'package:ngforms/src/directives/shared.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
-
-@GenerateMocks([ControlValueAccessor])
-import 'directives_test.mocks.dart'; // ignore: uri_does_not_exist
 
 class DummyControlValueAccessor implements ControlValueAccessor<dynamic> {
   dynamic writtenValue;
@@ -25,7 +22,7 @@ class DummyControlValueAccessor implements ControlValueAccessor<dynamic> {
 
 class CustomValidatorDirective implements Validator {
   @override
-  Map<String, dynamic> validate(AbstractControl c) {
+  Map<String, dynamic>? validate(AbstractControl c) {
     return {'custom': true};
   }
 }
@@ -38,9 +35,8 @@ Future<void> flushMicrotasks() async => await Future.microtask(() => null);
 void main() {
   group('Shared selectValueAccessor', () {
     late DefaultValueAccessor defaultAccessor;
-
     setUp(() {
-      defaultAccessor = DefaultValueAccessor(HTMLInputElement());
+      defaultAccessor = DefaultValueAccessor(null);
     });
     test('should throw when given an empty array', () {
       expect(() => selectValueAccessor([]),
@@ -50,49 +46,52 @@ void main() {
       expect(selectValueAccessor([defaultAccessor]), defaultAccessor);
     });
     test('should return checkbox accessor when provided', () {
-      var checkboxAccessor = CheckboxControlValueAccessor(HTMLInputElement());
+      var checkboxAccessor = CheckboxControlValueAccessor(web.document.createElement('input') as web.HtmlElement);
       expect(selectValueAccessor([defaultAccessor, checkboxAccessor]),
           checkboxAccessor);
     });
     test('should return select accessor when provided', () {
-      var selectAccessor = SelectControlValueAccessor(HTMLSelectElement());
+      var selectAccessor = SelectControlValueAccessor(web.document.createElement('select') as web.HtmlElement);
       expect(selectValueAccessor([defaultAccessor, selectAccessor]),
           selectAccessor);
     });
     test('should throw when more than one build-in accessor is provided', () {
-      var checkboxAccessor = CheckboxControlValueAccessor(HTMLInputElement());
-      var selectAccessor = SelectControlValueAccessor(HTMLSelectElement());
+      var checkboxAccessor = CheckboxControlValueAccessor(web.document.createElement('input') as web.HtmlElement);
+      var selectAccessor = SelectControlValueAccessor(web.document.createElement('select') as web.HtmlElement);
       expect(() => selectValueAccessor([checkboxAccessor, selectAccessor]),
           throwsWith('More than one built-in value accessor matches'));
     });
     test('should return custom accessor when provided', () {
-      // ignore: undefined_function
-      var customAccessor = MockControlValueAccessor();
-      var checkboxAccessor = CheckboxControlValueAccessor(HTMLInputElement());
+      var customAccessor = MockValueAccessor();
+      var checkboxAccessor = CheckboxControlValueAccessor(web.document.createElement('input') as web.HtmlElement);
       expect(
           selectValueAccessor(
               [defaultAccessor, customAccessor, checkboxAccessor]),
           customAccessor);
     });
     test('should throw when more than one custom accessor is provided', () {
-      // ignore: undefined_function
-      var customAccessor = MockControlValueAccessor();
+      ControlValueAccessor<dynamic> customAccessor = MockValueAccessor();
       expect(() => selectValueAccessor([customAccessor, customAccessor]),
           throwsWith('More than one custom value accessor matches'));
     });
   });
   group('Shared composeValidators', () {
+    setUp(() {
+      DefaultValueAccessor(null);
+    });
     test('should compose functions', () {
       Map<String, dynamic> dummy1(_) => {'dummy1': true};
       Map<String, dynamic> dummy2(_) => {'dummy2': true};
-      var v = composeValidators([dummy1, dummy2])!;
-      expect(v(Control('')), {'dummy1': true, 'dummy2': true});
-    });
+      var v = composeValidators([dummy1, dummy2]);
 
+      expect(v!(Control('')), {'dummy1': true, 'dummy2': true});
+    });
     test('should compose validator directives', () {
       Map<String, dynamic> dummy1(_) => {'dummy1': true};
-      var v = composeValidators([dummy1, CustomValidatorDirective()])!;
-      expect(v(Control('')), {'dummy1': true, 'custom': true});
+      var v = composeValidators([dummy1, CustomValidatorDirective()]);
+      expect(v!(Control('')), {'dummy1': true, 'custom': true});
     });
   });
 }
+
+class MockValueAccessor extends Mock implements ControlValueAccessor<dynamic> {}

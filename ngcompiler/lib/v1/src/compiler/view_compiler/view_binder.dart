@@ -1,3 +1,4 @@
+import 'package:source_span/source_span.dart';
 import 'package:ngcompiler/v1/src/compiler/expression_parser/ast.dart' as ast;
 import 'package:ngcompiler/v1/src/compiler/ir/model.dart' as ir;
 import 'package:ngcompiler/v1/src/compiler/output/output_ast.dart' as o;
@@ -7,7 +8,6 @@ import 'package:ngcompiler/v1/src/compiler/semantic_analysis/element_converter.d
 import 'package:ngcompiler/v1/src/compiler/template_ast.dart';
 import 'package:ngcompiler/v1/src/compiler/template_parser.dart';
 import 'package:ngcompiler/v1/src/compiler/view_type.dart';
-import 'package:source_span/source_span.dart';
 
 import 'bound_value_converter.dart';
 import 'compile_element.dart' show CompileElement;
@@ -70,9 +70,10 @@ class _ViewBinderVisitor implements TemplateAstVisitor<void, void> {
       return;
     }
     bindRenderText(
-        convertToBinding(ast, compileDirectiveMetadata: view.component),
-        node,
-        view);
+      convertToBinding(ast, compileDirectiveMetadata: view.component),
+      node,
+      view,
+    );
   }
 
   @override
@@ -88,7 +89,10 @@ class _ViewBinderVisitor implements TemplateAstVisitor<void, void> {
   @override
   void visitElement(ElementAst ast, _) {
     var element = convertElement(
-        ast, view.nodes[_nodeIndex++] as CompileElement, view.component);
+      ast,
+      view.nodes[_nodeIndex++] as CompileElement,
+      view.component,
+    );
     var compileElement = element.compileElement!;
 
     bindRenderInputs(element.inputs, compileElement);
@@ -104,7 +108,10 @@ class _ViewBinderVisitor implements TemplateAstVisitor<void, void> {
       bindDirectiveDetectChangesLifecycleCallbacks(directive, compileElement);
       bindDirectiveHostProps(directive, compileElement);
       bindDirectiveOutputs(
-          directive.outputs, directive.providerSource!, compileElement);
+        directive.outputs,
+        directive.providerSource!,
+        compileElement,
+      );
     }
     templateVisitAll(this, element.parsedTemplate, null);
     // afterContent and afterView lifecycles need to be called bottom up
@@ -117,13 +124,19 @@ class _ViewBinderVisitor implements TemplateAstVisitor<void, void> {
   @override
   void visitEmbeddedTemplate(EmbeddedTemplateAst ast, _) {
     var element = convertEmbeddedTemplate(
-        ast, view.nodes[_nodeIndex++] as CompileElement, view.component);
+      ast,
+      view.nodes[_nodeIndex++] as CompileElement,
+      view.component,
+    );
     var compileElement = element.compileElement!;
     for (var directive in element.matchedDirectives) {
       bindDirectiveInputs(directive.inputs, directive, compileElement);
       bindDirectiveDetectChangesLifecycleCallbacks(directive, compileElement);
       bindDirectiveOutputs(
-          directive.outputs, directive.providerSource!, compileElement);
+        directive.outputs,
+        directive.providerSource!,
+        compileElement,
+      );
       bindDirectiveAfterChildrenCallbacks(directive, compileElement);
     }
     var embeddedView = element.children.first as ir.EmbeddedView;
@@ -171,7 +184,9 @@ class _ViewBinderVisitor implements TemplateAstVisitor<void, void> {
 }
 
 void _bindViewHostProperties(
-    CompileView view, ElementSchemaRegistry schemaRegistry) {
+  CompileView view,
+  ElementSchemaRegistry schemaRegistry,
+) {
   if (view.viewIndex != 0 || view.viewType != ViewType.component) return;
   var hostProps = view.component.hostProperties;
   var hostProperties = <BoundElementPropertyAst>[];
@@ -179,13 +194,15 @@ void _bindViewHostProperties(
   var span = SourceSpan(SourceLocation(0), SourceLocation(0), '');
   hostProps.forEach((String propName, ast.AST expression) {
     var elementName = view.component.selector!;
-    hostProperties.add(createElementPropertyAst(
-      elementName,
-      propName,
-      BoundExpression(ast.ASTWithSource.missingSource(expression)),
-      span,
-      schemaRegistry,
-    ));
+    hostProperties.add(
+      createElementPropertyAst(
+        elementName,
+        propName,
+        BoundExpression(ast.ASTWithSource.missingSource(expression)),
+        span,
+        schemaRegistry,
+      ),
+    );
   });
 
   final method = CompileMethod();

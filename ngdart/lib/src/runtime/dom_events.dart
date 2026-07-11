@@ -1,8 +1,7 @@
+import 'package:web/web.dart';
 import 'dart:js_interop';
 
-import 'package:ngdart/src/core/zone/ng_zone.dart';
-import 'package:ngdart/src/utilities.dart';
-import 'package:web/web.dart';
+import '../core/zone/ng_zone.dart';
 
 /// Provides a runtime implementation for "native" DOM events on elements.
 class EventManager {
@@ -20,14 +19,22 @@ class EventManager {
   void addEventListener(
     Element element,
     String name,
-    void Function(Event) callback,
+    // void Function(Object) callback,
+    JSFunction callback,
   ) {
     if (_keyEvents.supports(name)) {
       // Run the actual DOM event (i.e. "keydown" or "keyup") outside of the
       // NgZone, so we can ignore change detection until the correct key(s) are
       // actually hit, then re-enter the zone.
       zone.runOutsideAngular(() {
-        _keyEvents.addEventListener(element, name, callback);
+        //_keyEvents.addEventListener(element, name, callback);
+        _keyEvents.addEventListener(
+          element,
+          name,
+          ((Event event) {
+            callback.callAsFunction(null, event);
+          }).toJS,
+        );
       });
       return;
     }
@@ -35,7 +42,12 @@ class EventManager {
     // If the view compiler knows that a given event is a DOM event (i.e.
     // "click"), it will never be called into EventManager. But of course the
     // browser APIs change, so this is the final fallback.
-    element.addEventListener(name, callback.toJS);
+    element.addEventListener(
+      name,
+      ((Event event) {
+        callback.callAsFunction(null, event);
+      }).toJS,
+    );
   }
 }
 
@@ -77,7 +89,8 @@ class _KeyEventsHandler {
   void addEventListener(
     Element element,
     String name,
-    void Function(Event) callback,
+    //void Function(Object) callback,
+    JSFunction callback,
   ) {
     assert(_supports(name), 'Should never be called before "supports".');
     final parsed = _cache[name];
@@ -88,12 +101,16 @@ class _KeyEventsHandler {
     }
 
     element.addEventListener(
-        parsed.domEventName,
-        (Event event) {
-          if (event.isA<KeyboardEvent>() && parsed.matches(unsafeCast(event))) {
-            callback(event);
-          }
-        }.toJS);
+      parsed.domEventName,
+      (Event event) {
+        // TODO: Migrate to 3.6 (Need review)
+        //if (event is KeyboardEvent && parsed.matches(event)) {
+        if (event.isA<KeyboardEvent>() &&
+            parsed.matches(event as KeyboardEvent)) {
+          callback.callAsFunction(null, event);
+        }
+      }.toJS,
+    );
   }
 
   static _ParsedEvent? _parse(String name) {
@@ -239,7 +256,7 @@ const _keyCodeNames = {
   122: 'f11',
   123: 'f12',
   144: 'numlock',
-  145: 'scrolllock'
+  145: 'scrolllock',
 };
 
 /// Determines whether a given modifier key name is currently active.
@@ -247,5 +264,5 @@ final _modifiers = <String, bool Function(KeyboardEvent)>{
   'alt': (event) => event.altKey,
   'control': (event) => event.ctrlKey,
   'meta': (event) => event.metaKey,
-  'shift': (event) => event.shiftKey
+  'shift': (event) => event.shiftKey,
 };

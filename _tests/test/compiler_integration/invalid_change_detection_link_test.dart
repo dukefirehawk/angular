@@ -1,6 +1,7 @@
-import 'package:_tests/compiler.dart';
-import 'package:ngcompiler/v2/context.dart';
 import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
+import '../../lib/compiler.dart';
+import 'package:ngcompiler/v2/context.dart';
 
 const ngExperimentalImport = 'package:$ngPackage/experimental.dart';
 
@@ -24,7 +25,8 @@ void main() {
     });
 
     test("shouldn't compile on CheckAlways component", () async {
-      await compilesExpecting("""
+      await compilesExpecting(
+        """
         import '$ngImport';
         import '$ngExperimentalImport';
 
@@ -34,30 +36,37 @@ void main() {
           template: '',
         )
         class CheckAlwaysComponent {}
-      """, errors: [
-        allOf(
-          contains('Only supported on components that use '
-              '"ChangeDetectionStrategy.onPush" change detection'),
-          containsSourceLocation(4, 9),
-        ),
-      ]);
+      """,
+        errors: [
+          allOf([
+            contains(
+              'Only supported on components that use "OnPush" change detection',
+            ),
+            containsSourceLocation(4, 9),
+          ]),
+        ],
+      );
     });
 
     test("shouldn't compile on directive", () async {
-      await compilesExpecting("""
+      await compilesExpecting(
+        """
         import '$ngImport';
         import '$ngExperimentalImport';
 
         @changeDetectionLink
         @Directive(selector: '[test]')
         class TestDirective {}
-      """, errors: [
-        allOf(
-          contains('Only supported on components that use '
-              '"ChangeDetectionStrategy.onPush" change detection'),
-          containsSourceLocation(4, 9),
-        ),
-      ]);
+      """,
+        errors: [
+          allOf([
+            contains(
+              'Only supported on components that use "OnPush" change detection',
+            ),
+            containsSourceLocation(4, 9),
+          ]),
+        ],
+      );
     });
   });
 }

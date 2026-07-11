@@ -16,7 +16,7 @@ import 'shared.dart' show setUpControl, setUpControlGroup;
   selector: '[memorizedForm]',
   providers: [
     Provider(ControlContainer, useExisting: MemorizedForm),
-    Provider(NgForm, useExisting: MemorizedForm)
+    Provider(NgForm, useExisting: MemorizedForm),
   ],
   exportAs: 'ngForm',
 )
@@ -41,7 +41,7 @@ class MemorizedForm extends NgForm {
     scheduleMicrotask(() {
       setUpControl(ctrl as Control, dir);
       ctrl.updateValueAndValidity(emitEvent: false);
-      changeDetectorRef.markForCheck();
+      changeDetectorRef?.markForCheck();
     });
   }
 
@@ -60,7 +60,7 @@ class MemorizedForm extends NgForm {
     scheduleMicrotask(() {
       setUpControlGroup(group as AbstractControlGroup, dir);
       group.updateValueAndValidity(emitEvent: false);
-      changeDetectorRef.markForCheck();
+      changeDetectorRef?.markForCheck();
     });
   }
 

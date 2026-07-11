@@ -1,6 +1,7 @@
-import 'package:_tests/compiler.dart';
-import 'package:ngcompiler/v2/context.dart';
 import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
+import '../../lib/compiler.dart';
+import 'package:ngcompiler/v2/context.dart';
 
 void main() {
   CompileContext.overrideForTesting();
@@ -20,12 +21,13 @@ void main() {
       class BadComponent {}
     ''',
       errors: [
-        allOf(
+        allOf([
           contains(
-              'Compiling @Component-annotated class "BadComponent" failed'),
+            'Compiling @Component-annotated class "BadComponent" failed',
+          ),
           contains('BadExport'),
           containsSourceLocation(8, 25),
-        ),
+        ]),
       ],
     );
   });
@@ -43,18 +45,20 @@ void main() {
       class BadComponent {}
     ''',
       errors: [
-        allOf(
+        allOf([
           contains('Item 1 in the "exports" field must be an identifier'),
           containsSourceLocation(3, 7),
-        ),
+        ]),
       ],
     );
   });
 
   test(
-      'should fail build if exports field having a class prefix, it only allows'
-      'library prefix instead', () async {
-    await compilesExpecting('''
+    'should fail build if exports field having a class prefix, it only allows'
+    'library prefix instead',
+    () async {
+      await compilesExpecting(
+        '''
       import '$ngImport';
 
       class Foo {
@@ -67,13 +71,18 @@ void main() {
         exports: const [Foo.bar],
       )
       class BadComponent {}
-    ''', errors: [
-      allOf(
-        contains('must be either a simple identifier or an identifier'),
-        contains('with a library prefix'),
-        contains('Foo.bar'),
-        containsSourceLocation(7, 7),
-      ),
-    ]);
-  });
+    ''',
+        errors: [
+          allOf([
+            contains(
+              'must be either a simple identifier or an identifier with a '
+              'library prefix',
+            ),
+            contains('Foo.bar'),
+            containsSourceLocation(7, 7),
+          ]),
+        ],
+      );
+    },
+  );
 }

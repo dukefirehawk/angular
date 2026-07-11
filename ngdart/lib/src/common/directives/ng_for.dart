@@ -1,8 +1,9 @@
-import 'package:ngdart/src/meta.dart';
-import 'package:ngdart/src/utilities.dart';
-
 import '../../core/change_detection/differs/default_iterable_differ.dart';
 import '../../core/linker.dart';
+import '../../meta/directives.dart';
+import '../../meta/lifecycle_hooks.dart';
+import '../../meta/di_arguments.dart';
+import '../../utilities/unsafe_cast.dart';
 
 /// The `NgFor` directive instantiates a template once per item from an
 /// iterable. The context for each instantiated template inherits from the outer
@@ -82,18 +83,16 @@ import '../../core/linker.dart';
 /// page.
 ///
 /// [guide]: https://webdev.dartlang.org/angular/guide/template-syntax.html#ngFor
-@Directive(
-  selector: '[ngFor][ngForOf]',
-)
+@Directive(selector: '[ngFor][ngForOf]')
 class NgFor implements DoCheck {
-  final ViewContainerRef _viewContainer;
+  final ViewContainerRef? _viewContainer;
+  TemplateRef? _templateRef;
 
   DefaultIterableDiffer? _differ;
   Iterable<Object?>? _ngForOf;
   TrackByFn? _ngForTrackBy;
-  TemplateRef _templateRef;
 
-  NgFor(this._viewContainer, this._templateRef);
+  NgFor(@Optional() this._viewContainer, @Optional() this._templateRef);
 
   @Input()
   set ngForOf(Iterable<Object?>? value) {
@@ -146,17 +145,21 @@ class NgFor implements DoCheck {
       int? currentIndex,
     ) {
       if (item.previousIndex == null) {
-        var view = _viewContainer.insertEmbeddedView(
-          _templateRef,
-          currentIndex!,
-        );
-        var tuple = _RecordViewTuple(item, view);
-        insertTuples.add(tuple);
+        if (_templateRef != null) {
+          var view = _viewContainer?.insertEmbeddedView(
+            _templateRef!,
+            currentIndex!,
+          );
+          if (view != null) {
+            var tuple = _RecordViewTuple(item, view);
+            insertTuples.add(tuple);
+          }
+        }
       } else if (currentIndex == null) {
-        _viewContainer.remove(adjustedPreviousIndex!);
+        _viewContainer?.remove(adjustedPreviousIndex!);
       } else {
         var view = _getEmbeddedViewRef(adjustedPreviousIndex!);
-        _viewContainer.move(view, currentIndex);
+        _viewContainer?.move(view, currentIndex);
         var tuple = _RecordViewTuple(item, view);
         insertTuples.add(tuple);
       }
@@ -165,7 +168,7 @@ class NgFor implements DoCheck {
     for (var i = 0; i < insertTuples.length; i++) {
       _perViewChange(insertTuples[i].view, insertTuples[i].record);
     }
-    for (var i = 0, len = _viewContainer.length; i < len; i++) {
+    for (var i = 0, len = _viewContainer?.length ?? 0; i < len; i++) {
       var viewRef = _getEmbeddedViewRef(i);
       viewRef.setLocal('first', identical(i, 0));
       viewRef.setLocal('last', identical(i, len - 1));
@@ -187,7 +190,7 @@ class NgFor implements DoCheck {
   /// container, and it only inserts [EmbeddedViewRef] instances, so its safe to
   /// assume that the returned [ViewRef]s are all [EmbeddedViewRef]s.
   EmbeddedViewRef _getEmbeddedViewRef(int index) =>
-      unsafeCast(_viewContainer.get(index));
+      unsafeCast(_viewContainer?.get(index));
 
   void _perViewChange(EmbeddedViewRef view, CollectionChangeRecord record) {
     view.setLocal('\$implicit', record.item);

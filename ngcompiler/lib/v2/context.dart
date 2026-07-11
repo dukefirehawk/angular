@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:build/build.dart';
 import 'package:meta/meta.dart';
+import 'package:source_gen/source_gen.dart';
+import 'package:ngdart/src/utilities.dart';
 import 'package:ngcompiler/v1/src/angular_compiler/cli/messages.dart';
 import 'package:ngcompiler/v2/asset.dart';
-import 'package:ngdart/src/utilities.dart';
-import 'package:source_gen/source_gen.dart';
 
 import 'src/context/build_error.dart';
 
@@ -31,10 +31,7 @@ final _compileContextKey = Object();
 ///
 /// **NOTE**: Unless you are specifically testing [runWithContext], tests should
 /// use [CompileContext.overrideForTesting] instead to set the current context.
-Future<T> runWithContext<T>(
-  CompileContext instance,
-  Future<T> Function() run,
-) {
+Future<T> runWithContext<T>(CompileContext instance, Future<T> Function() run) {
   ArgumentError.checkNotNull(instance, 'instance');
   // A call to runZoned with "onError" becomes a special kind of zone called an
   // "Error Zone", which no longer guarantees completion (that is, the function
@@ -50,36 +47,41 @@ Future<T> runWithContext<T>(
         final eCasted = e;
         final convert = BuildError.forSourceSpan(
           spanForElement(eCasted.annotatedElement),
-          'Could not resolve "${eCasted.annotationSource!.text}":\n'
+          'Could not resolve "${eCasted.annotationSource?.text ?? 'Null'}":\n'
           '${messages.analysisFailureReasons}',
         );
         e = convert;
       }
       if (e is BuildError) {
+        var errorMsg = 'An error occurred compiling ${instance.path}:\n$e';
         log.severe(
-          'An error occurred compiling ${instance.path}:\n$e',
+          errorMsg,
           // TODO(b/170758093): Add conditional stack traces, perhaps behind a
           // --define flag for developers of the compiler to get information on
           // the exact location of a failure.
         );
+
+        if (!buildCompletedOrFailed.isCompleted) {
+          buildCompletedOrFailed.completeError(e, s);
+        }
       } else {
+        var errorMsg = 'Unhandled exception in the AngularDart compiler!';
         log.severe(
-          'Unhandled exception in the AngularDart compiler!\n\n'
+          '$errorMsg\n\n'
           'Please report a bug: ${messages.urlFileBugs}',
           e.toString(),
           s,
         );
-      }
-      if (!buildCompletedOrFailed.isCompleted) {
-        buildCompletedOrFailed.complete();
+
+        if (!buildCompletedOrFailed.isCompleted) {
+          buildCompletedOrFailed.completeError(e, s);
+        }
       }
     },
     zoneSpecification: ZoneSpecification(
-      print: (_, __, ___, line) => log.info(line),
+      print: (_, _, _, line) => log.info(line),
     ),
-    zoneValues: {
-      _compileContextKey: instance,
-    },
+    zoneValues: {_compileContextKey: instance},
   )?.then((result) {
     if (!buildCompletedOrFailed.isCompleted) {
       buildCompletedOrFailed.complete(result);
@@ -101,7 +103,8 @@ Future<T> runWithContext<T>(
 ///
 /// When the compiler or components of the compiler are running in a _test_ it
 /// is required to statically initialize one by using [overrideForTesting].
-abstract final class CompileContext {
+@sealed
+abstract class CompileContext {
   /// Overrides [CompileContext.current] to return [context].
   ///
   /// This can be done once during `main()` or `setUpAll(() => ...)`:
@@ -127,6 +130,7 @@ abstract final class CompileContext {
   static void overrideForTesting([
     CompileContext context = const _TestCompileContext(),
   ]) {
+    ArgumentError.checkNotNull(context, 'context');
     _overrideForTesting = context;
   }
 
@@ -163,14 +167,16 @@ abstract final class CompileContext {
   static void _failNoCompileContextConfigured() {
     var errorMessage = 'No CompileContext configured.';
     if (isDevMode) {
-      errorMessage = ''
+      errorMessage =
+          ''
           '$errorMessage\n'
           'During tests that invoke parts of the compiler it is required to '
           'use CompileContext.overrideForTesting to initialize a default '
           'context. This can be done once in `main()`, in `setUpAll()`, or '
           'piece-meal per test if special behavior is desired.';
     } else {
-      errorMessage = ''
+      errorMessage =
+          ''
           '$errorMessage\n'
           'This should not happen, and might be the result of using part of '
           'the compiler outside of the normal build process.';
@@ -184,9 +190,11 @@ abstract final class CompileContext {
     required Map<String, Set<String>> policyExceptions,
     required Map<String, Set<String>> policyExceptionsInPackages,
     required bool enableDevTools,
+    required bool isNullSafe,
   }) {
     return _LibraryCompileContext(
       enableDevTools: enableDevTools,
+      isNullSafe: isNullSafe,
       path: libraryPath.toRelativeUrl(),
       policyExceptionsPerFiles: policyExceptions,
       policyExceptionsPerPackages: policyExceptionsInPackages,
@@ -206,6 +214,7 @@ abstract final class CompileContext {
   /// **NOTE**: [reportAndRecover] simply uses `throw` in this configuration.
   @visibleForTesting
   const factory CompileContext.forTesting({
+    bool emitNullSafeCode,
     bool isDevToolsEnabled,
     bool validateMissingDirectives,
   }) = _TestCompileContext;
@@ -236,6 +245,13 @@ abstract final class CompileContext {
   /// The buffer of previous errors is cleared as a result.
   void throwRecoverableErrors();
 
+  /// Whether to emit code that supports https://dart.dev/null-safety.
+  ///
+  /// This is based on a combination of:
+  /// 1. The library and/or package being opted-in to null safety.
+  /// 2. The library being added to the appropriate allow-list.
+  bool get emitNullSafeCode;
+
   /// Whether to emit code that supports developer tooling.
   ///
   /// There are two ways to enable this flag:
@@ -249,7 +265,7 @@ abstract final class CompileContext {
   bool get validateMissingDirectives;
 }
 
-final class _LibraryCompileContext implements CompileContext {
+class _LibraryCompileContext implements CompileContext {
   /// See `CompilerFlags.policyExceptions`.
   final Map<String, Set<String>> policyExceptionsPerFiles;
 
@@ -262,11 +278,15 @@ final class _LibraryCompileContext implements CompileContext {
   /// Whether `--define=ENABLE_DEVTOOLS=true` was passed during compilation.
   final bool enableDevTools;
 
+  /// Whether the library being compiled is opted-in to null-safety.
+  final bool isNullSafe;
+
   _LibraryCompileContext({
     required this.path,
     required this.policyExceptionsPerFiles,
     required this.policyExceptionsPerPackages,
     required this.enableDevTools,
+    required this.isNullSafe,
   });
 
   final _recoverableErrors = <BuildError>[];
@@ -327,6 +347,9 @@ final class _LibraryCompileContext implements CompileContext {
   }
 
   @override
+  bool get emitNullSafeCode => isNullSafe;
+
+  @override
   bool get isDevToolsEnabled {
     return enableDevTools || hasPolicyException('FORCE_DEVTOOLS_ENABLED');
   }
@@ -337,7 +360,10 @@ final class _LibraryCompileContext implements CompileContext {
   }
 }
 
-final class _TestCompileContext implements CompileContext {
+class _TestCompileContext implements CompileContext {
+  @override
+  final bool emitNullSafeCode;
+
   @override
   final bool isDevToolsEnabled;
 
@@ -345,6 +371,7 @@ final class _TestCompileContext implements CompileContext {
   final bool validateMissingDirectives;
 
   const _TestCompileContext({
+    this.emitNullSafeCode = true,
     this.isDevToolsEnabled = false,
     this.validateMissingDirectives = true,
   });

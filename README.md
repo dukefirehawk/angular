@@ -1,4 +1,4 @@
-## AngularDart packages maintained by AngularDart Community
+# AngularDart packages maintained by AngularDart Community
 
 ## Packages
 
@@ -60,4 +60,3 @@ Included for completeness._
 [ngcompiler]: https://github.com/angulardart-community/angular/tree/master/ngcompiler
 [ngdart_cli]: https://github.com/angulardart-community/ngdart_cli
 [ngcomponents]: https://github.com/angulardart-community/angular_components
-

@@ -1,8 +1,8 @@
 @TestOn('browser')
 library;
 
-import 'package:ngdart/src/security/style_sanitizer.dart';
 import 'package:test/test.dart';
+import 'package:ngdart/src/security/style_sanitizer.dart';
 
 void main() {
   group('Style sanitizer', () {

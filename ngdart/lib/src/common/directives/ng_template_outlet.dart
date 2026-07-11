@@ -1,5 +1,6 @@
-import 'package:ngdart/src/core/linker.dart';
-import 'package:ngdart/src/meta.dart';
+import 'package:ngdart/di.dart';
+
+import '../../core/linker.dart';
 
 /// Inserts an embedded view, created from a [TemplateRef].
 ///
@@ -40,16 +41,14 @@ import 'package:ngdart/src/meta.dart';
 ///   };
 /// }
 /// ```
-@Directive(
-  selector: '[ngTemplateOutlet]',
-)
+@Directive(selector: '[ngTemplateOutlet]')
 class NgTemplateOutlet implements DoCheck {
-  final ViewContainerRef _viewContainerRef;
+  final ViewContainerRef? _viewContainerRef;
 
-  Map<String, Object?>? _context;
+  Map<String, Object?> _context = {};
   EmbeddedViewRef? _insertedViewRef;
 
-  NgTemplateOutlet(this._viewContainerRef);
+  NgTemplateOutlet(@Optional() this._viewContainerRef);
 
   /// The [TemplateRef] used to create the embedded view.
   ///
@@ -59,10 +58,10 @@ class NgTemplateOutlet implements DoCheck {
   set ngTemplateOutlet(TemplateRef? templateRef) {
     final insertedViewRef = _insertedViewRef;
     if (insertedViewRef != null) {
-      _viewContainerRef.remove(_viewContainerRef.indexOf(insertedViewRef));
+      _viewContainerRef?.remove(_viewContainerRef.indexOf(insertedViewRef));
     }
     if (templateRef != null) {
-      _insertedViewRef = _viewContainerRef.createEmbeddedView(templateRef);
+      _insertedViewRef = _viewContainerRef?.createEmbeddedView(templateRef);
     } else {
       _insertedViewRef = null;
     }
@@ -96,6 +95,6 @@ class NgTemplateOutlet implements DoCheck {
     // simplify the design. It's unlikely this is worse than conditionally
     // setting them based on whether they actually changed, since their values
     // are change detected again wherever they're bound.
-    _context?.forEach(insertedViewRef.setLocal);
+    _context.forEach(insertedViewRef.setLocal);
   }
 }

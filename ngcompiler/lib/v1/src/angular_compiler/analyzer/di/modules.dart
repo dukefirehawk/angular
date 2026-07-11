@@ -13,8 +13,7 @@ import 'providers.dart';
 class ModuleReader {
   final ProviderReader _providerReader;
 
-  const ModuleReader({ProviderReader providerReader = const ProviderReader()})
-      : _providerReader = providerReader;
+  const ModuleReader({this._providerReader = const ProviderReader()});
 
   /// Returns whether an object represents a constant [List].
   @protected
@@ -104,8 +103,10 @@ class ModuleReader {
 
   ModuleElement _parseList(DartObject o) {
     final items = o.toListValue()!;
-    final include =
-        items.where((item) => isModule(item)).map(parseModule).toList();
+    final include = items
+        .where((item) => isModule(item))
+        .map(parseModule)
+        .toList();
     final provide = items
         .where((item) => !isModule(item))
         .map(_providerReader.parseProvider)
@@ -118,19 +119,22 @@ class ModuleReader {
     final reader = ConstantReader(o);
     final includeReader = reader.read('include');
     if (!includeReader.isList) {
-      var typeStr =
-          reader.objectValue.type!.getDisplayString(withNullability: false);
+      var typeStr = reader.objectValue.type!.getDisplayString(
+        withNullability: false,
+      );
       throw FormatException("Expected list for 'include' field of $typeStr");
     }
     final include = includeReader.listValue.map(parseModule).toList();
     final provideReader = reader.read('provide');
     if (!provideReader.isList) {
-      var typeStr =
-          reader.objectValue.type!.getDisplayString(withNullability: false);
+      var typeStr = reader.objectValue.type!.getDisplayString(
+        withNullability: false,
+      );
       throw FormatException("Expected list for 'provide' field of $typeStr.");
     }
-    final provide =
-        provideReader.listValue.map(_providerReader.parseProvider).toList();
+    final provide = provideReader.listValue
+        .map(_providerReader.parseProvider)
+        .toList();
     return ModuleElement(provide: provide, include: include);
   }
 }
@@ -171,8 +175,6 @@ class ModuleElement {
       iterableEquality.hash(provide) ^ iterableEquality.hash(include);
 
   @override
-  String toString() => 'ModuleElement ${{
-        'provide': '$provide',
-        'include': '$include',
-      }}';
+  String toString() =>
+      'ModuleElement ${{'provide': '$provide', 'include': '$include'}}';
 }

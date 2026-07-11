@@ -1,4 +1,4 @@
-import 'package:ngdart/src/meta.dart';
+import '../../meta/directives.dart';
 
 /// Transforms text to lowercase.
 @Pipe('lowercase')

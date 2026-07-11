@@ -1,7 +1,8 @@
+import 'package:web/web.dart';
+
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'detect_host_changes_test.template.dart' as ng;
 
@@ -57,5 +58,5 @@ class SomeDirective {
   void handleClick(Event e) {}
 
   @HostListener('keypress')
-  void handleKeyPress(KeyboardEvent e) {}
+  void handleKeyPress(Event e) {}
 }

@@ -89,9 +89,7 @@ class AnalyzerExpressionParser extends ExpressionParser {
       throwIfDiagnostics: false,
       featureSet: FeatureSet.fromEnableFlags2(
         sdkLanguageVersion: ExperimentStatus.currentVersion,
-        flags: const [
-          'non-nullable',
-        ],
+        flags: const ['non-nullable'],
       ),
     );
     if (result.errors.isNotEmpty) {
@@ -129,11 +127,13 @@ class AnalyzerExpressionParser extends ExpressionParser {
     List<CompileIdentifierMetadata>? exports,
   }) {
     try {
-      return ast.accept(_AngularSubsetVisitor(
-        allowAssignments: allowAssignments,
-        allowPipes: allowPipes,
-        exports: exports,
-      ))!;
+      return ast.accept(
+        _AngularSubsetVisitor(
+          allowAssignments: allowAssignments,
+          allowPipes: allowPipes,
+          exports: exports,
+        ),
+      )!;
     } on _SubsetException catch (e) {
       throw ParseException(e.reason, input, location, e.astNode.toSource());
     }
@@ -191,7 +191,7 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
   ) {
     return {
       for (final export in exports)
-        if (export.prefix == null) export.name: export
+        if (export.prefix == null) export.name: export,
     };
   }
 
@@ -213,10 +213,10 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
     bool? allowAssignments,
     bool? allowPipes,
     List<CompileIdentifierMetadata>? exports,
-  })  : allowAssignments = allowAssignments ?? false,
-        allowPipes = allowPipes ?? true,
-        unprefixedExports = _indexUnprefixed(exports ?? const []),
-        prefixedExports = _indexPrefixed(exports ?? const []);
+  }) : allowAssignments = allowAssignments ?? false,
+       allowPipes = allowPipes ?? true,
+       unprefixedExports = _indexUnprefixed(exports ?? const []),
+       prefixedExports = _indexPrefixed(exports ?? const []);
 
   /// Returns [ast.AST] if a name or prefix is registered and matches a symbol.
   ast.AST? _matchExport(
@@ -314,11 +314,7 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
     } else {
       final method = astNode.function.accept(this);
       if (method is ast.StaticRead) {
-        return _createFunctionCall(
-          astNode,
-          receiver: method,
-          methodName: null,
-        );
+        return _createFunctionCall(astNode, receiver: method, methodName: null);
       } else {
         return _createFunctionCall(
           astNode,
@@ -332,14 +328,11 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
   ast.BindingPipe _createPipeOrThrow(
     MethodInvocation astNode,
     ast.PropertyRead receiver,
-    List<Expression> posArgs,
-    List<NamedExpression> namedArgs,
+    List<Argument> posArgs,
+    List<NamedArgument> namedArgs,
   ) {
     if (!allowPipes) {
-      return _notSupported(
-        'Pipes are not allowed in this context',
-        astNode,
-      );
+      return _notSupported('Pipes are not allowed in this context', astNode);
     }
     if (namedArgs.isNotEmpty) {
       return _notSupported(
@@ -356,16 +349,16 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
     return _createPipeUsage(astNode.methodName.name, posArgs);
   }
 
-  ast.BindingPipe _createPipeUsage(String name, List<Expression> posArgs) {
+  ast.BindingPipe _createPipeUsage(String name, List<Argument> posArgs) {
     return ast.BindingPipe(
       posArgs.first.accept(this)!,
       name,
       posArgs.length > 1
           ? posArgs
-              .skip(1)
-              .map((e) => e.accept(this))
-              .whereType<ast.AST>()
-              .toList()
+                .skip(1)
+                .map((e) => e.accept(this))
+                .whereType<ast.AST>()
+                .toList()
           : const [],
     );
   }
@@ -385,10 +378,10 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
       return _notSupported('Generic type arguments not supported.', call);
     }
     final allArgs = call.argumentList.arguments;
-    final posArgs = <Expression>[];
-    final namedArgs = <NamedExpression>[];
+    final posArgs = <Argument>[];
+    final namedArgs = <NamedArgument>[];
     for (final arg in allArgs) {
-      if (arg is NamedExpression) {
+      if (arg is NamedArgument) {
         namedArgs.add(arg);
       } else {
         posArgs.add(arg);
@@ -402,33 +395,26 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
         namedArgs,
       );
     }
-    final callPos =
-        posArgs.map((a) => a.accept(this)).whereType<ast.AST>().toList();
+    final callPos = posArgs
+        .map((a) => a.accept(this))
+        .whereType<ast.AST>()
+        .toList();
     final callNamed = namedArgs
-        .map((a) => ast.NamedExpr(a.name.label.name, a.expression.accept(this)))
+        .map(
+          (a) => ast.NamedExpr(
+            a.name.stringValue!,
+            a.argumentExpression.accept(this),
+          ),
+        )
         .toList();
     if (methodName != null) {
       if (_isNullAwareCall(call)) {
-        return ast.SafeMethodCall(
-          receiver,
-          methodName,
-          callPos,
-          callNamed,
-        );
+        return ast.SafeMethodCall(receiver, methodName, callPos, callNamed);
       } else {
-        return ast.MethodCall(
-          receiver,
-          methodName,
-          callPos,
-          callNamed,
-        );
+        return ast.MethodCall(receiver, methodName, callPos, callNamed);
       }
     } else {
-      return ast.FunctionCall(
-        receiver,
-        callPos,
-        callNamed,
-      );
+      return ast.FunctionCall(receiver, callPos, callNamed);
     }
   }
 
@@ -582,11 +568,7 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
     }
 
     final expression = rightHandSide.accept(this)!;
-    return ast.PropertyWrite(
-      receiver,
-      property,
-      expression,
-    );
+    return ast.PropertyWrite(receiver, property, expression);
   }
 
   @override
@@ -622,10 +604,7 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
       case TokenType.BANG:
         return ast.PostfixNotNull(expression);
       default:
-        return _notSupported(
-          'Only ! is a supported postfix operator',
-          astNode,
-        );
+        return _notSupported('Only ! is a supported postfix operator', astNode);
     }
   }
 

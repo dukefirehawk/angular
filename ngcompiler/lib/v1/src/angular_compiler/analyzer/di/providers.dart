@@ -1,8 +1,8 @@
 import 'package:analyzer/dart/constant/value.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
-import 'package:meta/meta.dart';
 import 'package:ngcompiler/v2/context.dart';
+import 'package:meta/meta.dart';
 import 'package:source_gen/source_gen.dart';
 
 import '../common.dart';
@@ -16,11 +16,10 @@ class ProviderReader {
   final DependencyReader _dependencyReader;
   final TokenReader _tokenReader;
 
-  const ProviderReader(
-      {DependencyReader dependencyReader = const DependencyReader(),
-      TokenReader tokenReader = const TokenReader()})
-      : _dependencyReader = dependencyReader,
-        _tokenReader = tokenReader;
+  const ProviderReader({
+    this._dependencyReader = const DependencyReader(),
+    this._tokenReader = const TokenReader(),
+  });
 
   /// Returns whether an object represents a `Provider`.
   @protected
@@ -166,7 +165,9 @@ class ProviderReader {
       urlOf(factoryElement),
       dependencies: manualDeps.isList
           ? _dependencyReader.parseDependenciesList(
-              factoryElement, manualDeps.listValue)
+              factoryElement,
+              manualDeps.listValue,
+            )
           : _dependencyReader.parseDependencies(factoryElement),
     );
   }
@@ -208,10 +209,7 @@ abstract class ProviderElement {
   /// The `T` type of `Provider<T>`.
   final TypeLink? providerType;
 
-  const ProviderElement._(
-    this.token,
-    this.providerType,
-  );
+  const ProviderElement._(this.token, this.providerType);
 
   @override
   bool operator ==(Object other) =>
@@ -256,11 +254,8 @@ class UseClassProviderElement extends ProviderElement {
       useClass.hashCode ^ dependencies.hashCode ^ super.hashCode;
 
   @override
-  String toString() => 'UseClassProviderElement ${{
-        'token': '$token',
-        'useClass': '$useClass',
-        'dependencies': '$dependencies',
-      }}';
+  String toString() =>
+      'UseClassProviderElement ${{'token': '$token', 'useClass': '$useClass', 'dependencies': '$dependencies'}}';
 }
 
 /// A statically parsed `Provider` that redirects one token to another.
@@ -283,10 +278,8 @@ class UseExistingProviderElement extends ProviderElement {
   int get hashCode => redirect.hashCode ^ super.hashCode;
 
   @override
-  String toString() => 'UseFactoryProviderElement ${{
-        'token': '$token',
-        'redirect': '$redirect',
-      }}';
+  String toString() =>
+      'UseFactoryProviderElement ${{'token': '$token', 'redirect': '$redirect'}}';
 }
 
 /// A statically parsed `Provider` that describes a function invocation.
@@ -317,11 +310,8 @@ class UseFactoryProviderElement extends ProviderElement {
       useFactory.hashCode ^ dependencies.hashCode ^ super.hashCode;
 
   @override
-  String toString() => 'UseFactoryProviderElement ${{
-        'token': '$token',
-        'useClass': '$useFactory',
-        'dependencies': '$dependencies',
-      }}';
+  String toString() =>
+      'UseFactoryProviderElement ${{'token': '$token', 'useClass': '$useFactory', 'dependencies': '$dependencies'}}';
 }
 
 /// A statically parsed `Provider` that describes a constant expression.

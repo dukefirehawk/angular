@@ -33,12 +33,13 @@ DartType? inferProviderType(DartObject provider, DartObject token) {
         // When we start using angular_compiler to resolve all of the time
         // remove this message, since we already validate there.
         throw BuildError.forElement(
-            tokenType.element!,
-            'A sub-type of OpaqueToken must directly extend OpaqueToken or '
-            'MultiToken, and cannot extend another class that in turn extends '
-            'OpaqueToken or MultiToken.\n\n'
-            'We may loosten these restrictions in the future. See: '
-            'https://github.com/angulardart/angular/issues/899');
+          tokenType.element!,
+          'A sub-type of OpaqueToken must directly extend OpaqueToken or '
+          'MultiToken, and cannot extend another class that in turn extends '
+          'OpaqueToken or MultiToken.\n\n'
+          'We may loosten these restrictions in the future. See: '
+          'https://github.com/angulardart/angular/issues/899',
+        );
       }
       return supertype.typeArguments.first;
     }
@@ -50,7 +51,7 @@ DartType? inferProviderType(DartObject provider, DartObject token) {
     if (providerOfTArgs.isNotEmpty) {
       final genericType = providerOfTArgs.first;
       // If type inference fails it might resolve to dynamic or Object.
-      if (!genericType.isDynamic && !genericType.isDartCoreObject) {
+      if (genericType is! DynamicType && !genericType.isDartCoreObject) {
         return genericType;
       }
     }
@@ -63,7 +64,7 @@ DartType? inferProviderType(DartObject provider, DartObject token) {
       !$Provider.isExactlyType(provider.type!) &&
       tokenType.typeArguments.isNotEmpty) {
     final opaqueTokenOfT = tokenType.typeArguments.first;
-    if (!opaqueTokenOfT.isDynamic) {
+    if (opaqueTokenOfT is! DynamicType) {
       return opaqueTokenOfT;
     }
   }

@@ -5,7 +5,7 @@ import '../ast.dart';
 import '../token/tokens.dart';
 import '../visitor.dart';
 
-const _listEquals = ListEquality();
+const _listEquals = ListEquality<dynamic>();
 
 /// Represents a static attribute assignment (i.e. not bound to an expression).
 ///
@@ -100,10 +100,10 @@ class ParsedAttributeAst extends TemplateAst
     this.equalSignToken,
     this.mustaches,
   ]) : super.parsed(
-          nameToken,
-          valueToken == null ? nameToken : valueToken.rightQuote,
-          sourceFile,
-        );
+         nameToken,
+         valueToken == null ? nameToken : valueToken.rightQuote,
+         sourceFile,
+       );
 
   /// Static attribute name.
   @override

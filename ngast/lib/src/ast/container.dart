@@ -130,8 +130,8 @@ class _SyntheticContainerAst extends SyntheticTemplateAst with ContainerAst {
     this.annotations = const [],
     this.childNodes = const [],
     this.stars = const [],
-  })  : closeComplement = CloseElementAst('ng-container'),
-        super.from();
+  }) : closeComplement = CloseElementAst('ng-container'),
+       super.from();
 
   @override
   CloseElementAst closeComplement;

@@ -5,7 +5,7 @@ import '../ast.dart';
 import '../token/tokens.dart';
 import '../visitor.dart';
 
-const _listEquals = ListEquality();
+const _listEquals = ListEquality<dynamic>();
 
 /// Represents an embedded template (i.e. is not directly rendered in DOM).
 ///
@@ -230,8 +230,8 @@ class _SyntheticEmbeddedTemplateAst extends SyntheticTemplateAst
     this.properties = const [],
     this.references = const [],
     this.letBindings = const [],
-  })  : closeComplement = CloseElementAst('template'),
-        super.from();
+  }) : closeComplement = CloseElementAst('template'),
+       super.from();
 
   @override
   final List<AnnotationAst> annotations;

@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/utilities.dart';
 
+import '../utilities/unsafe_cast.dart';
 import 'di_tokens.dart';
 
 /// A marker that represents a lack-of-value for the `useValue` parameter.
@@ -38,15 +38,14 @@ Provider<T> provide<T extends Object>(
   Object? useExisting,
   Function? useFactory,
   List<Object>? deps,
-}) =>
-    Provider<T>(
-      token,
-      useClass: useClass,
-      useValue: useValue,
-      useExisting: useExisting,
-      useFactory: useFactory,
-      deps: deps,
-    );
+}) => Provider<T>(
+  token,
+  useClass: useClass,
+  useValue: useValue,
+  useExisting: useExisting,
+  useFactory: useFactory,
+  deps: deps,
+);
 
 /// Describes at compile-time how an `Injector` should be configured.
 ///
@@ -169,23 +168,14 @@ Object buildAtRuntime(Provider provider, RuntimeInjectorBuilder builder) {
 /// ```
 @optionalTypeArgs
 class ClassProvider<T extends Object> extends Provider<T> {
-  const factory ClassProvider(
-    Type type, {
-    Type useClass,
-  }) = ClassProvider<T>._;
+  const factory ClassProvider(Type type, {Type useClass}) = ClassProvider<T>._;
 
-  const factory ClassProvider.forToken(
-    OpaqueToken<T> token, {
-    Type useClass,
-  }) = ClassProvider<T>._;
+  const factory ClassProvider.forToken(OpaqueToken<T> token, {Type useClass}) =
+      ClassProvider<T>._;
 
   // Prevents extending this class.
-  const ClassProvider._(
-    super.token, {
-    Type? useClass,
-  }) : super._(
-          useClass: useClass ?? token as Type,
-        );
+  const ClassProvider._(super.token, {Type? useClass})
+    : super._(useClass: useClass ?? token as Type);
 }
 
 /// Describes at compile-time configuring to redirect to another token.
@@ -195,10 +185,8 @@ class ClassProvider<T extends Object> extends Provider<T> {
 /// Commonly used for deprecation strategies or to-export an interface.
 @optionalTypeArgs
 class ExistingProvider<T extends Object> extends Provider<T> {
-  const factory ExistingProvider(
-    Type type,
-    Object useExisting,
-  ) = ExistingProvider<T>._;
+  const factory ExistingProvider(Type type, Object useExisting) =
+      ExistingProvider<T>._;
 
   const factory ExistingProvider.forToken(
     OpaqueToken<T> token,
@@ -206,12 +194,8 @@ class ExistingProvider<T extends Object> extends Provider<T> {
   ) = ExistingProvider<T>._;
 
   // Prevents extending this class.
-  const ExistingProvider._(
-    super.token,
-    Object useExisting,
-  ) : super._(
-          useExisting: useExisting,
-        );
+  const ExistingProvider._(super.token, Object useExisting)
+    : super._(useExisting: useExisting);
 }
 
 /// Describes at compile-time configuring to invoke a factory function.
@@ -232,13 +216,8 @@ class FactoryProvider<T extends Object> extends Provider<T> {
   }) = FactoryProvider<T>._;
 
   // Prevents extending this class.
-  const FactoryProvider._(
-    super.token,
-    Function useFactory, {
-    super.deps,
-  }) : super._(
-          useFactory: useFactory,
-        );
+  const FactoryProvider._(super.token, Function useFactory, {super.deps})
+    : super._(useFactory: useFactory);
 }
 
 /// Describes at compile-time using a constant value to represent a token.
@@ -256,21 +235,11 @@ class FactoryProvider<T extends Object> extends Provider<T> {
 /// encounter problems it is recommended to use [FactoryProvider] instead.
 @optionalTypeArgs
 class ValueProvider<T extends Object> extends Provider<T> {
-  const factory ValueProvider(
-    Type type,
-    T useValue,
-  ) = ValueProvider<T>._;
+  const factory ValueProvider(Type type, T useValue) = ValueProvider<T>._;
 
-  const factory ValueProvider.forToken(
-    OpaqueToken<T> token,
-    T useValue,
-  ) = ValueProvider<T>._;
+  const factory ValueProvider.forToken(OpaqueToken<T> token, T useValue) =
+      ValueProvider<T>._;
 
   // Prevents extending this class.
-  const ValueProvider._(
-    super.token,
-    T useValue,
-  ) : super._(
-          useValue: useValue,
-        );
+  const ValueProvider._(super.token, T useValue) : super._(useValue: useValue);
 }

@@ -1,12 +1,11 @@
-## 3.0.0-dev.2
+# Change Log
 
- - **REFACTOR**(ngast,ngcompiler): reduce dynamic usage in i18n.
- - **REFACTOR**(all): update to Dart 3 ([#68](https://github.com/angulardart-community/angular/issues/68)).
- - **DOCS**(all): update to new workflow badge.
+## 4.0.0-dev.1
 
-## 3.0.0-dev.1
-
-- Migrate to Analyzer v6 and bump minimum SDK to 3.0
+- Minimum SDK > 3.6
+- Updated dependencies
+- Migrate `dart:html` to `package:web/web`
+- Migrate `dart:js` to `dart:js_interop`
 
 ## 3.0.0-dev.0
 
@@ -228,7 +227,7 @@ plugin.
 ## 0.4.0-alpha+1
 
 - New code location! angular_ast is now part of the angular mono-repo on
-  https://github.com/angulardart/angular.
+  <https://github.com/angulardart/angular>.
 
 ### Bug fix
 

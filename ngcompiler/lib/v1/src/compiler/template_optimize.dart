@@ -16,28 +16,25 @@ class OptimizeTemplateAstVisitor
 
   @override
   TemplateAst visitEmbeddedTemplate(
-      EmbeddedTemplateAst ast, CompileDirectiveMetadata? context) {
+    EmbeddedTemplateAst ast,
+    CompileDirectiveMetadata? context,
+  ) {
     context!;
     _typeNgForLocals(context, ast.directives, ast.variables);
-
-    AnalyzedClass? analyzedClass;
-
-    if (context.analyzedClass case var contextAnalyzedClass?) {
-      analyzedClass = AnalyzedClass.from(
-        contextAnalyzedClass,
-        additionalLocals: {
-          for (var v in ast.variables)
-            if (v.dartType != null) v.name: v.dartType!,
-        },
-      );
-    }
 
     // Add the local variables to the [CompileDirectiveMetadata] used in
     // children embedded templates.
     var scoped = CompileDirectiveMetadata.from(
       context,
-      analyzedClass: analyzedClass,
+      analyzedClass: AnalyzedClass.from(
+        context.analyzedClass!,
+        additionalLocals: {
+          for (var v in ast.variables)
+            if (v.dartType != null) v.name: v.dartType!,
+        },
+      ),
     );
+
     return super.visitEmbeddedTemplate(ast, scoped);
   }
 }
@@ -52,9 +49,11 @@ void _typeNgForLocals(
   List<DirectiveAst> directives,
   List<VariableAst> variables,
 ) {
-  final ngFor = directives.firstWhereOrNull((directive) =>
-      directive.directive.type.moduleUrl ==
-      Identifiers.ngForDirective.moduleUrl);
+  final ngFor = directives.firstWhereOrNull(
+    (directive) =>
+        directive.directive.type.moduleUrl ==
+        Identifiers.ngForDirective.moduleUrl,
+  );
   if (ngFor == null) return; // No `NgFor` to optimize.
   BoundExpression? ngForOfValue;
   for (final input in ngFor.inputs) {
@@ -77,8 +76,10 @@ void _typeNgForLocals(
     switch (variable.value) {
       case r'$implicit':
         // This local is the generic type of the `Iterable` bound to [ngForOf].
-        variable.dartType =
-            getIterableElementType(ngForOfType, clazz.classElement.library);
+        variable.dartType = getIterableElementType(
+          ngForOfType,
+          clazz.classElement.library,
+        );
         break;
       case 'index':
       case 'count':

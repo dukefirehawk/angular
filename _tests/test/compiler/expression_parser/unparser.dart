@@ -1,9 +1,9 @@
 import 'package:ngcompiler/v1/src/compiler/expression_parser/ast.dart';
 
-class Unparser implements AstVisitor<void, void> {
+class Unparser implements AstVisitor<void, String> {
   static final _quoteRegExp = RegExp(r'"');
 
-  StringBuffer sb = StringBuffer();
+  late StringBuffer sb;
 
   String unparse(ASTWithSource ast) {
     sb = StringBuffer();

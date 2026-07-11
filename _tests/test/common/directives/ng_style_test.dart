@@ -1,6 +1,6 @@
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 import 'package:web/web.dart';
 
 import 'ng_style_test.template.dart' as ng;
@@ -12,7 +12,8 @@ void main() {
     test('should update styles specified in an map literal', () async {
       var testBed = NgTestBed<MapUpdateTest>(ng.createMapUpdateTestFactory());
       var testFixture = await testBed.create();
-      var content = testFixture.rootElement.querySelector('div') as HTMLElement;
+      var content =
+          testFixture.rootElement.querySelector('div') as HTMLDivElement;
       await testFixture.update((MapUpdateTest component) {
         component.map = {'max-width': '40px'};
       });
@@ -26,7 +27,8 @@ void main() {
     test('should remove styles when deleting a key in a map literal', () async {
       var testBed = NgTestBed<MapUpdateTest>(ng.createMapUpdateTestFactory());
       var testFixture = await testBed.create();
-      var content = testFixture.rootElement.querySelector('div') as HTMLElement;
+      var content =
+          testFixture.rootElement.querySelector('div') as HTMLDivElement;
       await testFixture.update((MapUpdateTest component) {
         component.map = {'max-width': '40px'};
       });
@@ -41,7 +43,8 @@ void main() {
       var testBed = NgTestBed<MapUpdateWithDefaultTest>(
           ng.createMapUpdateWithDefaultTestFactory());
       var testFixture = await testBed.create();
-      var content = testFixture.rootElement.querySelector('div') as HTMLElement;
+      var content =
+          testFixture.rootElement.querySelector('div') as HTMLDivElement;
       await testFixture.update((MapUpdateWithDefaultTest component) {
         component.map = {'max-width': '40px'};
       });
@@ -59,7 +62,8 @@ void main() {
       var testBed = NgTestBed<MapUpdateWithStyleExprTest>(
           ng.createMapUpdateWithStyleExprTestFactory());
       var testFixture = await testBed.create();
-      var content = testFixture.rootElement.querySelector('div') as HTMLElement;
+      var content =
+          testFixture.rootElement.querySelector('div') as HTMLDivElement;
       await testFixture.update((MapUpdateWithStyleExprTest component) {
         component.map = {'max-width': '40px'};
       });

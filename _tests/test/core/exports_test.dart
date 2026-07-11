@@ -1,6 +1,6 @@
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 import 'package:web/web.dart';
 
 import 'exports_statics.dart' as lib;
@@ -104,11 +104,11 @@ void main() {
       var testBed = NgTestBed<SelfReferHostBindingTest>(
           ng.createSelfReferHostBindingTestFactory());
       var fixture = await testBed.create();
-      expect((fixture.rootElement as HTMLElement).title, 'hello');
+      expect((fixture.rootElement as HTMLDivElement).title, 'hello');
       await fixture.update((_) {
         SelfReferHostBindingTest.staticField = 'goodbye';
       });
-      expect((fixture.rootElement as HTMLElement).title, 'goodbye');
+      expect((fixture.rootElement as HTMLDivElement).title, 'goodbye');
     });
 
     group('can be prefixed', () {

@@ -1,7 +1,8 @@
+import 'package:web/web.dart';
+
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'host_annotation_test.template.dart' as ng;
 
@@ -9,27 +10,25 @@ void main() {
   tearDown(disposeAnyRunningTest);
 
   /// Returns the root [Element] created by initializing [component].
-  Future<HTMLElement> rootElementOf<T extends Object>(
+  Future<Element> rootElementOf<T extends Object>(
     ComponentFactory<T> component,
   ) {
     final testBed = NgTestBed(component);
-    return testBed
-        .create()
-        .then((fixture) => fixture.rootElement as HTMLElement);
+    return testBed.create().then((fixture) => fixture.rootElement);
   }
 
   group('@HostBinding', () {
     test('should assign "title" based on a static', () async {
       final element = await rootElementOf<HostBindingStaticTitle>(
         ng.createHostBindingStaticTitleFactory(),
-      );
+      ) as HTMLDivElement;
       expect(element.title, 'Hello World');
     });
 
     test('should assign "title" based on an instance member', () async {
       final element = await rootElementOf<HostBindingInstanceTitle>(
         ng.createHostBindingInstanceTitleFactory(),
-      );
+      ) as HTMLDivElement;
       expect(element.title, 'Hello World');
     });
 
@@ -44,28 +43,28 @@ void main() {
       // https://github.com/angulardart/angular/issues/1272
       final element = await rootElementOf<HostBindingStaticTitleNotInherited>(
         ng.createHostBindingStaticTitleNotInheritedFactory(),
-      );
+      ) as HTMLDivElement;
       expect(element.title, isEmpty);
     });
 
     test('should assign "title" based on an inherited instance', () async {
       final element = await rootElementOf<HostBindingInstanceTitleInherited>(
         ng.createHostBindingInstanceTitleInheritedFactory(),
-      );
+      ) as HTMLDivElement;
       expect(element.title, 'Hello World');
     });
 
     test('should support tabIndex of 0', () async {
       final element = await rootElementOf<HostBindingTabIndex0>(
         ng.createHostBindingTabIndex0Factory(),
-      );
+      ) as HTMLDivElement;
       expect(element.tabIndex, 0);
     });
 
     test('should support tabIndex of 0', () async {
       final element = await rootElementOf<HostBindingTabIndexNegative1>(
         ng.createHostBindingTabIndexNegative1Factory(),
-      );
+      ) as HTMLDivElement;
       expect(element.tabIndex, -1);
     });
 
@@ -89,16 +88,16 @@ void main() {
       );
       final fixture = await testBed.create();
       final element = fixture.rootElement;
-      expect(element.getAttribute('disabled'), isNull);
-      expect(element.getAttribute('aria-disabled'), isNull);
+      expect(element.attributes, isNot(contains('disabled')));
+      expect(element.attributes, isNot(contains('aria-disabled')));
 
       await fixture.update((c) => c.disabledBackingValue = true);
-      expect(element.getAttribute('disabled'), isNotNull);
-      expect(element.getAttribute('aria-disabled'), isNotNull);
+      expect(element.attributes, contains('disabled'));
+      expect(element.attributes, contains('aria-disabled'));
 
       await fixture.update((c) => c.disabledBackingValue = false);
-      expect(element.getAttribute('disabled'), isNull);
-      expect(element.getAttribute('aria-disabled'), isNull);
+      expect(element.attributes, isNot(contains('disabled')));
+      expect(element.attributes, isNot(contains('aria-disabled')));
     });
 
     test('should support conditional attributes on static members', () async {
@@ -107,8 +106,8 @@ void main() {
       );
       final fixture = await testBed.create();
       final element = fixture.rootElement;
-      expect(element.getAttribute('disabled'), isNotNull);
-      expect(element.getAttribute('aria-disabled'), isNotNull);
+      expect(element.attributes, contains('disabled'));
+      expect(element.attributes, contains('aria-disabled'));
     });
 
     test('should support conditional classes', () async {
@@ -117,18 +116,18 @@ void main() {
       );
       final fixture = await testBed.create();
       final element = fixture.rootElement;
-      expect(element.classList.value, isNot(contains('fancy')));
+      expect(element.classList, isNot(contains('fancy')));
 
       await fixture.update((c) => c.fancy = true);
-      expect(element.classList.value, contains('fancy'));
+      expect(element.classList, contains('fancy'));
 
       await fixture.update((c) => c.fancy = false);
-      expect(element.classList.value, isNot(contains('fancy')));
+      expect(element.classList, isNot(contains('fancy')));
     });
 
     test('should support multiple annotations on a single field', () async {
       final element = await rootElementOf<HostBindingMulti>(
-          ng.createHostBindingMultiFactory());
+          ng.createHostBindingMultiFactory()) as HTMLElement;
       expect(element.className, 'hello');
       expect(element.title, 'hello');
     });

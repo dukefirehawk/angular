@@ -27,19 +27,11 @@ class NgMicroToken {
   }
 
   factory NgMicroToken.letAssignmentBefore(int offset, String lexeme) {
-    return NgMicroToken._(
-      NgMicroTokenType.letAssignmentBefore,
-      lexeme,
-      offset,
-    );
+    return NgMicroToken._(NgMicroTokenType.letAssignmentBefore, lexeme, offset);
   }
 
   factory NgMicroToken.letIdentifier(int offset, String lexeme) {
-    return NgMicroToken._(
-      NgMicroTokenType.letIdentifier,
-      lexeme,
-      offset,
-    );
+    return NgMicroToken._(NgMicroTokenType.letIdentifier, lexeme, offset);
   }
 
   factory NgMicroToken.letKeyword(int offset, String lexeme) {
@@ -90,5 +82,5 @@ enum NgMicroTokenType {
   letAssignmentBefore,
   letIdentifier,
   letKeyword,
-  letKeywordAfter
+  letKeywordAfter,
 }

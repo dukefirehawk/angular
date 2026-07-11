@@ -12,7 +12,7 @@ import 'visibility.dart';
 /// ```dart
 /// import 'package:web/web.dart';
 ///
-/// import 'package:ngdart/angular.dart';
+/// import '../angular.dart';
 ///
 /// @Directive(selector: '[myHighlight]')
 /// class HighlightDirective {
@@ -148,7 +148,7 @@ class Directive {
 ///
 /// [LCH]: https://webdev.dartlang.org/angular/guide/lifecycle-hooks
 @Target({TargetKind.classType})
-class Component extends Directive {
+class Component {
   /// Defines the used change detection strategy.
   ///
   /// When a component is instantiated, Angular creates a change detector, which
@@ -206,10 +206,13 @@ class Component extends Directive {
   ///     )
   ///     class Example {}
   ///
-  final List<Object?> exports;
+  final List<Object> exports;
 
   final String? templateUrl;
   final String? template;
+  final String? exportAs;
+
+  final bool standalone;
 
   /// Removes all whitespace except `&ngsp;` and `&nbsp;` from template if set
   /// to false.
@@ -230,11 +233,16 @@ class Component extends Directive {
   final List<Object> pipes;
   final ViewEncapsulation encapsulation;
 
+  final String selector;
+  final List<Object> providers;
+  final Visibility visibility;
+
   const Component({
-    required super.selector,
-    super.exportAs,
-    super.providers = const [],
-    super.visibility = Visibility.local,
+    required this.selector,
+    this.exportAs,
+    this.providers = const [],
+    this.visibility = Visibility.local,
+    this.standalone = false,
     this.viewProviders = const [],
     this.exports = const [],
     this.changeDetection = ChangeDetectionStrategy.checkAlways,
@@ -270,7 +278,7 @@ class Pipe {
 ///
 /// > **NOTE**: `@Attribute` is not affected by any updates to attributes to the
 /// > host element (including the `[attr.*]` template syntax, or imperative
-/// > updates to the DOM using `package:web/web.dart`).
+/// > updates to the DOM using `dart:html`).
 ///
 /// ### Example
 ///
@@ -367,16 +375,9 @@ abstract class _Query {
 /// combination with an `NgFor` (or a custom directive that supports moving
 /// embedded views) this field or setter may _not_ be updated. For details see
 /// go/angular-dart/dev/template-queries.
-@Target({
-  TargetKind.field,
-  TargetKind.setter,
-})
+@Target({TargetKind.field, TargetKind.setter})
 class ContentChildren extends _Query {
-  const ContentChildren(
-    super.selector, {
-    super.descendants = true,
-    super.read,
-  });
+  const ContentChildren(super.selector, {super.descendants = true, super.read});
 }
 
 /// Declares a reference to a single child node projected into `<ng-content>`.
@@ -386,15 +387,10 @@ class ContentChildren extends _Query {
 /// - similar to `querySelector` instead of `querySelectorAll`.
 ///
 /// See [ContentChildren] and [ViewChildren] for full documentation.
-@Target({
-  TargetKind.field,
-  TargetKind.setter,
-})
+@Target({TargetKind.field, TargetKind.setter})
 class ContentChild extends _Query {
-  const ContentChild(
-    super.selector, {
-    super.read,
-  }) : super(descendants: true, first: true);
+  const ContentChild(super.selector, {super.read})
+    : super(descendants: true, first: true);
 }
 
 abstract class _ViewQuery extends _Query {
@@ -579,15 +575,9 @@ abstract class _ViewQuery extends _Query {
 /// combination with an `NgFor` (or a custom directive that supports moving
 /// embedded views) this field or setter may _not_ be updated. For details see
 /// go/angular-dart/dev/template-queries.
-@Target({
-  TargetKind.field,
-  TargetKind.setter,
-})
+@Target({TargetKind.field, TargetKind.setter})
 class ViewChildren extends _ViewQuery {
-  const ViewChildren(
-    super.selector, {
-    super.read,
-  }) : super(descendants: true);
+  const ViewChildren(super.selector, {super.read}) : super(descendants: true);
 }
 
 /// Declares a reference to a single child node in a component's template.
@@ -615,15 +605,10 @@ class ViewChildren extends _ViewQuery {
 /// ```
 ///
 /// See [ViewChildren] for a full documentation of parameters and more examples.
-@Target({
-  TargetKind.field,
-  TargetKind.setter,
-})
+@Target({TargetKind.field, TargetKind.setter})
 class ViewChild extends _ViewQuery {
-  const ViewChild(
-    super.selector, {
-    super.read,
-  }) : super(descendants: true, first: true);
+  const ViewChild(super.selector, {super.read})
+    : super(descendants: true, first: true);
 }
 
 /// Declares a data-bound input property.
@@ -664,10 +649,7 @@ class ViewChild extends _ViewQuery {
 ///    directives: const [BankAccount])
 ///  class App {}
 ///  ```
-@Target({
-  TargetKind.field,
-  TargetKind.setter,
-})
+@Target({TargetKind.field, TargetKind.setter})
 class Input {
   /// Name used when instantiating a component in the template.
   final String? bindingPropertyName;
@@ -721,10 +703,7 @@ class Input {
 ///   }
 /// }
 /// ```
-@Target({
-  TargetKind.field,
-  TargetKind.getter,
-})
+@Target({TargetKind.field, TargetKind.getter})
 class Output {
   final String? bindingPropertyName;
   const Output([this.bindingPropertyName]);
@@ -765,10 +744,7 @@ class Output {
 ///   String debugId;
 /// }
 /// ```
-@Target({
-  TargetKind.field,
-  TargetKind.getter,
-})
+@Target({TargetKind.field, TargetKind.getter})
 class HostBinding {
   final String? hostPropertyName;
   const HostBinding([this.hostPropertyName]);

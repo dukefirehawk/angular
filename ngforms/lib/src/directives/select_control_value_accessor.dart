@@ -1,6 +1,7 @@
+import 'package:web/web.dart';
+
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/src/utilities.dart';
-import 'package:web/web.dart';
 
 import 'control_value_accessor.dart'
     show ChangeHandler, ControlValueAccessor, ngValueAccessor, TouchHandler;
@@ -44,8 +45,8 @@ class SelectControlValueAccessor extends Object
   final Map<String, Object?> _optionMap = <String, Object?>{};
   num _idCounter = 0;
 
-  SelectControlValueAccessor(HTMLElement element)
-      : _element = element as HTMLSelectElement;
+  SelectControlValueAccessor(@Optional() Element? element)
+    : _element = element as HTMLSelectElement;
 
   @HostListener('change', ['\$event.target.value'])
   void handleChange(String value) {
@@ -86,15 +87,15 @@ class SelectControlValueAccessor extends Object
 ///     <select ngControl="city">
 ///       <option *ngFor="let c of cities" [value]="c"></option>
 ///     </select>
-@Directive(
-  selector: 'option',
-)
+@Directive(selector: 'option')
 class NgSelectOption implements OnDestroy {
-  final HTMLOptionElement _element;
+  final HTMLOptionElement? _element;
   final SelectControlValueAccessor? _select;
   late final String id;
-  NgSelectOption(HTMLElement element, @Optional() @Host() this._select)
-      : _element = element as HTMLOptionElement {
+  NgSelectOption(
+    @Optional() Element? element,
+    @Optional() @Host() this._select,
+  ) : _element = element as HTMLOptionElement? {
     if (_select != null) id = _select._registerOption();
   }
 
@@ -115,7 +116,7 @@ class NgSelectOption implements OnDestroy {
   }
 
   void _setElementValue(String value) {
-    _element.value = value;
+    _element?.value = value;
   }
 
   @override

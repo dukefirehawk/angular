@@ -1,6 +1,6 @@
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart';
 import 'package:ngcompiler/v1/src/compiler/identifiers.dart'
-    show DomHelpers, Identifiers, JsInterop, SafeHtmlAdapters;
+    show DomHelpers, Identifiers, SafeHtmlAdapters;
 import 'package:ngcompiler/v1/src/compiler/ir/model.dart' as ir;
 import 'package:ngcompiler/v1/src/compiler/ir/model.dart';
 import 'package:ngcompiler/v1/src/compiler/output/output_ast.dart' as o;
@@ -10,6 +10,7 @@ import 'package:ngcompiler/v1/src/compiler/view_compiler/compile_view.dart'
 import 'package:ngcompiler/v2/context.dart';
 
 import 'devtools.dart';
+import 'interpolation_utils.dart';
 
 /// Returns statements that update a [binding].
 List<o.Statement> bindingToUpdateStatements(
@@ -20,21 +21,28 @@ List<o.Statement> bindingToUpdateStatements(
   o.Expression currValExpr,
 ) {
   // Wraps current value with sanitization call if necessary.
-  var renderValue =
-      _sanitizedValue(binding.target.securityContext, currValExpr);
+  var renderValue = _sanitizedValue(
+    binding.target.securityContext,
+    currValExpr,
+  );
   var visitor = _UpdateStatementsVisitor(
-      appViewInstance, renderNode, binding.source, isHtmlElement, currValExpr);
+    appViewInstance,
+    renderNode,
+    binding.source,
+    isHtmlElement,
+    currValExpr,
+  );
   var updateStatement = binding.target.accept(visitor, renderValue);
   if (binding.source is BoundExpression) {
     updateStatement.sourceReference =
         (binding.source as BoundExpression).sourceReference;
   }
-  var devToolsStatement =
-      devToolsBindingStatement(binding, appViewInstance, currValExpr);
-  return [
-    if (devToolsStatement != null) devToolsStatement,
-    updateStatement,
-  ];
+  var devToolsStatement = devToolsBindingStatement(
+    binding,
+    appViewInstance,
+    currValExpr,
+  );
+  return [?devToolsStatement, updateStatement];
 }
 
 class _UpdateStatementsVisitor
@@ -69,8 +77,19 @@ class _UpdateStatementsVisitor
       // b/171226440: Avoid using "setAttribute" for conditionals, because we
       // try to use a (ternary) nullable-string, which is invalid. We either
       // need more plumbing in order to use "setAttribute" safely.
-      useSetAttributeIfImmutable = false;
+      if (CompileContext.current.emitNullSafeCode) {
+        useSetAttributeIfImmutable = false;
+      }
       renderValue = renderValue!.conditional(o.literal(''), o.nullExpr);
+    } else if (attributeBinding.securityContext ==
+            TemplateSecurityContext.none &&
+        !isInterpolation(bindingSource) &&
+        !bindingSource.isString) {
+      // Convert to string if necessary.
+      // Sanitized and interpolated bindings always return a string, so we only
+      // check if values that don't require sanitization or interpolation need
+      // to be converted to a string.
+      renderValue = _convertAttributeRenderValue(renderValue, bindingSource);
     }
     if (attributeBinding.hasNamespace) {
       return o.importExpr(DomHelpers.updateAttributeNS).callFn([
@@ -82,30 +101,57 @@ class _UpdateStatementsVisitor
     }
 
     return o
-        .importExpr(!useSetAttributeIfImmutable || bindingSource.isNullable
-            ? DomHelpers.updateAttribute
-            : DomHelpers.setAttribute)
-        .callFn(
-      [
-        renderNode!.toReadExpr(),
-        o.literal(attributeBinding.name),
-        renderValue!,
-      ],
-    ).toStmt();
+        .importExpr(
+          !useSetAttributeIfImmutable || bindingSource.isNullable
+              ? DomHelpers.updateAttribute
+              : DomHelpers.setAttribute,
+        )
+        .callFn([
+          renderNode!.toReadExpr(),
+          o.literal(attributeBinding.name),
+          renderValue!,
+        ])
+        .toStmt();
+  }
+
+  static o.Expression? _convertAttributeRenderValue(
+    o.Expression? renderValue,
+    ir.BindingSource bindingSource,
+  ) {
+    if (CompileContext.current.emitNullSafeCode) {
+      // New behavior: Do nothing. We accept a "String?" (only) as a type and
+      // Dart's compilers will emit a compile-time error (i.e. something like
+      // "cannot assign int to String?") on another value type.
+      return renderValue;
+    } else {
+      // Legacy behavior: Allow a non-String `[attr.foo]="baz"` binding. We
+      // coerce it into a String (or null) by transforming "baz" into
+      // "baz?.toString()".
+      return renderValue!.callMethod(
+        'toString',
+        const [],
+        checked: bindingSource.isNullable,
+      );
+    }
   }
 
   @override
-  o.Statement visitClassBinding(ir.ClassBinding classBinding,
-      [o.Expression? renderValue]) {
+  o.Statement visitClassBinding(
+    ir.ClassBinding classBinding, [
+    o.Expression? renderValue,
+  ]) {
     if (classBinding.name == null) {
       // TODO(b/126226538): Consider optimizing "static" classBindings in the
       // constructor to skip adding the shim classes.
 
       // Handle [attr.class]="expression" or [className]="expression".
-      final renderMethod =
-          isHtmlElement ? 'updateChildClass' : 'updateChildClassNonHtml';
-      return appViewInstance!.callMethod(
-          renderMethod, [renderNode!.toReadExpr(), renderValue!]).toStmt();
+      final renderMethod = isHtmlElement
+          ? 'updateChildClass'
+          : 'updateChildClassNonHtml';
+      return appViewInstance!.callMethod(renderMethod, [
+        renderNode!.toReadExpr(),
+        renderValue!,
+      ]).toStmt();
     } else {
       final renderMethod = isHtmlElement
           ? DomHelpers.updateClassBinding
@@ -119,8 +165,10 @@ class _UpdateStatementsVisitor
   }
 
   @override
-  o.Statement visitPropertyBinding(ir.PropertyBinding propertyBinding,
-      [o.Expression? renderValue]) {
+  o.Statement visitPropertyBinding(
+    ir.PropertyBinding propertyBinding, [
+    o.Expression? renderValue,
+  ]) {
     return o.importExpr(DomHelpers.setProperty).callFn([
       renderNode!.toReadExpr(),
       o.literal(propertyBinding.name),
@@ -141,13 +189,16 @@ class _UpdateStatementsVisitor
           ? currValExpr
           : currValExpr.callMethod('toString', []);
       final styleWithUnit = styleString.plus(o.literal(styleBinding.unit));
-      styleValueExpr =
-          currValExpr.isBlank().conditional(o.literal(''), styleWithUnit);
+      styleValueExpr = currValExpr.isBlank().conditional(
+        o.nullExpr,
+        styleWithUnit,
+      );
     } else {
       styleValueExpr = bindingSource.isString
           ? currValExpr
           : currValExpr.callMethod(
-              'toString', [],
+              'toString',
+              [],
               // Use null check to bind null instead of string "null".
               checked: bindingSource.isNullable,
             );
@@ -156,14 +207,18 @@ class _UpdateStatementsVisitor
     o.Expression updateStyleExpr = renderNode!
         .toReadExpr()
         .prop('style')
-        .callMethod(
-            'setProperty', [o.literal(styleBinding.name), styleValueExpr]);
+        .callMethod('setProperty', [
+          o.literal(styleBinding.name),
+          styleValueExpr,
+        ]);
     return updateStyleExpr.toStmt();
   }
 
   @override
-  o.Statement visitTabIndexBinding(ir.TabIndexBinding tabIndexBinding,
-      [o.Expression? renderValue]) {
+  o.Statement visitTabIndexBinding(
+    ir.TabIndexBinding tabIndexBinding, [
+    o.Expression? renderValue,
+  ]) {
     if (renderValue is o.LiteralExpr) {
       final value = renderValue.value;
       final tabIndex = value is String ? int.tryParse(value) : null;
@@ -191,8 +246,10 @@ class _UpdateStatementsVisitor
   }
 
   @override
-  o.Statement visitTextBinding(ir.TextBinding textBinding,
-      [o.Expression? renderValue]) {
+  o.Statement visitTextBinding(
+    ir.TextBinding textBinding, [
+    o.Expression? renderValue,
+  ]) {
     // TODO(alorenzen): Generalize updateExpr() to all NodeReferences.
     var node = renderNode as TextBindingNodeReference?;
     if (bindingSource.isBool ||
@@ -207,52 +264,64 @@ class _UpdateStatementsVisitor
   @override
   o.Statement visitHtmlBinding(ir.HtmlBinding htmlBinding, [_]) {
     throw UnsupportedError(
-        '${ir.HtmlBinding}s are not supported as bound properties.');
+      '${ir.HtmlBinding}s are not supported as bound properties.',
+    );
   }
 
   @override
-  o.Statement visitInputBinding(ir.InputBinding inputBinding,
-          [o.Expression? renderValue]) =>
-      appViewInstance!
-          .prop(inputBinding.propertyName)
-          .set(renderValue!)
-          .toStmt();
+  o.Statement visitInputBinding(
+    ir.InputBinding inputBinding, [
+    o.Expression? renderValue,
+  ]) => appViewInstance!
+      .prop(inputBinding.propertyName)
+      .set(renderValue!)
+      .toStmt();
 
   @override
-  o.Statement visitCustomEvent(ir.CustomEvent customEvent,
-      [o.Expression? renderValue]) {
+  o.Statement visitCustomEvent(
+    ir.CustomEvent customEvent, [
+    o.Expression? renderValue,
+  ]) {
     final appViewUtilsExpr = o.importExpr(Identifiers.appViewUtils);
     final eventManagerExpr = appViewUtilsExpr.prop('eventManager');
-    return eventManagerExpr.callMethod(
-      'addEventListener',
-      [
-        renderNode?.toReadExpr() ?? appViewInstance!,
-        o.literal(customEvent.name),
-        renderValue!
-      ],
-    ).toStmt();
+    return eventManagerExpr.callMethod('addEventListener', [
+      renderNode?.toReadExpr() ?? appViewInstance!,
+      o.literal(customEvent.name),
+      _toJsEventHandler(renderValue!),
+    ]).toStmt();
   }
 
   @override
-  o.Statement visitDirectiveOutput(ir.DirectiveOutput directiveOutput,
-          [o.Expression? renderValue]) =>
-      renderNode!.toWriteStmt(appViewInstance!
-          .prop(directiveOutput.name)
-          .callMethod(o.BuiltinMethod.subscribeObservable, [renderValue!]));
+  o.Statement visitDirectiveOutput(
+    ir.DirectiveOutput directiveOutput, [
+    o.Expression? renderValue,
+  ]) => renderNode!.toWriteStmt(
+    appViewInstance!.prop(directiveOutput.name).callMethod(
+      o.BuiltinMethod.subscribeObservable,
+      [renderValue!],
+      checked: directiveOutput.isMockLike,
+    ),
+  );
 
   @override
-  o.Statement visitNativeEvent(ir.NativeEvent nativeEvent,
-          [o.Expression? renderValue]) =>
-      (renderNode?.toReadExpr() ?? appViewInstance!).callMethod(
-        'addEventListener',
-        [
-          o.literal(nativeEvent.name),
-          o.importExpr(JsInterop.functionToJSExportedDartFunction).instantiate([
-            renderValue!.cast(
-                o.FunctionType(o.voidType, [o.importType(Identifiers.event)!]))
-          ]).prop('toJS')
-        ],
-      ).toStmt();
+  o.Statement visitNativeEvent(
+    ir.NativeEvent nativeEvent, [
+    o.Expression? renderValue,
+  ]) => (renderNode?.toReadExpr() ?? appViewInstance!).callMethod(
+    'addEventListener',
+    [o.literal(nativeEvent.name), _toJsEventHandler(renderValue!)],
+  ).toStmt();
+
+  o.Expression _toJsEventHandler(o.Expression renderValue) {
+    if (renderValue is o.InvokeMemberMethodExpr &&
+        renderValue.methodName.startsWith('eventHandler')) {
+      return o.InvokeMemberMethodExpr(
+        'js${renderValue.methodName.substring(0, 1).toUpperCase()}${renderValue.methodName.substring(1)}',
+        renderValue.args,
+      );
+    }
+    return renderValue;
+  }
 }
 
 o.Expression _sanitizedValue(
@@ -275,6 +344,9 @@ o.Expression _sanitizedValue(
     case TemplateSecurityContext.resourceUrl:
       method = SafeHtmlAdapters.sanitizeResourceUrl;
       break;
+    //default:
+    //  throw ArgumentError('internal error, unexpected '
+    //      'TemplateSecurityContext $securityContext.');
   }
   return o.importExpr(method).callFn([renderValue]);
 }

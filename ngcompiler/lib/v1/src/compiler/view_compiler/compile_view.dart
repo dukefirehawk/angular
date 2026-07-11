@@ -1,11 +1,12 @@
 import 'dart:convert';
 
+import 'package:ngdart/src/meta.dart';
 import 'package:ngcompiler/v1/cli.dart';
 import 'package:ngcompiler/v1/src/compiler/ir/model.dart' as ir;
 import 'package:ngcompiler/v1/src/compiler/view_type.dart';
 import 'package:ngcompiler/v1/src/source_gen/common/url_resolver.dart'
     show toTemplateExtension;
-import 'package:ngdart/src/meta.dart';
+import 'package:ngcompiler/v2/context.dart';
 
 import '../compile_metadata.dart'
     show
@@ -79,60 +80,49 @@ class NodeReference {
   /// Create a [NodeReference] with a defined [o.OutputType].
   ///
   /// In practice, this is used for `ElementRef`, and nothing else.
-  NodeReference(
-    this._storage,
-    this._type,
-    int nodeIndex,
-  )   : _name = '_el_$nodeIndex',
-        _initialValue = null;
+  NodeReference(this._storage, this._type, int nodeIndex)
+    : _name = '_el_$nodeIndex',
+      _initialValue = null;
 
   /// Create a [NodeReference] for an HTML fragment (for i18n).
-  NodeReference.html(
-    this._storage,
-    int nodeIndex,
-  )   : _type = o.importType(Identifiers.documentFragment),
-        _name = '_html_$nodeIndex',
-        _initialValue = null;
+  NodeReference.html(this._storage, int nodeIndex)
+    : _type = o.importType(Identifiers.documentFragment),
+      _name = '_html_$nodeIndex',
+      _initialValue = null;
 
   /// Create a [NodeReference] for a `Text` node.
-  NodeReference.textNode(
-    this._storage,
-    int nodeIndex, {
-    o.Expression? initialValue,
-  })  : _type = o.importType(Identifiers.textNode),
-        _name = '_text_$nodeIndex',
-        _initialValue = initialValue;
+  NodeReference.textNode(this._storage, int nodeIndex, {this._initialValue})
+    : _type = o.importType(Identifiers.textNode),
+      _name = '_text_$nodeIndex';
 
   /// Creates a [NodeReference] for a ng-content node.
-  NodeReference.ngContent(
-    this._storage,
-    int nodeIndex,
-  )   : _type = o.importType(Identifiers.ngContentRef),
-        _name = '_ngContent_$nodeIndex',
-        _initialValue = null;
+  NodeReference.ngContent(this._storage, int nodeIndex)
+    : _type = o.importType(Identifiers.ngContentRef),
+      _name = '_ngContent_$nodeIndex',
+      _initialValue = null;
 
   /// Create a [NodeReference] for a `TextBinding` node.
   NodeReference._textBindingNode(this._storage, int nodeIndex)
-      : _type = o.importType(Interpolation.textBinding),
-        _name = '_textBinding_$nodeIndex',
-        _initialValue = o.importExpr(Interpolation.textBinding).callFn([]);
+    : _type = o.importType(Interpolation.textBinding),
+      _name = '_textBinding_$nodeIndex',
+      _initialValue = o.importExpr(Interpolation.textBinding).callFn([]);
 
   /// Create a [NodeReference] for an anchor node for view containers.
   NodeReference.anchor(
     this._storage,
     int nodeIndex, [
     this._visibility = NodeReferenceVisibility.build,
-  ])  : _type = o.importType(Identifiers.commentNode),
-        _name = '_anchor_$nodeIndex',
-        _initialValue = null;
+  ]) : _type = o.importType(Identifiers.commentNode),
+       _name = '_anchor_$nodeIndex',
+       _initialValue = null;
 
   /// Create a [NodeReference] for the root element of a view.
   NodeReference.rootElement()
-      : _storage = null,
-        _type = o.importType(Identifiers.htmlElement),
-        _name = componentViewRootElementFieldName,
-        _visibility = NodeReferenceVisibility.classPublic,
-        _initialValue = null;
+    : _storage = null,
+      _type = o.importType(Identifiers.htmlElement),
+      _name = componentViewRootElementFieldName,
+      _visibility = NodeReferenceVisibility.classPublic,
+      _initialValue = null;
 
   /// Create a [NodeReference] for a node passed as a parameter.
   factory NodeReference.parameter(
@@ -142,12 +132,12 @@ class NodeReference {
   ) = _ParameterNodeReference;
 
   NodeReference._parameter(this._storage, this._type, this._name)
-      : _initialValue = null;
+    : _initialValue = null;
 
   NodeReference._subscription(this._name)
-      : _storage = null,
-        _type = null,
-        _initialValue = null;
+    : _storage = null,
+      _type = null,
+      _initialValue = null;
 
   /// Returns an expression that reads from this variable or field.
   o.Expression toReadExpr() => ReadNodeReferenceExpr(this);
@@ -185,8 +175,10 @@ class NodeReference {
 /// This is used in DirectiveChangeDetector.
 class _ParameterNodeReference extends NodeReference {
   _ParameterNodeReference(
-      CompileViewStorage super.storage, super.type, super.name)
-      : super._parameter();
+    CompileViewStorage super.storage,
+    super.type,
+    super.name,
+  ) : super._parameter();
 
   @override
   o.Expression toReadExpr() => o.ReadVarExpr(_name);
@@ -198,15 +190,16 @@ class _ParameterNodeReference extends NodeReference {
 // Wraps references to HTML Text nodes in a [TextBinding] helper class.
 class TextBindingNodeReference extends NodeReference {
   TextBindingNodeReference(CompileViewStorage super.storage, super.nodeIndex)
-      : super._textBindingNode();
+    : super._textBindingNode();
 
   @override
   o.Expression toReadExpr() => ReadNodeReferenceExpr(this).prop('element');
   o.Expression updateExpr(o.Expression newValueExpr) =>
       ReadNodeReferenceExpr(this).callMethod('updateText', [newValueExpr]);
   o.Expression updateWithPrimitiveExpr(o.Expression newValueExpr) =>
-      ReadNodeReferenceExpr(this)
-          .callMethod('updateTextWithPrimitive', [newValueExpr]);
+      ReadNodeReferenceExpr(
+        this,
+      ).callMethod('updateTextWithPrimitive', [newValueExpr]);
 }
 
 /// An AST expression that reads the value of a NodeReference.
@@ -234,14 +227,15 @@ class WriteNodeReferenceStmt extends o.DeclareVarStmt {
   final NodeReference node;
 
   WriteNodeReferenceStmt(this.node, o.Expression? value)
-      : super(node._name, value, null, const [o.StmtModifier.finalStmt]);
+    : super(node._name, value, null, const [o.StmtModifier.finalStmt]);
 
   @override
   R visitStatement<R, C>(o.StatementVisitor<R, C> visitor, C context) {
     return node._visibility == NodeReferenceVisibility.classPublic
-        ? o.WriteClassMemberExpr(name, value!)
-            .toStmt()
-            .visitStatement(visitor, context)
+        ? o.WriteClassMemberExpr(
+            name,
+            value!,
+          ).toStmt().visitStatement(visitor, context)
         : visitor.visitDeclareVarStmt(this, context);
   }
 
@@ -286,7 +280,9 @@ class NodeReferenceStorageVisitor extends o.RecursiveExpressionVisitor<void> {
 
   @override
   o.Statement visitDeclareFunctionStmt(
-      o.DeclareFunctionStmt stmt, void context) {
+    o.DeclareFunctionStmt stmt,
+    void context,
+  ) {
     visitScopedStatements(stmt.statements, this);
     return stmt;
   }
@@ -306,8 +302,10 @@ class NodeReferenceStorageVisitor extends o.RecursiveExpressionVisitor<void> {
     return stmt;
   }
 
-  static void visitScopedStatements(List<o.Statement> stmts,
-      [NodeReferenceStorageVisitor? parent]) {
+  static void visitScopedStatements(
+    List<o.Statement> stmts, [
+    NodeReferenceStorageVisitor? parent,
+  ]) {
     final visitor = NodeReferenceStorageVisitor(parent);
     for (var stmt in stmts) {
       stmt.visitStatement(visitor, null);
@@ -322,7 +320,7 @@ class AppViewReference {
   final String _name;
 
   AppViewReference(this.parent, this.nodeIndex)
-      : _name = '_compView_$nodeIndex';
+    : _name = '_compView_$nodeIndex';
 
   o.ReadClassMemberExpr toReadExpr() {
     return o.ReadClassMemberExpr(_name);
@@ -332,17 +330,11 @@ class AppViewReference {
     return o.WriteClassMemberExpr(_name, value).toStmt();
   }
 
-  void allocate(
-    CompileViewStorage storage, {
-    o.OutputType? outputType,
-  }) {
+  void allocate(CompileViewStorage storage, {o.OutputType? outputType}) {
     storage.allocate(
       _name,
       outputType: outputType,
-      modifiers: const [
-        o.StmtModifier.lateStmt,
-        o.StmtModifier.finalStmt,
-      ],
+      modifiers: const [o.StmtModifier.lateStmt, o.StmtModifier.finalStmt],
     );
   }
 }
@@ -418,6 +410,7 @@ class CompileView {
   List<o.ClassMethod> methods = [];
   List<o.ClassGetter> getters = [];
   List<o.Expression> subscriptions = [];
+  bool subscribesToMockLike = false;
   late CompileView componentView;
   var purePipes = <String, CompilePipe>{};
   List<CompilePipe> pipes = [];
@@ -446,7 +439,8 @@ class CompileView {
     nameResolver = ViewNameResolver(this);
     storage = CompileViewStorage();
     viewType = _getViewType(component, viewIndex);
-    className = '${viewIndex == 0 && viewType != ViewType.host ? '' : '_'}'
+    className =
+        '${viewIndex == 0 && viewType != ViewType.host ? '' : '_'}'
         'View${component.type.name}$viewIndex';
     classType = o.importType(CompileIdentifierMetadata(name: className))!;
     viewFactoryName = getViewFactoryName(component, viewIndex);
@@ -464,7 +458,9 @@ class CompileView {
     viewQueries = CompileTokenMap<List<CompileQuery>>();
     if (viewType == ViewType.component) {
       var directiveInstance = BuiltInSource(
-          identifierToken(component.type), DetectChangesVars.cachedCtx);
+        identifierToken(component.type),
+        DetectChangesVars.cachedCtx,
+      );
       var queryIndex = -1;
       for (var metadata in component.viewQueries) {
         queryIndex++;
@@ -538,8 +534,9 @@ class CompileView {
       final messageArgs = <o.ReadVarExpr>[];
       // These are passed to `examples` in `Intl.message()`.
       final messageExamples = <List<dynamic>>[];
-      final messageExamplesType =
-          o.MapType(null, [o.TypeModifier.constModifier]);
+      final messageExamplesType = o.MapType(null, [
+        o.TypeModifier.constModifier,
+      ]);
       // These are the arguments used to invoke the generated method.
       final methodArgs = <o.LiteralExpr>[];
       // These are the parameters of the generated method.
@@ -554,10 +551,12 @@ class CompileView {
       args
         ..add(o.NamedExpr('name', o.literal('${className}_$name')))
         ..add(o.NamedExpr('args', o.literalArr(messageArgs)))
-        ..add(o.NamedExpr(
-          'examples',
-          o.literalMap(messageExamples, messageExamplesType),
-        ));
+        ..add(
+          o.NamedExpr(
+            'examples',
+            o.literalMap(messageExamples, messageExamplesType),
+          ),
+        );
       final value = i18n.callMethod('message', args);
       final method = o.ClassMethod(
         name,
@@ -598,8 +597,11 @@ class CompileView {
     int nodeIndex,
   ) {
     final renderNode = NodeReference.html(storage, nodeIndex);
-    _initializeAndAppendNode(parent, renderNode,
-        o.importExpr(Identifiers.createTrustedHtml).callFn([_textValue(html)]));
+    _initializeAndAppendNode(
+      parent,
+      renderNode,
+      o.importExpr(Identifiers.createTrustedHtml).callFn([_textValue(html)]),
+    );
     return renderNode;
   }
 
@@ -701,7 +703,9 @@ class CompileView {
       _toExpression(source, DetectChangesVars.cachedCtx);
 
   o.Expression _toExpression(
-      ir.BindingSource source, o.Expression implicitReceiver) {
+    ir.BindingSource source,
+    o.Expression implicitReceiver,
+  ) {
     if (source is ir.StringLiteral) {
       return o.literal(source.value);
     } else if (source is ir.BoundI18nMessage) {
@@ -723,31 +727,34 @@ class CompileView {
   int _eventHandlerCount = 0;
 
   // TODO(alorenzen): Convert to NodeReference.
-  o.Expression createEventHandler(List<o.Statement> stmts,
-      {List<o.Statement> localDeclarations = const []}) {
+  o.Expression createEventHandler(
+    List<o.Statement> stmts, {
+    List<o.Statement> localDeclarations = const [],
+  }) {
     var methodName = '_handleEvent_${_eventHandlerCount++}';
-    methods.add(_createEventHandlerMethod(
-      methodName,
-      stmts,
-      localDeclarations,
-    ));
+    methods.add(
+      _createEventHandlerMethod(methodName, stmts, localDeclarations),
+    );
     return o.ReadClassMemberExpr(methodName);
   }
 
-  o.ClassMethod _createEventHandlerMethod(String methodName,
-          List<o.Statement> stmts, List<o.Statement> localDeclarations) =>
-      o.ClassMethod(
-          methodName,
-          [_eventParam],
-          [
-            ...localDeclarations,
-            ...maybeCachedCtxDeclarationStatement(statements: stmts),
-            ...stmts,
-          ],
-          null,
-          [o.StmtModifier.privateStmt]);
+  o.ClassMethod _createEventHandlerMethod(
+    String methodName,
+    List<o.Statement> stmts,
+    List<o.Statement> localDeclarations,
+  ) => o.ClassMethod(
+    methodName,
+    [_eventParam],
+    [
+      ...localDeclarations,
+      ...maybeCachedCtxDeclarationStatement(statements: stmts),
+      ...stmts,
+    ],
+    null,
+    [o.StmtModifier.privateStmt],
+  );
 
-  static final _eventParam = o.FnParam(
+  final _eventParam = o.FnParam(
     EventHandlerVars.event.name!,
     o.importType(null),
   );
@@ -766,7 +773,8 @@ class CompileView {
       parentRenderNodeExpr,
       elementRef,
       templateUrl: component.template?.templateUrl,
-      offset: (component.template?.templateOffset ?? 0) +
+      offset:
+          (component.template?.templateOffset ?? 0) +
           ast.sourceSpan.start.offset,
     );
   }
@@ -801,23 +809,24 @@ class CompileView {
           coerceToTypedElement = o.importType(identifierFromTagName(tagName));
           break;
       }
-      createExpr = o.importExpr(createAndAppendMethod).callFn(
-        createParams,
-        typeArguments: [
-          // Some of our dom_helper methods expect HtmlElement, so if we know
-          // that this tag is one we should add the generic type argument
-          // <HtmlElement> (which ends up just being an unsafeCast behind the
-          // scenes).
-          if (coerceToTypedElement != null) coerceToTypedElement
-        ],
-      );
+      createExpr = o
+          .importExpr(createAndAppendMethod)
+          .callFn(
+            createParams,
+            typeArguments: [
+              // Some of our dom_helper methods expect HtmlElement, so if we know
+              // that this tag is one we should add the generic type argument
+              // <HtmlElement> (which ends up just being an unsafeCast behind the
+              // scenes).
+              ?coerceToTypedElement,
+            ],
+          );
       _createMethod.addStmt(elementRef.toWriteStmt(createExpr));
     } else {
       // No parent node, just create element and assign.
-      final createRenderNodeExpr = o.ReadVarExpr(docVarName).callMethod(
-        'createElement',
-        [o.literal(tagName)],
-      );
+      final createRenderNodeExpr = o.ReadVarExpr(
+        docVarName,
+      ).callMethod('createElement', [o.literal(tagName)]);
       _createMethod.addStmt(
         elementRef.toWriteStmt(unsafeCast(createRenderNodeExpr)),
       );
@@ -833,11 +842,12 @@ class CompileView {
   ) {
     if (enableDataDebugSource) {
       if (templateUrl != null) {
-        _createMethod.addStmt(elementRef.toReadExpr().callMethod(
-            'setAttribute', [
-          o.literal('data-debug-source'),
-          o.literal('$templateUrl:$offset')
-        ]).toStmt());
+        _createMethod.addStmt(
+          elementRef.toReadExpr().callMethod('setAttribute', [
+            o.literal('data-debug-source'),
+            o.literal('$templateUrl:$offset'),
+          ]).toStmt(),
+        );
       }
     }
   }
@@ -853,14 +863,21 @@ class CompileView {
   }
 
   /// Creates an html node with a namespace and appends to parent element.
-  void createElementNs(CompileElement parent, NodeReference elementRef,
-      int nodeIndex, String? ns, String tagName, TemplateAst ast) {
+  void createElementNs(
+    CompileElement parent,
+    NodeReference elementRef,
+    int nodeIndex,
+    String? ns,
+    String tagName,
+    TemplateAst ast,
+  ) {
     if (docVarName == null) {
       _createMethod.addStmt(_createLocalDocumentVar());
     }
-    var createRenderNodeExpr = o
-        .variable(docVarName)
-        .callMethod('createElementNS', [o.literal(ns), o.literal(tagName)]);
+    var createRenderNodeExpr = o.variable(docVarName).callMethod(
+      'createElementNS',
+      [o.literal(ns), o.literal(tagName)],
+    );
     _initializeAndAppendNode(parent, elementRef, createRenderNodeExpr);
   }
 
@@ -870,15 +887,17 @@ class CompileView {
   ///
   /// Returns an expression that references the initialized component view.
   o.Expression _createAppViewNodeAndComponent(
-      CompileElement parent,
-      CompileDirectiveMetadata childComponent,
-      NodeReference elementRef,
-      int nodeIndex,
-      ElementAst ast) {
+    CompileElement parent,
+    CompileDirectiveMetadata childComponent,
+    NodeReference elementRef,
+    int nodeIndex,
+    ElementAst ast,
+  ) {
     var childComponentType = childComponent.type;
     var componentViewIdentifier = CompileIdentifierMetadata(
-        name: 'View${childComponentType.name}0',
-        moduleUrl: templateModuleUrl(childComponentType));
+      name: 'View${childComponentType.name}0',
+      moduleUrl: templateModuleUrl(childComponentType),
+    );
 
     o.ReadClassMemberExpr componentViewExpr;
     if (viewType == ViewType.host) {
@@ -913,8 +932,9 @@ class CompileView {
         .importExpr(componentViewIdentifier)
         .instantiate([o.thisExpr, o.literal(nodeIndex)]);
 
-    _createMethod
-        .addStmt(componentViewExpr.set(createComponentInstanceExpr).toStmt());
+    _createMethod.addStmt(
+      componentViewExpr.set(createComponentInstanceExpr).toStmt(),
+    );
     return componentViewExpr;
   }
 
@@ -962,13 +982,14 @@ class CompileView {
     // Example:
     //     this._appEl_2 = new import7.ViewContainer(2,0,this,this._anchor_2);
     var statement = o.WriteClassMemberExpr(
-        fieldName,
-        o.importExpr(Identifiers.viewContainer).instantiate([
-          o.literal(nodeIndex),
-          o.literal(parentNodeIndex),
-          o.thisExpr,
-          renderNode
-        ])).toStmt();
+      fieldName,
+      o.importExpr(Identifiers.viewContainer).instantiate([
+        o.literal(nodeIndex),
+        o.literal(parentNodeIndex),
+        o.thisExpr,
+        renderNode,
+      ]),
+    ).toStmt();
     _createMethod.addStmt(statement);
     var appViewContainer = o.ReadClassMemberExpr(fieldName);
     if (!isPrivate) {
@@ -1003,10 +1024,11 @@ class CompileView {
       _initializeAndAppendNode(parent, elementRef, root);
     }
     _addDataDebugSource(
-        elementRef,
-        parentComponent.template?.templateUrl,
-        (parentComponent.template?.templateOffset ?? 0) +
-            ast.sourceSpan.start.offset);
+      elementRef,
+      parentComponent.template?.templateUrl,
+      (parentComponent.template?.templateOffset ?? 0) +
+          ast.sourceSpan.start.offset,
+    );
     return componentViewExpr;
   }
 
@@ -1017,29 +1039,34 @@ class CompileView {
   ) {
     final createExpr =
         projectedNodes is o.LiteralArrayExpr && projectedNodes.entries.isEmpty
-            ? componentViewExpr.callMethod('create', [componentExpr])
-            : componentViewExpr.callMethod('createAndProject', [
-                componentExpr,
-                projectedNodes,
-              ]);
+        ? componentViewExpr.callMethod('create', [componentExpr])
+        : componentViewExpr.callMethod('createAndProject', [
+            componentExpr,
+            projectedNodes,
+          ]);
     _createMethod.addStmt(createExpr.toStmt());
   }
 
   bool isRootNodeOfHost(int nodeIndex) =>
       nodeIndex == 0 && viewType == ViewType.host;
 
-  o.Expression _createNgContentRefExpr(int nodeIndex) => o
-      .importExpr(Identifiers.ngContentRef)
-      .instantiate([o.thisExpr, o.literal(nodeIndex)],
-          type: o.importType(Identifiers.ngContentRef));
+  o.Expression _createNgContentRefExpr(int nodeIndex) =>
+      o.importExpr(Identifiers.ngContentRef).instantiate([
+        o.thisExpr,
+        o.literal(nodeIndex),
+      ], type: o.importType(Identifiers.ngContentRef));
 
   CompileProviderMetadata createNgContentRefProvider(int nodeIndex) =>
       CompileProviderMetadata(
-          token: identifierToken(Identifiers.ngContentRef),
-          useValue: _createNgContentRefExpr(nodeIndex));
+        token: identifierToken(Identifiers.ngContentRef),
+        useValue: _createNgContentRefExpr(nodeIndex),
+      );
 
   void projectNodesIntoElement(
-      CompileElement target, int sourceAstIndex, int? ngContentIndex) {
+    CompileElement target,
+    int sourceAstIndex,
+    int? ngContentIndex,
+  ) {
     // The projected nodes originate from a different view, so we don't
     // have debug information for them.
     var parentRenderNode = _getParentRenderNode(target);
@@ -1047,11 +1074,17 @@ class CompileView {
     // to project for each NgContent.
     // Creates a call to project(parentNode, nodeIndex).
     var nodesExpression = ViewProperties.projectedNodes.key(
-        o.literal(sourceAstIndex), o.ArrayType(o.importType(Identifiers.node)));
+      o.literal(sourceAstIndex),
+      o.ArrayType(o.importType(Identifiers.node)),
+    );
     var isRootNode = !identical(target.view, this);
     if (!identical(parentRenderNode, o.nullExpr)) {
-      _createMethod.addStmt(o.InvokeMemberMethodExpr(
-          'project', [parentRenderNode, o.literal(sourceAstIndex)]).toStmt());
+      _createMethod.addStmt(
+        o.InvokeMemberMethodExpr('project', [
+          parentRenderNode,
+          o.literal(sourceAstIndex),
+        ]).toStmt(),
+      );
     } else if (isRootNode) {
       if (!identical(viewType, ViewType.component)) {
         // store root nodes only for embedded/host views
@@ -1064,23 +1097,32 @@ class CompileView {
     }
   }
 
-  void shimCssForNode(NodeReference nodeReference, int nodeIndex,
-      CompileIdentifierMetadata nodeType) {
+  void shimCssForNode(
+    NodeReference nodeReference,
+    int nodeIndex,
+    CompileIdentifierMetadata nodeType,
+  ) {
     if (isRootNodeOfHost(nodeIndex)) return;
     if (component.template!.encapsulation == ViewEncapsulation.emulated) {
       // Set ng_content class for CSS shim.
-      var shimMethod =
-          nodeType != Identifiers.element ? 'addShimC' : 'addShimE';
-      o.Expression shimClassExpr =
-          o.InvokeMemberMethodExpr(shimMethod, [nodeReference.toReadExpr()]);
+      var shimMethod = nodeType != Identifiers.element
+          ? 'addShimC'
+          : 'addShimE';
+      o.Expression shimClassExpr = o.InvokeMemberMethodExpr(shimMethod, [
+        nodeReference.toReadExpr(),
+      ]);
       _createMethod.addStmt(shimClassExpr.toStmt());
     }
   }
 
-  NodeReference createSubscription() {
-    final subscription =
-        NodeReference._subscription('subscription_${subscriptions.length}');
+  NodeReference createSubscription({bool isMockLike = false}) {
+    final subscription = NodeReference._subscription(
+      'subscription_${subscriptions.length}',
+    );
     subscriptions.add(subscription.toReadExpr());
+    if (isMockLike) {
+      subscribesToMockLike = true;
+    }
     return subscription;
   }
 
@@ -1090,8 +1132,15 @@ class CompileView {
     o.Expression handler, [
     o.Expression? directiveInstance,
   ]) {
-    _createMethod.addStmts(bindingToUpdateStatements(
-        binding, directiveInstance, node, false, handler));
+    _createMethod.addStmts(
+      bindingToUpdateStatements(
+        binding,
+        directiveInstance,
+        node,
+        false,
+        handler,
+      ),
+    );
   }
 
   /// Registers any [directives] on [element] with the Inspector.
@@ -1144,12 +1193,14 @@ class CompileView {
     o.OutputType? type;
     if (isMulti) {
       resolvedProviderValueExpr = o.literalArr(providerValueExpressions);
-      type = o.ArrayType(provider.typeArgument != null
-          ? o.importType(
-              provider.typeArgument,
-              provider.typeArgument!.typeArguments,
-            )
-          : o.dynamicType);
+      type = o.ArrayType(
+        provider.typeArgument != null
+            ? o.importType(
+                provider.typeArgument,
+                provider.typeArgument!.typeArguments,
+              )
+            : o.dynamicType,
+      );
     } else {
       resolvedProviderValueExpr = providerValueExpressions.first;
       if (directiveMetadata != null) {
@@ -1178,16 +1229,16 @@ class CompileView {
     // to work around https://github.com/dart-lang/language/issues/1785
     bool providerHasChangeDetector = // ignore: omit_local_variable_types
         provider.providerType == ProviderAstType.directive &&
-            directiveMetadata != null &&
-            directiveMetadata.requiresDirectiveChangeDetector;
+        directiveMetadata != null &&
+        directiveMetadata.requiresDirectiveChangeDetector;
 
     late CompileIdentifierMetadata changeDetectorClass;
     o.OutputType? changeDetectorType;
     if (providerHasChangeDetector) {
       changeDetectorClass = CompileIdentifierMetadata(
-          name: '${directiveMetadata.identifier!.name}NgCd',
-          moduleUrl:
-              toTemplateExtension(directiveMetadata.identifier!.moduleUrl));
+        name: '${directiveMetadata.identifier!.name}NgCd',
+        moduleUrl: toTemplateExtension(directiveMetadata.identifier!.moduleUrl),
+      );
       changeDetectorType = o.importType(
         changeDetectorClass,
         lookupTypeArgumentsOf(
@@ -1216,13 +1267,16 @@ class CompileView {
               o.StmtModifier.finalStmt,
             ],
           );
-          _createMethod.addStmt(storage
-              .buildWriteExpr(
+          _createMethod.addStmt(
+            storage
+                .buildWriteExpr(
                   item,
                   o
                       .importExpr(changeDetectorClass)
-                      .instantiate(changeDetectorParams))
-              .toStmt());
+                      .instantiate(changeDetectorParams),
+                )
+                .toStmt(),
+          );
           return o.ReadPropExpr(
             o.ReadClassMemberExpr(propName, changeDetectorType),
             'instance',
@@ -1236,9 +1290,11 @@ class CompileView {
             // There's no need to allocate a new field for this provider, as
             // `HostView` already has a dedicated field for it.
             propName = hostViewComponentFieldName;
-            _createMethod.addStmt(o.ReadClassMemberExpr(propName)
-                .set(resolvedProviderValueExpr)
-                .toStmt());
+            _createMethod.addStmt(
+              o.ReadClassMemberExpr(
+                propName,
+              ).set(resolvedProviderValueExpr).toStmt(),
+            );
           } else {
             var item = storage.allocate(
               propName,
@@ -1249,35 +1305,72 @@ class CompileView {
                 o.StmtModifier.finalStmt,
               ],
             );
-            _createMethod.addStmt(storage
-                .buildWriteExpr(item, resolvedProviderValueExpr)
-                .toStmt());
+            _createMethod.addStmt(
+              storage.buildWriteExpr(item, resolvedProviderValueExpr).toStmt(),
+            );
           }
         }
       } else {
         // Since provider is not dynamically reachable and we only need
         // the provider locally in build, create a local var.
         var localVar = o.variable(propName, type);
-        _createMethod
-            .addStmt(localVar.set(resolvedProviderValueExpr).toDeclStmt());
+        _createMethod.addStmt(
+          localVar.set(resolvedProviderValueExpr).toDeclStmt(),
+        );
         return localVar;
       }
     } else {
+      // We don't have to eagerly initialize this object. Add an uninitialized
+      // class field and provide a getter to construct the provider on demand.
+      final cachedType = providerHasChangeDetector ? changeDetectorType! : type;
+
       if (providerHasChangeDetector) {
-        resolvedProviderValueExpr =
-            o.importExpr(changeDetectorClass).instantiate(changeDetectorParams);
+        resolvedProviderValueExpr = o
+            .importExpr(changeDetectorClass)
+            .instantiate(changeDetectorParams);
       }
 
-      // If null-safety is enabled, use `late` to implement a lazily
-      // initialized field.
-      final field = storage.allocate(
-        propName,
-        // TODO(b/190556639) - Use final.
-        modifiers: const [o.StmtModifier.lateStmt],
-        outputType: type,
-        initializer: resolvedProviderValueExpr,
+      if (CompileContext.current.emitNullSafeCode) {
+        // If null-safety is enabled, use `late` to implement a lazily
+        // initialized field.
+        final field = storage.allocate(
+          propName,
+          // TODO(b/190556639) - Use final.
+          modifiers: const [o.StmtModifier.lateStmt],
+          outputType: type,
+          initializer: resolvedProviderValueExpr,
+        );
+        return storage.buildReadExpr(field);
+      }
+
+      // If null-safety is disabled, manually implement a lazily initialized
+      // field.
+      final internalField = storage.allocate(
+        '_$propName',
+        outputType: cachedType.asNullable(),
+        modifiers: const [o.StmtModifier.privateStmt],
       );
-      return storage.buildReadExpr(field);
+
+      final getter = CompileMethod()
+        ..addStmts([
+          o.DeclareVarStmt('result', storage.buildReadExpr(internalField)),
+          o.IfStmt(o.ReadVarExpr('result').equals(o.nullExpr), [
+            storage
+                .buildWriteExpr(
+                  internalField,
+                  o.WriteVarExpr('result', resolvedProviderValueExpr),
+                )
+                .toStmt(),
+          ]),
+          o.ReturnStatement(o.ReadVarExpr('result')),
+        ]);
+      getters.add(
+        o.ClassGetter(
+          propName,
+          getter.finish(),
+          providerHasChangeDetector ? changeDetectorType : type,
+        ),
+      );
     }
     return o.ReadClassMemberExpr(propName, type);
   }
@@ -1285,8 +1378,9 @@ class CompileView {
   void createPipeInstance(String name, CompilePipeMetadata pipeMeta) {
     var usesInjectorGet = false;
     final deps = pipeMeta.type.diDeps.map((diDep) {
-      if (diDep.token!
-          .equalsTo(identifierToken(Identifiers.changeDetectorRef))) {
+      if (diDep.token!.equalsTo(
+        identifierToken(Identifiers.changeDetectorRef),
+      )) {
         return o.thisExpr;
       }
       usesInjectorGet = true;
@@ -1305,12 +1399,11 @@ class CompileView {
     if (usesInjectorGet) {
       _createMethod.addStmt(debugInjectorEnter(typeExpression));
     }
-    _createMethod.addStmt(storage
-        .buildWriteExpr(
-          pipeInstance,
-          typeExpression.instantiate(deps),
-        )
-        .toStmt());
+    _createMethod.addStmt(
+      storage
+          .buildWriteExpr(pipeInstance, typeExpression.instantiate(deps))
+          .toStmt(),
+    );
     if (usesInjectorGet) {
       _createMethod.addStmt(debugInjectorLeave(typeExpression));
     }
@@ -1336,11 +1429,14 @@ class CompileView {
         : null;
     if (pureProxyId == null) {
       throw StateError(
-          'Unsupported number of argument for pure functions: $argCount');
+        'Unsupported number of argument for pure functions: $argCount',
+      );
     }
-    _createMethod.addStmt(storage
-        .buildWriteExpr(proxy, o.importExpr(pureProxyId).callFn([fn]))
-        .toStmt());
+    _createMethod.addStmt(
+      storage
+          .buildWriteExpr(proxy, o.importExpr(pureProxyId).callFn([fn]))
+          .toStmt(),
+    );
   }
 
   void writeLiteralAttributeValues(
@@ -1350,12 +1446,14 @@ class CompileView {
     required bool isHtmlElement,
   }) {
     for (var binding in bindings) {
-      _createMethod.addStmts(createAttributeStatements(
-        binding,
-        elementName,
-        nodeReference,
-        isHtmlElement: isHtmlElement,
-      ));
+      _createMethod.addStmts(
+        createAttributeStatements(
+          binding,
+          elementName,
+          nodeReference,
+          isHtmlElement: isHtmlElement,
+        ),
+      );
     }
   }
 
@@ -1419,13 +1517,14 @@ class CompileView {
     // Add content child change detection calls.
     for (var contentChild in viewContainers) {
       statements.add(
-          contentChild.callMethod('detectChangesInNestedViews', []).toStmt());
+        contentChild.callMethod('detectChangesInNestedViews', []).toStmt(),
+      );
     }
 
     // Add Content query updates.
-    var afterContentStmts =
-        List<o.Statement>.from(_updateContentQueriesMethod.finish())
-          ..addAll(afterContentLifecycleCallbacksMethod.finish());
+    var afterContentStmts = List<o.Statement>.from(
+      _updateContentQueriesMethod.finish(),
+    )..addAll(afterContentLifecycleCallbacksMethod.finish());
     if (afterContentStmts.isNotEmpty) {
       statements.add(o.IfStmt(notThrowOnChanges, afterContentStmts));
     }
@@ -1436,12 +1535,13 @@ class CompileView {
     // Add view child change detection calls.
     for (var viewChild in viewChildren) {
       statements.add(
-          viewChild.componentView!.callMethod('detectChanges', []).toStmt());
+        viewChild.componentView!.callMethod('detectChanges', []).toStmt(),
+      );
     }
 
-    var afterViewStmts =
-        List<o.Statement>.from(_updateViewQueriesMethod.finish())
-          ..addAll(afterViewLifecycleCallbacksMethod.finish());
+    var afterViewStmts = List<o.Statement>.from(
+      _updateViewQueriesMethod.finish(),
+    )..addAll(afterViewLifecycleCallbacksMethod.finish());
     if (afterViewStmts.isNotEmpty) {
       statements.add(o.IfStmt(notThrowOnChanges, afterViewStmts));
     }
@@ -1452,13 +1552,18 @@ class CompileView {
 
     if (readVars.contains(DetectChangesVars.changed.name) ||
         writeVars.contains(DetectChangesVars.changed.name)) {
-      varStmts.add(DetectChangesVars.changed
-          .set(o.literal(false))
-          .toDeclStmt(o.boolType));
+      varStmts.add(
+        DetectChangesVars.changed.set(o.literal(false)).toDeclStmt(o.boolType),
+      );
     }
     if (readVars.contains(DetectChangesVars.firstCheck.name)) {
-      varStmts.add(o.DeclareVarStmt(DetectChangesVars.firstCheck.name!,
-          o.thisExpr.prop('firstCheck'), o.boolType));
+      varStmts.add(
+        o.DeclareVarStmt(
+          DetectChangesVars.firstCheck.name!,
+          o.thisExpr.prop('firstCheck'),
+          o.boolType,
+        ),
+      );
     }
     return List.from(varStmts)..addAll(statements);
   }
@@ -1468,12 +1573,12 @@ class CompileView {
     return o.ClassMethod(
       'injectorGetInternal',
       [
-        o.FnParam(InjectMethodVars.token.name!, o.dynamicType),
+        o.FnParam(InjectMethodVars.token.name!, o.objectType),
         o.FnParam(InjectMethodVars.nodeIndex.name!, o.intType),
-        o.FnParam(InjectMethodVars.notFoundResult.name!, o.dynamicType)
+        o.FnParam(InjectMethodVars.notFoundResult.name!, o.objectType.asNullable()),
       ],
       _addReturnValueIfNotEmpty(statements, InjectMethodVars.notFoundResult),
-      o.dynamicType,
+      o.objectType.asNullable(),
       null,
       [o.importExpr(Identifiers.dartCoreOverride)],
     );
@@ -1510,10 +1615,9 @@ class CompileView {
     }
     final parentExpr = _getParentRenderNode(parentElement);
     if (parentExpr != o.nullExpr) {
-      _createMethod.addStmt(parentExpr.callMethod(
-        'append',
-        [nodeReference.toReadExpr()],
-      ).toStmt());
+      _createMethod.addStmt(
+        parentExpr.callMethod('append', [nodeReference.toReadExpr()]).toStmt(),
+      );
     }
   }
 
@@ -1570,7 +1674,9 @@ class CompileView {
 }
 
 ViewType _getViewType(
-    CompileDirectiveMetadata component, int embeddedTemplateIndex) {
+  CompileDirectiveMetadata component,
+  int embeddedTemplateIndex,
+) {
   if (embeddedTemplateIndex > 0) {
     return ViewType.embedded;
   } else if (component.type.isHost) {
@@ -1581,7 +1687,9 @@ ViewType _getViewType(
 }
 
 List<o.Statement> _addReturnValueIfNotEmpty(
-    List<o.Statement> statements, o.Expression value) {
+  List<o.Statement> statements,
+  o.Expression value,
+) {
   if (statements.isEmpty) {
     return statements;
   } else {

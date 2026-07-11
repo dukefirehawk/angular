@@ -6,7 +6,7 @@ import 'compile_view.dart' show CompileView;
 import 'ir/provider_source.dart';
 import 'ir/view_storage.dart';
 import 'view_compiler_utils.dart'
-    show getPropertyInView, replaceReadClassMemberInExpression, unsafeCast;
+    show getPropertyInView, replaceReadClassMemberInExpression;
 
 const _viewQueryNodeIndex = -1;
 
@@ -113,11 +113,8 @@ abstract class CompileQuery {
     );
   }
 
-  CompileQuery._base(
-    this.metadata,
-    this._queryRoot,
-    this._boundDirective,
-  ) : _values = _NestedQueryValues(_queryRoot);
+  CompileQuery._base(this.metadata, this._queryRoot, this._boundDirective)
+    : _values = _NestedQueryValues(_queryRoot);
 
   /// Whether the query is only setting a single value, not a list-like object.
   ///
@@ -260,11 +257,13 @@ abstract class CompileQuery {
         : results.values;
 
     final adjustedExpressions = expressions.map(readFromNestedView).toList();
-    final adjustedValuesWithChangeDetectorRefs =
-        results.withChangeDetectorRefs.map((value) => _QueryValue(
-              readFromNestedView(value.value),
-              readFromNestedView(value.changeDetectorRef!),
-            ));
+    final adjustedValuesWithChangeDetectorRefs = results.withChangeDetectorRefs
+        .map(
+          (value) => _QueryValue(
+            readFromNestedView(value.value),
+            readFromNestedView(value.changeDetectorRef!),
+          ),
+        );
 
     // Choose which function to use based on whether the nested query returns
     // multiple results or a single result.
@@ -278,7 +277,8 @@ abstract class CompileQuery {
         [o.FnParam('nestedView', value.view!.classType)],
         [
           ..._createAddQueryChangeDetectorRefs(
-              adjustedValuesWithChangeDetectorRefs),
+            adjustedValuesWithChangeDetectorRefs,
+          ),
           o.ReturnStatement(o.literalVargs(adjustedExpressions)),
         ],
       ),
@@ -347,11 +347,9 @@ class _ListCompileQuery extends CompileQuery {
     this._storage,
     CompileView queryRoot,
     ProviderSource? boundDirective, {
-    required int? nodeIndex,
-    required int queryIndex,
-  })  : _nodeIndex = nodeIndex,
-        _queryIndex = queryIndex,
-        super._base(metadata, queryRoot, boundDirective);
+    required this._nodeIndex,
+    required this._queryIndex,
+  }) : super._base(metadata, queryRoot, boundDirective);
 
   ViewStorageItem? _dirtyFieldIfNeeded;
 
@@ -404,11 +402,13 @@ class _ListCompileQuery extends CompileQuery {
     if (!_queryResultOrigins.add(origin)) {
       return;
     }
-    final queryDirtyField = getPropertyInView(
-      _storage.buildReadExpr(_dirtyField),
-      origin,
-      _queryRoot,
-    ) as o.ReadPropExpr;
+    final queryDirtyField =
+        getPropertyInView(
+              _storage.buildReadExpr(_dirtyField),
+              origin,
+              _queryRoot,
+            )
+            as o.ReadPropExpr;
     origin.dirtyParentQueriesMethod.addStmt(
       queryDirtyField.set(o.literal(true)).toStmt(),
     );
@@ -421,14 +421,9 @@ class _ListCompileQuery extends CompileQuery {
     }
     final statements = <o.Statement>[
       ..._createUpdates(),
-      _storage.buildWriteExpr(_dirtyField, o.literal(false)).toStmt()
+      _storage.buildWriteExpr(_dirtyField, o.literal(false)).toStmt(),
     ];
-    return [
-      o.IfStmt(
-        _storage.buildReadExpr(_dirtyField),
-        statements,
-      ),
-    ];
+    return [o.IfStmt(_storage.buildReadExpr(_dirtyField), statements)];
   }
 
   @override
@@ -452,9 +447,9 @@ class _ListCompileQuery extends CompileQuery {
       if (_isSingle && results.values.isEmpty) {
         return const [];
       }
-      result = _createUpdatesStaticOnly(results.values, metadata.isElementType);
+      result = _createUpdatesStaticOnly(results.values);
     } else {
-      result = _createUpdatesNested(results.values, metadata.isElementType);
+      result = _createUpdatesNested(results.values);
     }
     return [
       ..._createAddQueryChangeDetectorRefs(results.withChangeDetectorRefs),
@@ -470,20 +465,8 @@ class _ListCompileQuery extends CompileQuery {
   //
   // * If this is for @{Content|View}Child, use the first value.
   // * Else, return the element(s) as a List.
-  o.Expression _createUpdatesStaticOnly(
-    List<o.Expression> values,
-    bool isElement,
-  ) {
-    if (_isSingle) {
-      return isElement ? unsafeCast(values.first) : values.first;
-    }
-
-    if (isElement) {
-      values = values.map(unsafeCast).toList();
-    }
-
-    return o.literalArr(values);
-  }
+  o.Expression _createUpdatesStaticOnly(List<o.Expression> values) =>
+      _isSingle ? values.first : o.literalArr(values);
 
   // Returns the equivalent of `{list}.isNotEmpty ? {list}.first : null`.
   o.Expression _firstIfNotEmpty(o.Expression list) {
@@ -498,12 +481,11 @@ class _ListCompileQuery extends CompileQuery {
   //
   // * If this is for @{Content|View}Child, return the first value if not empty.
   // * Else, just return the {expression} itself (already a List).
-  o.Expression _createUpdatesNested(List<o.Expression> values, bool isElement) {
+  o.Expression _createUpdatesNested(List<o.Expression> values) {
     // We know there are nested views, so if the length is 1, then it must be a
     // `mapNestedViews` expression which returns a list. Otherwise, we wrap the
     // results in a list literal.
     final value = values.length != 1 ? o.literalArr(values) : values.first;
-    // TODO(ykmnkmi): add unsafeCast if needed.
     return _isSingle ? _firstIfNotEmpty(value) : value;
   }
 }
@@ -532,14 +514,15 @@ void addQueryToTokenMap(
 List<o.Statement> _createAddQueryChangeDetectorRefs(
   Iterable<_QueryValue> queriesWithChangeDetectorRefs,
 ) {
-  final queryChangeDetectorRefs =
-      o.importExpr(Views.view).prop('queryChangeDetectorRefs');
+  final queryChangeDetectorRefs = o
+      .importExpr(Views.view)
+      .prop('queryChangeDetectorRefs');
   return [
     for (final query in queriesWithChangeDetectorRefs)
       queryChangeDetectorRefs
           .key(query.value)
           .set(query.changeDetectorRef!)
-          .toStmt()
+          .toStmt(),
   ];
 }
 

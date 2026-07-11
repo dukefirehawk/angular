@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:js_interop';
 
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 import 'package:web/web.dart';
 
 import 'bed_error_test.template.dart' as ng;
@@ -11,39 +10,44 @@ import 'bed_error_test.template.dart' as ng;
 void main() {
   tearDown(disposeAnyRunningTest);
 
-  test('should be able to catch errors that occur synchronously',
-      CatchSynchronousErrors._runTest);
+  test('should be able to catch errors that occur synchronously', () {
+    return CatchSynchronousErrors._runTest();
+  });
 
-  test('should be able to catch errors that occur asynchronously',
-      CatchAsynchronousErrors._runTest);
+  test('should be able to catch errors that occur asynchronously', () {
+    return CatchAsynchronousErrors._runTest();
+  });
 
-  test('should be able to catch errors that occur in the constructor',
-      CatchConstructorErrors._runTest);
+  test('should be able to catch errors that occur in the constructor', () {
+    return CatchConstructorErrors._runTest();
+  });
 
-  test('should be able to catch errors asynchronously in constructor',
-      CatchConstructorAsyncErrors._runTest);
+  test('should be able to catch errors asynchronously in constructor', () {
+    return CatchConstructorAsyncErrors._runTest();
+  });
 
-  test('should be able to catch asynchronous errors from a native event',
-      CatchNativeEventAsynchronousErrors._runTest);
+  test('should be able to catch asynchronous errors from a native event', () {
+    return CatchNativeEventAsynchronousErrors._runTest();
+  });
 
-  test('should be able to catch synchronously errors from a native event',
-      CatchNativeEventSynchronousErrors._runTest);
+  test('should be able to catch synchronously errors from a native event', () {
+    return CatchNativeEventSynchronousErrors._runTest();
+  });
 
-  test('should be able to catch errors that occur in `ngOnInit`',
-      CatchOnInitErrors._runTest);
+  test('should be able to catch errors that occur in `ngOnInit`', () {
+    return CatchOnInitErrors._runTest();
+  });
 
-  test('should be able to catch errors that occur in change detection',
-      CatchInChangeDetection._runTest);
+  test('should be able to catch errors that occur in change detection', () {
+    return CatchInChangeDetection._runTest();
+  });
 
   test('should not have uncaught errors silenty passed', () async {
     await NoExceptionsSwallowedTest._runTest();
   });
 }
 
-@Component(
-  selector: 'test',
-  template: '',
-)
+@Component(selector: 'test', template: '')
 class CatchSynchronousErrors {
   static Future<void> _runTest() async {
     final fixture = await NgTestBed<CatchSynchronousErrors>(
@@ -56,35 +60,26 @@ class CatchSynchronousErrors {
   }
 }
 
-@Component(
-  selector: 'test',
-  template: '',
-)
+@Component(selector: 'test', template: '')
 class CatchAsynchronousErrors {
   static Future<void> _runTest() async {
     final fixture = await NgTestBed<CatchAsynchronousErrors>(
       ng.createCatchAsynchronousErrorsFactory(),
     ).create();
     expect(
-      fixture.update((_) => Future<void>.error(StateError('Test'))),
+      fixture.update((_) => Future.error(StateError('Test'))),
       throwsA(isStateError),
     );
   }
 }
 
-@Component(
-  selector: 'test',
-  template: '',
-)
+@Component(selector: 'test', template: '')
 class CatchConstructorErrors {
   static Future<void> _runTest() async {
     final testBed = NgTestBed<CatchConstructorErrors>(
       ng.createCatchConstructorErrorsFactory(),
     );
-    expect(
-      testBed.create(),
-      throwsA(isStateError),
-    );
+    expect(testBed.create(), throwsA(isStateError));
   }
 
   CatchConstructorErrors() {
@@ -92,19 +87,13 @@ class CatchConstructorErrors {
   }
 }
 
-@Component(
-  selector: 'test',
-  template: '',
-)
+@Component(selector: 'test', template: '')
 class CatchConstructorAsyncErrors {
   static Future<void> _runTest() async {
     final testBed = NgTestBed<CatchConstructorAsyncErrors>(
       ng.createCatchConstructorAsyncErrorsFactory(),
     );
-    expect(
-      testBed.create(),
-      throwsA(isStateError),
-    );
+    expect(testBed.create(), throwsA(isStateError));
   }
 
   CatchConstructorAsyncErrors() {
@@ -125,6 +114,8 @@ class CatchNativeEventSynchronousErrors {
     ).create();
     expect(
       fixture.update((_) {
+        // TODO: Migrate to 3.6 (Need review)
+        //fixture.rootElement.querySelector('button')!.click();
         (fixture.rootElement.querySelector('button') as HTMLButtonElement)
             .click();
       }),
@@ -155,24 +146,18 @@ class CatchNativeEventAsynchronousErrors {
     );
   }
 
-  Future<void> throwError() async {
+  void throwError() async {
     throw StateError('Test');
   }
 }
 
-@Component(
-  selector: 'test',
-  template: '',
-)
+@Component(selector: 'test', template: '')
 class CatchOnInitErrors implements OnInit {
   static Future<void> _runTest() async {
     final testBed = NgTestBed<CatchOnInitErrors>(
       ng.createCatchOnInitErrorsFactory(),
     );
-    expect(
-      testBed.create(),
-      throwsA(isStateError),
-    );
+    expect(testBed.create(), throwsA(isStateError));
   }
 
   @override
@@ -190,21 +175,15 @@ class CatchInChangeDetection {
   static Future<void> _runTest() async {
     final NgTestFixture<CatchInChangeDetection> fixture =
         await NgTestBed<CatchInChangeDetection>(
-      ng.createCatchInChangeDetectionFactory(),
-    ).create();
-    expect(
-      fixture.update((c) => c.value = true),
-      throwsA(isStateError),
-    );
+          ng.createCatchInChangeDetectionFactory(),
+        ).create();
+    expect(fixture.update((c) => c.value = true), throwsA(isStateError));
   }
 
   bool value = false;
 }
 
-@Component(
-  selector: 'child',
-  template: '',
-)
+@Component(selector: 'child', template: '')
 class ChildChangeDetectionError {
   @Input()
   set trueToError(bool trueToError) {
@@ -214,26 +193,21 @@ class ChildChangeDetectionError {
   }
 }
 
-@Component(
-  selector: 'test',
-  template: '<h1>Hello {{name}}</h1>',
-)
+@Component(selector: 'test', template: '<h1>Hello {{name}}</h1>')
 class NoExceptionsSwallowedTest {
   static Future<void> _runTest() async {
     final simpleHandler = _CapturingExceptionHandler();
     final NgTestFixture<NoExceptionsSwallowedTest> fixture =
         await NgTestBed<NoExceptionsSwallowedTest>(
-      ng.createNoExceptionsSwallowedTestFactory(),
-      rootInjector: (i) => Injector.map(
-        {ExceptionHandler: simpleHandler},
-        i,
-      ),
-    ).create();
+          ng.createNoExceptionsSwallowedTestFactory(),
+          rootInjector: (i) =>
+              Injector.map({ExceptionHandler: simpleHandler}, i),
+        ).create();
 
     expect(fixture.text, 'Hello Angular');
     await fixture.update((c) => c.name = 'World');
     expect(fixture.text, 'Hello World');
-    final html = fixture.rootElement.innerHTML as JSString;
+    final html = fixture.rootElement.innerHTML;
     expect(html, '<h1>Hello World</h1>');
     await fixture.dispose();
 

@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:web/web.dart';
 
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'view_creation_test.template.dart' as ng;
 
@@ -24,7 +24,7 @@ void main() {
       ng.createMovesEmbeddedViewComponentFactory(),
     ).addInjector(
       (i) => Injector.map({
-        anchorElement: template,
+        ANCHOR_ELEMENT: template,
       }, i),
     );
     final testFixture = await testBed.create();
@@ -84,9 +84,8 @@ void main() {
       await testFixture.update((component) {
         component.directive!.myAttr = 'bar';
       });
-      final directiveElement =
-          testFixture.rootElement.children.item(0) as HTMLElement;
-      expect(directiveElement.getAttribute('my-attr'), equals('bar'));
+      final directiveElement = testFixture.rootElement.children.item(0);
+      expect(directiveElement?.attributes, containsPair('my-attr', 'bar'));
     });
 
     test('should support @Output', () async {
@@ -108,9 +107,8 @@ void main() {
       final testFixture = await testBed.create();
       final directive = testFixture.assertOnlyInstance.directive!;
       expect(directive.target, isNull);
-      final directiveElement =
-          testFixture.rootElement.children.item(0) as EventTarget;
-      directiveElement.dispatchEvent(MouseEvent('click'));
+      final directiveElement = testFixture.rootElement.children.item(0);
+      directiveElement?.dispatchEvent(MouseEvent('click'));
       await testFixture.update();
       expect(directive.target, directiveElement);
     });
@@ -120,17 +118,22 @@ void main() {
     final testBed = NgTestBed<SvgElementsComponent>(
       ng.createSvgElementsComponentFactory(),
     );
+
+    // TODO: Migrate to 3.6 (Need review)
     final testFixture = await testBed.create();
-    final svg = testFixture.rootElement.querySelector('svg')!;
+    final svg =
+        testFixture.rootElement.querySelector('svg')! as HTMLImageElement;
     expect(svg.namespaceURI, 'http://www.w3.org/2000/svg');
-    final use = testFixture.rootElement.querySelector('use')!;
+    final use =
+        testFixture.rootElement.querySelector('use')! as HTMLImageElement;
     expect(use.namespaceURI, 'http://www.w3.org/2000/svg');
-    final foreignObject =
-        testFixture.rootElement.querySelector('foreignObject')!;
+    final foreignObject = testFixture.rootElement
+        .querySelector('foreignObject')! as HTMLObjectElement;
     expect(foreignObject.namespaceURI, 'http://www.w3.org/2000/svg');
-    final div = testFixture.rootElement.querySelector('div')!;
+    final div = testFixture.rootElement.querySelector('div')! as HTMLDivElement;
     expect(div.namespaceURI, 'http://www.w3.org/1999/xhtml');
-    final p = testFixture.rootElement.querySelector('p')!;
+    final p =
+        testFixture.rootElement.querySelector('p')! as HTMLParagraphElement;
     expect(p.namespaceURI, 'http://www.w3.org/1999/xhtml');
   });
 
@@ -168,7 +171,8 @@ class SimpleImperativeViewComponent {
   }
 }
 
-const anchorElement = OpaqueToken('AnchorElement');
+// ignore: constant_identifier_names
+const ANCHOR_ELEMENT = OpaqueToken('AnchorElement');
 
 @Directive(
   selector: '[someImpvp]',
@@ -180,7 +184,7 @@ class SomeImperativeViewport {
   HTMLTemplateElement anchor;
 
   SomeImperativeViewport(
-      this.vc, this.templateRef, @Inject(anchorElement) this.anchor);
+      this.vc, this.templateRef, @Inject(ANCHOR_ELEMENT) this.anchor);
 
   @Input()
   set someImpvp(bool value) {

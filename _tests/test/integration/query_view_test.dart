@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'package:web/web.dart';
 
-import 'package:_tests/query_tests.dart';
+import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
+import '../../lib/query_tests.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'query_view_test.template.dart' as ng;
 
@@ -15,19 +16,22 @@ void main() {
     testViewChildren(
       directViewChildren: TestCase(
         NgTestBed<TestDirectViewChildrenList>(
-            ng.createTestDirectViewChildrenListFactory()),
+          ng.createTestDirectViewChildrenListFactory(),
+        ),
         [1, 2, 3],
       ),
       viewChildrenAndEmbedded: TestCase(
         NgTestBed<TestViewChildrenAndEmbeddedList>(
-            ng.createTestViewChildrenAndEmbeddedListFactory()),
+          ng.createTestViewChildrenAndEmbeddedListFactory(),
+        ),
         [1, 3],
       ),
     );
 
     test('should work even when the property is a setter', () async {
       final testBed = NgTestBed<TestDirectViewChildrenListSetter>(
-          ng.createTestDirectViewChildrenListSetterFactory());
+        ng.createTestDirectViewChildrenListSetterFactory(),
+      );
       final fixture = await testBed.create();
       expect(fixture, hasChildValues([1, 2, 3]));
     });
@@ -35,28 +39,37 @@ void main() {
     test('should work in a multiple nesting scenario', () async {
       // This is a regression case based on internal code.
       final testBed = NgTestBed<TestNestedNgForQueriesList>(
-          ng.createTestNestedNgForQueriesListFactory());
-      final fixture = await testBed.create();
-      expect(
-        fixture.assertOnlyInstance.taggedDivs!.map((e) => e.textContent),
-        ['1', '2', '3'],
+        ng.createTestNestedNgForQueriesListFactory(),
       );
+      final fixture = await testBed.create();
+      expect(fixture.assertOnlyInstance.taggedDivs!.map((e) => e.textContent), [
+        '1',
+        '2',
+        '3',
+      ]);
     });
 
     test('should work in a multiple nesting+static scenario', () async {
       // This is a regression case based on internal code.
       final testBed = NgTestBed<TestNestedAndStaticNgForQueriesList>(
-          ng.createTestNestedAndStaticNgForQueriesListFactory());
-      final fixture = await testBed.create();
-      expect(
-        fixture.assertOnlyInstance.taggedDivs!.map((e) => e.textContent),
-        ['1', '2', '3', '4', '5', '6', '7'],
+        ng.createTestNestedAndStaticNgForQueriesListFactory(),
       );
+      final fixture = await testBed.create();
+      expect(fixture.assertOnlyInstance.taggedDivs!.map((e) => e.textContent), [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+      ]);
     });
 
     test('should work on type selectors that are not directives', () async {
       final testBed = NgTestBed<TestNonDirectiveChildSelector>(
-          ng.createTestNonDirectiveChildSelectorFactory());
+        ng.createTestNonDirectiveChildSelectorFactory(),
+      );
       final fixture = await testBed.create();
       expect(fixture.assertOnlyInstance.children, hasLength(3));
       expect(fixture.assertOnlyInstance.services, hasLength(3));
@@ -66,9 +79,7 @@ void main() {
 
 @Component(
   selector: 'test',
-  directives: [
-    ValueDirective,
-  ],
+  directives: [ValueDirective],
   template: r'''
     <value [value]="1"></value>
     <value [value]="2"></value>
@@ -83,9 +94,7 @@ class TestDirectViewChildren extends HasChildren<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    ValueDirective,
-  ],
+  directives: [ValueDirective],
   template: r'''
     <value [value]="1"></value>
   ''',
@@ -98,11 +107,7 @@ class TestDirectViewChild extends HasChild<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    AlwaysShowDirective,
-    NeverShowDirective,
-    ValueDirective,
-  ],
+  directives: [AlwaysShowDirective, NeverShowDirective, ValueDirective],
   template: r'''
     <value [value]="1"></value>
     <template neverShow>
@@ -121,10 +126,7 @@ class TestViewChildrenAndEmbedded extends HasChildren<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    AlwaysShowDirective,
-    ValueDirective,
-  ],
+  directives: [AlwaysShowDirective, ValueDirective],
   template: r'''
     <template alwaysShow>
       <value [value]="1"></value>
@@ -139,11 +141,7 @@ class TestDirectViewChildEmbedded extends HasChild<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    AlwaysShowDirective,
-    NeverShowDirective,
-    ValueDirective,
-  ],
+  directives: [AlwaysShowDirective, NeverShowDirective, ValueDirective],
   template: r'''
     <template alwaysShow>
       <template neverShow>
@@ -160,10 +158,7 @@ class TestViewChildNestedOnOff extends HasChild<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    NgIf,
-    ValueDirective,
-  ],
+  directives: [NgIf, ValueDirective],
   template: r'''
     <div *ngIf="outerDiv">
       <div *ngIf="innerDiv">
@@ -183,10 +178,7 @@ class TestViewChildNestedNgIfOffOn extends HasChild<ValueDirective> {
 
 @Component(
   selector: 'test-regression-embedded-ngif-false-true-async',
-  directives: [
-    NgIf,
-    ValueDirective,
-  ],
+  directives: [NgIf, ValueDirective],
   template: r'''
     <div *ngIf="outerDiv">
       <div *ngIf="innerDiv">
@@ -214,9 +206,7 @@ class TestViewChildNestedNgIfOffOnAsync extends HasChild<ValueDirective>
 
 @Component(
   selector: 'test',
-  directives: [
-    ValueDirective,
-  ],
+  directives: [ValueDirective],
   template: r'''
     <value [value]="1"></value>
     <value [value]="2"></value>
@@ -231,9 +221,7 @@ class TestDirectViewChildrenList extends HasChildren<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    ValueDirective,
-  ],
+  directives: [ValueDirective],
   template: r'''
     <value [value]="1"></value>
     <value [value]="2"></value>
@@ -252,11 +240,7 @@ class TestDirectViewChildrenListSetter extends HasChildren<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    AlwaysShowDirective,
-    NeverShowDirective,
-    ValueDirective,
-  ],
+  directives: [AlwaysShowDirective, NeverShowDirective, ValueDirective],
   template: r'''
     <value [value]="1"></value>
     <template neverShow>
@@ -275,10 +259,7 @@ class TestViewChildrenAndEmbeddedList extends HasChildren<ValueDirective> {
 
 @Component(
   selector: 'test',
-  directives: [
-    AlwaysShowDirective,
-    NgFor,
-  ],
+  directives: [AlwaysShowDirective, NgFor],
   template: r'''
     <div *alwaysShow>
       <div *alwaysShow>
@@ -296,10 +277,7 @@ class TestNestedNgForQueriesList {
 
 @Component(
   selector: 'test',
-  directives: [
-    AlwaysShowDirective,
-    NgFor,
-  ],
+  directives: [AlwaysShowDirective, NgFor],
   template: r'''
     <div #taggedDiv>1</div>
     <div *alwaysShow>
@@ -334,10 +312,7 @@ class InjectableService {}
 
 @Component(
   selector: 'test-non-directive-child-selector',
-  directives: [
-    NgIf,
-    QueryableDirective,
-  ],
+  directives: [NgIf, QueryableDirective],
   template: r'''
     <queryable-directive></queryable-directive>
     <queryable-directive></queryable-directive>

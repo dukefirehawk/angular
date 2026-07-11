@@ -1,8 +1,8 @@
+import 'package:web/web.dart' as html;
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngdart/src/devtools.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'inspector_test.template.dart' as ng;
 
@@ -21,8 +21,9 @@ void main() {
   // TODO(b/194920649): remove.
   group('getComponents', () {
     test('component views', () async {
-      final testBed =
-          NgTestBed<TestComponentViews>(ng.createTestComponentViewsFactory());
+      final testBed = NgTestBed<TestComponentViews>(
+          ng.createTestComponentViewsFactory()
+              as ComponentFactory<TestComponentViews>);
       await testBed.create();
 
       final components = Inspector.instance.getComponents(groupName);
@@ -52,7 +53,8 @@ void main() {
     group('embedded views', () {
       test('conditional', () async {
         final testBed = NgTestBed<TestConditionalEmbeddedViews>(
-            ng.createTestConditionalEmbeddedViewsFactory());
+            ng.createTestConditionalEmbeddedViewsFactory()
+                as ComponentFactory<TestConditionalEmbeddedViews>);
         final testFixture = await testBed.create();
 
         // Should not return embedded component before it's created.
@@ -94,7 +96,8 @@ void main() {
 
       test('repeated', () async {
         final testBed = NgTestBed<TestRepeatedEmbeddedViews>(
-            ng.createTestRepeatedEmbeddedViewsFactory());
+            ng.createTestRepeatedEmbeddedViewsFactory()
+                as ComponentFactory<TestRepeatedEmbeddedViews>);
         final testFixture = await testBed.create(
           beforeChangeDetection: (component) {
             component.values = [1, 2, 4];
@@ -155,7 +158,8 @@ void main() {
 
       test('transplanted', () async {
         final testBed = NgTestBed<TestTransplantedEmbeddedViews>(
-            ng.createTestTransplantedEmbeddedViewsFactory());
+            ng.createTestTransplantedEmbeddedViewsFactory()
+                as ComponentFactory<TestTransplantedEmbeddedViews>);
         await testBed.create();
 
         final components = Inspector.instance.getComponents(groupName);
@@ -182,7 +186,8 @@ void main() {
     });
 
     test('host views', () async {
-      final testBed = NgTestBed<TestHostViews>(ng.createTestHostViewsFactory());
+      final testBed = NgTestBed<TestHostViews>(
+          ng.createTestHostViewsFactory() as ComponentFactory<TestHostViews>);
       final testFixture = await testBed.create();
 
       // Should not return imperatively loaded component before it's created.
@@ -224,7 +229,8 @@ void main() {
 
     test('projected content', () async {
       final testBed = NgTestBed<TestProjectedContent>(
-          ng.createTestProjectedContentFactory());
+          ng.createTestProjectedContentFactory()
+              as ComponentFactory<TestProjectedContent>);
       await testBed.create();
 
       final components = Inspector.instance.getComponents(groupName);
@@ -262,13 +268,14 @@ void main() {
     });
 
     group('external content root', () {
-      late Element container;
+      late html.Element container;
       late NgTestFixture<TestExternalContentRoots> testFixture;
 
       setUp(() async {
         container = createContentRoot();
         final testBed = NgTestBed<TestExternalContentRoots>(
-            ng.createTestExternalContentRootsFactory());
+            ng.createTestExternalContentRootsFactory()
+                as ComponentFactory<TestExternalContentRoots>);
         testFixture = await testBed.create();
       });
 
@@ -317,7 +324,8 @@ void main() {
       final containerOne = createContentRoot();
       final containerTwo = createContentRoot();
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory());
+          ng.createTestExternalContentRootsFactory()
+              as ComponentFactory<TestExternalContentRoots>);
       final testFixture = await testBed.create();
 
       await testFixture.update((component) {
@@ -338,7 +346,8 @@ void main() {
 
     test('is coalesced by existing content root', () async {
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory());
+          ng.createTestExternalContentRootsFactory()
+              as ComponentFactory<TestExternalContentRoots>);
       final testFixture = await testBed.create();
       final container = createContentRoot(parent: testFixture.rootElement);
 
@@ -355,10 +364,11 @@ void main() {
 
     test('coalesces existing content roots', () async {
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory());
+          ng.createTestExternalContentRootsFactory()
+              as ComponentFactory<TestExternalContentRoots>);
       final testFixture = await testBed.create();
-      final childContainer = HTMLDivElement();
-      final parentContainer = testFixture.rootElement.parentElement!
+      final childContainer = html.HTMLDivElement();
+      final parentContainer = testFixture.rootElement.parentNode!
         ..append(childContainer);
       registerContentRoot(childContainer);
       registerContentRoot(parentContainer);
@@ -389,8 +399,9 @@ void main() {
 
   group('getNodes', () {
     test('component views', () async {
-      final testBed =
-          NgTestBed<TestComponentViews>(ng.createTestComponentViewsFactory());
+      final testBed = NgTestBed<TestComponentViews>(
+          ng.createTestComponentViewsFactory()
+              as ComponentFactory<TestComponentViews>);
       await testBed.create();
 
       expect(
@@ -411,7 +422,8 @@ void main() {
     group('embedded views', () {
       test('conditional', () async {
         final testBed = NgTestBed<TestConditionalEmbeddedViews>(
-            ng.createTestConditionalEmbeddedViewsFactory());
+            ng.createTestConditionalEmbeddedViewsFactory()
+                as ComponentFactory<TestConditionalEmbeddedViews>);
         final testFixture = await testBed.create();
 
         // Should not return embedded component before it's created.
@@ -469,7 +481,8 @@ void main() {
 
       test('repeated', () async {
         final testBed = NgTestBed<TestRepeatedEmbeddedViews>(
-            ng.createTestRepeatedEmbeddedViewsFactory());
+            ng.createTestRepeatedEmbeddedViewsFactory()
+                as ComponentFactory<TestRepeatedEmbeddedViews>);
         final testFixture = await testBed.create(
           beforeChangeDetection: (component) {
             component.values = [1, 2, 4];
@@ -538,7 +551,8 @@ void main() {
 
       test('transplated', () async {
         final testBed = NgTestBed<TestTransplantedEmbeddedViews>(
-            ng.createTestTransplantedEmbeddedViewsFactory());
+            ng.createTestTransplantedEmbeddedViewsFactory()
+                as ComponentFactory<TestTransplantedEmbeddedViews>);
         await testBed.create();
 
         expect(
@@ -564,7 +578,8 @@ void main() {
     });
 
     test('host views', () async {
-      final testBed = NgTestBed<TestHostViews>(ng.createTestHostViewsFactory());
+      final testBed = NgTestBed<TestHostViews>(
+          ng.createTestHostViewsFactory() as ComponentFactory<TestHostViews>);
       final testFixture = await testBed.create();
 
       // Should not return imperatively loaded component before it's created.
@@ -600,7 +615,8 @@ void main() {
 
     test('projected content', () async {
       final testBed = NgTestBed<TestProjectedContent>(
-          ng.createTestProjectedContentFactory());
+          ng.createTestProjectedContentFactory()
+              as ComponentFactory<TestProjectedContent>);
       await testBed.create();
 
       expect(
@@ -627,13 +643,14 @@ void main() {
     });
 
     group('external content root', () {
-      late Element container;
+      late html.Element container;
       late NgTestFixture<TestExternalContentRoots> testFixture;
 
       setUp(() async {
         container = createContentRoot();
         final testBed = NgTestBed<TestExternalContentRoots>(
-            ng.createTestExternalContentRootsFactory());
+            ng.createTestExternalContentRootsFactory()
+                as ComponentFactory<TestExternalContentRoots>);
         testFixture = await testBed.create();
       });
 
@@ -682,7 +699,8 @@ void main() {
       final containerOne = createContentRoot();
       final containerTwo = createContentRoot();
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory());
+          ng.createTestExternalContentRootsFactory()
+              as ComponentFactory<TestExternalContentRoots>);
       final testFixture = await testBed.create();
 
       await testFixture.update((component) {
@@ -703,7 +721,8 @@ void main() {
 
     test('is coalesced by existing content root', () async {
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory());
+          ng.createTestExternalContentRootsFactory()
+              as ComponentFactory<TestExternalContentRoots>);
       final testFixture = await testBed.create();
       final container = createContentRoot(parent: testFixture.rootElement);
 
@@ -720,10 +739,11 @@ void main() {
 
     test('coalesces existing content roots', () async {
       final testBed = NgTestBed<TestExternalContentRoots>(
-          ng.createTestExternalContentRootsFactory());
+          ng.createTestExternalContentRootsFactory()
+              as ComponentFactory<TestExternalContentRoots>);
       final testFixture = await testBed.create();
-      final childContainer = HTMLDivElement();
-      final parentContainer = testFixture.rootElement.parentElement!
+      final childContainer = html.HTMLDivElement();
+      final parentContainer = testFixture.rootElement.parentNode!
         ..append(childContainer);
       registerContentRoot(childContainer);
       registerContentRoot(parentContainer);
@@ -757,8 +777,8 @@ void main() {
     }
 
     test('no inputs', () async {
-      final testBed =
-          NgTestBed<TestUsedInputs>(ng.createTestUsedInputsFactory());
+      final testBed = NgTestBed<TestUsedInputs>(
+          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
       await testBed.create();
 
       final components = Inspector.instance.getComponents(groupName);
@@ -770,8 +790,9 @@ void main() {
     });
 
     test('omits unused inputs', () async {
-      final testBed =
-          NgTestBed<TestUnusedInputs>(ng.createTestUnusedInputsFactory());
+      final testBed = NgTestBed<TestUnusedInputs>(
+          ng.createTestUnusedInputsFactory()
+              as ComponentFactory<TestUnusedInputs>);
       await testBed.create();
 
       final id = firstChildComponentId();
@@ -780,8 +801,8 @@ void main() {
     });
 
     test('omits inputs until set', () async {
-      final testBed =
-          NgTestBed<TestUsedInputs>(ng.createTestUsedInputsFactory());
+      final testBed = NgTestBed<TestUsedInputs>(
+          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
       final testFixture = await testBed.create();
 
       final id = firstChildComponentId();
@@ -807,8 +828,8 @@ void main() {
     });
 
     test('updates inputs when changed', () async {
-      final testBed =
-          NgTestBed<TestUsedInputs>(ng.createTestUsedInputsFactory());
+      final testBed = NgTestBed<TestUsedInputs>(
+          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
       final testFixture = await testBed.create(
         beforeChangeDetection: (component) {
           component.title = 'Hello!';
@@ -828,8 +849,9 @@ void main() {
     });
 
     test('records immutable expressions', () async {
-      final testBed =
-          NgTestBed<TestImmutableInputs>(ng.createTestImmutableInputsFactory());
+      final testBed = NgTestBed<TestImmutableInputs>(
+          ng.createTestImmutableInputsFactory()
+              as ComponentFactory<TestImmutableInputs>);
       final testFixture = await testBed.create();
 
       final id = firstChildComponentId();
@@ -854,8 +876,8 @@ void main() {
     }
 
     test('no inputs', () async {
-      final testBed =
-          NgTestBed<TestUsedInputs>(ng.createTestUsedInputsFactory());
+      final testBed = NgTestBed<TestUsedInputs>(
+          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
       await testBed.create();
 
       final nodes = Inspector.instance.getNodes(groupName);
@@ -865,8 +887,9 @@ void main() {
     });
 
     test('omits unused inputs', () async {
-      final testBed =
-          NgTestBed<TestUnusedInputs>(ng.createTestUnusedInputsFactory());
+      final testBed = NgTestBed<TestUnusedInputs>(
+          ng.createTestUnusedInputsFactory()
+              as ComponentFactory<TestUnusedInputs>);
       await testBed.create();
 
       final id = firstChildComponentId();
@@ -875,8 +898,8 @@ void main() {
     });
 
     test('omits inputs until set', () async {
-      final testBed =
-          NgTestBed<TestUsedInputs>(ng.createTestUsedInputsFactory());
+      final testBed = NgTestBed<TestUsedInputs>(
+          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
       final testFixture = await testBed.create();
 
       final id = firstChildComponentId();
@@ -902,8 +925,8 @@ void main() {
     });
 
     test('updates inputs when changed', () async {
-      final testBed =
-          NgTestBed<TestUsedInputs>(ng.createTestUsedInputsFactory());
+      final testBed = NgTestBed<TestUsedInputs>(
+          ng.createTestUsedInputsFactory() as ComponentFactory<TestUsedInputs>);
       final testFixture = await testBed.create(
         beforeChangeDetection: (component) {
           component.title = 'Hello!';
@@ -923,8 +946,9 @@ void main() {
     });
 
     test('records immutable expressions', () async {
-      final testBed =
-          NgTestBed<TestImmutableInputs>(ng.createTestImmutableInputsFactory());
+      final testBed = NgTestBed<TestImmutableInputs>(
+          ng.createTestImmutableInputsFactory()
+              as ComponentFactory<TestImmutableInputs>);
       final testFixture = await testBed.create();
 
       final id = firstChildComponentId();
@@ -942,7 +966,8 @@ void main() {
 
     test('captures directive inputs', () async {
       final testBed = NgTestBed<TestConditionalEmbeddedViews>(
-          ng.createTestConditionalEmbeddedViewsFactory());
+          ng.createTestConditionalEmbeddedViewsFactory()
+              as ComponentFactory<TestConditionalEmbeddedViews>);
       final testFixture = await testBed.create();
       final nodes = Inspector.instance.getNodes(groupName);
       final ngIfId = nodes.first.children.first.directives.first.id;
@@ -962,9 +987,9 @@ void main() {
   });
 }
 
-Element createContentRoot({Element? parent}) {
-  final root = HTMLDivElement();
-  (parent ?? document.body!).append(root);
+html.Element createContentRoot({html.Element? parent}) {
+  final root = html.HTMLDivElement();
+  (parent ?? html.document.body!).append(root);
   registerContentRoot(root);
   return root;
 }
@@ -1075,7 +1100,8 @@ class TestEmbeddedViews2 {
   ''',
 )
 class TestHostViews {
-  final componentFactory = ng.createTestHostViews1Factory();
+  final componentFactory =
+      ng.createTestHostViews1Factory() as ComponentFactory<TestHostViews1>;
 
   @ViewChild('viewContainerRef', read: ViewContainerRef)
   ViewContainerRef? viewContainerRef;
@@ -1187,7 +1213,7 @@ class TestExternalContentRoots {
   @ViewChild('multiple')
   TemplateRef? multipleComponentTemplateRef;
 
-  void initExternalContent(Element container, TemplateRef content) {
+  void initExternalContent(html.Element container, TemplateRef content) {
     final viewRef = _viewContainerRef.createEmbeddedView(content);
     for (final node in viewRef.rootNodes) {
       container.append(node);

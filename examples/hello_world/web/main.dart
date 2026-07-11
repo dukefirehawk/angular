@@ -1,13 +1,21 @@
 import 'package:ngdart/angular.dart';
+import 'package:ngrouter/angular_router.dart';
+import 'package:http/browser_client.dart';
+import 'package:http/http.dart';
+
+import 'package:examples_hello_world/app.template.dart' as app;
 
 import 'main.template.dart' as ng;
 
-void main() {
-  runApp<HelloWorldComponent>(ng.HelloWorldComponentNgFactory);
-}
+const useHashLS = false;
 
-@Component(
-  selector: 'hello-world',
-  template: 'Hello World',
-)
-class HelloWorldComponent {}
+@GenerateInjector([
+  routerProvidersHash, // For development
+  // routerProviders, // For Production
+  ClassProvider(Client, useClass: BrowserClient),
+])
+final InjectorFactory injector = ng.injector$Injector;
+
+void main() {
+  runApp(app.MyAppComponentNgFactory, createInjector: injector);
+}

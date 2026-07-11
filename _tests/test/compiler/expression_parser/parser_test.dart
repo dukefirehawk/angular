@@ -1,4 +1,6 @@
-import 'package:_tests/test_util.dart';
+import 'package:test/test.dart';
+// ignore: avoid_relative_lib_imports
+import '../../../lib/test_util.dart';
 import 'package:ngcompiler/v1/src/compiler/compile_metadata.dart'
     show CompileIdentifierMetadata;
 import 'package:ngcompiler/v1/src/compiler/expression_parser/ast.dart'
@@ -6,7 +8,6 @@ import 'package:ngcompiler/v1/src/compiler/expression_parser/ast.dart'
 import 'package:ngcompiler/v1/src/compiler/expression_parser/parser.dart'
     show ParseException, ExpressionParser;
 import 'package:ngcompiler/v2/context.dart';
-import 'package:test/test.dart';
 
 import 'unparser.dart' show Unparser;
 
@@ -24,15 +25,15 @@ void main() {
 }
 
 void _runTests(ExpressionParser Function() createParser) {
-  ASTWithSource parseAction(String? text, [String location = '']) {
+  ASTWithSource parseAction(String text, [String? location]) {
     return createParser().parseAction(text, location, []);
   }
 
-  ASTWithSource parseBinding(String text, [String location = '']) {
+  ASTWithSource parseBinding(String text, [String? location]) {
     return createParser().parseBinding(text, location, []);
   }
 
-  ASTWithSource? parseInterpolation(String text, [String location = '']) {
+  ASTWithSource parseInterpolation(String text, [String? location]) {
     return createParser().parseInterpolation(text, location, []);
   }
 
@@ -41,7 +42,7 @@ void _runTests(ExpressionParser Function() createParser) {
   }
 
   void checkInterpolation(String exp, [String? expected]) {
-    var ast = parseInterpolation(exp)!;
+    var ast = parseInterpolation(exp);
     expected ??= exp;
     expect(unparse(ast), expected);
   }
@@ -62,7 +63,7 @@ void _runTests(ExpressionParser Function() createParser) {
     expect(() => parseInterpolation(text), matcher);
   }
 
-  void expectActionError(String? text, Object matcher) {
+  void expectActionError(String text, Object matcher) {
     expect(() => parseAction(text), matcher);
   }
 
@@ -93,10 +94,7 @@ void _runTests(ExpressionParser Function() createParser) {
         checkAction('-1', '0 - 1');
       });
       test('should fail to parse unary + expressions', () {
-        expectActionError(
-          '+1',
-          _throwsParseException,
-        );
+        expectActionError('+1', _throwsParseException);
       });
       test('should parse unary ! expressions', () {
         checkAction('!true');
@@ -167,7 +165,7 @@ void _runTests(ExpressionParser Function() createParser) {
           final parser = createParser();
           final text = 'fn(a: 1)';
           final export = CompileIdentifierMetadata(name: 'a');
-          final ast = parser.parseAction(text, '', [export]);
+          final ast = parser.parseAction(text, null, [export]);
           expect(unparse(ast), text);
         });
       });
@@ -218,23 +216,17 @@ void _runTests(ExpressionParser Function() createParser) {
       });
       test('should throw when encountering interpolation', () {
         expectActionError(
-            '{{a()}}',
-            throwsWith(
-                'Got interpolation ({{}}) where expression was expected'));
+          '{{a()}}',
+          throwsWith('Got interpolation ({{}}) where expression was expected'),
+        );
       });
       test('should not support multiple statements', () {
-        expect(
-          () => parseAction('1;2'),
-          _throwsParseException,
-        );
+        expect(() => parseAction('1;2'), _throwsParseException);
       });
     });
     group('general error handling', () {
       test('should throw on an unexpected token', () {
-        expectActionError(
-          'f(1,2) trac',
-          _throwsParseException,
-        );
+        expectActionError('f(1,2) trac', _throwsParseException);
       });
       test('should throw a reasonable error for unconsumed tokens', () {
         expectActionError(')', _throwsParseException);
@@ -276,19 +268,16 @@ void _runTests(ExpressionParser Function() createParser) {
         expect(parseBinding('someExpr', 'location').location, 'location');
       });
       test('should throw on multiple statements', () {
-        expect(
-          () => parseBinding('1;2'),
-          _throwsParseException,
-        );
+        expect(() => parseBinding('1;2'), _throwsParseException);
       });
       test('should throw on assignment', () {
         expect(() => parseBinding('a=2'), _throwsParseException);
       });
       test('should throw when encountering interpolation', () {
         expectBindingError(
-            '{{a.b}}',
-            throwsWith(
-                'Got interpolation ({{}}) where expression was expected'));
+          '{{a.b}}',
+          throwsWith('Got interpolation ({{}}) where expression was expected'),
+        );
       });
       test('should parse conditional expression', () {
         checkBinding('a < b ? a : b');
@@ -298,7 +287,9 @@ void _runTests(ExpressionParser Function() createParser) {
       });
       test('should retain // in string literals', () {
         checkBinding(
-            '''"http://www.google.com"''', '''"http://www.google.com"''');
+          '''"http://www.google.com"''',
+          '''"http://www.google.com"''',
+        );
       });
     });
     group('parseInterpolation', () {
@@ -306,33 +297,40 @@ void _runTests(ExpressionParser Function() createParser) {
         expect(parseInterpolation('nothing'), isNull);
       });
       test('should parse no prefix/suffix interpolation', () {
-        var ast = parseInterpolation('{{a}}')!.ast as Interpolation;
+        var ast = parseInterpolation('{{a}}').ast as Interpolation;
         expect(ast.strings, ['', '']);
         expect(ast.expressions.length, 1);
         expect((ast.expressions[0] as PropertyRead).name, 'a');
       });
       test('should parse prefix/suffix with multiple interpolation', () {
         var originalExp = 'before {{ a }} middle {{ b }} after';
-        var ast = parseInterpolation(originalExp)!;
+        var ast = parseInterpolation(originalExp);
         expect(Unparser().unparse(ast), originalExp);
       });
       test('should throw on empty interpolation expressions', () {
         expect(
-            () => parseInterpolation('{{}}'),
-            throwsWith(
-                'Parser Error: Blank expressions are not allowed in interpolated strings'));
+          () => parseInterpolation('{{}}'),
+          throwsWith(
+            'Parser Error: Blank expressions are not allowed in interpolated strings',
+          ),
+        );
         expect(
-            () => parseInterpolation('foo {{  }}'),
-            throwsWith(
-                'Parser Error: Blank expressions are not allowed in interpolated strings'));
+          () => parseInterpolation('foo {{  }}'),
+          throwsWith(
+            'Parser Error: Blank expressions are not allowed in interpolated strings',
+          ),
+        );
       });
       test('should parse conditional expression', () {
         checkInterpolation('{{ a < b ? a : b }}');
       });
       test('should parse expression with newline characters', () {
-        checkInterpolation('''{{ 'foo' +
+        checkInterpolation(
+          '''{{ 'foo' +
  'bar' +
- 'baz' }}''', '''{{ "foo" + "bar" + "baz" }}''');
+ 'baz' }}''',
+          '''{{ "foo" + "bar" + "baz" }}''',
+        );
       });
       group('non-comment slashes should parse in', () {
         test('single quote strings', () {
@@ -351,10 +349,7 @@ void _runTests(ExpressionParser Function() createParser) {
 
       group('comments should fail in', () {
         test('interpolation expressions', () {
-          expectInterpolationError(
-            '{{a //comment}}',
-            _throwsParseException,
-          );
+          expectInterpolationError('{{a //comment}}', _throwsParseException);
         });
 
         test('after string literals', () {

@@ -9,16 +9,16 @@
 library;
 
 import 'package:meta/meta.dart';
-import 'package:ngdart/angular.dart';
 
 import 'src/bootstrap/run.dart' show appInjector;
+import 'src/di/injector.dart';
 import 'src/runtime/dom_helpers.dart';
 
 export 'src/common/directives/ng_for_identity.dart' show NgForIdentity;
 export 'src/core/linker/component_factory.dart'
     show debugUsesDefaultChangeDetection;
 export 'src/core/zone/ng_zone.dart' show longestPendingTimer, inAngularZone;
-export 'src/meta.dart' show changeDetectionLink;
+export 'src/meta/change_detection_link.dart' show changeDetectionLink;
 
 /// Create a root application [Injector].
 ///

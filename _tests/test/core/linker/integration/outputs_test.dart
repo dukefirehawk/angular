@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:web/web.dart';
 
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'outputs_test.template.dart' as ng;
 
@@ -48,9 +48,9 @@ void main() {
     final testBed = NgTestBed<ElementWithDomEventComponent>(
         ng.createElementWithDomEventComponentFactory());
     final testFixture = await testBed.create();
-    final div = testFixture.rootElement.children.item(0)!;
+    final div = testFixture.rootElement.children.item(0);
     final listener = testFixture.assertOnlyInstance.listener;
-    await testFixture.update((_) => div.dispatchEvent(Event('click')));
+    await testFixture.update((_) => div?.dispatchEvent(Event('click')));
     expect(listener!.eventTypes, ['click']);
   });
 
@@ -62,8 +62,7 @@ void main() {
         testFixture.rootElement.children.item(0) as HTMLInputElement;
     final inputNoPrevent =
         testFixture.rootElement.children.item(1) as HTMLInputElement;
-    // `true` by default in the `dart:html` Event contructor
-    final clickPrevent = MouseEvent('click', MouseEventInit(cancelable: true));
+    final clickPrevent = MouseEvent('click');
     final clickNoPrevent = MouseEvent('click');
     inputPrevent.dispatchEvent(clickPrevent);
     inputNoPrevent.dispatchEvent(clickNoPrevent);

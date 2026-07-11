@@ -6,19 +6,23 @@ import 'package:source_gen/source_gen.dart';
 
 import 'common.dart';
 
-final TypeReference _dynamic = TypeReference((b) => b
-  ..symbol = 'dynamic'
-  ..url = 'dart:core');
+final TypeReference _dynamic = TypeReference(
+  (b) => b
+    ..symbol = 'dynamic'
+    ..url = 'dart:core',
+);
 
 /// Returns as a `code_builder` [TypeReference] for code generation.
 TypeReference linkToReference(TypeLink link, LibraryReader library) {
   if (link.isDynamic || link.isPrivate) {
     return _dynamic;
   }
-  return TypeReference((b) => b
-    ..symbol = link.symbol
-    ..url = library.pathToUrl(link.import).toString()
-    ..types.addAll(link.generics.map((t) => linkToReference(t, library))));
+  return TypeReference(
+    (b) => b
+      ..symbol = link.symbol
+      ..url = library.pathToUrl(link.import).toString()
+      ..types.addAll(link.generics.map((t) => linkToReference(t, library))),
+  );
 }
 
 DartType _resolveBounds(DartType type) {
@@ -28,7 +32,7 @@ DartType _resolveBounds(DartType type) {
 /// Returns a [TypeLink] to the given statically analyzed [DartType].
 TypeLink linkTypeOf(DartType type) {
   // Return void or Null types.
-  if (type.isVoid) {
+  if (type is VoidType) {
     return TypeLink.$void;
   }
   if (type.isDartCoreNull) {
@@ -40,7 +44,7 @@ TypeLink linkTypeOf(DartType type) {
   // that does not come from a typedef, it is the type of a top-level function
   // and that type was not inferred previously by the analyzer. A more proper
   // fix from Angular would be to support function types (for now dynamic only).
-  if (type.isDynamic) {
+  if (type is DynamicType) {
     return TypeLink.$dynamic;
   }
   type = _resolveBounds(type);
@@ -142,9 +146,6 @@ class TypeLink {
   }
 
   /// Returns as a [TypeLink] without generic type arguments.
-  TypeLink withoutGenerics() => TypeLink(
-        symbol,
-        import,
-        isNullable: isNullable,
-      );
+  TypeLink withoutGenerics() =>
+      TypeLink(symbol, import, isNullable: isNullable);
 }

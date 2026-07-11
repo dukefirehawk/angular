@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:ngdart/src/meta.dart';
+import '../meta.dart';
 
 import '../core/application_ref.dart';
 import '../core/application_tokens.dart';
@@ -48,10 +48,7 @@ Injector appInjector(
   // We also add other top-level services with similar constraints:
   // * `AppViewUtils`
   final injector = ngZone.run(() {
-    applicationRef = internalCreateApplicationRef(
-      ngZone,
-      userInjector,
-    );
+    applicationRef = internalCreateApplicationRef(ngZone, userInjector);
     appViewUtils = AppViewUtils(
       userInjector.provideToken(appId),
       EventManager(ngZone),
@@ -73,10 +70,7 @@ Injector appInjector(
 class _LazyInjector extends HierarchicalInjector {
   final Map<Object, Object Function()> _providers;
 
-  const _LazyInjector(
-    this._providers, [
-    super.parent,
-  ]);
+  const _LazyInjector(this._providers, [super.parent]);
 
   @override
   Object? injectFromSelfOptional(
@@ -100,7 +94,7 @@ Injector _identityInjector(Injector parent) => parent;
 ///
 /// ```dart
 /// // Assume this file is "main.dart".
-/// import 'package:ngdart/angular.dart';
+/// import '../angular.dart';
 /// import 'main.template.dart' as ng;
 ///
 /// @Component(
@@ -124,7 +118,7 @@ Injector _identityInjector(Injector parent) => parent;
 /// services to the root of the application:
 ///
 /// // Assume this file is "main.dart".
-/// import 'package:ngdart/angular.dart';
+/// import '../angular.dart';
 /// import 'main.template.dart' as ng;
 ///
 /// @Component(

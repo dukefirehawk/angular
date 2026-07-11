@@ -14,8 +14,10 @@ class RecursiveTemplateAstVisitor<C>
 
   /// Visits a collection of [TemplateAst] nodes, returning all of those that
   /// are not null.
-  List<T>? visitAll<T extends TemplateAst>(Iterable<T>? astNodes,
-      [C? context]) {
+  List<T>? visitAll<T extends TemplateAst>(
+    Iterable<T>? astNodes, [
+    C? context,
+  ]) {
     if (astNodes == null) return null;
 
     final results = <T>[];
@@ -127,10 +129,7 @@ class RecursiveTemplateAstVisitor<C>
   @override
   @mustCallSuper
   TemplateAst visitInterpolation(InterpolationAst astNode, [C? context]) {
-    return InterpolationAst.from(
-      astNode,
-      astNode.value,
-    );
+    return InterpolationAst.from(astNode, astNode.value);
   }
 
   @override
