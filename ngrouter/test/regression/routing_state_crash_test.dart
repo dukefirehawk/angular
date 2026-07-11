@@ -106,7 +106,7 @@ class LoggingExceptionHandler implements ExceptionHandler {
   providers: [routerProvidersTest, ClassProvider(ServiceThatThrows)],
 )
 class AppComponent {
-  static final routes = [
+  final List<RouteDefinition> routes = [
     RouteDefinition(
       path: 'home',
       useAsDefault: true,
