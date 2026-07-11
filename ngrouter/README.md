@@ -1,3 +1,5 @@
+# ngrouter
+
 [![Pub package](https://img.shields.io/pub/v/ngrouter.svg)](https://pub.dev/packages/ngrouter)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/angulardart-community/angular/dart.yml?branch=master)](https://github.com/angulardart-community/angular/actions/workflows/dart.yml)
 [![Gitter](https://img.shields.io/gitter/room/angulardart/community)](https://gitter.im/angulardart/community)
@@ -5,7 +7,7 @@
 The [AngularDart][webdev_angular] router enables navigation from one view to
 the next as users perform application tasks.
 
-### Resources:
+## Resources
 
 * Documentation:
   [routing guide][webdev_router],

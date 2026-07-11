@@ -1,8 +1,8 @@
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngrouter/testing.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 
 import 'redirect_parameters_navigation_test.template.dart' as ng;
 
@@ -23,13 +23,14 @@ void main() {
 /// Performs a navigation that should be redirected.
 /// Returns any URL changes that occurred due to navigation.
 Future<List<String>> redirect(String from) async {
-  final testBed =
-      NgTestBed<TestRedirectComponent>(ng.createTestRedirectComponentFactory())
-          .addInjector(injector);
+  final testBed = NgTestBed<TestRedirectComponent>(
+    ng.createTestRedirectComponentFactory(),
+  ).addInjector(injector);
   final testFixture = await testBed.create();
-  final urlChanges = testFixture.assertOnlyInstance.locationStrategy.urlChanges;
+  final urlChanges =
+      testFixture.assertOnlyInstance.locationStrategy?.urlChanges ?? [];
   final router = testFixture.assertOnlyInstance.router;
-  final result = await router.navigate(from);
+  final result = await router?.navigate(from);
   expect(result, NavigationResult.success);
   return urlChanges;
 }
@@ -52,11 +53,11 @@ class TestRedirectComponent {
     RouteDefinition.redirect(path: '/from/:id/:id2', redirectTo: '/to/:id'),
   ];
 
-  final MockLocationStrategy locationStrategy;
-  final Router router;
+  final MockLocationStrategy? locationStrategy;
+  final Router? router;
 
   TestRedirectComponent(
-    @Inject(LocationStrategy) this.locationStrategy,
-    this.router,
+    @Optional() @Inject(LocationStrategy) this.locationStrategy,
+    @Optional() this.router,
   );
 }

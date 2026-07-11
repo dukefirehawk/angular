@@ -1,8 +1,8 @@
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngrouter/testing.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 
 import 'empty_active_link_test.template.dart' as ng;
 
@@ -14,6 +14,7 @@ void main() {
     final testBed = NgTestBed<AppComponent>(ng.createAppComponentFactory())
         .addInjector(injector);
     final testFixture = await testBed.create();
+    await testFixture.update((_) {});
     final anchor = testFixture.rootElement.querySelector('a')!;
     expect(anchor.classList.contains(AppComponent.activeClassName), isTrue);
   });
@@ -27,8 +28,8 @@ class IndexComponent {}
 
 @Component(
   selector: 'app',
-  template: ''''
-    <a [routerLink]="indexPath" [routerLinkActive]="activeClassName"></a>
+  template: '''
+    <a [routerLink]="indexPath" [routerLinkActive]="boundActiveClassName"></a>
     <router-outlet [routes]="routes"></router-outlet>
   ''',
   directives: [
@@ -39,9 +40,13 @@ class IndexComponent {}
 )
 class AppComponent {
   static const activeClassName = 'active';
-  static const indexPath = '/';
-  static final routes = [
+  static const _indexPath = '/';
+
+  String get indexPath => _indexPath;
+  String get boundActiveClassName => activeClassName;
+  
+  final List<RouteDefinition> routes = [
     RouteDefinition(
-        path: indexPath, component: ng.createIndexComponentFactory()),
+        path: _indexPath, component: ng.createIndexComponentFactory()),
   ];
 }

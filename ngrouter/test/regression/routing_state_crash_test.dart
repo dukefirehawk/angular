@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:js_interop';
+import 'package:web/helpers.dart';
+import 'package:web/web.dart';
 
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngrouter/testing.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
 
 import 'routing_state_crash_test.template.dart' as ng;
 
@@ -33,7 +34,7 @@ void main() {
 
     await onStable();
     expect(_logs, isEmpty);
-    expect(locationStrategy.path(), isEmpty);
+    expect(locationStrategy?.path(), isEmpty);
     expect(routeContainer.textContent, contains('Home Page'));
 
     // "Navigate" to /another
@@ -71,7 +72,7 @@ class LoggingExceptionHandler implements ExceptionHandler {
   }
 
   @override
-  void call(exception, [stack, __]) {
+  void call(exception, [stack, _]) {
     _logs.add('$exception: $stack');
 
     if (exception is! IntentionalException) {
@@ -101,17 +102,11 @@ class LoggingExceptionHandler implements ExceptionHandler {
       <router-outlet [routes]="routes"></router-outlet>
     </div>
   ''',
-  directives: [
-    RouterLink,
-    RouterOutlet,
-  ],
-  providers: [
-    routerProvidersTest,
-    ClassProvider(ServiceThatThrows),
-  ],
+  directives: [RouterLink, RouterOutlet],
+  providers: [routerProvidersTest, ClassProvider(ServiceThatThrows)],
 )
 class AppComponent {
-  static final routes = [
+  final List<RouteDefinition> routes = [
     RouteDefinition(
       path: 'home',
       useAsDefault: true,
@@ -127,17 +122,17 @@ class AppComponent {
     ),
   ];
 
-  final MockLocationStrategy _locationStrategy;
-  final NgZone _ngZone;
-  final Testability _testability;
+  final MockLocationStrategy? _locationStrategy;
+  final NgZone? _ngZone;
+  final Testability? _testability;
 
   AppComponent(
-    @Inject(LocationStrategy) this._locationStrategy,
-    this._ngZone,
-    this._testability,
+    @Optional() @Inject(LocationStrategy) this._locationStrategy,
+    @Optional() this._ngZone,
+    @Optional() this._testability,
   );
 
-  String get currentUrl => _locationStrategy.path();
+  String get currentUrl => _locationStrategy?.path() ?? '';
 
   /// Returns a future that completes when [Testability] reports stability.
   Future<void> get onStable async {
@@ -146,7 +141,7 @@ class AppComponent {
 
     // Then wait for an async completion.
     final completer = Completer<void>();
-    _testability.whenStable(completer.complete);
+    _testability?.whenStable((() => completer.complete()).toJS);
     return completer.future;
   }
 
@@ -157,30 +152,26 @@ class AppComponent {
   /// Returns a [Future] that completes (a) after changing and (b) after stable.
   Future<void> updateUrl(String newUrl) {
     // Enters the zone manually if needed.
-    return _ngZone.run(() {
-      _locationStrategy.simulatePopState(newUrl);
-      return onStable;
-    });
+    if (_ngZone != null) {
+      return _ngZone.run(() {
+        _locationStrategy?.simulatePopState(newUrl);
+        return onStable;
+      });
+    }
+
+    return Future.value();
   }
 }
 
-@Component(
-  selector: 'home',
-  template: 'Home Page',
-)
+@Component(selector: 'home', template: 'Home Page')
 class HomeComponent {}
 
-@Component(
-  selector: 'another',
-  template: 'Another Page',
-)
+@Component(selector: 'another', template: 'Another Page')
 class AnotherComponent {}
 
 @Component(
   selector: 'throws',
-  directives: [
-    NgIf,
-  ],
+  directives: [NgIf],
   template: r'''
     <ng-container *ngIf="service.getterThatThrows">
       Should not be shown.

@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:js_interop';
-
-import 'package:ngdart/angular.dart';
 import 'package:web/web.dart'
     show
         Element,
@@ -11,6 +9,8 @@ import 'package:web/web.dart'
         KeyCode,
         KeyboardEvent,
         MouseEvent;
+
+import 'package:ngdart/angular.dart';
 
 import '../location.dart' show Location;
 import '../router/navigation_params.dart';
@@ -28,12 +28,10 @@ import '../url.dart';
 /// ```
 ///
 /// The [routerLink] can contain queryParameters or a fragment, ie: /heroes?a=1.
-@Directive(
-  selector: '[routerLink]',
-)
+@Directive(selector: '[routerLink]')
 class RouterLink implements OnDestroy {
-  final Router _router;
-  final Location _location;
+  final Router? _router;
+  final Location? _location;
   final String? _target;
 
   StreamSubscription<KeyboardEvent>? _keyPressSubscription;
@@ -42,16 +40,17 @@ class RouterLink implements OnDestroy {
   Url? _cachedUrl;
 
   RouterLink(
-    this._router,
-    this._location,
-    @Attribute('target') this._target,
-    Element element,
+    @Optional() this._router,
+    @Optional() this._location,
+    @Optional() @Attribute('target') this._target,
+    @Optional() Element? element,
   ) {
     // The browser will synthesize a click event for anchor elements when they
     // receive an Enter key press. For other elements, we must manually add a
     // key press listener to ensure the link remains keyboard accessible.
+    //if (element is! HTMLAnchorElement) {
     if (!element.isA<HTMLAnchorElement>()) {
-      _keyPressSubscription = element.onKeyPress.listen(_onKeyPress);
+      _keyPressSubscription = element?.onKeyPress.listen(_onKeyPress);
     }
   }
 
@@ -65,11 +64,13 @@ class RouterLink implements OnDestroy {
   Url get url {
     if (_cachedUrl == null) {
       final parsedUrl = Url.parse(_routerLink);
-      _cachedUrl = Url(
-        _location.normalizePath(parsedUrl.path),
-        fragment: parsedUrl.fragment,
-        queryParameters: parsedUrl.queryParameters,
-      );
+      if (_location != null) {
+        _cachedUrl = Url(
+          _location.normalizePath(parsedUrl.path),
+          fragment: parsedUrl.fragment,
+          queryParameters: parsedUrl.queryParameters,
+        );
+      }
     }
     return _cachedUrl!;
   }
@@ -78,7 +79,8 @@ class RouterLink implements OnDestroy {
   @HostBinding('attr.href')
   String get visibleHref {
     // Memoize invoking this external function.
-    return _cachedVisibleHref ??= _location.prepareExternalUrl(_routerLink);
+    return _cachedVisibleHref ??=
+        _location?.prepareExternalUrl(_routerLink) ?? '';
   }
 
   @override
@@ -105,10 +107,13 @@ class RouterLink implements OnDestroy {
     // The presence of target="_blank" opens link in new tab.
     if (_target == null || _target == '_self') {
       event.preventDefault();
-      _router.navigate(
-          url.path,
-          NavigationParams(
-              queryParameters: url.queryParameters, fragment: url.fragment));
+      _router?.navigate(
+        url.path,
+        NavigationParams(
+          queryParameters: url.queryParameters,
+          fragment: url.fragment,
+        ),
+      );
     }
   }
 }

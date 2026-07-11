@@ -1,0 +1,1251 @@
+  0s mockito:mockBuilder on 43 inputs; test/directives/router_link_active_directive_test.dart
+  0s ngdart (lazy); test/directives/router_link_active_directive_test.dart
+  0s mockito:mockBuilder on 43 inputs: 43 skipped
+  0s build_test:test_bootstrap on 45 inputs; $package$
+  0s build_test:test_bootstrap on 45 inputs: 45 skipped
+  0s build_web_compilers:entrypoint on 22 inputs; test/directives/router_link_active_directive_test.dart.browser_test.dart
+  0s build_web_compilers:entrypoint on 22 inputs: 22 skipped
+E ngdart (lazy) on test/directives/router_link_active_directive_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/directives/router_link_active_directive_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/directives/router_link_active_directive_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/directives/router_link_directive_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/directives/router_link_directive_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/directives/router_link_directive_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/lifecycle_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/lifecycle_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/lifecycle_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/navigation_queue_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/navigation_queue_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/navigation_queue_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/on_navigation_start_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/on_navigation_start_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/on_navigation_start_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/on_route_resolved_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/on_route_resolved_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/on_route_resolved_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/redirect_parameters_navigation_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/redirect_parameters_navigation_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/redirect_parameters_navigation_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/regression/empty_active_link_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/regression/empty_active_link_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/regression/empty_active_link_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/regression/empty_path_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/regression/empty_path_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/regression/empty_path_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/regression/hash_location_strategy_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/regression/hash_location_strategy_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/regression/hash_location_strategy_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/regression/redirect_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/regression/redirect_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/regression/redirect_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/regression/routing_state_crash_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/regression/routing_state_crash_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/regression/routing_state_crash_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/revert_popstate_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/revert_popstate_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/revert_popstate_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/route_definition_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/route_definition_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/route_definition_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/route_path_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/route_path_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/route_path_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/route_prefetcher_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/route_prefetcher_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/route_prefetcher_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/router_hook_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/router_hook_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/router_hook_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E ngdart (lazy) on test/update_location_on_popstate_test.dart:
+  An error occurred compiling third_party/dart/ngrouter/test/update_location_on_popstate_test.dart:
+  Failed to register provider for token "package:web/web.dart::HTMLElement": It already was provided, potentially automatically by the framework. This error is usually a sign you are trying to provide a token that is not valid to provide at the component level, such as "Element"; these tokens are meant to *only* be provided automatically by the framework and not manually by end-users.
+  
+  Please file a bug (https://github.com/angulardart-community/angular/issues/new) if you think this message is wrong or misleading.
+E ngdart (lazy) on test/update_location_on_popstate_test.dart:
+  type 'Null' is not a subtype of type 'FutureOr<String>'
+  #0      _SyncCompleter.complete (dart:async/future_impl.dart:113)
+  #1      runWithContext.<anonymous closure> (package:ngcompiler/v2/context.dart:65)
+  #2      _rootRunBinary (dart:async/zone_root.dart:70)
+  #3      _CustomZone.runBinary (dart:async/zone.dart:740)
+  #4      runZonedGuarded.<anonymous closure> (dart:async/zone_api.dart:134)
+  #5      _Zone._processUncaughtError (dart:async/zone.dart:482)
+  #6      _CustomZone.handleUncaughtError (dart:async/zone.dart:703)
+  #7      Future._propagateToListeners (dart:async/future_impl.dart:886)
+  #8      Future._completeErrorObject (dart:async/future_impl.dart:738)
+  #9      Future._completeError (dart:async/future_impl.dart:742)
+  <asynchronous suspension>
+  
+E build_web_compilers:entrypoint on test/directives/router_link_active_directive_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_link_active_directive_test.template.dart' as ng;` from ngrouter|test/directives/router_link_active_directive_test.dart at 10:1
+  
+E build_web_compilers:entrypoint on test/directives/router_link_active_directive_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_link_active_directive_test.template.dart' as ng;` from ngrouter|test/directives/router_link_active_directive_test.dart at 10:1
+  
+E build_web_compilers:entrypoint on test/directives/router_link_active_directive_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_link_active_directive_test.template.dart' as ng;` from ngrouter|test/directives/router_link_active_directive_test.dart at 10:1
+  
+E build_web_compilers:entrypoint on test/directives/router_link_active_directive_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_link_active_directive_test.template.dart' as ng;` from ngrouter|test/directives/router_link_active_directive_test.dart at 10:1
+  
+E build_web_compilers:entrypoint on test/directives/router_link_active_directive_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_link_active_directive_test.template.dart' as ng;` from ngrouter|test/directives/router_link_active_directive_test.dart at 10:1
+  
+E build_web_compilers:entrypoint on test/directives/router_link_directive_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_link_directive_test.template.dart' as ng;` from ngrouter|test/directives/router_link_directive_test.dart at 12:1
+  
+E build_web_compilers:entrypoint on test/directives/router_link_directive_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_link_directive_test.template.dart' as ng;` from ngrouter|test/directives/router_link_directive_test.dart at 12:1
+  
+E build_web_compilers:entrypoint on test/directives/router_link_directive_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_link_directive_test.template.dart' as ng;` from ngrouter|test/directives/router_link_directive_test.dart at 12:1
+  
+E build_web_compilers:entrypoint on test/directives/router_link_directive_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_link_directive_test.template.dart' as ng;` from ngrouter|test/directives/router_link_directive_test.dart at 12:1
+  
+E build_web_compilers:entrypoint on test/directives/router_link_directive_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_link_directive_test.template.dart' as ng;` from ngrouter|test/directives/router_link_directive_test.dart at 12:1
+  
+E build_web_compilers:entrypoint on test/lifecycle_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'lifecycle_test.template.dart' as ng;` from ngrouter|test/lifecycle_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/lifecycle_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'lifecycle_test.template.dart' as ng;` from ngrouter|test/lifecycle_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/lifecycle_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'lifecycle_test.template.dart' as ng;` from ngrouter|test/lifecycle_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/lifecycle_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'lifecycle_test.template.dart' as ng;` from ngrouter|test/lifecycle_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/lifecycle_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'lifecycle_test.template.dart' as ng;` from ngrouter|test/lifecycle_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/navigation_queue_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'navigation_queue_test.template.dart' as ng;` from ngrouter|test/navigation_queue_test.dart at 10:1
+  
+E build_web_compilers:entrypoint on test/navigation_queue_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'navigation_queue_test.template.dart' as ng;` from ngrouter|test/navigation_queue_test.dart at 10:1
+  
+E build_web_compilers:entrypoint on test/navigation_queue_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'navigation_queue_test.template.dart' as ng;` from ngrouter|test/navigation_queue_test.dart at 10:1
+  
+E build_web_compilers:entrypoint on test/navigation_queue_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'navigation_queue_test.template.dart' as ng;` from ngrouter|test/navigation_queue_test.dart at 10:1
+  
+E build_web_compilers:entrypoint on test/navigation_queue_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'navigation_queue_test.template.dart' as ng;` from ngrouter|test/navigation_queue_test.dart at 10:1
+  
+E build_web_compilers:entrypoint on test/on_navigation_start_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'on_navigation_start_test.template.dart' as ng;` from ngrouter|test/on_navigation_start_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/on_navigation_start_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'on_navigation_start_test.template.dart' as ng;` from ngrouter|test/on_navigation_start_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/on_navigation_start_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'on_navigation_start_test.template.dart' as ng;` from ngrouter|test/on_navigation_start_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/on_navigation_start_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'on_navigation_start_test.template.dart' as ng;` from ngrouter|test/on_navigation_start_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/on_navigation_start_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'on_navigation_start_test.template.dart' as ng;` from ngrouter|test/on_navigation_start_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/on_route_resolved_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'on_route_resolved_test.template.dart' as ng;` from ngrouter|test/on_route_resolved_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/on_route_resolved_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'on_route_resolved_test.template.dart' as ng;` from ngrouter|test/on_route_resolved_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/on_route_resolved_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'on_route_resolved_test.template.dart' as ng;` from ngrouter|test/on_route_resolved_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/on_route_resolved_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'on_route_resolved_test.template.dart' as ng;` from ngrouter|test/on_route_resolved_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/on_route_resolved_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'on_route_resolved_test.template.dart' as ng;` from ngrouter|test/on_route_resolved_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/redirect_parameters_navigation_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'redirect_parameters_navigation_test.template.dart' as ng;` from ngrouter|test/redirect_parameters_navigation_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/redirect_parameters_navigation_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'redirect_parameters_navigation_test.template.dart' as ng;` from ngrouter|test/redirect_parameters_navigation_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/redirect_parameters_navigation_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'redirect_parameters_navigation_test.template.dart' as ng;` from ngrouter|test/redirect_parameters_navigation_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/redirect_parameters_navigation_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'redirect_parameters_navigation_test.template.dart' as ng;` from ngrouter|test/redirect_parameters_navigation_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/redirect_parameters_navigation_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'redirect_parameters_navigation_test.template.dart' as ng;` from ngrouter|test/redirect_parameters_navigation_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/empty_active_link_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'empty_active_link_test.template.dart' as ng;` from ngrouter|test/regression/empty_active_link_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/empty_active_link_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'empty_active_link_test.template.dart' as ng;` from ngrouter|test/regression/empty_active_link_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/empty_active_link_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'empty_active_link_test.template.dart' as ng;` from ngrouter|test/regression/empty_active_link_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/empty_active_link_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'empty_active_link_test.template.dart' as ng;` from ngrouter|test/regression/empty_active_link_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/empty_active_link_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'empty_active_link_test.template.dart' as ng;` from ngrouter|test/regression/empty_active_link_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/empty_path_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'empty_path_test.template.dart' as ng;` from ngrouter|test/regression/empty_path_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/regression/empty_path_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'empty_path_test.template.dart' as ng;` from ngrouter|test/regression/empty_path_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/regression/empty_path_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'empty_path_test.template.dart' as ng;` from ngrouter|test/regression/empty_path_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/regression/empty_path_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'empty_path_test.template.dart' as ng;` from ngrouter|test/regression/empty_path_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/regression/empty_path_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'empty_path_test.template.dart' as ng;` from ngrouter|test/regression/empty_path_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/regression/hash_location_strategy_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'hash_location_strategy_test.template.dart' as ng;` from ngrouter|test/regression/hash_location_strategy_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/regression/hash_location_strategy_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'hash_location_strategy_test.template.dart' as ng;` from ngrouter|test/regression/hash_location_strategy_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/regression/hash_location_strategy_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'hash_location_strategy_test.template.dart' as ng;` from ngrouter|test/regression/hash_location_strategy_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/regression/hash_location_strategy_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'hash_location_strategy_test.template.dart' as ng;` from ngrouter|test/regression/hash_location_strategy_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/regression/hash_location_strategy_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'hash_location_strategy_test.template.dart' as ng;` from ngrouter|test/regression/hash_location_strategy_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/regression/redirect_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'redirect_test.template.dart' as ng;` from ngrouter|test/regression/redirect_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/redirect_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'redirect_test.template.dart' as ng;` from ngrouter|test/regression/redirect_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/redirect_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'redirect_test.template.dart' as ng;` from ngrouter|test/regression/redirect_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/redirect_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'redirect_test.template.dart' as ng;` from ngrouter|test/regression/redirect_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/redirect_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'redirect_test.template.dart' as ng;` from ngrouter|test/regression/redirect_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/regression/routing_state_crash_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'routing_state_crash_test.template.dart' as ng;` from ngrouter|test/regression/routing_state_crash_test.dart at 11:1
+  
+E build_web_compilers:entrypoint on test/regression/routing_state_crash_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'routing_state_crash_test.template.dart' as ng;` from ngrouter|test/regression/routing_state_crash_test.dart at 11:1
+  
+E build_web_compilers:entrypoint on test/regression/routing_state_crash_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'routing_state_crash_test.template.dart' as ng;` from ngrouter|test/regression/routing_state_crash_test.dart at 11:1
+  
+E build_web_compilers:entrypoint on test/regression/routing_state_crash_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'routing_state_crash_test.template.dart' as ng;` from ngrouter|test/regression/routing_state_crash_test.dart at 11:1
+  
+E build_web_compilers:entrypoint on test/regression/routing_state_crash_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'routing_state_crash_test.template.dart' as ng;` from ngrouter|test/regression/routing_state_crash_test.dart at 11:1
+  
+E build_web_compilers:entrypoint on test/revert_popstate_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'revert_popstate_test.template.dart' as ng;` from ngrouter|test/revert_popstate_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/revert_popstate_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'revert_popstate_test.template.dart' as ng;` from ngrouter|test/revert_popstate_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/revert_popstate_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'revert_popstate_test.template.dart' as ng;` from ngrouter|test/revert_popstate_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/revert_popstate_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'revert_popstate_test.template.dart' as ng;` from ngrouter|test/revert_popstate_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/revert_popstate_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'revert_popstate_test.template.dart' as ng;` from ngrouter|test/revert_popstate_test.dart at 8:1
+  
+E build_web_compilers:entrypoint on test/route_definition_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_definition_test.template.dart' as ng;` from ngrouter|test/route_definition_test.dart at 5:1
+  
+E build_web_compilers:entrypoint on test/route_definition_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_definition_test.template.dart' as ng;` from ngrouter|test/route_definition_test.dart at 5:1
+  
+E build_web_compilers:entrypoint on test/route_definition_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_definition_test.template.dart' as ng;` from ngrouter|test/route_definition_test.dart at 5:1
+  
+E build_web_compilers:entrypoint on test/route_definition_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_definition_test.template.dart' as ng;` from ngrouter|test/route_definition_test.dart at 5:1
+  
+E build_web_compilers:entrypoint on test/route_definition_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_definition_test.template.dart' as ng;` from ngrouter|test/route_definition_test.dart at 5:1
+  
+E build_web_compilers:entrypoint on test/route_path_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_path_test.template.dart' as ng;` from ngrouter|test/route_path_test.dart at 5:1
+  
+E build_web_compilers:entrypoint on test/route_path_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_path_test.template.dart' as ng;` from ngrouter|test/route_path_test.dart at 5:1
+  
+E build_web_compilers:entrypoint on test/route_path_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_path_test.template.dart' as ng;` from ngrouter|test/route_path_test.dart at 5:1
+  
+E build_web_compilers:entrypoint on test/route_path_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_path_test.template.dart' as ng;` from ngrouter|test/route_path_test.dart at 5:1
+  
+E build_web_compilers:entrypoint on test/route_path_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_path_test.template.dart' as ng;` from ngrouter|test/route_path_test.dart at 5:1
+  
+E build_web_compilers:entrypoint on test/route_prefetcher_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_prefetcher_test.template.dart' as ng;` from ngrouter|test/route_prefetcher_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/route_prefetcher_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_prefetcher_test.template.dart' as ng;` from ngrouter|test/route_prefetcher_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/route_prefetcher_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_prefetcher_test.template.dart' as ng;` from ngrouter|test/route_prefetcher_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/route_prefetcher_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_prefetcher_test.template.dart' as ng;` from ngrouter|test/route_prefetcher_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/route_prefetcher_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'route_prefetcher_test.template.dart' as ng;` from ngrouter|test/route_prefetcher_test.dart at 9:1
+  
+E build_web_compilers:entrypoint on test/router_hook_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_hook_test.template.dart' as ng;` from ngrouter|test/router_hook_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/router_hook_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_hook_test.template.dart' as ng;` from ngrouter|test/router_hook_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/router_hook_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_hook_test.template.dart' as ng;` from ngrouter|test/router_hook_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/router_hook_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_hook_test.template.dart' as ng;` from ngrouter|test/router_hook_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/router_hook_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'router_hook_test.template.dart' as ng;` from ngrouter|test/router_hook_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/update_location_on_popstate_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'update_location_on_popstate_test.template.dart' as ng;` from ngrouter|test/update_location_on_popstate_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/update_location_on_popstate_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'update_location_on_popstate_test.template.dart' as ng;` from ngrouter|test/update_location_on_popstate_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/update_location_on_popstate_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'update_location_on_popstate_test.template.dart' as ng;` from ngrouter|test/update_location_on_popstate_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/update_location_on_popstate_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'update_location_on_popstate_test.template.dart' as ng;` from ngrouter|test/update_location_on_popstate_test.dart at 7:1
+  
+E build_web_compilers:entrypoint on test/update_location_on_popstate_test.dart.browser_test.dart:
+  Unable to find modules for some sources, this is usually the result of either a
+  bad import, a missing dependency in a package (or possibly a dev_dependency
+  needs to move to a real dependency), or a build failure (if importing a
+  generated file).
+  
+  Please check the following imports:
+  
+  `import 'update_location_on_popstate_test.template.dart' as ng;` from ngrouter|test/update_location_on_popstate_test.dart at 7:1
+  
+  Failed to build with build_runner/aot in 3s; wrote 0 outputs.
+Skipping tests due to build failure

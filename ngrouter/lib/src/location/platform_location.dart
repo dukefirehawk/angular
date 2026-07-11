@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:web/web.dart';
 
 /// This class should not be used directly by an application developer. Instead, use
@@ -26,13 +24,13 @@ import 'package:web/web.dart';
 /// they are all platform independent.
 abstract class PlatformLocation {
   String? getBaseHrefFromDOM();
-  void onPopState(void Function(Event event) fn);
-  void onHashChange(void Function(Event event) fn);
+  void onPopState(EventListener fn);
+  void onHashChange(EventListener fn);
   String get pathname;
   String get search;
   String get hash;
-  void replaceState(JSAny? state, String title, String? url);
-  void pushState(JSAny? state, String title, String? url);
+  void replaceState(Object? state, String title, String? url);
+  void pushState(Object? state, String title, String? url);
   void forward();
   void back();
 }

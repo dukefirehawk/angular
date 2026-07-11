@@ -1,12 +1,13 @@
-import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
+import 'package:web/web.dart' hide Location;
+import 'dart:js_interop';
+
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngrouter/testing.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart' hide Location;
 
 import 'router_link_directive_test.template.dart' as ng;
 
@@ -86,7 +87,9 @@ void main() {
 
 @Component(
   selector: 'test-router-link',
-  directives: [RouterLink],
+  directives: [
+    RouterLink,
+  ],
   template: r'''
     <a [routerLink]="routerLink"></a>
   ''',
@@ -106,7 +109,9 @@ class TestRouterLinkKeyPress {
 
 @Component(
   selector: 'test-router-link',
-  directives: [RouterLink],
+  directives: [
+    RouterLink,
+  ],
   template: r'''
     <a (click)="onClick($event)" [routerLink]="routerLink" target="_parent"></a>
   ''',
@@ -163,6 +168,16 @@ window['$_createKeyboardEventName'] = function(
 }
 ''';
 
+@JS('__dart_createKeyboardEvent')
+external Event _createKeyboardEventInterop(
+  String type,
+  int keyCode,
+  bool ctrlKey,
+  bool altKey,
+  bool shiftKey,
+  bool metaKey,
+);
+
 Event createKeyboardEvent(
   String type,
   int keyCode, {
@@ -171,21 +186,21 @@ Event createKeyboardEvent(
   bool shiftKey = false,
   bool metaKey = false,
 }) {
-  if (!globalContext.has(_createKeyboardEventName)) {
+  if (!globalContext
+      .getProperty(_createKeyboardEventName.toJS)
+      .isDefinedAndNotNull) {
     final script = document.createElement('script')
       ..setAttribute('type', 'text/javascript')
-      ..textContent = _createKeyboardEventScript;
+      ..text = _createKeyboardEventScript;
     document.body!.append(script);
   }
-  return globalContext.callMethodVarArgs(
-    _createKeyboardEventName.toJS,
-    [
-      type.toJS,
-      keyCode.toJS,
-      ctrlKey.toJS,
-      altKey.toJS,
-      shiftKey.toJS,
-      metaKey.toJS,
-    ],
-  ) as Event;
+
+  return _createKeyboardEventInterop(
+    type,
+    keyCode,
+    ctrlKey,
+    altKey,
+    shiftKey,
+    metaKey,
+  );
 }

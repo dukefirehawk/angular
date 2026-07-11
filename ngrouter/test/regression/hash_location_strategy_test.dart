@@ -1,21 +1,13 @@
-import 'package:mockito/annotations.dart';
+import 'package:web/web.dart';
+
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
-import 'package:web/web.dart';
-
-// TODO(ykmnkmi): replace with BrowserPlatformLocation when `mockito` supports
-//  extension types.
-@GenerateNiceMocks([MockSpec<PlatformLocation>()])
-import 'hash_location_strategy_test.mocks.dart'; // ignore: uri_does_not_exist
 
 import 'hash_location_strategy_test.template.dart' as ng;
 
-// TODO(ykmnkmi): replace with MockBrowserPlatformLocation when `mockito`
-//  supports extension types.
-// ignore: undefined_function
 final platformLocation = MockPlatformLocation();
 
 void main() {
@@ -30,15 +22,38 @@ void main() {
         rootInjector: injectorFactory);
     final testFixture = await testBed.create();
     expect(
-        testFixture.assertOnlyInstance.anchor!.getAttribute('href'), '#/foo');
+        testFixture.assertOnlyInstance.anchor?.getAttribute('href'), '#/foo');
     await testFixture.update((c) {
-      c.anchor!.click();
+      c.anchor?.click();
     });
-    verify(platformLocation.pushState(any, any, '#/foo')).called(1);
+    verify(platformLocation.pushState(any, '', '#/foo')).called(1);
   });
 }
 
 PlatformLocation platformLocationFactory() => platformLocation;
+
+class MockPlatformLocation extends Mock implements BrowserPlatformLocation {
+  @override
+  String get pathname => super.noSuchMethod(
+        Invocation.getter(#pathname),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+
+  @override
+  String get search => super.noSuchMethod(
+        Invocation.getter(#search),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+
+  @override
+  String get hash => super.noSuchMethod(
+        Invocation.getter(#hash),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+}
 
 @GenerateInjector([
   routerProvidersHash,
@@ -55,14 +70,14 @@ InjectorFactory injectorFactory = ng.injectorFactory$Injector;
   directives: [RouterLink, RouterOutlet],
 )
 class AppComponent {
-  static final fooRoute = RouteDefinition(
+  final RouteDefinition fooRoute = RouteDefinition(
     path: '/foo',
     component: ng.createFooComponentFactory(),
   );
-  static final routes = [fooRoute];
+  late final List<RouteDefinition> routes = [fooRoute];
 
   @ViewChild('routerLink')
-  HTMLAnchorElement? anchor;
+  HtmlElement? anchor;
 }
 
 @Component(selector: 'foo', template: '')

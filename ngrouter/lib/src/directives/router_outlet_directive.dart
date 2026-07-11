@@ -25,12 +25,10 @@ import '../router_hook.dart';
 ///   </template>
 /// </template>
 /// ```
-@Directive(
-  selector: 'router-outlet',
-)
+@Directive(selector: 'router-outlet')
 class RouterOutlet implements OnInit, OnDestroy {
-  final ViewContainerRef _viewContainerRef;
-  final Router _router;
+  final ViewContainerRef? _viewContainerRef;
+  final Router? _router;
   final RouterHook? _routerHook;
 
   // A mapping of {ComponentFactory} -> created {ComponentRef}.
@@ -44,8 +42,8 @@ class RouterOutlet implements OnInit, OnDestroy {
 
   RouterOutlet(
     @Optional() RouterOutletToken? token,
-    this._viewContainerRef,
-    this._router,
+    @Optional() this._viewContainerRef,
+    @Optional() this._router,
     @Optional() this._routerHook,
   ) {
     token?.routerOutlet = this;
@@ -95,7 +93,7 @@ class RouterOutlet implements OnInit, OnDestroy {
 
   @override
   void ngOnInit() {
-    _router.registerRootOutlet(this);
+    _router?.registerRootOutlet(this);
   }
 
   @override
@@ -103,8 +101,8 @@ class RouterOutlet implements OnInit, OnDestroy {
     for (var loadedComponent in _loadedComponents.values) {
       loadedComponent.destroy();
     }
-    _viewContainerRef.clear();
-    _router.unregisterRootOutlet(this);
+    _viewContainerRef?.clear();
+    _router?.unregisterRootOutlet(this);
   }
 
   /// Returns the component created by [componentFactory], prepared for routing.
@@ -112,10 +110,18 @@ class RouterOutlet implements OnInit, OnDestroy {
   /// If the component is currently active, or reusable, a cached instance will
   /// be returned instead of creating a new one.
   ComponentRef<Object> prepare(ComponentFactory<Object> componentFactory) {
+    if (_viewContainerRef == null) {
+      if (_loadedComponents.containsKey(componentFactory)) {
+        return _loadedComponents[componentFactory]!;
+      }
+      throw StateError('Cannot prepare component without a ViewContainerRef');
+    }
     return _loadedComponents.putIfAbsent(componentFactory, () {
-      final componentRef = componentFactory.create(Injector.map({
-        RouterOutletToken: RouterOutletToken(),
-      }, _viewContainerRef.injector));
+      final componentRef = componentFactory.create(
+        Injector.map({
+          RouterOutletToken: RouterOutletToken(),
+        }, _viewContainerRef.injector),
+      );
       // ignore: deprecated_member_use
       componentRef.changeDetectorRef.detectChanges();
       return componentRef;
@@ -142,20 +148,20 @@ class RouterOutlet implements OnInit, OnDestroy {
         // If both routes render the same component, don't detach it from DOM.
         if (identical(_activeComponentFactory, componentFactory)) return;
         // Detach the active component, keeping it cached for reuse.
-        for (var i = _viewContainerRef.length - 1; i >= 0; --i) {
-          _viewContainerRef.detach(i);
+        for (var i = (_viewContainerRef?.length ?? 1) - 1; i >= 0; --i) {
+          _viewContainerRef?.detach(i);
         }
       } else {
         // Destroy the active component.
         _loadedComponents.remove(_activeComponentFactory);
         activeComponent.destroy();
-        _viewContainerRef.clear();
+        _viewContainerRef?.clear();
       }
     }
     // Render the new component in the outlet.
     _activeComponentFactory = componentFactory;
     final component = prepare(componentFactory);
-    _viewContainerRef.insert(component.hostView);
+    _viewContainerRef?.insert(component.hostView);
     // ignore: deprecated_member_use
     component.changeDetectorRef.detectChanges();
   }

@@ -1,8 +1,8 @@
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngrouter/testing.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 
 import 'redirect_test.template.dart' as ng;
 
@@ -28,11 +28,11 @@ void main() {
 
   test('redirect on outlet registration should replace URL', () async {
     final testBed = NgTestBed<TestInitialRedirectComponent>(
-            ng.createTestInitialRedirectComponentFactory())
-        .addInjector(injector);
+      ng.createTestInitialRedirectComponentFactory(),
+    ).addInjector(injector);
     final testFixture = await testBed.create();
     final locationStrategy = testFixture.assertOnlyInstance.locationStrategy;
-    expect(locationStrategy.urlChanges, ['replace: /to']);
+    expect(locationStrategy?.urlChanges, ['replace: /to']);
   });
 }
 
@@ -40,13 +40,14 @@ void main() {
 ///
 /// Returns any URL changes that occurred due to navigation.
 Future<List<String>> redirect([NavigationParams? params]) async {
-  final testBed =
-      NgTestBed<TestRedirectComponent>(ng.createTestRedirectComponentFactory())
-          .addInjector(injector);
+  final testBed = NgTestBed<TestRedirectComponent>(
+    ng.createTestRedirectComponentFactory(),
+  ).addInjector(injector);
   final testFixture = await testBed.create();
-  final urlChanges = testFixture.assertOnlyInstance.locationStrategy.urlChanges;
+  final urlChanges =
+      testFixture.assertOnlyInstance.locationStrategy?.urlChanges ?? [];
   final router = testFixture.assertOnlyInstance.router;
-  final result = await router.navigate('/from', params);
+  final result = await router?.navigate('/from', params);
   expect(result, NavigationResult.success);
   return urlChanges;
 }
@@ -68,12 +69,12 @@ class TestRedirectComponent {
     RouteDefinition.redirect(path: '/from', redirectTo: '/to'),
   ];
 
-  final MockLocationStrategy locationStrategy;
-  final Router router;
+  final MockLocationStrategy? locationStrategy;
+  final Router? router;
 
   TestRedirectComponent(
-    @Inject(LocationStrategy) this.locationStrategy,
-    this.router,
+    @Optional() @Inject(LocationStrategy) this.locationStrategy,
+    @Optional() this.router,
   );
 }
 
@@ -88,11 +89,11 @@ class TestInitialRedirectComponent {
     RouteDefinition.redirect(path: '/.*', redirectTo: '/to'),
   ];
 
-  final MockLocationStrategy locationStrategy;
-  final Router router;
+  final MockLocationStrategy? locationStrategy;
+  final Router? router;
 
   TestInitialRedirectComponent(
-    @Inject(LocationStrategy) this.locationStrategy,
-    this.router,
+    @Optional() @Inject(LocationStrategy) this.locationStrategy,
+    @Optional() this.router,
   );
 }

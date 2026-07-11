@@ -1,19 +1,36 @@
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:ngrouter/ngrouter.dart';
 import 'package:test/test.dart';
+import 'package:ngrouter/ngrouter.dart';
 
-@GenerateMocks([PlatformLocation])
-import 'empty_hash_test.mocks.dart'; // ignore: uri_does_not_exist
+class MockPlatformLocation extends Mock implements PlatformLocation {
+  @override
+  String get pathname => super.noSuchMethod(
+        Invocation.getter(#pathname),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+
+  @override
+  String get search => super.noSuchMethod(
+        Invocation.getter(#search),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+
+  @override
+  String get hash => super.noSuchMethod(
+        Invocation.getter(#hash),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String;
+}
 
 void main() {
   late LocationStrategy locationStrategy;
-  // ignore: undefined_class
   late MockPlatformLocation platformLocation;
 
   group("empty URL doesn't overwrite query parameters", () {
     setUp(() {
-      // ignore: undefined_function
       platformLocation = MockPlatformLocation();
       locationStrategy = HashLocationStrategy(platformLocation, null);
       when(platformLocation.pathname).thenReturn('/foo');

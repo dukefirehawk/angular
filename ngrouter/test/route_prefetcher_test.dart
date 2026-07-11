@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngrouter/testing.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 
 import 'route_prefetcher_test.template.dart' as ng;
 
@@ -12,8 +12,9 @@ void main() {
   late NgTestBed<AppComponent> testBed;
 
   setUp(() {
-    testBed = NgTestBed<AppComponent>(ng.createAppComponentFactory())
-        .addInjector(appInjector);
+    testBed = NgTestBed<AppComponent>(
+      ng.createAppComponentFactory(),
+    ).addInjector(appInjector);
   });
 
   tearDown(disposeAnyRunningTest);
@@ -46,11 +47,11 @@ void main() {
     var router = testFixture.assertOnlyInstance.router;
     // Assert that initial navigation is awaiting prefetcher's result.
     expect(prefetcherWasCalled, true);
-    expect(router.current, null);
+    expect(router?.current, null);
     await testFixture.update(prefetcherCompleter.complete);
     // Assert that initial navigation is now complete.
     expect(
-      router.current,
+      router?.current,
       TypeMatcher<RouterState>().having((s) => s.path, 'path', ''),
     );
   });
@@ -77,19 +78,28 @@ void main() {
             FooComponent.routes.first,
           ]);
           expect(state.parameters, {'fooId': '1', 'barId': '2'});
-          expect(state.fragment, 'qux',
-              skip: 'Not correctly set by MockLocationStrategy (b/122484064)');
+          expect(
+            state.fragment,
+            'qux',
+            skip: 'Not correctly set by MockLocationStrategy (b/122484064)',
+          );
           expect(state.queryParameters, {'x': '12'});
         }),
       ),
     ];
     BarComponent.routes = [
       RouteDefinition(
-          path: '/baz', component: ng.createEmptyComponentFactory()),
+        path: '/baz',
+        component: ng.createEmptyComponentFactory(),
+      ),
     ];
-    return testBed.create(beforeComponentCreated: (injector) {
-      injector.provideType<Location>(Location).go('/foo/1/bar/2/baz?x=12#qux');
-    });
+    return testBed.create(
+      beforeComponentCreated: (injector) {
+        injector
+            .provideType<Location>(Location)
+            .go('/foo/1/bar/2/baz?x=12#qux');
+      },
+    );
   });
 }
 
@@ -104,15 +114,12 @@ final appInjector = ng.appInjector$Injector;
 class AppComponent {
   static late List<RouteDefinition> routes;
 
-  final Router router;
+  final Router? router;
 
   AppComponent(this.router);
 }
 
-@Component(
-  selector: 'empty',
-  template: '',
-)
+@Component(selector: 'empty', template: '')
 class EmptyComponent {}
 
 @Component(

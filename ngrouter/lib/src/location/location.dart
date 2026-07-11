@@ -1,7 +1,8 @@
 import 'dart:async';
+import 'dart:js_interop';
 
-import 'package:ngdart/angular.dart' show Injectable;
-
+import 'package:ngdart/angular.dart' show Injectable, Optional;
+import 'package:web/web.dart';
 import 'location_strategy.dart' show LocationStrategy;
 
 /// `Location` is a service that applications can use to interact with a
@@ -39,31 +40,34 @@ import 'location_strategy.dart' show LocationStrategy;
 /// ```
 @Injectable()
 class Location {
-  final LocationStrategy locationStrategy;
+  final LocationStrategy? locationStrategy;
   final _subject = StreamController<Object>();
   final String _baseHref;
 
-  Location(this.locationStrategy)
-      : _baseHref = _sanitizeBaseHref(locationStrategy) {
-    locationStrategy.onPopState((ev) {
-      _subject.add({'url': path(), 'pop': true, 'type': ev.type});
-    });
+  Location(@Optional() this.locationStrategy)
+    : _baseHref = _sanitizeBaseHref(locationStrategy) {
+    locationStrategy?.onPopState(
+      (Event ev) {
+        _subject.add({'url': path(), 'pop': true, 'type': ev.type});
+      }.toJS,
+    );
   }
 
-  static String _sanitizeBaseHref(LocationStrategy platformStrategy) {
-    var browserBaseHref = platformStrategy.getBaseHref();
-    return Location.stripTrailingSlash(_stripIndexHtml(browserBaseHref));
+  static String _sanitizeBaseHref(LocationStrategy? platformStrategy) {
+    var browserBaseHref = platformStrategy?.getBaseHref();
+    return Location.stripTrailingSlash(_stripIndexHtml(browserBaseHref ?? ''));
   }
 
   /// Returns the normalized URL path.
-  String path() => normalize(locationStrategy.path());
+  String path() => normalize(locationStrategy?.path() ?? '');
 
-  String hash() => normalize(locationStrategy.hash());
+  String hash() => normalize(locationStrategy?.hash() ?? '');
 
   /// Given a string representing a URL, returns the normalized URL path without
   /// leading or trailing slashes
   String normalize(String url) => Location.stripTrailingSlash(
-      _stripBaseHref(_baseHref, _stripIndexHtml(url)));
+    _stripBaseHref(_baseHref, _stripIndexHtml(url)),
+  );
 
   /// Normalizes [path] for navigation.
   ///
@@ -90,30 +94,30 @@ class Location {
     if (url.isNotEmpty && !url.startsWith('/')) {
       url = '/$url';
     }
-    return locationStrategy.prepareExternalUrl(url);
+    return locationStrategy?.prepareExternalUrl(url) ?? url;
   }
 
   // TODO: rename this method to pushState
   /// Changes the browsers URL to the normalized version of the given URL, and
   /// pushes a new item onto the platform's history.
   void go(String path, [String query = '']) {
-    locationStrategy.pushState(null, '', path, query);
+    locationStrategy?.pushState(null, '', path, query);
   }
 
   /// Changes the browsers URL to the normalized version of the given URL, and
   /// replaces the top item on the platform's history stack.
   void replaceState(String path, [String query = '']) {
-    locationStrategy.replaceState(null, '', path, query);
+    locationStrategy?.replaceState(null, '', path, query);
   }
 
   /// Navigates forward in the platform's history.
   void forward() {
-    locationStrategy.forward();
+    locationStrategy?.forward();
   }
 
   /// Navigates back in the platform's history.
   void back() {
-    locationStrategy.back();
+    locationStrategy?.back();
   }
 
   /// Subscribe to the platform's `popState` events.

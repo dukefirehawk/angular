@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:js_interop';
+//import 'dart:html' show EventListener, PopStateEvent;
+import 'package:web/web.dart' show EventListener, PopStateEvent;
 
 import 'package:ngdart/angular.dart' show Injectable;
 import 'package:ngrouter/src/location/location_strategy.dart'
     show LocationStrategy;
-import 'package:web/web.dart' hide Location;
 
 /// A mock implementation of [LocationStrategy] that allows tests to fire
 /// simulated location events.
@@ -47,7 +49,11 @@ class MockLocationStrategy extends LocationStrategy {
 
   @override
   void replaceState(
-      Object? state, String title, String url, String queryParams) {
+    Object? state,
+    String title,
+    String url,
+    String queryParams,
+  ) {
     internalTitle = title;
     var fullUrl = url + (queryParams.isNotEmpty ? '?$queryParams' : '');
     internalPath = fullUrl;
@@ -56,8 +62,12 @@ class MockLocationStrategy extends LocationStrategy {
   }
 
   @override
-  void onPopState(void Function(Event event) fn) {
-    _subject.stream.listen(fn);
+  void onPopState(EventListener fn) {
+    //TODO: Migrate to 3.6. (Need to review)
+    //_subject.stream.listen(fn);
+    _subject.stream.listen((PopStateEvent event) {
+      fn.callAsFunction(null, event);
+    });
   }
 
   @override

@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngrouter/ngrouter.dart';
 import 'package:ngrouter/testing.dart';
 import 'package:ngtest/angular_test.dart';
-import 'package:test/test.dart';
 
 // ignore: uri_has_not_been_generated
 import 'navigation_queue_test.template.dart' as ng;
@@ -22,24 +22,22 @@ void main() {
     final secondCompleter = Completer<void>();
     final thirdCompleter = Completer<void>();
 
-    final testBed = NgTestBed<TestComponent>(
-      ng.createTestComponentFactory(),
-    ).addInjector(
-      (i) => Injector.map({
-        firstToken: firstCompleter.future,
-        secondToken: secondCompleter.future,
-        thirdToken: thirdCompleter.future,
-      }, i),
-    );
+    final testBed = NgTestBed<TestComponent>(ng.createTestComponentFactory())
+        .addInjector(
+          (i) => Injector.map({
+            firstToken: firstCompleter.future,
+            secondToken: secondCompleter.future,
+            thirdToken: thirdCompleter.future,
+          }, i),
+        );
 
     final testFixture = await testBed.create();
     final router = testFixture.assertOnlyInstance.router;
-    final requests = router.onRouteActivated.map((state) => state.path);
+    final requests = router?.onRouteActivated.map((state) => state.path);
 
-    unawaited(router.navigate('/first'));
-    unawaited(router.navigate('/second'));
-    unawaited(router.navigate('/third'));
-
+    unawaited(router?.navigate('/first'));
+    unawaited(router?.navigate('/second'));
+    unawaited(router?.navigate('/third'));
     // Expect navigation to complete in order requested.
     expect(requests, emitsInOrder(['/first', '/second', '/third']));
 
@@ -57,15 +55,11 @@ void main() {
 @Component(
   selector: 'test',
   template: '<router-outlet [routes]="routes"></router-outlet>',
-  directives: [
-    RouterOutlet,
-  ],
-  providers: [
-    routerProvidersTest,
-  ],
+  directives: [RouterOutlet],
+  providers: [routerProvidersTest],
 )
 class TestComponent {
-  final Router router;
+  final Router? router;
   final List<RouteDefinition> routes = [
     RouteDefinition(
       path: '/first',
@@ -93,25 +87,26 @@ class TestComponent {
 class DefaultComponent {}
 
 abstract class DelayedActivation implements CanActivate {
-  final Future<void> _future;
+  final Future<void>? _future;
 
   DelayedActivation(this._future);
 
   @override
-  Future<bool> canActivate(_, __) => _future.then((_) => true);
+  Future<bool> canActivate(_, _) =>
+      _future?.then((_) => true) ?? Future.value(true);
 }
 
 @Component(selector: 'first', template: 'First')
 class FirstComponent extends DelayedActivation {
-  FirstComponent(@firstToken super.future);
+  FirstComponent(@Optional() @firstToken super.future);
 }
 
 @Component(selector: 'second', template: 'Second')
 class SecondComponent extends DelayedActivation {
-  SecondComponent(@secondToken super.future);
+  SecondComponent(@Optional() @secondToken super.future);
 }
 
 @Component(selector: 'third', template: 'Third')
 class ThirdComponent extends DelayedActivation {
-  ThirdComponent(@thirdToken super.future);
+  ThirdComponent(@Optional() @thirdToken super.future);
 }
