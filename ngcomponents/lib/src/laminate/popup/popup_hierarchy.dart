@@ -4,6 +4,7 @@
 
 import 'dart:async';
 import 'package:web/web.dart';
+import 'dart:js_interop';
 
 import 'package:ngdart/angular.dart';
 import 'package:ngcomponents/laminate/overlay/constants.dart';
@@ -24,7 +25,7 @@ class PopupHierarchy {
 
   /// Whether last trigger event is a keyboard event or focus event.
   bool get islastTriggerWithKeyboard =>
-      _lastTriggerEvent is KeyboardEvent || _lastTriggerEvent is FocusEvent;
+      (_lastTriggerEvent?.isA<KeyboardEvent>() ?? false) || (_lastTriggerEvent?.isA<FocusEvent>() ?? false);
 
   /// Closes every popup element present in the hierarchy.
   void closeHierarchy() {
@@ -44,11 +45,11 @@ class PopupHierarchy {
     _visiblePopupStack.add(child!);
 
     if (_triggerListener == null) {
-      // Passing null to triggersOutside listens to triggers on any elements.
-      _triggerListener = events.triggersOutside(null).listen(_onTrigger);
+      // Passing false to triggersOutsideAny listens to triggers on any elements.
+      _triggerListener = events.triggersOutsideAny((node) => false).listen(_onTrigger);
     }
     if (_keyUpListener == null) {
-      _keyUpListener = document.onKeyUp.listen(_onKeyUp);
+      _keyUpListener = EventStreamProvider<KeyboardEvent>('keyup').forTarget(document).listen(_onKeyUp);
     }
   }
 
@@ -74,14 +75,21 @@ class PopupHierarchy {
     var modalPanes = document.querySelectorAll(
       '.$overlayContainerClassName .pane.modal.visible',
     );
-    if (modalPanes.isNotEmpty) {
+    if (modalPanes.length > 0) {
       // Only close popups that belong to the currently visible modal or whose
       // modal is no longer visible. Note that since the modal may already
       // have closed prior to this event being processed, it's possible in
       // some situations that the popups of the level below will be closed as
       // well.
+      bool containsRoot = false;
+      for (var i = 0; i < modalPanes.length; i++) {
+        if (modalPanes.item(i) == _rootPane) {
+          containsRoot = true;
+          break;
+        }
+      }
       if (_rootPane == null ||
-          (_rootPane != modalPanes.last && modalPanes.contains(_rootPane))) {
+          (_rootPane != modalPanes.item(modalPanes.length - 1) && containsRoot)) {
         return true;
       }
     }

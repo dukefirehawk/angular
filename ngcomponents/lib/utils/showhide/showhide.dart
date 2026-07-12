@@ -71,8 +71,8 @@ class ShowHideDirective implements OnInit, OnDestroy {
     } else {
       _initialWritePending = true;
       _domService.scheduleWrite(() {
-        _element.classes.toggle(_hideClass, !value);
-        _element.classes.toggle(_hiddenClass, !value);
+        _element.classList.toggle(_hideClass, !value);
+        _element.classList.toggle(_hiddenClass, !value);
         _initialWritePending = false;
       });
     }
@@ -81,9 +81,9 @@ class ShowHideDirective implements OnInit, OnDestroy {
   void _show() {
     _stopHiding();
     _domService.scheduleRead(() {
-      if (_initialWritePending || _element.classes.contains(_hiddenClass)) {
+      if (_initialWritePending || _element.classList.contains(_hiddenClass)) {
         _domService.scheduleWrite(() {
-          _element.classes.remove(_hiddenClass);
+          _element.classList.remove(_hiddenClass);
         });
         // remove the ng-hide class in the next event loop, so that effects of
         // removing acx-showhide-hidden can settle (like changing display from
@@ -100,7 +100,7 @@ class ShowHideDirective implements OnInit, OnDestroy {
   void _removeNgHide() {
     if (_hiding) return;
     _domService.scheduleWrite(() {
-      _element.classes.remove(_hideClass);
+      _element.classList.remove(_hideClass);
       _onShow.add(_element);
     });
     _onTransitionEnd(() {

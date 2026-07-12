@@ -4,7 +4,7 @@
 
 import 'dart:async';
 import 'package:web/web.dart';
-import 'dart:math' show min, max;
+import 'dart:math' show min, max, Rectangle;
 
 import 'package:ngcomponents/utils/angular/scroll_host/interface.dart';
 import 'package:ngcomponents/utils/browser/dom_service/dom_service.dart';

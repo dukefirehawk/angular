@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:web/web.dart';
+import 'package:web/web.dart' hide Module;
 
 import 'package:ngdart/angular.dart';
 
@@ -12,7 +12,7 @@ import 'package:ngdart/angular.dart';
 ///
 /// Visible for transformer only.
 @Injectable()
-HtmlDocument getDocument() => document;
+Document getDocument() => document;
 
 /// Returns the current browser's [Window].
 ///
@@ -30,14 +30,12 @@ const windowBindings = [
   // This strange syntax is required because we need windowBindings to be a
   // const list to be usable within component annotations.
   FactoryProvider(Document, getDocument),
-  FactoryProvider(HtmlDocument, getDocument),
   FactoryProvider(Window, getWindow),
 ];
 
 const windowModule = Module(
   provide: [
     FactoryProvider(Document, getDocument),
-    FactoryProvider(HtmlDocument, getDocument),
     FactoryProvider(Window, getWindow),
   ],
 );

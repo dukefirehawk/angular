@@ -71,7 +71,7 @@ class AcxImperativeViewUtils {
   Future<ComponentRef<T>> insertComponent<T extends Object>(
     ComponentFactory<T> componentFactory,
     ViewContainerRef viewContainer,
-    HtmlElement intoDomElement, {
+    HTMLElement intoDomElement, {
     Injector? injector,
   }) async {
     final ref = _componentLoader.loadNextToLocation<T>(
@@ -91,7 +91,7 @@ class AcxImperativeViewUtils {
   ///
   /// **WARNING**: This code is experimental.
   Future<ImperativeViewRef> insertAngularView(
-    HtmlElement intoDomElement,
+    HTMLElement intoDomElement,
     TemplateRef templateRef,
     ViewContainerRef viewContainer,
   ) {

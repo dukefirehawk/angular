@@ -7,7 +7,6 @@ import 'package:web/web.dart';
 import 'dart:math' show max;
 
 import 'package:ngdart/angular.dart';
-import 'package:js/js.dart' as js;
 import 'package:logging/logging.dart' show Logger;
 import 'package:ngcomponents/src/utils/angular/scroll_host/gestures.dart';
 import 'package:ngcomponents/src/utils/angular/scroll_host/pan_controller_impl.dart';

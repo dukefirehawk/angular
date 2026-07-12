@@ -17,7 +17,8 @@ class NewWindowOpener {
 /// Gives a hint to Chrome that it should open the given link in a separate
 /// process.
 void openInNewWindow(String url) {
-  var anchorElement = AnchorElement(href: url)
+  var anchorElement = HTMLAnchorElement()
+    ..href = url
     ..rel = 'noopener noreferrer'
     ..target = '_blank';
   document.body!.append(anchorElement);

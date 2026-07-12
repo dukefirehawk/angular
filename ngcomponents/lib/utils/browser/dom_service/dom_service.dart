@@ -381,17 +381,13 @@ class DomService {
         });
 
         _listenOnLayoutEvents(
-          EventStreamProvider<AnimationEvent>(
-            'animationend',
-          ).forTarget(_window),
+          EventStreamProvider<Event>('animationend').forTarget(_window),
         );
         _listenOnLayoutEvents(
-          EventStreamProvider<ResizeEvent>('onresize').forTarget(_window),
+          EventStreamProvider<Event>('onresize').forTarget(_window),
         );
         _listenOnLayoutEvents(
-          EventStreamProvider<TransitionEvent>(
-            'ontransitionend',
-          ).forTarget(_window),
+          EventStreamProvider<Event>('ontransitionend').forTarget(_window),
         );
 
         //_listenOnLayoutEvents(_window.onAnimationEnd);

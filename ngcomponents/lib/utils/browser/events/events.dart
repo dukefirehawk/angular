@@ -70,24 +70,28 @@ Stream<Event> triggersOutsideAny(Predicate<Node> checkNodeInside) {
       Event? lastEvent;
       Event? lastDownEvent;
 
-      listener = (Event e) {
+      listener = ((Event e) {
         lastEvent = e;
         var node = e.target as Node?;
         while (node != null) {
           if (checkNodeInside(node)) {
             return;
           } else {
-            node = node.parent;
+            node = node.parentElement;
           }
         }
         controller.add(e);
-      };
+      }).toJS;
 
       // Keep track of mousedown events so that we can filter mouseup events
       // that occurred on a different element than the mousedown.
       mouseDownListener = document.onMouseDown.listen((MouseEvent e) {
         lastDownEvent = e;
       });
+
+      document.addEventListener('mousedown', (MouseEvent e) {
+        lastDownEvent = e;
+      }.toJS)
 
       // Listen to mouseup to prevent scenarios where a single click event
       // both opens and closes an element.
@@ -124,7 +128,7 @@ Stream<Event> triggersOutsideAny(Predicate<Node> checkNodeInside) {
       // Since 'focusin' event is not supported in Firefox, listen to 'focus'
       // event with useCapture set to true to implement event delegation and
       // capture changes to active element on document.
-      document.addEventListener('focus', listener, true);
+      document.addEventListener('focus', listener, true.toJS);
 
       // Handles touches outside of element for Safari on iOS devices since
       // touch events are not detected as clicks on iOS platforms.
@@ -159,11 +163,14 @@ Stream<Rectangle?> onResize(Element element) {
     sync: true,
     onListen: () {
       observer = ResizeObserver(
-        allowInterop((entries, _) {
-          for (var entry in entries) {
-            controller.add(entry.contentRect);
+        ((JSArray<ResizeObserverEntry> entries, ResizeObserver observer) {
+          final List<ResizeObserverEntry> dartEntries = entries.toDart;
+
+          for (var entry in dartEntries) {
+            var rec = entry.contentRect;
+            controller.add(Rectangle(rec.left, rec.top, rec.width, rec.height));
           }
-        }),
+        }).toJS,
       );
       observer.observe(element);
     },

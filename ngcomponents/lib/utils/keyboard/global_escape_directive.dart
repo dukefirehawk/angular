@@ -22,7 +22,7 @@ class GlobalEscapeDirective {
   /// Event triggered when the escape key is pressed.
   @Output()
   Stream<KeyboardEvent> get globalEscape =>
-      _window.onKeyUp.where((event) => event.keyCode == KeyCode.ESC);
+      EventStreamProvider<KeyboardEvent>('keyup').forTarget(_window).where((event) => event.keyCode == KeyCode.ESC);
 
   GlobalEscapeDirective(this._window);
 }

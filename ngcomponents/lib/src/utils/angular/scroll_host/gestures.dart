@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:math';
 import 'package:web/web.dart';
 import 'dart:math' as math;
 
@@ -74,7 +75,7 @@ Map<GestureDirection, bool> innerScrollableDirections(
           directions[GestureDirection.down]! ||
           element.scrollTop + element.clientHeight < element.scrollHeight;
     }
-    element = element.parent;
+    element = element.parentElement;
   }
   return directions;
 }
@@ -129,10 +130,8 @@ class GestureListener implements Disposable {
     _disposer!.addStreamSubscription(
       _element!.onTouchStart.listen(_onTouchStart),
     );
-    _disposer!.addStreamSubscription(
-      _element!.onTouchMove.listen(_onTouchMove),
-    );
-    _disposer!.addStreamSubscription(_element!.onTouchEnd.listen(_onTouchEnd));
+    _disposer!.addStreamSubscription(_element.onTouchMove.listen(_onTouchMove));
+    _disposer!.addStreamSubscription(_element.onTouchEnd.listen(_onTouchEnd));
   }
 
   void _onCancel() {
@@ -152,10 +151,10 @@ class GestureListener implements Disposable {
   bool _capturing = false;
   void _onTouchStart(TouchEvent touchStart) {
     // Don't capture multi-touch events.
-    if (touchStart.touches!.length > 1) return;
+    if (touchStart.touches.length > 1) return;
 
     _directions = innerScrollableDirections(_element, touchStart.target);
-    _startPoint = touchStart.touches!.single.screen;
+    _startPoint = touchStart.touches.single.screen;
     _capturing = false;
 
     _gesture?.cancel();
@@ -170,7 +169,7 @@ class GestureListener implements Disposable {
     // Start capturing events if the scroll host can scroll in the direction of
     // movement, and no child can.
     if (!_capturing) {
-      Point delta = touchMove.touches!.first.screen - _startPoint;
+      Point delta = touchMove.touches.first.screen - _startPoint;
 
       // Don't capture events that will trigger child scrolling.
       // If delta is diagonal, we let the child handle scrolling even if it can
@@ -274,7 +273,7 @@ class _Gesture {
     _scrollTimer = Timer.periodic(_scrollInterval, _addDragEvent);
     _startTime = _clock.now();
     _lastTime = _startTime;
-    _startPoint = touchStart.touches!.single.screen;
+    _startPoint = touchStart.touches.single.screen;
     _lastTouchPoint = _startPoint;
     _lastSyncPoint = _startPoint;
     _startingTarget = touchStart.target;
@@ -288,7 +287,7 @@ class _Gesture {
   void update(TouchEvent touchMove) {
     assert(!_finished);
     _lastTime = _clock.now();
-    _lastTouchPoint = touchMove.touches!.first.screen;
+    _lastTouchPoint = touchMove.touches.first.screen;
   }
 
   /// Called when the user has finished their gesture, either by removing their

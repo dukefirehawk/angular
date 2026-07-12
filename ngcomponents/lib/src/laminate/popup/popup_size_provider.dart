@@ -35,25 +35,25 @@ class PercentagePopupSizeProvider implements PopupSizeProvider {
   final num _maxWidthPercentage;
   final num _maxHeightPercentage;
 
-  const PercentagePopupSizeProvider(
-      [num? maxWidthPercentage,
-      num? maxHeightPercentage,
-      num? minWidthPercentage,
-      num? minHeightPercentage])
-      : _minWidthPercentage = minWidthPercentage,
-        _minHeightPercentage = minHeightPercentage,
-        _maxWidthPercentage = maxWidthPercentage ?? 0.7,
-        _maxHeightPercentage = maxHeightPercentage ?? 0.5;
+  const PercentagePopupSizeProvider([
+    num? maxWidthPercentage,
+    num? maxHeightPercentage,
+    num? minWidthPercentage,
+    num? minHeightPercentage,
+  ]) : _minWidthPercentage = minWidthPercentage,
+       _minHeightPercentage = minHeightPercentage,
+       _maxWidthPercentage = maxWidthPercentage ?? 0.7,
+       _maxHeightPercentage = maxHeightPercentage ?? 0.5;
 
   @override
   num? getMinHeight(num positionY, num viewportHeight) =>
       _minHeightPercentage == null
-          ? null
-          : viewportHeight * _minHeightPercentage!;
+      ? null
+      : viewportHeight * _minHeightPercentage;
 
   @override
   num? getMinWidth(num positionX, num viewportWidth) =>
-      _minWidthPercentage == null ? null : viewportWidth * _minWidthPercentage!;
+      _minWidthPercentage == null ? null : viewportWidth * _minWidthPercentage;
 
   @override
   num getMaxWidth(num _, num viewportWidth) =>
@@ -97,24 +97,27 @@ class FixedPopupSizeProvider implements PopupSizeProvider {
   final num? _maxWidth;
   final num? _maxHeight;
 
-  const FixedPopupSizeProvider(
-      {num? minWidth, num? minHeight, num? maxWidth, num? maxHeight})
-      : this._minWidth = minWidth,
-        this._minHeight = minHeight,
-        this._maxWidth = maxWidth,
-        this._maxHeight = maxHeight;
+  const FixedPopupSizeProvider({
+    num? minWidth,
+    num? minHeight,
+    num? maxWidth,
+    num? maxHeight,
+  }) : this._minWidth = minWidth,
+       this._minHeight = minHeight,
+       this._maxWidth = maxWidth,
+       this._maxHeight = maxHeight;
 
   @override
-  num? getMinWidth(num _, num __) => _minWidth;
+  num? getMinWidth(num _, num _) => _minWidth;
 
   @override
-  num? getMinHeight(num _, num __) => _minHeight;
+  num? getMinHeight(num _, num _) => _minHeight;
 
   @override
-  num? getMaxWidth(num _, num __) => _maxWidth;
+  num? getMaxWidth(num _, num _) => _maxWidth;
 
   @override
-  num? getMaxHeight(num _, num __) => _maxHeight;
+  num? getMaxHeight(num _, num _) => _maxHeight;
 }
 
 /// A popup size provider of no maximum size.
