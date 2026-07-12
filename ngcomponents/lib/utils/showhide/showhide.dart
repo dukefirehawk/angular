@@ -158,7 +158,7 @@ class ShowHideDirective implements OnInit, OnDestroy {
   }
 
   static int _transitionDurationMs(Element element) {
-    String duration = element.getComputedStyle().transitionDuration;
+    String duration = window.getComputedStyle(element).transitionDuration;
     if (duration.isEmpty) return 0;
 
     // TODO(google): remove this when
