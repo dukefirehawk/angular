@@ -70,6 +70,24 @@ jobs:
         run: dart analyze --fatal-infos .
         if: "always() && steps.ngast_pub_upgrade.conclusion == 'success'"
         working-directory: ngast
+      - id: ngast_pub_upgrade
+        name: ngast; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: ngast
+      - name: "ngast; dart analyze --fatal-infos"
+        run: dart analyze --fatal-infos
+        if: "always() && steps.ngast_pub_upgrade.conclusion == 'success'"
+        working-directory: ngast
+      - id: ngcompiler_pub_upgrade
+        name: ngcompiler; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: ngcompiler
+      - name: "ngcompiler; dart analyze --fatal-infos"
+        run: dart analyze --fatal-infos
+        if: "always() && steps.ngcompiler_pub_upgrade.conclusion == 'success'"
+        working-directory: ngcompiler
       - id: ngcompiler_pub_upgrade
         name: ngcompiler; dart pub upgrade
         run: dart pub upgrade
@@ -147,6 +165,15 @@ jobs:
         run: "dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.ngast_pub_upgrade.conclusion == 'success'"
         working-directory: ngast
+      - id: ngast_pub_upgrade
+        name: ngast; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: ngast
+      - name: "ngast; dart format --output=none --set-exit-if-changed ."
+        run: "dart format --output=none --set-exit-if-changed ."
+        if: "always() && steps.ngast_pub_upgrade.conclusion == 'success'"
+        working-directory: ngast
       - id: ngcompiler_pub_upgrade
         name: ngcompiler; dart pub upgrade
         run: dart pub upgrade
@@ -156,6 +183,24 @@ jobs:
         run: "dart format --output=none --set-exit-if-changed ."
         if: "always() && steps.ngcompiler_pub_upgrade.conclusion == 'success'"
         working-directory: ngcompiler
+      - id: ngcompiler_pub_upgrade
+        name: ngcompiler; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: ngcompiler
+      - name: "ngcompiler; dart format --output=none --set-exit-if-changed ."
+        run: "dart format --output=none --set-exit-if-changed ."
+        if: "always() && steps.ngcompiler_pub_upgrade.conclusion == 'success'"
+        working-directory: ngcompiler
+      - id: ngdart_pub_upgrade
+        name: ngdart; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: ngdart
+      - name: "ngdart; dart format --output=none --set-exit-if-changed ."
+        run: "dart format --output=none --set-exit-if-changed ."
+        if: "always() && steps.ngdart_pub_upgrade.conclusion == 'success'"
+        working-directory: ngdart
       - id: ngdart_pub_upgrade
         name: ngdart; dart pub upgrade
         run: dart pub upgrade
@@ -667,6 +712,41 @@ jobs:
         run: dart test -P ci
         if: "always() && steps.ngast_pub_upgrade.conclusion == 'success'"
         working-directory: ngast
+    needs:
+      - job_001
+      - job_002
+      - job_003
+      - job_004
+  job_013:
+    name: "unit_test; PKG: _tests; `dart run build_runner test --fail-on-severe -- -P browser`"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Pub hosted dependencies
+        uses: actions/cache@88522ab9f39a2ea568f7027eddc7d8d8bc9d59c8
+        with:
+          path: "~/.pub-cache/hosted"
+          key: "os:ubuntu-latest;pub-cache-hosted;sdk:3.12.0;packages:_tests;commands:command_2"
+          restore-keys: |
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.12.0;packages:_tests
+            os:ubuntu-latest;pub-cache-hosted;sdk:3.12.0
+            os:ubuntu-latest;pub-cache-hosted
+            os:ubuntu-latest
+      - name: Setup Dart SDK
+        uses: dart-lang/setup-dart@d6a63dab3335f427404425de0fbfed4686d93c4f
+        with:
+          sdk: "3.12.0"
+      - id: checkout
+        name: Checkout repository
+        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab
+      - id: _tests_pub_upgrade
+        name: _tests; dart pub upgrade
+        run: dart pub upgrade
+        if: "always() && steps.checkout.conclusion == 'success'"
+        working-directory: _tests
+      - name: "_tests; dart run build_runner test --fail-on-severe -- -P browser"
+        run: dart run build_runner test --fail-on-severe -- -P browser
+        if: "always() && steps._tests_pub_upgrade.conclusion == 'success'"
+        working-directory: _tests
     needs:
       - job_001
       - job_002

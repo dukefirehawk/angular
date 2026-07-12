@@ -12,7 +12,6 @@ workspace:
   - ngrouter
   - goldens
   - examples/hello_world
-  # - ngcomponents
   #- _tests
 
 dev_dependencies:
