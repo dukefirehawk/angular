@@ -207,7 +207,7 @@ class ElementScrollHost implements OnInit, OnDestroy, ElementScrollHostBase {
   bool get throttleScrollEvents => scrollHost.throttleScrollEvents;
 
   @override
-  ElementScrollHost get scrollbarHost => scrollHost.scrollbarHost;
+  Element get scrollbarHost => scrollHost.scrollbarHost;
 
   @override
   int get clientWidth => scrollHost.clientWidth;
@@ -304,7 +304,7 @@ class AcxPanClassDirective extends BasePanClassDirective
   AcxPanClassDirective(
     super.domService,
     super.scrollHost,
-    HtmlElement super.element,
+    HTMLElement super.element,
   );
 
   @override
