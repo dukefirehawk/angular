@@ -24,7 +24,7 @@ import 'tooltip_target.dart';
 /// Typically, the tooltips are associated with an icon or a button and provide
 /// a label or brief helper text about that element. This component should be
 /// used with a [TooltipTarget] component which controls its visibility
-/// and provides the underlying [HtmlElement] at which the tooltip is targeted.
+/// and provides the underlying [HTMLElement] at which the tooltip is targeted.
 ///
 /// Use this component in conjunction with the [MaterialTooltipTargetDirective].
 ///
@@ -86,11 +86,11 @@ class MaterialInkTooltipComponent implements Tooltip {
   MaterialInkTooltipComponent(
     this._tooltipController,
     this._changeDetector,
-    HtmlElement hostElement,
+    HTMLElement hostElement,
     @Attribute('tooltipClass') String? tooltipClass,
   ) : popupClassName = constructEncapsulatedCss(
         tooltipClass,
-        hostElement.classes,
+        hostElement.classList,
       );
 
   @override

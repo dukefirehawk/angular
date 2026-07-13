@@ -127,11 +127,11 @@ class MaterialPaperTooltipComponent implements DeferredContentAware, Tooltip {
   MaterialPaperTooltipComponent(
     this._tooltipController,
     this._changeDetector,
-    HtmlElement hostElement,
+    HTMLElement hostElement,
     @Attribute('tooltipClass') String? tooltipClass,
   ) : popupClassName = constructEncapsulatedCss(
         tooltipClass,
-        hostElement.classes,
+        hostElement.classList,
       );
 
   @ViewChild(MaterialPopupComponent)
