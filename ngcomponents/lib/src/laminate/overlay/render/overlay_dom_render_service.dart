@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:math';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart' hide Visibility;
@@ -25,10 +26,10 @@ const overlayContainerName = OpaqueToken<String>('overlayContainerName');
 ///     bootstrap(RootComponent, [
 ///       provide(overlayContainerToken, useValue: overlayContainer)
 ///     ]);
-const overlayContainerToken = OpaqueToken<HtmlElement>('overlayContainer');
+const overlayContainerToken = OpaqueToken<HTMLElement>('overlayContainer');
 
 /// Where [overlayContainerToken] should be created.
-const overlayContainerParent = OpaqueToken<HtmlElement>(
+const overlayContainerParent = OpaqueToken<HTMLElement>(
   'overlayContainerParent',
 );
 
@@ -62,13 +63,13 @@ class OverlayDomRenderService {
   static const _defaultConfig = OverlayState();
   static const _paneClassName = 'pane';
 
-  final HtmlElement containerElement;
+  final HTMLElement containerElement;
   final String _containerName;
   final DomRuler _domRuler;
   final DomService _domService;
   final AcxImperativeViewUtils _imperativeViewUtils;
-  final _useDomSynchronously;
-  final _useRepositionLoop;
+  final bool _useDomSynchronously;
+  final bool _useRepositionLoop;
   final ZIndexer _zIndexer;
 
   /// Track the last z-index used by an overlay. When updating an overlay,
@@ -91,7 +92,7 @@ class OverlayDomRenderService {
     @Inject(overlayRepositionLoop) this._useRepositionLoop,
     this._zIndexer,
   ) {
-    containerElement.attributes['name'] = _containerName;
+    containerElement.setAttribute('name', _containerName);
     styleConfig.registerStyles();
     _lastZIndex = _zIndexer.peek();
   }
@@ -103,7 +104,7 @@ class OverlayDomRenderService {
   /// Converts [state] into a set of CSS property mutations on [pane], applying
   /// them in the next DOM write queue, and returning a future that completes
   /// after applied.
-  Future<void> applyState(OverlayState state, HtmlElement pane) async {
+  Future<void> applyState(OverlayState state, HTMLElement pane) async {
     if (!_useDomSynchronously) {
       return _domService.onWrite().then((_) {
         applyStateSync(state, pane);
@@ -114,7 +115,7 @@ class OverlayDomRenderService {
   }
 
   /// Like [applyState], but is done synchronously.
-  void applyStateSync(OverlayState state, HtmlElement pane) {
+  void applyStateSync(OverlayState state, HTMLElement pane) {
     var cssClasses = <String>[];
 
     // Optionally, make the overlay "modal" style.
@@ -149,7 +150,7 @@ class OverlayDomRenderService {
 
     // If it exists, also update z-index of overlay container so it's on top of
     // any other zIndexer-using components
-    var p = pane.parent;
+    var p = pane.parentElement;
     if (p != null) {
       if (_lastZIndex != _zIndexer.peek()) {
         _lastZIndex = _zIndexer.pop();
@@ -170,7 +171,7 @@ class OverlayDomRenderService {
   /// but should only be used on elements that will not effect layout much such
   /// as overlays/popups.
   Stream<Rectangle> measureSize(
-    HtmlElement pane, {
+    HTMLElement pane, {
     bool track = false,
     bool sync = false,
   }) {
@@ -193,21 +194,26 @@ class OverlayDomRenderService {
   /// time).
   Future<Rectangle> measureContainer() {
     if (!_useDomSynchronously) {
-      return _domService.onWrite().then(
-        (_) => containerElement.getBoundingClientRect(),
-      );
+      return _domService.onWrite().then((_) {
+        var rect = containerElement.getBoundingClientRect();
+        return Rectangle(rect.left, rect.top, rect.width, rect.height);
+      });
     } else {
-      return Future<Rectangle>.value(containerElement.getBoundingClientRect());
+      var rect = containerElement.getBoundingClientRect();
+
+      return Future<Rectangle>.value(
+        Rectangle(rect.left, rect.top, rect.width, rect.height),
+      );
     }
   }
 
   /// Returns a future that completes with an overlay pane DOM element.
   ///
   /// The element is created and appended in the next DOM write queue.
-  Future<HtmlElement> createOverlayPane([OverlayState state = _defaultConfig]) {
+  Future<HTMLElement> createOverlayPane([OverlayState state = _defaultConfig]) {
     // Create a detached DIV to use as the overlay host.
-    HtmlElement pane = DivElement()
-      ..attributes['pane-id'] = _createUniqueId()
+    HTMLElement pane = HTMLDivElement()
+      ..setAttribute('pane-id', _createUniqueId())
       ..classList.add(_paneClassName);
 
     // Depending on the initial positioning, size, and visibility, apply the
@@ -227,10 +233,10 @@ class OverlayDomRenderService {
   }
 
   /// Creates and returns an overlay pane DOM element.
-  HtmlElement createOverlayPaneSync([OverlayState state = _defaultConfig]) {
+  HTMLElement createOverlayPaneSync([OverlayState state = _defaultConfig]) {
     // Create a detached DIV to use as the overlay host.
-    HtmlElement pane = DivElement()
-      ..attributes['pane-id'] = _createUniqueId()
+    HTMLElement pane = HTMLDivElement()
+      ..setAttribute('pane-id', _createUniqueId())
       ..classList.add(_paneClassName);
 
     // Depending on the initial positioning, size, and visibility, apply the
@@ -242,7 +248,7 @@ class OverlayDomRenderService {
   }
 
   /// Creates a DOM-bound [PortalHost] with [hostContainer].
-  PortalHost createPortalHost(HtmlElement hostContainer) {
+  PortalHost createPortalHost(HTMLElement hostContainer) {
     return DomPortalHost(hostContainer, _imperativeViewUtils);
   }
 }

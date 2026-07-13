@@ -10,8 +10,6 @@ import 'dart:js_interop';
 import 'dart:math';
 import 'package:web/web.dart';
 
-import 'package:ngdart/angular.dart';
-
 import 'package:ngcomponents/utils/browser/feature_detector/feature_detector.dart';
 
 /// Determines if the space key was pressed in a [KeyboardEvent].
@@ -37,8 +35,8 @@ bool isStandardMouseEvent(MouseEvent event) =>
 
 /// Whether the [UIEvent] is a standard trigger event without modifier keys.
 bool isStandardTriggerEvent(UIEvent event) {
-  return event is MouseEvent && isStandardMouseEvent(event) ||
-      event is KeyboardEvent && isKeyboardTrigger(event);
+  return event.isA<MouseEvent>() && isStandardMouseEvent(event as MouseEvent) ||
+      event.isA<KeyboardEvent>() && isKeyboardTrigger(event as KeyboardEvent);
 }
 
 typedef Predicate<T> = bool Function(T value);
@@ -70,7 +68,7 @@ Stream<Event> triggersOutsideAny(Predicate<Node> checkNodeInside) {
       Event? lastEvent;
       Event? lastDownEvent;
 
-      listener = ((Event e) {
+      void onEvent(Event e) {
         lastEvent = e;
         var node = e.target as Node?;
         while (node != null) {
@@ -81,49 +79,53 @@ Stream<Event> triggersOutsideAny(Predicate<Node> checkNodeInside) {
           }
         }
         controller.add(e);
-      }).toJS;
+      }
+      
+      listener = onEvent.toJS;
 
       // Keep track of mousedown events so that we can filter mouseup events
       // that occurred on a different element than the mousedown.
-      mouseDownListener = document.onMouseDown.listen((MouseEvent e) {
-        lastDownEvent = e;
-      });
-
-      document.addEventListener('mousedown', (MouseEvent e) {
-        lastDownEvent = e;
-      }.toJS)
+      mouseDownListener = EventStreamProviders.mouseDownEvent
+          .forTarget(document)
+          .listen((MouseEvent e) {
+            lastDownEvent = e;
+          });
 
       // Listen to mouseup to prevent scenarios where a single click event
       // both opens and closes an element.
-      mouseUpListener = document.onMouseUp.listen((MouseEvent e) {
-        // Allow for the event to be listened to if there was no down event
-        // for example if it was canceled or if the target is the same as
-        // where the 'click' started.
-        if (lastDownEvent == null || e.target == lastDownEvent!.target) {
-          listener!(e);
-        }
-        lastEvent = e;
-      });
+      mouseUpListener = EventStreamProviders.mouseUpEvent
+          .forTarget(document)
+          .listen((MouseEvent e) {
+            // Allow for the event to be listened to if there was no down event
+            // for example if it was canceled or if the target is the same as
+            // where the 'click' started.
+            if (lastDownEvent == null || e.target == lastDownEvent!.target) {
+              onEvent(e);
+            }
+            lastEvent = e;
+          });
 
-      clickListener = document.onClick.listen((MouseEvent e) {
-        // Ignore the click if we just saw a mouseup on the same element... it
-        // probably means that the mouseup was part of this same click.
-        //
-        // This prevents scenarios where clicking an element that displays
-        // another element (e.g. a button to open a popup) inadvertently
-        // triggers an "outside" event, immediately hiding the just-displayed
-        // element.
-        if (lastEvent?.type == 'mouseup' && e.target == lastEvent?.target) {
-          return;
-        }
-        // Allow for the event to be listened to if there was no down event
-        // for example if it was canceled or if the target is the same as
-        // where the 'click' started.
-        if (lastDownEvent == null || e.target == lastDownEvent!.target) {
-          listener!(e);
-        }
-        lastDownEvent = null;
-      });
+      clickListener = EventStreamProviders.clickEvent.forTarget(document).listen(
+        (MouseEvent e) {
+          // Ignore the click if we just saw a mouseup on the same element... it
+          // probably means that the mouseup was part of this same click.
+          //
+          // This prevents scenarios where clicking an element that displays
+          // another element (e.g. a button to open a popup) inadvertently
+          // triggers an "outside" event, immediately hiding the just-displayed
+          // element.
+          if (lastEvent?.type == 'mouseup' && e.target == lastEvent?.target) {
+            return;
+          }
+          // Allow for the event to be listened to if there was no down event
+          // for example if it was canceled or if the target is the same as
+          // where the 'click' started.
+          if (lastDownEvent == null || e.target == lastDownEvent!.target) {
+            onEvent(e);
+          }
+          lastDownEvent = null;
+        },
+      );
 
       // Since 'focusin' event is not supported in Firefox, listen to 'focus'
       // event with useCapture set to true to implement event delegation and
@@ -253,7 +255,7 @@ bool isParentOf(Element? element, Node? node) {
 ///     elements.sort(compareDocumentPosition);
 ///     // Now they're sorted according to their position in the document.
 int compareDocumentPosition(Node a, Node b) {
-  int bitmask = js_util.callMethod(a, 'compareDocumentPosition', [b]);
+  int bitmask = a.compareDocumentPosition(b);
   if ((bitmask & 4) != 0 || (bitmask & 16) != 0) {
     // DOCUMENT_POSITION_FOLLOWING or DOCUMENT_POSITION_CONTAINED_BY
     return -1;

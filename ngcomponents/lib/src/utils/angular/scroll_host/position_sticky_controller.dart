@@ -3,6 +3,8 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
+import 'dart:math';
 import 'package:web/web.dart';
 
 import 'package:quiver/core.dart';
@@ -115,10 +117,12 @@ class PositionStickyController implements StickyController {
   void _scheduleUpdate() {
     if (_isUpdateScheduled) return;
     _isUpdateScheduled = true;
-    window.requestAnimationFrame((_) {
-      _isUpdateScheduled = false;
-      _update();
-    });
+    window.requestAnimationFrame(
+      ((_) {
+        _isUpdateScheduled = false;
+        _update();
+      }).toJS,
+    );
   }
 
   void _addStickyStyle(
@@ -127,10 +131,13 @@ class PositionStickyController implements StickyController {
     num zIndex,
     num? offset,
   ) {
-    stickyElement.element.style
+    (stickyElement.element as HTMLElement).style
       ..position = 'sticky'
       ..zIndex = '${zIndex}';
-    stickyElement.element.style.setProperty(positionProperty, '${offset}px');
+    (stickyElement.element as HTMLElement).style.setProperty(
+      positionProperty,
+      '${offset}px',
+    );
 
     if (stickyElement.stickyClass != null) {
       if (feature_detector.supportsIntersectionObserver) {
@@ -138,7 +145,7 @@ class PositionStickyController implements StickyController {
           _startIntersectionSubscription(stickyElement);
         }
         // + 1px wasn't enough to trigger an intersection.
-        stickyElement.intersectionElement!.style.setProperty(
+        (stickyElement.intersectionElement as HTMLElement).style.setProperty(
           positionProperty,
           '${-(offset! + 2)}px',
         );
@@ -149,14 +156,14 @@ class PositionStickyController implements StickyController {
   }
 
   void _removeStickyStyle(_StickyElement stickyElement) {
-    stickyElement.element.style
+    (stickyElement.element as HTMLElement).style
       ..position = ''
       ..zIndex = ''
       ..top = ''
       ..bottom = '';
 
     if (stickyElement.stickyClass != null) {
-      stickyElement.element.classes.remove(stickyElement.stickyClass);
+      stickyElement.element.classList.remove(stickyElement.stickyClass!);
       if (stickyElement.intersectionSubscription != null) {
         _stopIntersectionSubscription(stickyElement);
       }
@@ -171,7 +178,7 @@ class PositionStickyController implements StickyController {
     // edge of the scroll host. The invisible element is positioned relative to
     // the sticky element with an offset opposite of the sticky element's
     // offset.
-    stickyElement.intersectionElement = DivElement()
+    stickyElement.intersectionElement = HTMLDivElement()
       ..style.width = '0px'
       ..style.height = '1px'
       ..style.position = 'absolute';
@@ -182,8 +189,8 @@ class PositionStickyController implements StickyController {
     stickyElement.intersectionSubscription = _scrollHost
         .onIntersection(stickyElement.intersectionElement)
         .listen((e) {
-          if (e!.intersectionRect!.height > 0) {
-            stickyElement.element.classes.remove(stickyElement.stickyClass);
+          if (e!.intersectionRect.height > 0) {
+            stickyElement.element.classList.remove(stickyElement.stickyClass!);
           } else {
             stickyElement.element.classList.add(stickyElement.stickyClass!);
           }

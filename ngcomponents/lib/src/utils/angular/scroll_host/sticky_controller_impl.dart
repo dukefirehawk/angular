@@ -9,6 +9,8 @@ import 'dart:math' show min, max, Rectangle;
 import 'package:ngcomponents/utils/angular/scroll_host/interface.dart';
 import 'package:ngcomponents/utils/browser/dom_service/dom_service.dart';
 
+import 'package:ngcomponents/utils/browser/dom_herlper/dom_helper.dart';
+
 class StickyControllerImpl implements StickyController {
   final DomService _domService;
   final ScrollHost _scrollHost;
@@ -142,7 +144,7 @@ class StickyControllerImpl implements StickyController {
     Rectangle hostRect = _scrollHost.calcViewportRect();
     // assuming that floating elements are either at the top or at the bottom
     for (Element element in _floatingElements) {
-      Rectangle rect = element.getBoundingClientRect();
+      Rectangle rect = toRectangle(element.getBoundingClientRect());
       num rectMiddle = rect.top + (rect.height / 2.0);
       num topDistance = (hostRect.top - rectMiddle).abs();
       num bottomDistance = (hostRect.bottom - rectMiddle).abs();
@@ -302,14 +304,16 @@ class _StickyRow implements StickyRowPosition {
 
   /// Observes the position of the row's Element and its range.
   void readRowPositions() {
-    rowPosition = element.getBoundingClientRect();
+    rowPosition = toRectangle(element.getBoundingClientRect());
     rowPosition = Rectangle(
       rowPosition!.left,
       rowPosition!.top - translateY,
       rowPosition!.width,
       rowPosition!.height,
     );
-    rangePosition = range?.getBoundingClientRect();
+    if (range != null) {
+      rangePosition = toRectangle(range!.getBoundingClientRect());
+    }
   }
 
   /// Sets the row back to its starting position and styling, but without
@@ -318,20 +322,20 @@ class _StickyRow implements StickyRowPosition {
     if (translateY == 0) return;
     translateY = 0;
     if (_currentTransform != '' || _currentZIndex != '') {
-      element.style
+      (element as HTMLElement).style
         ..transform = ''
         ..zIndex = '';
     }
     _currentTransform = '';
     _currentZIndex = '';
-    if (stickyClass != null) element.classes.toggle(stickyClass!, false);
+    if (stickyClass != null) element.classList.toggle(stickyClass!, false);
   }
 
   /// Completely resets the row's position and styling (expensive in Firefox).
   void resetTop() {
     softResetTop();
     if (_currentPosition != '') {
-      element.style.position = '';
+      (element as HTMLElement).style.position = '';
       _currentPosition = '';
     }
   }
@@ -346,7 +350,7 @@ class _StickyRow implements StickyRowPosition {
       if (_currentPosition != 'relative' ||
           _currentTransform != newTransform ||
           _currentZIndex != newZIndex) {
-        element.style
+        (element as HTMLElement).style
           ..position = 'relative'
           ..transform = newTransform
           ..zIndex = newZIndex;
@@ -354,7 +358,7 @@ class _StickyRow implements StickyRowPosition {
         _currentTransform = newTransform;
         _currentZIndex = newZIndex;
       }
-      if (stickyClass != null) element.classes.toggle(stickyClass!, true);
+      if (stickyClass != null) element.classList.toggle(stickyClass!, true);
     }
   }
 
@@ -364,16 +368,16 @@ class _StickyRow implements StickyRowPosition {
 }
 
 /// Wraps a row of arbitrary type with additional data needed by the algorithm.
-class _RowData<T> {
+class RowData<T> {
   T row;
   num offsetY;
 
-  _RowData(this.row, {this.offsetY = 0});
+  RowData(this.row, {this.offsetY = 0});
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is _RowData &&
+      other is RowData &&
           runtimeType == other.runtimeType &&
           row == other.row &&
           offsetY == other.offsetY;
@@ -392,10 +396,10 @@ class StickyContainerLayout<T> {
   Rectangle? hostPosition;
 
   /// Rows that should stick to the top.
-  List<_RowData<T>>? topRows;
+  List<RowData<T>>? topRows;
 
   /// Rows that should stick to the bottom.
-  List<_RowData<T>>? bottomRows;
+  List<RowData<T>>? bottomRows;
 
   /// Rows that should not stick.
   List<T>? hiddenRows;
@@ -558,7 +562,7 @@ abstract class StickyRowUtils {
           if (layout.topRows == null) {
             layout.topRows = [];
           }
-          layout.topRows!.add(_RowData(row, offsetY: 0));
+          layout.topRows!.add(RowData(row, offsetY: 0));
           layout._translateYs!.add(hostTop - row.rowPosition!.top);
           hostTop += row.rowPosition!.height;
 
@@ -571,7 +575,7 @@ abstract class StickyRowUtils {
           if (layout.bottomRows == null) {
             layout.bottomRows = [];
           }
-          layout.bottomRows!.add(_RowData(row, offsetY: 0));
+          layout.bottomRows!.add(RowData(row, offsetY: 0));
           layout._translateYs!.add(hostBottom - row.rowPosition!.bottom);
           hostBottom -= row.rowPosition!.height;
 
@@ -590,7 +594,7 @@ abstract class StickyRowUtils {
           final duplicateRow =
               layout.topRows![stickyKeyToRowIndex![row.stickyKey]!].row;
           layout.hiddenRows!.add(duplicateRow);
-          layout.topRows![stickyKeyToRowIndex[row.stickyKey]!] = _RowData(
+          layout.topRows![stickyKeyToRowIndex[row.stickyKey]!] = RowData(
             row,
             offsetY: 0,
           );

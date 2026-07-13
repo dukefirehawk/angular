@@ -52,7 +52,7 @@ class DomTreeIterator implements Iterator<Element> {
   /// Scope is retained, while wrapping may be overriden
   /// if wraps is true or inherited from current as true,
   /// new wraps will start from current position.
-  DomTreeIterator reversed({wraps}) {
+  DomTreeIterator reversed({dynamic wraps}) {
     return DomTreeIterator(
       _element,
       reverse: !_reverse,
