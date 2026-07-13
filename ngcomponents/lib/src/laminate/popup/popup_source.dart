@@ -3,6 +3,8 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:math';
+import 'package:ngcomponents/utils/browser/dom_herlper/dom_helper.dart';
 import 'package:web/web.dart';
 
 import 'package:ngcomponents/focus/focus_interface.dart';
@@ -78,10 +80,11 @@ abstract class PopupSource {
 
 /// An [PopupSource] that's based on an element.
 abstract class ElementPopupSource implements PopupSource, Focusable {
-  HtmlElement? get sourceElement;
+  HTMLElement? get sourceElement;
 
   @override
-  Rectangle? get dimensions => sourceElement?.getBoundingClientRect();
+  Rectangle? get dimensions =>
+      toRectangle(sourceElement!.getBoundingClientRect());
 }
 
 /// An immutable [PopupSource] implementation based on a predefined polygon.

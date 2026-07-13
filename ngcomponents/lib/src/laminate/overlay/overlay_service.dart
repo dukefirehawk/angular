@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:math';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -26,7 +27,7 @@ class OverlayService {
   Future<OverlayRef> createOverlayRef([
     OverlayState initialState = _defaultState,
   ]) async {
-    HtmlElement pane = await _renderService.createOverlayPane(initialState);
+    HTMLElement pane = await _renderService.createOverlayPane(initialState);
     return _createRef(pane, initialState);
   }
 
@@ -34,7 +35,7 @@ class OverlayService {
   ///
   /// Returns with a reference to the pane.
   OverlayRef createOverlayRefSync([OverlayState initialState = _defaultState]) {
-    HtmlElement pane = _renderService.createOverlayPaneSync(initialState);
+    HTMLElement pane = _renderService.createOverlayPaneSync(initialState);
     return _createRef(pane, initialState);
   }
 
@@ -53,7 +54,7 @@ class OverlayService {
   final NgZone _ngZone;
   final OverlayDomRenderService _renderService;
 
-  OverlayRef _createRef(HtmlElement pane, OverlayState state) => OverlayRef(
+  OverlayRef _createRef(HTMLElement pane, OverlayState state) => OverlayRef(
     _renderService.applyState,
     _measurePane,
     _renderService.createPortalHost(pane),
@@ -64,7 +65,7 @@ class OverlayService {
   );
 
   // Depending on client flags, either measure sync or async.
-  Stream<Rectangle<num>> _measurePane(HtmlElement pane, {bool track = false}) {
+  Stream<Rectangle<num>> _measurePane(HTMLElement pane, {bool track = false}) {
     return _renderService.measureSize(
       pane,
       track: track,

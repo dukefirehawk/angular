@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:math';
 import 'package:web/web.dart';
 
 import 'package:ngcomponents/laminate/enums/visibility.dart';
@@ -73,10 +74,10 @@ class OverlayRef implements PortalHost {
   final MutableOverlayState state;
 
   /// The .acx-overlay-container element where the overlay pane resides.
-  final HtmlElement containerElement;
+  final HTMLElement containerElement;
 
   /// The .pane element corresponding to this overlay.
-  final HtmlElement overlayElement;
+  final HTMLElement overlayElement;
 
   /// Sets whether the overlay should capture events and prevent interaction
   /// with the underlying application.
@@ -90,7 +91,7 @@ class OverlayRef implements PortalHost {
   }
 
   /// A unique ID that represents the overlay pane.
-  String? get uniqueId => overlayElement.attributes['pane-id'];
+  String? get uniqueId => overlayElement.getAttribute('pane-id');
 
   @override
   Future<Object> attach(Portal<Object?> portal) =>
@@ -118,8 +119,8 @@ class OverlayRef implements PortalHost {
     return a.width == b.width && a.height == b.height;
   }
 
-  final AsyncApplyState<HtmlElement> _asyncApplyState;
-  final AsyncMeasureSize<HtmlElement> _asyncMeasureSize;
+  final AsyncApplyState<HTMLElement> _asyncApplyState;
+  final AsyncMeasureSize<HTMLElement> _asyncMeasureSize;
   final PortalHost _delegatePortalHost;
   final Function _runOutsideAngular;
 

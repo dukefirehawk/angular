@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:math';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -21,7 +22,7 @@ class PopupSourceDirective
     implements ElementPopupSource, AfterViewInit, OnDestroy {
   final DomPopupSourceFactory _domPopupSourceFactory;
   final bool _initAriaAttributes;
-  HtmlElement _element;
+  HTMLElement _element;
   ReferenceDirective? _referenceDirective;
   Focusable? _focusable;
 
@@ -56,12 +57,12 @@ class PopupSourceDirective
   @override
   void ngAfterViewInit() {
     // We have to wait until the view is inited to have elementRef
-    _element = _referenceDirective?.elementRef as HtmlElement? ?? _element;
+    _element = _referenceDirective?.elementRef as HTMLElement? ?? _element;
     _updateSource();
   }
 
   @override
-  HtmlElement? get sourceElement => _element;
+  HTMLElement? get sourceElement => _element;
 
   @override
   Alignment? get alignOriginX => _popupSource?.alignOriginX;

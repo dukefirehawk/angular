@@ -3,6 +3,8 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:math';
+import 'package:ngcomponents/utils/browser/dom_herlper/dom_helper.dart';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -27,7 +29,7 @@ class DomPopupSourceFactory {
 
   /// Returns a new [DomPopupSource] from [sourceElement].
   DomPopupSource createPopupSource(
-    HtmlElement sourceElement, {
+    HTMLElement sourceElement, {
     Alignment alignOriginX = Alignment.Start,
     Alignment alignOriginY = Alignment.Start,
     bool initAriaAttributes = true,
@@ -47,7 +49,7 @@ class DomPopupSourceFactory {
   /// If [track] is set, will wait for DOM update notifications and respond if
   /// the measurement changes.
   Stream<Rectangle> _asyncMeasureSize(
-    HtmlElement element, {
+    HTMLElement element, {
     bool track = false,
   }) {
     if (track) {
@@ -62,8 +64,8 @@ class DomPopupSourceFactory {
 class DomPopupSource implements ElementPopupSource {
   static final bool _isRtl = determineRtl(document);
 
-  final AsyncMeasureSize<HtmlElement> _asyncMeasureSize;
-  final HtmlElement sourceElement;
+  final AsyncMeasureSize<HTMLElement> _asyncMeasureSize;
+  final HTMLElement sourceElement;
   final bool _initAriaAttributes;
 
   /// Creates a new source from a measure function and source DOM element.
@@ -102,7 +104,8 @@ class DomPopupSource implements ElementPopupSource {
   }
 
   @override
-  Rectangle? get dimensions => sourceElement.getBoundingClientRect();
+  Rectangle? get dimensions =>
+      toRectangle(sourceElement.getBoundingClientRect());
 
   @override
   bool get isRtl => _isRtl;
@@ -132,6 +135,6 @@ class DomPopupSource implements ElementPopupSource {
   @override
   void onClose() {
     if (_id == null || !_initAriaAttributes) return;
-    sourceElement.attributes.remove('aria-owns');
+    sourceElement.removeAttribute('aria-owns');
   }
 }
