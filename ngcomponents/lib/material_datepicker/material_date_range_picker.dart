@@ -406,11 +406,11 @@ class MaterialDateRangePickerComponent
     @Optional() DatepickerConfig? config,
     @Attribute('popupClass') String? popupClass,
     @Optional() @SkipSelf() this._popupSizeProvider,
-    HtmlElement element,
+    HTMLElement element,
     this._domService,
     this._ngZone,
   ) : _config = config ?? DatepickerConfig(),
-      popupClassName = constructEncapsulatedCss(popupClass, element.classes) {
+      popupClassName = constructEncapsulatedCss(popupClass, element.classList) {
     // TODO(google): Migrate to use only datepickerClock
     clock ??= legacyClock;
 

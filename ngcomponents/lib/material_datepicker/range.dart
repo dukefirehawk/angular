@@ -14,7 +14,9 @@ import 'package:ngcomponents/model/date/date.dart';
 /// If the given range is valid (non-null with non-null start and end dates),
 /// returns the result of calling the given function. Otherwise returns `null`.
 DatepickerDateRange? _ifValidRange(
-    DatepickerDateRange? r, DatepickerDateRange fn()) {
+  DatepickerDateRange? r,
+  DatepickerDateRange fn(),
+) {
   if (r == null || r.start == null || r.end == null) {
     return null;
   }
@@ -22,14 +24,19 @@ DatepickerDateRange? _ifValidRange(
 }
 
 DatepickerDateRange? _genericNext(DatepickerDateRange r) => _ifValidRange(
-    r,
-    () => DatepickerDateRange.custom(
-        r.end!.add(days: 1), r.end!.add(days: daysSpanned(r.start!, r.end!))));
+  r,
+  () => DatepickerDateRange.custom(
+    r.end!.add(days: 1),
+    r.end!.add(days: daysSpanned(r.start!, r.end!)),
+  ),
+);
 DatepickerDateRange? _genericPrev(DatepickerDateRange r) => _ifValidRange(
-    r,
-    () => DatepickerDateRange.custom(
-        r.start!.add(days: -daysSpanned(r.start!, r.end!)),
-        r.start!.add(days: -1)));
+  r,
+  () => DatepickerDateRange.custom(
+    r.start!.add(days: -daysSpanned(r.start!, r.end!)),
+    r.start!.add(days: -1),
+  ),
+);
 
 typedef RangeFn = DatepickerDateRange? Function(DatepickerDateRange range);
 
@@ -92,12 +99,15 @@ abstract class DatepickerDateRange implements DateRange {
   /// date_range.proto.
   proto.DatepickerDateRange toProtoBuf();
 
-  factory DatepickerDateRange(String title, Date? start, Date? end,
-          {RangeFn next = _genericNext,
-          RangeFn prev = _genericPrev,
-          bool isPredefined = false,
-          bool isAllTime = false}) =>
-      _BasicDateRange(title, start, end, next, prev, isPredefined, isAllTime);
+  factory DatepickerDateRange(
+    String title,
+    Date? start,
+    Date? end, {
+    RangeFn next = _genericNext,
+    RangeFn prev = _genericPrev,
+    bool isPredefined = false,
+    bool isAllTime = false,
+  }) => _BasicDateRange(title, start, end, next, prev, isPredefined, isAllTime);
 
   /// Shortcut to define a "custom" date range with a localized "Custom" title
   /// and default behavior.
@@ -106,7 +116,9 @@ abstract class DatepickerDateRange implements DateRange {
 
   /// Construct from the protocol buffer format defined in date_range.proto.
   factory DatepickerDateRange.fromProtoBuf(
-      Clock clock, proto.DatepickerDateRange pb) {
+    Clock clock,
+    proto.DatepickerDateRange pb,
+  ) {
     if (pb.hasAllTimeRange()) {
       return allTime;
     } else if (pb.hasDaysAgo()) {
@@ -117,8 +129,11 @@ abstract class DatepickerDateRange implements DateRange {
       return LastNDaysToTodayRange.beforeToday(clock, pb.lastNDaysToToday);
     } else if (pb.hasWeeksAgo()) {
       if (pb.hasStartWeekday()) {
-        return WeekRange.weeksAgo(clock, pb.weeksAgo,
-            startWeekday: pb.startWeekday);
+        return WeekRange.weeksAgo(
+          clock,
+          pb.weeksAgo,
+          startWeekday: pb.startWeekday,
+        );
       } else {
         return WeekRange.weeksAgo(clock, pb.weeksAgo);
       }
@@ -131,7 +146,9 @@ abstract class DatepickerDateRange implements DateRange {
     }
 
     return DatepickerDateRange.custom(
-        _convertToDate(pb.dateRange.start), _convertToDate(pb.dateRange.end));
+      _convertToDate(pb.dateRange.start),
+      _convertToDate(pb.dateRange.end),
+    );
   }
 }
 
@@ -163,9 +180,9 @@ DateRange _plainRange(DatepickerDateRange range) =>
 
 proto.DatepickerDateRange _makeProtoBuf(DatepickerDateRange range) =>
     range.isAllTime
-        ? (proto.DatepickerDateRange()..allTimeRange = true)
-        : (proto.DatepickerDateRange()
-          ..dateRange = _makeDateRangeProto(range.start!, range.end!));
+    ? (proto.DatepickerDateRange()..allTimeRange = true)
+    : (proto.DatepickerDateRange()
+        ..dateRange = _makeDateRangeProto(range.start!, range.end!));
 
 proto.DateRange _makeDateRangeProto(Date start, Date end) => proto.DateRange()
   ..start = _makeDateProto(start)
@@ -192,8 +209,8 @@ class _ClampedDateRange implements DatepickerDateRange {
   final DatepickerDateRange _delegate;
 
   _ClampedDateRange(this._delegate, {Date? min, Date? max})
-      : _min = min,
-        _max = max;
+    : _min = min,
+      _max = max;
 
   @override
   String get title => _delegate.title;
@@ -205,13 +222,13 @@ class _ClampedDateRange implements DatepickerDateRange {
   @override
   Date? get start {
     final date = _delegate.start;
-    return (date == null || (_min != null && _min! > date)) ? _min : date;
+    return (date == null || (_min != null && _min > date)) ? _min : date;
   }
 
   @override
   Date? get end {
     final date = _delegate.end;
-    return (date == null || (_max != null && _max! < date)) ? _max : date;
+    return (date == null || (_max != null && _max < date)) ? _max : date;
   }
 
   @override
@@ -271,8 +288,15 @@ class _BasicDateRange implements DatepickerDateRange {
   final RangeFn _next;
   final RangeFn _prev;
 
-  _BasicDateRange(this.title, this.start, this.end, this._next, this._prev,
-      this.isPredefined, this.isAllTime);
+  _BasicDateRange(
+    this.title,
+    this.start,
+    this.end,
+    this._next,
+    this._prev,
+    this.isPredefined,
+    this.isAllTime,
+  );
 
   DatepickerDateRange? get next => _next(this);
   DatepickerDateRange? get prev => _prev(this);
@@ -300,7 +324,7 @@ class SingleDayRange implements DatepickerDateRange {
   final RangeTitle _titleFunction;
   SingleDayRange(this._date, this._ago, [this._titleFunction = _defaultTitle]);
   SingleDayRange.daysAgo(clock, ago, [RangeTitle titleFunction = _defaultTitle])
-      : this(Date.today(clock).add(days: -ago), ago, titleFunction);
+    : this(Date.today(clock).add(days: -ago), ago, titleFunction);
 
   String get title => _titleFunction(_ago);
   Date get start => _date;
@@ -328,25 +352,31 @@ class SingleDayRange implements DatepickerDateRange {
   static String _defaultTitle(int daysAgo) =>
       daysAgo > 0 ? _addDaysMsg(daysAgo) : _daysFromNowMsg(-daysAgo);
 
-  static String _addDaysMsg(int daysAgo) => Intl.plural(daysAgo,
-      zero: 'Today',
-      one: 'Yesterday',
-      other: '$daysAgo days ago',
-      name: '_addDaysMsg',
-      args: [daysAgo],
-      desc: 'A date range containing only one day a certain number '
-          'of days in the past.',
-      examples: const {'daysAgo': 2});
+  static String _addDaysMsg(int daysAgo) => Intl.plural(
+    daysAgo,
+    zero: 'Today',
+    one: 'Yesterday',
+    other: '$daysAgo days ago',
+    name: '_addDaysMsg',
+    args: [daysAgo],
+    desc:
+        'A date range containing only one day a certain number '
+        'of days in the past.',
+    examples: const {'daysAgo': 2},
+  );
 
-  static String _daysFromNowMsg(int daysFromNow) => Intl.plural(daysFromNow,
-      zero: 'Today',
-      one: 'Tomorrow',
-      other: '$daysFromNow days from now',
-      name: '_daysFromNowMsg',
-      args: [daysFromNow],
-      desc: 'A date range containing only one day a certain number '
-          'of days in the future.',
-      examples: const {'daysFromNow': 2});
+  static String _daysFromNowMsg(int daysFromNow) => Intl.plural(
+    daysFromNow,
+    zero: 'Today',
+    one: 'Tomorrow',
+    other: '$daysFromNow days from now',
+    name: '_daysFromNowMsg',
+    args: [daysFromNow],
+    desc:
+        'A date range containing only one day a certain number '
+        'of days in the future.',
+    examples: const {'daysFromNow': 2},
+  );
 }
 
 /// A range 'N' days long, where N is at least one.
@@ -384,24 +414,30 @@ abstract class MultipleDaysRange implements DatepickerDateRange {
 /// [lengthInDays] should be at least 1.
 class LastNDaysRange extends MultipleDaysRange {
   LastNDaysRange(Date start, int lengthInDays, [String? title])
-      : super(start, lengthInDays, title ?? _lastNDaysMsg(lengthInDays));
+    : super(start, lengthInDays, title ?? _lastNDaysMsg(lengthInDays));
 
   LastNDaysRange.beforeToday(clock, lengthInDays, [String? title])
-      : super(Date.today(clock).add(days: -lengthInDays), lengthInDays,
-            title ?? _lastNDaysMsg(lengthInDays));
+    : super(
+        Date.today(clock).add(days: -lengthInDays),
+        lengthInDays,
+        title ?? _lastNDaysMsg(lengthInDays),
+      );
 
   @override
   proto.DatepickerDateRange toProtoBuf() =>
       _makeProtoBuf(this)..lastNDays = _lengthInDays;
 
-  static String _lastNDaysMsg(int lengthInDays) => Intl.plural(lengthInDays,
-      one: 'Yesterday',
-      other: 'Last $lengthInDays days',
-      name: '_lastNDaysMsg',
-      args: [lengthInDays],
-      desc: 'A date range containing the last "lengthInDays" days, '
-          'not including today.',
-      examples: const {'lengthInDays': 7});
+  static String _lastNDaysMsg(int lengthInDays) => Intl.plural(
+    lengthInDays,
+    one: 'Yesterday',
+    other: 'Last $lengthInDays days',
+    name: '_lastNDaysMsg',
+    args: [lengthInDays],
+    desc:
+        'A date range containing the last "lengthInDays" days, '
+        'not including today.',
+    examples: const {'lengthInDays': 7},
+  );
 }
 
 /// A range 'N' days long which ends today.
@@ -410,24 +446,29 @@ class LastNDaysRange extends MultipleDaysRange {
 /// [lengthInDays] should be at least 1.
 class LastNDaysToTodayRange extends MultipleDaysRange {
   LastNDaysToTodayRange(Date start, int lengthInDays, [String? title])
-      : super(start, lengthInDays, title ?? _lastNDaysToTodayMsg(lengthInDays));
+    : super(start, lengthInDays, title ?? _lastNDaysToTodayMsg(lengthInDays));
 
   LastNDaysToTodayRange.beforeToday(clock, lengthInDays, [String? title])
-      : super(Date.today(clock).add(days: -(lengthInDays - 1)), lengthInDays,
-            title ?? _lastNDaysToTodayMsg(lengthInDays));
+    : super(
+        Date.today(clock).add(days: -(lengthInDays - 1)),
+        lengthInDays,
+        title ?? _lastNDaysToTodayMsg(lengthInDays),
+      );
 
   proto.DatepickerDateRange toProtoBuf() =>
       _makeProtoBuf(this)..lastNDaysToToday = _lengthInDays;
 
-  static String _lastNDaysToTodayMsg(int lengthInDays) =>
-      Intl.plural(lengthInDays,
-          one: 'Today',
-          other: '$lengthInDays days to today',
-          name: '_lastNDaysToTodayMsg',
-          args: [lengthInDays],
-          desc: 'A date range containing the last "lengthInDays" days, '
-              'ending today.',
-          examples: const {'lengthInDays': 7});
+  static String _lastNDaysToTodayMsg(int lengthInDays) => Intl.plural(
+    lengthInDays,
+    one: 'Today',
+    other: '$lengthInDays days to today',
+    name: '_lastNDaysToTodayMsg',
+    args: [lengthInDays],
+    desc:
+        'A date range containing the last "lengthInDays" days, '
+        'ending today.',
+    examples: const {'lengthInDays': 7},
+  );
 }
 
 /// A range 'N' days long, which starts today.
@@ -437,25 +478,29 @@ class LastNDaysToTodayRange extends MultipleDaysRange {
 /// A range 'N' days long which starts today.
 class NextNDaysFromTodayRange extends MultipleDaysRange {
   NextNDaysFromTodayRange(Date start, int lengthInDays, [String? title])
-      : super(
-            start, lengthInDays, title ?? _nextNDaysFromTodayMsg(lengthInDays));
+    : super(start, lengthInDays, title ?? _nextNDaysFromTodayMsg(lengthInDays));
 
   NextNDaysFromTodayRange.afterToday(clock, lengthInDays, [String? title])
-      : super(Date.today(clock), lengthInDays,
-            title ?? _nextNDaysFromTodayMsg(lengthInDays));
+    : super(
+        Date.today(clock),
+        lengthInDays,
+        title ?? _nextNDaysFromTodayMsg(lengthInDays),
+      );
 
   proto.DatepickerDateRange toProtoBuf() =>
       _makeProtoBuf(this)..nextNDaysFromToday = _lengthInDays;
 
-  static String _nextNDaysFromTodayMsg(int lengthInDays) =>
-      Intl.plural(lengthInDays,
-          one: 'Today',
-          other: '$lengthInDays days from today',
-          name: '_nextNDaysFromTodayMsg',
-          args: [lengthInDays],
-          desc: 'A date range containing the next "lengthInDays" days, '
-              'starting with today. [REL_NOTE:brockschmid/01-01-2019]',
-          examples: const {'lengthInDays': 7});
+  static String _nextNDaysFromTodayMsg(int lengthInDays) => Intl.plural(
+    lengthInDays,
+    one: 'Today',
+    other: '$lengthInDays days from today',
+    name: '_nextNDaysFromTodayMsg',
+    args: [lengthInDays],
+    desc:
+        'A date range containing the next "lengthInDays" days, '
+        'starting with today. [REL_NOTE:brockschmid/01-01-2019]',
+    examples: const {'lengthInDays': 7},
+  );
 }
 
 /// A single week. Special-cased to have titles like "This week" or "Last week".
@@ -468,8 +513,12 @@ class WeekRange implements DatepickerDateRange {
   final int _ago;
   final int? _startWeekday;
   final RangeTitle _titleFunction;
-  WeekRange(this._start, this._ago,
-      [this._titleFunction = _defaultTitle, this._startWeekday]);
+  WeekRange(
+    this._start,
+    this._ago, [
+    this._titleFunction = _defaultTitle,
+    this._startWeekday,
+  ]);
 
   /// Constructs a [WeekRange] ending [ago] weeks ago from the date given by
   /// [clock] starting on the [startWeekday].
@@ -478,17 +527,20 @@ class WeekRange implements DatepickerDateRange {
   /// [DateTime.monday] (which equals 1) for Monday, [DateTime.tuesday] for
   /// Tuesday, etc. It defaults to the first day of the week specified in the
   /// current locale.
-  WeekRange.weeksAgo(clock, ago,
-      {RangeTitle titleFunction = _defaultTitle, int? startWeekday})
-      : this(
-            _weekStart(
-                    Date.today(clock),
-                    startWeekday ??
-                        (DateFormat().dateSymbols.FIRSTDAYOFWEEK + 1))
-                .add(days: -7 * ago as int),
-            ago,
-            titleFunction,
-            startWeekday);
+  WeekRange.weeksAgo(
+    clock,
+    ago, {
+    RangeTitle titleFunction = _defaultTitle,
+    int? startWeekday,
+  }) : this(
+         _weekStart(
+           Date.today(clock),
+           startWeekday ?? (DateFormat().dateSymbols.FIRSTDAYOFWEEK + 1),
+         ).add(days: -7 * ago as int),
+         ago,
+         titleFunction,
+         startWeekday,
+       );
 
   String get title => _titleFunction(_ago);
   Date get start => _start;
@@ -511,7 +563,7 @@ class WeekRange implements DatepickerDateRange {
   proto.DatepickerDateRange toProtoBuf() {
     var result = _makeProtoBuf(this)..weeksAgo = _ago;
     if (_startWeekday != null) {
-      result.startWeekday = _startWeekday!;
+      result.startWeekday = _startWeekday;
     }
     return result;
   }
@@ -523,23 +575,27 @@ class WeekRange implements DatepickerDateRange {
   static String _defaultTitle(int weeksAgo) =>
       weeksAgo > 0 ? _weeksAgoMsg(weeksAgo) : _weeksFromNowMsg(-weeksAgo);
 
-  static String _weeksAgoMsg(int weeksAgo) => Intl.plural(weeksAgo,
-      zero: 'This week', // TODO(google): 'This week (Mon-Sun)'
-      one: 'Last week',
-      other: '$weeksAgo weeks ago',
-      name: '_weeksAgoMsg',
-      args: [weeksAgo],
-      desc: 'A date range spanning a single week in the past.',
-      examples: const {'weeksAgo': 2});
+  static String _weeksAgoMsg(int weeksAgo) => Intl.plural(
+    weeksAgo,
+    zero: 'This week', // TODO(google): 'This week (Mon-Sun)'
+    one: 'Last week',
+    other: '$weeksAgo weeks ago',
+    name: '_weeksAgoMsg',
+    args: [weeksAgo],
+    desc: 'A date range spanning a single week in the past.',
+    examples: const {'weeksAgo': 2},
+  );
 
-  static String _weeksFromNowMsg(int weeksFromNow) => Intl.plural(weeksFromNow,
-      zero: 'This week',
-      one: 'Next week',
-      other: '$weeksFromNow weeks from now',
-      name: '_weeksFromNowMsg',
-      args: [weeksFromNow],
-      desc: 'A date range spanning a single week in the future.',
-      examples: const {'weeksFromNow': 2});
+  static String _weeksFromNowMsg(int weeksFromNow) => Intl.plural(
+    weeksFromNow,
+    zero: 'This week',
+    one: 'Next week',
+    other: '$weeksFromNow weeks from now',
+    name: '_weeksFromNowMsg',
+    args: [weeksFromNow],
+    desc: 'A date range spanning a single week in the future.',
+    examples: const {'weeksFromNow': 2},
+  );
 }
 
 /// A single month. Special-cased so that next/previous picks the next/previous
@@ -551,21 +607,25 @@ class MonthRange implements DatepickerDateRange {
   final RangeTitle _titleFunction;
 
   MonthRange(Date start, this._ago, [this._titleFunction = _defaultTitle])
-      : _start = Date(start.year, start.month, 1);
+    : _start = Date(start.year, start.month, 1);
 
-  MonthRange.monthsAgo(Clock clock, int ago,
-      [RangeTitle titleFunction = _defaultTitle])
-      : this._monthsAgo(Date.today(clock), ago, titleFunction);
+  MonthRange.monthsAgo(
+    Clock clock,
+    int ago, [
+    RangeTitle titleFunction = _defaultTitle,
+  ]) : this._monthsAgo(Date.today(clock), ago, titleFunction);
 
   MonthRange._monthsAgo(Date today, int ago, RangeTitle titleFunction)
-      : this(
-            Date(
-                today.year,
-                // The [Date] constructor handles wrapping to previous years.
-                today.month - ago,
-                1),
-            ago,
-            titleFunction);
+    : this(
+        Date(
+          today.year,
+          // The [Date] constructor handles wrapping to previous years.
+          today.month - ago,
+          1,
+        ),
+        ago,
+        titleFunction,
+      );
 
   String get title => _titleFunction(_ago);
   Date get start => _start;
@@ -594,24 +654,27 @@ class MonthRange implements DatepickerDateRange {
   static String _defaultTitle(int monthsAgo) =>
       monthsAgo > 0 ? _monthsAgoMsg(monthsAgo) : _monthsFromNowMsg(-monthsAgo);
 
-  static String _monthsAgoMsg(int monthsAgo) => Intl.plural(monthsAgo,
-      zero: 'This month',
-      one: 'Last month',
-      other: '$monthsAgo months ago',
-      name: '_monthsAgoMsg',
-      args: [monthsAgo],
-      desc: 'A date range spanning a single month in the past.',
-      examples: const {'monthsAgo': 2});
+  static String _monthsAgoMsg(int monthsAgo) => Intl.plural(
+    monthsAgo,
+    zero: 'This month',
+    one: 'Last month',
+    other: '$monthsAgo months ago',
+    name: '_monthsAgoMsg',
+    args: [monthsAgo],
+    desc: 'A date range spanning a single month in the past.',
+    examples: const {'monthsAgo': 2},
+  );
 
-  static String _monthsFromNowMsg(int monthsFromNow) =>
-      Intl.plural(monthsFromNow,
-          zero: 'This month',
-          one: 'Next month',
-          other: '$monthsFromNow months from now',
-          name: '_monthsFromNowMsg',
-          args: [monthsFromNow],
-          desc: 'A date range spanning a single month in the future.',
-          examples: const {'monthsFromNow': 2});
+  static String _monthsFromNowMsg(int monthsFromNow) => Intl.plural(
+    monthsFromNow,
+    zero: 'This month',
+    one: 'Next month',
+    other: '$monthsFromNow months from now',
+    name: '_monthsFromNowMsg',
+    args: [monthsFromNow],
+    desc: 'A date range spanning a single month in the future.',
+    examples: const {'monthsFromNow': 2},
+  );
 }
 
 /// A single broadcast month.
@@ -646,11 +709,17 @@ class BroadcastMonthRange implements DatepickerDateRange {
   final int _ago;
   final RangeTitle _titleFunction;
 
-  BroadcastMonthRange._(this._theFirst, this._ago,
-      [this._titleFunction = _defaultTitle]);
+  BroadcastMonthRange._(
+    this._theFirst,
+    this._ago, [
+    this._titleFunction = _defaultTitle,
+  ]);
 
-  factory BroadcastMonthRange.monthsAgo(Clock clock, int ago,
-      [RangeTitle titleFunction = _defaultTitle]) {
+  factory BroadcastMonthRange.monthsAgo(
+    Clock clock,
+    int ago, [
+    RangeTitle titleFunction = _defaultTitle,
+  ]) {
     var today = Date.today(clock);
     var thisCalendarMonthTheFirst = Date(today.year, today.month, 1);
     var nextCalendarMonthTheFirst = thisCalendarMonthTheFirst.add(months: 1);
@@ -662,7 +731,10 @@ class BroadcastMonthRange implements DatepickerDateRange {
         ? thisCalendarMonthTheFirst
         : nextCalendarMonthTheFirst;
     return BroadcastMonthRange._(
-        theFirst.add(months: -ago), ago, titleFunction);
+      theFirst.add(months: -ago),
+      ago,
+      titleFunction,
+    );
   }
 
   String get title => _titleFunction(_ago);
@@ -672,7 +744,10 @@ class BroadcastMonthRange implements DatepickerDateRange {
   DatepickerDateRange get next =>
       BroadcastMonthRange._(_theFirst.add(months: 1), _ago - 1, _titleFunction);
   DatepickerDateRange get prev => BroadcastMonthRange._(
-      _theFirst.add(months: -1), _ago + 1, _titleFunction);
+    _theFirst.add(months: -1),
+    _ago + 1,
+    _titleFunction,
+  );
 
   bool get isPredefined => true;
   bool get isAllTime => false;
@@ -692,25 +767,28 @@ class BroadcastMonthRange implements DatepickerDateRange {
       ? _broadcastMonthsAgoMsg(broadcastMonthsAgo)
       : _broadcastMonthsFromNowMsg(-broadcastMonthsAgo);
 
-  static String _broadcastMonthsAgoMsg(broadcastMonthsAgo) =>
-      Intl.plural(broadcastMonthsAgo,
-          zero: 'This broadcast month',
-          one: 'Last broadcast month',
-          other: '$broadcastMonthsAgo broadcast months ago',
-          name: '_broadcastMonthsAgoMsg',
-          args: [broadcastMonthsAgo],
-          desc: 'A date range spanning a single broadcast month in the past.',
-          examples: const {'broadcastMonthsAgo': 2});
+  static String _broadcastMonthsAgoMsg(broadcastMonthsAgo) => Intl.plural(
+    broadcastMonthsAgo,
+    zero: 'This broadcast month',
+    one: 'Last broadcast month',
+    other: '$broadcastMonthsAgo broadcast months ago',
+    name: '_broadcastMonthsAgoMsg',
+    args: [broadcastMonthsAgo],
+    desc: 'A date range spanning a single broadcast month in the past.',
+    examples: const {'broadcastMonthsAgo': 2},
+  );
 
   static String _broadcastMonthsFromNowMsg(broadcastMonthsFromNow) =>
-      Intl.plural(broadcastMonthsFromNow,
-          zero: 'This broadcast month',
-          one: 'Next broadcast month',
-          other: '$broadcastMonthsFromNow broadcast months from now',
-          name: '_broadcastMonthsFromNowMsg',
-          args: [broadcastMonthsFromNow],
-          desc: 'A date range spanning a single broadcast month in the future.',
-          examples: const {'broadcastMonthsFromNow': 2});
+      Intl.plural(
+        broadcastMonthsFromNow,
+        zero: 'This broadcast month',
+        one: 'Next broadcast month',
+        other: '$broadcastMonthsFromNow broadcast months from now',
+        name: '_broadcastMonthsFromNowMsg',
+        args: [broadcastMonthsFromNow],
+        desc: 'A date range spanning a single broadcast month in the future.',
+        examples: const {'broadcastMonthsFromNow': 2},
+      );
 }
 
 /// A single year. Special-cased to have titles like "This year" or "Last year".
@@ -719,9 +797,9 @@ class YearRange implements DatepickerDateRange {
   final int _ago;
   final RangeTitle _titleFunction;
   YearRange(Date start, this._ago, [this._titleFunction = _defaultTitle])
-      : _start = Date(start.year, 1, 1);
+    : _start = Date(start.year, 1, 1);
   YearRange.yearsAgo(clock, ago, [RangeTitle titleFunction = _defaultTitle])
-      : this(Date.today(clock).add(years: -ago), ago, titleFunction);
+    : this(Date.today(clock).add(years: -ago), ago, titleFunction);
 
   String get title => _titleFunction(_ago);
   Date get start => _start;
@@ -750,23 +828,27 @@ class YearRange implements DatepickerDateRange {
   static String _defaultTitle(int yearsAgo) =>
       yearsAgo > 0 ? _yearsAgoMsg(yearsAgo) : _yearsFromNowMsg(-yearsAgo);
 
-  static String _yearsAgoMsg(int yearsAgo) => Intl.plural(yearsAgo,
-      zero: 'This year',
-      one: 'Last year',
-      other: '$yearsAgo years ago',
-      name: '_yearsAgoMsg',
-      args: [yearsAgo],
-      desc: 'A date range spanning a single year in the past.',
-      examples: const {'yearsAgo': 2});
+  static String _yearsAgoMsg(int yearsAgo) => Intl.plural(
+    yearsAgo,
+    zero: 'This year',
+    one: 'Last year',
+    other: '$yearsAgo years ago',
+    name: '_yearsAgoMsg',
+    args: [yearsAgo],
+    desc: 'A date range spanning a single year in the past.',
+    examples: const {'yearsAgo': 2},
+  );
 
-  static String _yearsFromNowMsg(int yearsFromNow) => Intl.plural(yearsFromNow,
-      zero: 'This year',
-      one: 'Next year',
-      other: '$yearsFromNow years from now',
-      name: '_yearsFromNowMsg',
-      args: [yearsFromNow],
-      desc: 'A date range spanning a single year in the future.',
-      examples: const {'yearsFromNow': 2});
+  static String _yearsFromNowMsg(int yearsFromNow) => Intl.plural(
+    yearsFromNow,
+    zero: 'This year',
+    one: 'Next year',
+    other: '$yearsFromNow years from now',
+    name: '_yearsFromNowMsg',
+    args: [yearsFromNow],
+    desc: 'A date range spanning a single year in the future.',
+    examples: const {'yearsFromNow': 2},
+  );
 }
 
 /// A single quarter.
@@ -780,21 +862,25 @@ class QuarterRange implements DatepickerDateRange {
   final RangeTitle _titleFunction;
 
   QuarterRange(Date startDate, this._ago, [this._titleFunction = _defaultTitle])
-      : start = Date(startDate.year, _getStartMonth(startDate), 1);
+    : start = Date(startDate.year, _getStartMonth(startDate), 1);
 
-  QuarterRange.quartersAgo(Clock clock, int ago,
-      [RangeTitle titleFunction = _defaultTitle])
-      : this._quartersAgo(Date.today(clock), ago, titleFunction);
+  QuarterRange.quartersAgo(
+    Clock clock,
+    int ago, [
+    RangeTitle titleFunction = _defaultTitle,
+  ]) : this._quartersAgo(Date.today(clock), ago, titleFunction);
 
   QuarterRange._quartersAgo(Date today, int ago, RangeTitle titleFunction)
-      : this(
-            Date(
-                today.year,
-                // The [Date] constructor handles wrapping to previous years.
-                today.month - ago * 3,
-                1),
-            ago,
-            titleFunction);
+    : this(
+        Date(
+          today.year,
+          // The [Date] constructor handles wrapping to previous years.
+          today.month - ago * 3,
+          1,
+        ),
+        ago,
+        titleFunction,
+      );
 
   @override
   String get title => _titleFunction(_ago);
@@ -838,24 +924,27 @@ class QuarterRange implements DatepickerDateRange {
       ? _quartersAgoMsg(quartersAgo)
       : _quartersFromNowMsg(-quartersAgo);
 
-  static String _quartersAgoMsg(int quartersAgo) => Intl.plural(quartersAgo,
-      zero: 'This quarter',
-      one: 'Last quarter',
-      other: '$quartersAgo quarters ago',
-      name: '_quartersAgoMsg',
-      args: [quartersAgo],
-      desc: 'A date range spanning a single quarter in the past.',
-      examples: const {'quartersAgo': 2});
+  static String _quartersAgoMsg(int quartersAgo) => Intl.plural(
+    quartersAgo,
+    zero: 'This quarter',
+    one: 'Last quarter',
+    other: '$quartersAgo quarters ago',
+    name: '_quartersAgoMsg',
+    args: [quartersAgo],
+    desc: 'A date range spanning a single quarter in the past.',
+    examples: const {'quartersAgo': 2},
+  );
 
-  static String _quartersFromNowMsg(int quartersFromNow) =>
-      Intl.plural(quartersFromNow,
-          zero: 'This quarter',
-          one: 'Next quarter',
-          other: '$quartersFromNow quarters from now',
-          name: '_quartersFromNowMsg',
-          args: [quartersFromNow],
-          desc: 'A date range spanning a single quarter in the future.',
-          examples: const {'quartersFromNow': 2});
+  static String _quartersFromNowMsg(int quartersFromNow) => Intl.plural(
+    quartersFromNow,
+    zero: 'This quarter',
+    one: 'Next quarter',
+    other: '$quartersFromNow quarters from now',
+    name: '_quartersFromNowMsg',
+    args: [quartersFromNow],
+    desc: 'A date range spanning a single quarter in the future.',
+    examples: const {'quartersFromNow': 2},
+  );
 }
 
 // Commonly used date ranges
@@ -902,25 +991,35 @@ DatepickerDateRange lastQuarter(Clock clock) =>
 // those two dates, then we need to get the account opening date down here.
 // If not, we need to change the data model to have separate dates for display
 // vs. what gets sent to the API.
-DatepickerDateRange allTime = DatepickerDateRange(_allTimeMsg, null, null,
-    isPredefined: true, isAllTime: true);
+DatepickerDateRange allTime = DatepickerDateRange(
+  _allTimeMsg,
+  null,
+  null,
+  isPredefined: true,
+  isAllTime: true,
+);
 
 List<DatepickerDateRange> commonRanges(Clock clock) => [
-      today(clock),
-      yesterday(clock),
-      thisWeek(clock),
-      lastWeek(clock),
-      thisMonth(clock),
-      lastMonth(clock),
-      allTime,
-    ];
+  today(clock),
+  yesterday(clock),
+  thisWeek(clock),
+  lastWeek(clock),
+  thisMonth(clock),
+  lastMonth(clock),
+  allTime,
+];
 
-final _customDateRangeMsg = Intl.message('Custom',
-    name: '_customDateRangeMsg',
-    meaning: 'Name of a date range',
-    desc: 'Name of a user-specified date range, as opposed to a predefined '
-        'date range like "Last 7 days"');
+final _customDateRangeMsg = Intl.message(
+  'Custom',
+  name: '_customDateRangeMsg',
+  meaning: 'Name of a date range',
+  desc:
+      'Name of a user-specified date range, as opposed to a predefined '
+      'date range like "Last 7 days"',
+);
 
-final _allTimeMsg = Intl.message('All time',
-    name: '_allTimeMsg',
-    desc: 'A date range containing the entire lifetime of the account.');
+final _allTimeMsg = Intl.message(
+  'All time',
+  name: '_allTimeMsg',
+  desc: 'A date range containing the entire lifetime of the account.',
+);

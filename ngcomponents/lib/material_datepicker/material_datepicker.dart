@@ -298,10 +298,10 @@ class MaterialDatepickerComponent
   String? error;
 
   MaterialDatepickerComponent(
-    HtmlElement element,
+    HTMLElement element,
     @Attribute('popupClass') String? popupClass,
     @Optional() @Inject(datepickerClock) Clock? clock,
-  ) : popupClassName = constructEncapsulatedCss(popupClass, element.classes) {
+  ) : popupClassName = constructEncapsulatedCss(popupClass, element.classList) {
     clock ??= Clock();
 
     // Init minDate and maxDate to sensible defaults

@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -133,22 +134,22 @@ class MaterialCalendarPickerComponent
     final template = DocumentFragment();
 
     // Create the month container element.
-    final container = DivElement()..className = 'month';
+    final container = HTMLDivElement()..className = 'month';
     template.append(container);
 
     // Create the title element.
     final title = HTMLHeadingElement.h2()
       ..className = 'month-title'
-      ..appendText('');
+      ..append(document.createTextNode(''));
     container.append(title);
 
     // Add 6 rows of 7 slots.
     final slotTemplate = HTMLDivElement()
       ..className = 'day-slot'
-      ..appendText('');
+      ..append(document.createTextNode(''));
     HTMLDivElement slot;
     for (var i = 0; i < WEEK_ROWS_IN_MONTH * 7; i++) {
-      slot = slotTemplate.clone(true) as HTMLDivElement;
+      slot = slotTemplate.cloneNode(true) as HTMLDivElement;
       container.append(slot);
     }
 
@@ -319,9 +320,10 @@ class MaterialCalendarPickerComponent
 
   Date? _extractDate(Event event) {
     final slot = event.target;
-    if (slot is! HTMLElement) return null;
+    if (!slot.isA<HTMLElement>()) return null;
+    final element = slot as HTMLElement;
 
-    final dateText = slot.getAttribute(_dateAttribute);
+    final dateText = element.getAttribute(_dateAttribute);
     if (dateText == null) return null;
 
     final parts = dateText.split(_dateSeparator);
@@ -348,7 +350,7 @@ class MaterialCalendarPickerComponent
   }
 
   void _scrollToMonth(_Month month) {
-    _container!.parent!.scrollTop = _rangeHeight(_minMonth!, month);
+    _container!.parentElement!.scrollTop = _rangeHeight(_minMonth!, month);
   }
 
   /// Scroll the calendar so that [date] becomes visible.
@@ -365,9 +367,9 @@ class MaterialCalendarPickerComponent
     // Edge, reusing the TextNode doesn't trigger a repaint, so we have to
     // create a new TextNode instead.
     if (isEdge) {
-      slot!.text = text;
+      slot!.textContent = text;
     } else {
-      setProperty(slot!.firstChild!, 'nodeValue', text);
+      slot!.firstChild!.nodeValue = text;
     }
   }
 
@@ -612,8 +614,9 @@ class MaterialCalendarPickerComponent
     final classes = ['visible', 'invisible', 'hidden'];
     for (var className in classes) {
       final selector = '.day-slot.$className';
-      for (HTMLElement el in _container!.querySelectorAll(selector)) {
-        el.className = 'day-slot $className';
+      var selectList = _container!.querySelectorAll(selector);
+      for (int i = 0; i < selectList.length; i++) {
+        (selectList.item(i) as HTMLElement).className = 'day-slot $className';
       }
     }
   }
@@ -662,8 +665,8 @@ class MaterialCalendarPickerComponent
           }
         }
         if (a.contains(b.end) && a.end! > b.end) {
-          HtmlElement? end =
-              _container!.querySelector(_slotSelector(b.end!)) as HtmlElement?;
+          HTMLElement? end =
+              _container!.querySelector(_slotSelector(b.end!)) as HTMLElement?;
           if (end != null) {
             end.classList.add('right');
             end.classList.add('right-${a.id}');
@@ -675,16 +678,16 @@ class MaterialCalendarPickerComponent
 
   void _renderToday() {
     HTMLElement? el =
-        _container!.querySelector('.day-slot.today') as HtmlElement?;
-    if (el != null) el.classes.remove('today');
-    el = _container!.querySelector(_slotSelector(_today!)) as HtmlElement?;
+        _container!.querySelector('.day-slot.today') as HTMLElement?;
+    if (el != null) el.classList.remove('today');
+    el = _container!.querySelector(_slotSelector(_today!)) as HTMLElement?;
     if (el != null) el.classList.add('today');
   }
 
   void _renderHover() {
     HTMLElement? el =
         _container!.querySelector('.day-slot.hover') as HTMLElement?;
-    if (el != null) el.classes.remove('hover');
+    if (el != null) el.classList.remove('hover');
     if (_model.value!.preview != null) {
       el =
           _container!.querySelector(_slotSelector(_model.value!.preview!))
@@ -717,12 +720,14 @@ class MaterialCalendarPickerComponent
         _ensureSelectionIsVisible();
       }
       if (!_isRenderScheduled) {
-        window.requestAnimationFrame((_) {
-          _resetHighlights();
-          _renderHighlights();
-          _renderToday();
-          _renderHover();
-        });
+        window.requestAnimationFrame(
+          ((_) {
+            _resetHighlights();
+            _renderHighlights();
+            _renderToday();
+            _renderHover();
+          }).toJS,
+        );
       }
     }
   }
@@ -784,7 +789,7 @@ class MaterialCalendarPickerComponent
   @ViewChild('container')
   set container(HTMLElement? container) {
     _container = container;
-    _scroller = container?.parent as HTMLElement?;
+    _scroller = container?.parentElement as HTMLElement?;
   }
 
   @override
@@ -839,12 +844,12 @@ class MaterialCalendarPickerComponent
     }
 
     // Create the blank month containers.
-    _container?.children.clear();
+    if (_container != null) _container!.textContent = '';
     _renderedMonths.clear();
     _renderedOffsets.clear();
 
     for (var i = -_overdraw; i <= _overdraw; i++) {
-      _container?.append(_monthTemplate.clone(true));
+      _container?.append(_monthTemplate.cloneNode(true));
     }
 
     _renderVisible();
@@ -856,10 +861,12 @@ class MaterialCalendarPickerComponent
     _scrollToMonth(_Month.fromDate(_initialDate!));
 
     // Wait to render until after the initial scroll.
-    window.requestAnimationFrame((_) {
-      _initializePanels();
-      _isRenderScheduled = false;
-    });
+    window.requestAnimationFrame(
+      ((_) {
+        _initializePanels();
+        _isRenderScheduled = false;
+      }).toJS,
+    );
   }
 
   // Dart returns a separate instance every time a tearoff is accessed, so we
@@ -872,12 +879,12 @@ class MaterialCalendarPickerComponent
 
   void _initializeEvents() {
     // Process the events outside of Angular for lower overhead.
-    _scroller?.addEventListener('scroll', _scrollListener = _onScroll);
+    _scroller?.addEventListener('scroll', _scrollListener = _onScroll.toJS);
     _container
-      ?..addEventListener('click', _clickListener = _onClick)
-      ..addEventListener('mousedown', _mouseDownListener = _onMouseDown)
-      ..addEventListener('mousemove', _mouseMoveListener = _onMouseMove)
-      ..addEventListener('mouseout', _mouseOutListener = _onMouseOut);
+      ?..addEventListener('click', _clickListener = _onClick.toJS)
+      ..addEventListener('mousedown', _mouseDownListener = _onMouseDown.toJS)
+      ..addEventListener('mousemove', _mouseMoveListener = _onMouseMove.toJS)
+      ..addEventListener('mouseout', _mouseOutListener = _onMouseOut.toJS);
   }
 
   void _onClick(Event event) {
@@ -909,13 +916,15 @@ class MaterialCalendarPickerComponent
   }
 
   void _onScroll(Event event) {
-    _scrollTop = _scroller!.scrollTop;
+    _scrollTop = _scroller!.scrollTop.toInt();
     if (_isRenderScheduled) return;
     _isRenderScheduled = true;
-    window.requestAnimationFrame((_) {
-      _renderVisible();
-      _isRenderScheduled = false;
-    });
+    window.requestAnimationFrame(
+      ((_) {
+        _renderVisible();
+        _isRenderScheduled = false;
+      }).toJS,
+    );
   }
 }
 
@@ -996,16 +1005,26 @@ class _Month {
   /// The [Date] corresponding to the last day of this month.
   Date get end => Date(year, month, days);
 
-  bool operator ==(o) =>
-      (o is Date) ? year == o.year && month == o.month : false;
+  @override
+  bool operator ==(Object o) {
+    if (o is _Month) return year == o.year && month == o.month;
+    if (o is Date) return year == o.year && month == o.month;
+    return false;
+  }
 
-  bool operator <(o) => year < o.year || (year == o.year && month < o.month);
+  @override
+  int get hashCode => Object.hash(year, month);
 
-  bool operator >(o) => year > o.year || (year == o.year && month > o.month);
+  bool operator <(dynamic o) =>
+      year < o.year || (year == o.year && month < o.month);
 
-  bool operator <=(o) => this == o || this < o;
+  bool operator >(dynamic o) =>
+      year > o.year || (year == o.year && month > o.month);
 
-  bool operator >=(o) => this == o || this > o;
+  bool operator <=(dynamic o) => this == o || this < o;
 
+  bool operator >=(dynamic o) => this == o || this > o;
+
+  @override
   String toString() => '$year-$month';
 }
