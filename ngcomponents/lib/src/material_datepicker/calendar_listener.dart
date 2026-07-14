@@ -178,7 +178,7 @@ class _RangeListener implements CalendarListener {
     // Terminate drags on mouseup, whether inside the calendar or not
     // TODO(google): Is this webworker-safe?
     _disposer.addStreamSubscription(
-      document.onMouseUp.take(1).listen((_) {
+      EventStreamProvider<Event>('mouseup').forTarget(document).take(1).listen((_) {
         if (state == _DragState.dragging) {
           // If this was actually a drag, confirm current selection (set
           // previously by mousemove) and select the next range

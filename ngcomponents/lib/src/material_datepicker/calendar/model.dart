@@ -20,7 +20,7 @@ bool datesEqualAtResolution(Date? a, Date? b, CalendarResolution resolution) {
       return a!.year == b!.year && a.month == b.month;
     case CalendarResolution.days:
       return a == b;
-    case CalendarResolution.weeks:
+    //case CalendarResolution.weeks:
     default:
       throw ArgumentError('Equality not supported at resolution: $resolution');
   }
@@ -35,10 +35,11 @@ int compareDatesAtResolution(Date a, Date? b, CalendarResolution resolution) {
       return a.year.compareTo(b.year);
     case CalendarResolution.days:
       return a.compareTo(b);
-    case CalendarResolution.weeks:
+    //case CalendarResolution.weeks:
     default:
       throw ArgumentError(
-          'Comparison not supported at resolution: $resolution');
+        'Comparison not supported at resolution: $resolution',
+      );
   }
 }
 
@@ -55,7 +56,7 @@ class CalendarSelection {
   /// Tries to infer the start and end dates from the two given dates. Doesn't
   /// support null dates.
   CalendarSelection.guessOrder(String? id, Date a, Date? b)
-      : this(id, earlierOf(a, b), laterOf(a, b));
+    : this(id, earlierOf(a, b), laterOf(a, b));
 
   /// Checks whether this selection's confirmed range contains the given time.
   /// If this selection's start or end are null, that's interpreted as an
@@ -163,85 +164,102 @@ class CalendarState {
   }
 
   static List<CalendarSelection> _adaptSelections(
-      List<CalendarSelection> selections, CalendarResolution resolution) {
+    List<CalendarSelection> selections,
+    CalendarResolution resolution,
+  ) {
     if (resolution.index < CalendarResolution.months.index) {
       return selections;
     }
     return selections
-        .map((selection) => CalendarSelection(selection.id,
-            firstDayOfMonth(selection.start), lastDayOfMonth(selection.end)))
+        .map(
+          (selection) => CalendarSelection(
+            selection.id,
+            firstDayOfMonth(selection.start),
+            lastDayOfMonth(selection.end),
+          ),
+        )
         .toList();
   }
 
-  CalendarState(
-      {List<CalendarSelection>? selections,
-      this.currentSelection,
-      this.cause,
-      this.preview,
-      this.previewAnchoredAtStart = false,
-      resolution = CalendarResolution.days})
-      : selections = _adaptSelections(selections ?? [], resolution),
-        resolution = resolution;
+  CalendarState({
+    List<CalendarSelection>? selections,
+    this.currentSelection,
+    this.cause,
+    this.preview,
+    this.previewAnchoredAtStart = false,
+    resolution = CalendarResolution.days,
+  }) : selections = _adaptSelections(selections ?? [], resolution),
+       resolution = resolution;
 
-  CalendarState.empty(
-      {String currentSelection = 'default',
-      resolution = CalendarResolution.days})
-      : this(
-            selections: [],
-            currentSelection: currentSelection,
-            cause: CausedBy.external,
-            resolution: resolution);
+  CalendarState.empty({
+    String currentSelection = 'default',
+    resolution = CalendarResolution.days,
+  }) : this(
+         selections: [],
+         currentSelection: currentSelection,
+         cause: CausedBy.external,
+         resolution: resolution,
+       );
 
   /// Creates a calendar state initialized with the given selections.
   /// The first element in the list is set as the current selection.
-  CalendarState.selected(List<CalendarSelection> selections,
-      {resolution = CalendarResolution.days, cause = CausedBy.external})
-      : this(
-            cause: cause,
-            selections: selections,
-            currentSelection: selections.first.id,
-            resolution: resolution);
+  CalendarState.selected(
+    List<CalendarSelection> selections, {
+    resolution = CalendarResolution.days,
+    cause = CausedBy.external,
+  }) : this(
+         cause: cause,
+         selections: selections,
+         currentSelection: selections.first.id,
+         resolution: resolution,
+       );
 
   /// Sets the range with the given ID as the "current selection" -- the range
   /// that'll get updated when the user clicks on the calendar.
   CalendarState select(String? id, {bool previewAnchoredAtStart = false}) =>
       CalendarState(
-          selections: selections,
-          currentSelection: id,
-          cause: CausedBy.external,
-          previewAnchoredAtStart: previewAnchoredAtStart,
-          resolution: resolution);
+        selections: selections,
+        currentSelection: id,
+        cause: CausedBy.external,
+        previewAnchoredAtStart: previewAnchoredAtStart,
+        resolution: resolution,
+      );
 
   /// Updates the value for the given selection. Creates it if it's not in the
   /// list of selections already.
-  CalendarState setSelection(CalendarSelection val,
-      {CausedBy cause = CausedBy.external,
-      bool previewAnchoredAtStart = false}) {
+  CalendarState setSelection(
+    CalendarSelection val, {
+    CausedBy cause = CausedBy.external,
+    bool previewAnchoredAtStart = false,
+  }) {
     var newSelections = [val]..addAll(selections.where((s) => s.id != val.id));
     return CalendarState(
-        selections: newSelections,
-        currentSelection: currentSelection,
-        cause: cause,
-        previewAnchoredAtStart: previewAnchoredAtStart,
-        resolution: resolution);
+      selections: newSelections,
+      currentSelection: currentSelection,
+      cause: cause,
+      previewAnchoredAtStart: previewAnchoredAtStart,
+      resolution: resolution,
+    );
   }
 
   /// Updates the "current" selection's endpoints, with "dragging" as the cause
   /// (the user is still dragging the current selection).
-  CalendarState updateDrag(Date a, Date? b) =>
-      setSelection(CalendarSelection.guessOrder(currentSelection, a, b),
-          cause: CausedBy.drag);
+  CalendarState updateDrag(Date a, Date? b) => setSelection(
+    CalendarSelection.guessOrder(currentSelection, a, b),
+    cause: CausedBy.drag,
+  );
 
   /// Updates the preview endpoint and sets `cause` to `previewing`.
   CalendarState updateCurrentPreview(Date newPreviewTarget) {
     //assert(newPreviewTarget != null);
     return CalendarState(
-        selections: selections,
-        currentSelection: currentSelection,
-        cause: CausedBy.preview,
-        preview: newPreviewTarget,
-        previewAnchoredAtStart: previewAnchoredAtStart,
-        resolution: resolution);
+      selections: selections,
+      currentSelection: currentSelection,
+      cause: CausedBy.preview,
+      preview: newPreviewTarget,
+      previewAnchoredAtStart: previewAnchoredAtStart,
+      resolution: resolution,
+    );
   }
 
   /// Ends preview mode, if applicable.
@@ -254,14 +272,20 @@ class CalendarState {
           cause: CausedBy.preview,
           preview: null,
           previewAnchoredAtStart: previewAnchoredAtStart,
-          resolution: resolution);
+          resolution: resolution,
+        );
 
   /// Sets both endpoints of the "current" selection
-  CalendarState setCurrentSelection(Date a, Date? b,
-          {CausedBy cause = CausedBy.rangeConfirm,
-          bool previewAnchoredAtStart = false}) =>
-      setSelection(CalendarSelection.guessOrder(currentSelection, a, b),
-          cause: cause, previewAnchoredAtStart: previewAnchoredAtStart);
+  CalendarState setCurrentSelection(
+    Date a,
+    Date? b, {
+    CausedBy cause = CausedBy.rangeConfirm,
+    bool previewAnchoredAtStart = false,
+  }) => setSelection(
+    CalendarSelection.guessOrder(currentSelection, a, b),
+    cause: cause,
+    previewAnchoredAtStart: previewAnchoredAtStart,
+  );
 
   /// Delete the "current" selection. Note this is different from creating a
   /// selection with null endpoints, which for the date-range-picker means
@@ -272,8 +296,10 @@ class CalendarState {
   /// `confirmRange` - If true, this the last endpoint to be set for the current
   ///                  range. This information is not used by CalendarState
   ///                  directly, but clients of CalendarState may need it.
-  CalendarState confirmPreview(
-      {bool confirmRange = false, required bool movingStartMaintainsLength}) {
+  CalendarState confirmPreview({
+    bool confirmRange = false,
+    required bool movingStartMaintainsLength,
+  }) {
     var current = selection(currentSelection);
     var anchor = previewAnchoredAtStart ? current.start : current.end;
     assert(preview != null && anchor != null);
@@ -287,43 +313,54 @@ class CalendarState {
         // End date was moved before (or onto) the start date. Collapse to a
         // single-day range and keep the end date active.
         return setSelection(
-            CalendarSelection(currentSelection, preview, preview),
-            cause: cause,
-            previewAnchoredAtStart: true);
+          CalendarSelection(currentSelection, preview, preview),
+          cause: cause,
+          previewAnchoredAtStart: true,
+        );
       } else {
         // Modify end date.
         return setSelection(
-            CalendarSelection(currentSelection, anchor, preview),
-            cause: cause,
-            previewAnchoredAtStart: false);
+          CalendarSelection(currentSelection, anchor, preview),
+          cause: cause,
+          previewAnchoredAtStart: false,
+        );
       }
     } else {
       // Selecting start date.
 
       if (movingStartMaintainsLength) {
         // Preserve the length of the range, and make the end date active.
-        var rangeLengthInDays =
-            daysSpanned(current.start!, current.end!, inclusive: false);
+        var rangeLengthInDays = daysSpanned(
+          current.start!,
+          current.end!,
+          inclusive: false,
+        );
         return setSelection(
-            CalendarSelection(currentSelection, preview,
-                preview!.add(days: rangeLengthInDays)),
-            cause: cause,
-            previewAnchoredAtStart: true);
+          CalendarSelection(
+            currentSelection,
+            preview,
+            preview!.add(days: rangeLengthInDays),
+          ),
+          cause: cause,
+          previewAnchoredAtStart: true,
+        );
       } else if (preview! >= anchor) {
         // Move only the start date.
         //
         // Start date was moved after the end date. Collapse to a single-day
         // range and activate the end date.
         return setSelection(
-            CalendarSelection(currentSelection, preview, preview),
-            cause: cause,
-            previewAnchoredAtStart: true);
+          CalendarSelection(currentSelection, preview, preview),
+          cause: cause,
+          previewAnchoredAtStart: true,
+        );
       } else {
         // Move only the start date.
         return setSelection(
-            CalendarSelection(currentSelection, preview, anchor),
-            cause: cause,
-            previewAnchoredAtStart: true);
+          CalendarSelection(currentSelection, preview, anchor),
+          cause: cause,
+          previewAnchoredAtStart: true,
+        );
       }
     }
   }
@@ -335,7 +372,8 @@ class CalendarState {
           selections: selections.where((s) => s.id != id).toList(),
           currentSelection: currentSelection,
           cause: CausedBy.external,
-          resolution: resolution)
+          resolution: resolution,
+        )
       : this;
 
   bool _resolutionAtLeast(CalendarResolution minimumResolution) =>

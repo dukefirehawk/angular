@@ -38,7 +38,7 @@ import 'package:ngcomponents/utils/angular/scroll_host/angular_2.dart';
     NgIf,
     NgFor,
     MaterialDropdownSelectComponent,
-    MaterialSelectItemComponent
+    MaterialSelectItemComponent,
   ],
 )
 class ComparisonRangeEditorComponent {
@@ -66,13 +66,16 @@ class ComparisonRangeEditorComponent {
       // When users turn on toggle, scrolls to the end to make
       // comparison options discoverable.
       _ngZone.runAfterChangesObserved(
-          () => _scrollHost?.scrollToPosition(_scrollHost?.scrollLength ?? 0));
+        () => _scrollHost.scrollToPosition(_scrollHost.scrollLength),
+      );
     }
   }
 
-  static final comparisonHeaderMsg = Intl.message('Compare',
-      name: 'comparisonHeaderMsg',
-      desc: 'Label for a toggle that turns time comparison on/off.');
+  static final comparisonHeaderMsg = Intl.message(
+    'Compare',
+    name: 'comparisonHeaderMsg',
+    desc: 'Label for a toggle that turns time comparison on/off.',
+  );
 
   /// Gets display message from given option.
   String? comparisonOptionMsg(ComparisonOption option) {
@@ -88,7 +91,7 @@ class ComparisonRangeEditorComponent {
       for (var option in model!.validComparisonOptions) {
         _optionMsgCache[option] =
             option.computeComparisonRange(model!.primaryRange)?.title ??
-                option.displayName;
+            option.displayName;
       }
     }
   }
