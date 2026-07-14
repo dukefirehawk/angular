@@ -46,7 +46,7 @@ class MaterialRadioComponent extends RootFocusable
         OnDestroy {
   final ChangeDetectorRef _changeDetector;
   final MaterialRadioGroupComponent? _group;
-  final HtmlElement _root;
+  final HTMLElement _root;
   final _disposer = Disposer.oneShot();
 
   MaterialRadioComponent(
@@ -116,9 +116,9 @@ class MaterialRadioComponent extends RootFocusable
 
     if (_group != null) {
       if (isChecked) {
-        _group!.componentSelection.select(this);
+        _group.componentSelection.select(this);
       } else {
-        _group!.componentSelection.deselect(this);
+        _group.componentSelection.deselect(this);
       }
     }
     _onChecked.add(_checked);
@@ -198,7 +198,7 @@ class MaterialRadioComponent extends RootFocusable
   @visibleForTemplate
   void onFocus() {
     _isFocused = true;
-    if (_group != null) _group?.focusSelection.select(this);
+    if (_group != null) _group.focusSelection.select(this);
   }
 
   @HostListener('blur')
@@ -206,7 +206,7 @@ class MaterialRadioComponent extends RootFocusable
   @visibleForTesting
   void onBlur() {
     _isFocused = false;
-    if (_group != null) _group?.focusSelection.deselect(this);
+    if (_group != null) _group.focusSelection.deselect(this);
   }
 
   @visibleForTesting
