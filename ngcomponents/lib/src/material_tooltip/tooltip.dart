@@ -37,7 +37,7 @@ class MaterialTooltipDirective extends TooltipTarget
   bool _isShown = false;
   MaterialInkTooltipComponent? _inkTooltip;
   late DelayedAction _delayedActivate;
-  HtmlElement element;
+  HTMLElement element;
   late bool inLongPress;
   bool _hostListenersAttached = false;
 
@@ -52,7 +52,10 @@ class MaterialTooltipDirective extends TooltipTarget
     this._window,
     @Attribute('initPopupAriaAttributes') String? initAriaAttributes,
     @Attribute('tooltipClass') String? tooltipClass,
-  ) : _popupClassName = constructEncapsulatedCss(tooltipClass, element.classes),
+  ) : _popupClassName = constructEncapsulatedCss(
+        tooltipClass,
+        element.classList,
+      ),
       super(
         domPopupSourceFactory,
         viewContainerRef,
@@ -95,7 +98,7 @@ class MaterialTooltipDirective extends TooltipTarget
     }
     if (isHammerLoaded()) {
       _disposer.addStreamSubscription(
-        element.on['press'].listen(handleLongPress),
+        EventStreamProvider<Event>('press').forTarget(element).listen(handleLongPress),
       );
       _disposer.addStreamSubscription(element.onTouchEnd.listen(endLongPress));
     }

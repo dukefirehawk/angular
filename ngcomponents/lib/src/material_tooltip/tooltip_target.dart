@@ -24,7 +24,7 @@ import 'tooltip_source.dart' show tooltipShowDelay;
 @Directive(selector: '[tooltipTarget]', exportAs: 'tooltipTarget')
 class MaterialTooltipTargetDirective extends TooltipBehavior
     implements AfterViewInit, OnDestroy {
-  HtmlElement element;
+  HTMLElement element;
 
   MaterialTooltipTargetDirective(
     DomPopupSourceFactory domPopupSourceFactory,
@@ -70,7 +70,7 @@ abstract class TooltipBehavior extends TooltipTarget {
   TooltipBehavior(
     DomPopupSourceFactory domPopupSourceFactory,
     ViewContainerRef viewContainerRef,
-    HtmlElement element,
+    HTMLElement element,
     this._changeDetector,
     String? initAriaAttributes,
   ) : super(
@@ -133,11 +133,11 @@ abstract class TooltipBehavior extends TooltipTarget {
     if (event.relatedTarget == null) return;
 
     // Don't hide the tooltip if focus went to an element inside the tooltip.
-    HtmlElement? el;
+    HTMLElement? el;
     for (
-      el = event.relatedTarget as HtmlElement?;
-      el!.parent != null;
-      el = el.parent as HtmlElement?
+      el = event.relatedTarget as HTMLElement?;
+      el!.parentElement != null;
+      el = el.parentElement as HTMLElement
     ) {
       if (el.className == overlayContainerClassName) return;
     }
@@ -160,7 +160,7 @@ abstract class TooltipBehavior extends TooltipTarget {
 class ClickableTooltipTargetDirective extends TooltipBehavior
     implements AfterViewInit, OnDestroy {
   late StreamSubscription _tooltipSubscription;
-  HtmlElement element;
+  HTMLElement element;
   bool _tooltipVisible = false;
 
   ClickableTooltipTargetDirective(
@@ -217,7 +217,7 @@ class ClickableTooltipTargetDirective extends TooltipBehavior
 abstract class TooltipTarget extends PopupSourceDirective {
   Tooltip? _tooltip;
   final ViewContainerRef viewContainerRef;
-  final HtmlElement _element;
+  final HTMLElement _element;
   String? _previousDescribedbyId;
 
   TooltipTarget(
@@ -259,7 +259,7 @@ abstract class TooltipTarget extends PopupSourceDirective {
     if (_previousDescribedbyId != null) {
       _element.setAttribute('aria-describedby', _previousDescribedbyId!);
     } else {
-      _element.attributes.remove('aria-describedby');
+      _element.removeAttribute('aria-describedby');
     }
   }
 }

@@ -76,7 +76,7 @@ import 'tooltip_target.dart';
 class MaterialIconTooltipComponent implements DeferredContentAware {
   final _contentVisible = StreamController<bool>.broadcast(sync: true);
 
-  HtmlElement element;
+  HTMLElement element;
 
   /// Icon identifier for [MaterialIconComponent]. See
   /// [https://www.google.com/design/icons/] for available icons.
