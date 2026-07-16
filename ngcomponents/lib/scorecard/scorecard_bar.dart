@@ -32,7 +32,7 @@ import 'package:ngcomponents/utils/disposer/disposer.dart';
 class ScorecardBarDirective implements OnInit, OnDestroy, AfterViewChecked {
   final _refreshController = StreamController<bool>.broadcast();
   final _disposer = Disposer.oneShot();
-  final HtmlElement _element;
+  final HTMLElement _element;
   final DomService _domService;
 
   late bool _isRtl;
@@ -82,7 +82,7 @@ class ScorecardBarDirective implements OnInit, OnDestroy, AfterViewChecked {
 
   /// Whether the scrollbar is aligned vertically.
   @Input()
-  set isVertical(value) {
+  set isVertical(bool value) {
     _isVertical = value;
   }
 
@@ -115,8 +115,8 @@ class ScorecardBarDirective implements OnInit, OnDestroy, AfterViewChecked {
   ///
   /// Depends upon orientation of scrollbar.
   int get currentClientSize => _isVertical
-      ? _element.parent!.clientHeight
-      : _element.parent!.clientWidth;
+      ? _element.parentElement!.clientHeight
+      : _element.parentElement!.clientWidth;
 
   /// The current size of the scrollbar.
   ///
@@ -214,7 +214,7 @@ class ScorecardBarDirective implements OnInit, OnDestroy, AfterViewChecked {
     );
   }
 
-  void _readElement({windowResize = false}) {
+  void _readElement({bool windowResize = false}) {
     assert(_domService.isReadingDom);
     _clientSize = currentClientSize;
     _scrollSize = currentScrollSize;
@@ -228,7 +228,7 @@ class ScorecardBarDirective implements OnInit, OnDestroy, AfterViewChecked {
 
     _getButtonSize();
 
-    if (_element.children.isNotEmpty && _scrollSize! > 0) {
+    if (_element.children.length > 0 && _scrollSize! > 0) {
       // Find the average size of the cards. This assumes cards are of uniform
       // size (as required in ACUX specs).
       var avg = _scrollSize! / _element.children.length;
@@ -248,10 +248,16 @@ class ScorecardBarDirective implements OnInit, OnDestroy, AfterViewChecked {
   void _getButtonSize() {
     // Get scroll button size.
     if (_buttonSize == 0) {
-      final buttons = _element.parent!.querySelectorAll('.scroll-button');
-      for (var button in buttons) {
+      final buttons = _element.parentElement!.querySelectorAll(
+        '.scroll-button',
+      );
+
+      for (int i = 0; i < buttons.length; i++) {
+        var button = buttons.item(i);
         var dimension = _isVertical ? 'height' : 'width';
-        var size = button.getComputedStyle().getPropertyValue(dimension);
+        var size = window
+            .getComputedStyle(button as Element)
+            .getPropertyValue(dimension);
         if (size != 'auto') {
           final parsed =
               double.tryParse(size.replaceAll(RegExp('[^0-9.]'), '')) ?? 0.0;

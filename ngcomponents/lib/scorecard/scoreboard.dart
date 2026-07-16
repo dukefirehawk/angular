@@ -171,7 +171,7 @@ class ScoreboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /// Updates each scorecards' [HtmlElement.tabIndex] based on whether the
+  /// Updates each scorecards' [HTMLElement.tabIndex] based on whether the
   /// element is viewable.
   ///
   /// An element is viewable if it's relative offset is within the range of:
@@ -203,7 +203,7 @@ class ScoreboardComponent implements OnInit, OnDestroy {
   /// the end of the scorecard overlaps with the scroll arrow, it'll hover over
   /// the scorecard without affecting the transform. This is not the case for
   /// vertical score cards, therefore we need to look for the bottom.
-  int _scorecardOffset(HtmlElement element) {
+  int _scorecardOffset(HTMLElement element) {
     return isVertical
         ? element.offsetTop + element.offsetHeight
         : element.offsetLeft;
@@ -245,7 +245,7 @@ class ScoreboardComponent implements OnInit, OnDestroy {
   }
 
   void _makeScorecardsUniformWidth() {
-    List<HtmlElement> scorecardsElem = _scorecards
+    List<HTMLElement> scorecardsElem = _scorecards
         .map((ScorecardComponent scorecard) => scorecard.element)
         .toList();
 
@@ -259,10 +259,10 @@ class ScoreboardComponent implements OnInit, OnDestroy {
         _disposer.addDisposable(
           _domService.scheduleRead(() {
             for (var element in scorecardsElem) {
-              var elemWidth = element.getComputedStyle().width.replaceAll(
-                RegExp('[^0-9.]'),
-                '',
-              );
+              var elemWidth = window
+                  .getComputedStyle(element)
+                  .width
+                  .replaceAll(RegExp('[^0-9.]'), '');
               var elemWidthValue = elemWidth.isEmpty
                   ? 0.0
                   : double.parse(elemWidth);
