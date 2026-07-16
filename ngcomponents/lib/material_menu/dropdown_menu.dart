@@ -38,7 +38,7 @@ class DropdownMenuComponent extends Object
         MenuPopupWrapper,
         MenuPopupTrigger
     implements AfterViewInit, HasDisabled, OnDestroy {
-  final HtmlElement _root;
+  final HTMLElement _root;
   final _disposer = Disposer.oneShot();
 
   DropdownMenuComponent(ChangeDetectorRef changeDetector, this._root) {
@@ -98,7 +98,7 @@ class DropdownMenuComponent extends Object
   /// be used to select DOM elements within the overlay when the popup is open.
   @Input()
   set popupClass(String? className) {
-    _popupClass = constructEncapsulatedCss(className, _root.classes);
+    _popupClass = constructEncapsulatedCss(className, _root.classList);
   }
 
   bool get dropdownStyle => _dropdownStyle;

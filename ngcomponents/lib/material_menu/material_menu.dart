@@ -46,7 +46,7 @@ class MaterialMenuComponent extends Object
         MenuPopupWrapper,
         MenuPopupTrigger
     implements AfterViewInit, HasDisabled, OnDestroy {
-  final HtmlElement _root;
+  final HTMLElement _root;
   final _disposer = Disposer.oneShot();
 
   MaterialMenuComponent(this._root);
@@ -60,7 +60,7 @@ class MaterialMenuComponent extends Object
   /// be used to select DOM elements within the overlay when the popup is open.
   @Input()
   set popupClass(String? className) {
-    _popupClass = constructEncapsulatedCss(className, _root.classes);
+    _popupClass = constructEncapsulatedCss(className, _root.classList);
   }
 
   /// Trigger button text. Ignored if the [MenuModel] has an icon.

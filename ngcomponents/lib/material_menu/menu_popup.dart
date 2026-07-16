@@ -36,7 +36,7 @@ import 'package:ngcomponents/utils/angular/css/css.dart';
   changeDetection: ChangeDetectionStrategy.onPush,
 )
 class MenuPopupComponent extends Object with FocusableMixin, MenuPopupWrapper {
-  HtmlElement element;
+  HTMLElement element;
 
   @Input()
   PopupSource? popupSource;
@@ -47,7 +47,7 @@ class MenuPopupComponent extends Object with FocusableMixin, MenuPopupWrapper {
   /// be used to select DOM elements within the overlay when the popup is open.
   @Input()
   set popupClass(String? value) {
-    _popupClass = constructEncapsulatedCss(value, element.classes);
+    _popupClass = constructEncapsulatedCss(value, element.classList);
   }
 
   String get popupClass => _popupClass;

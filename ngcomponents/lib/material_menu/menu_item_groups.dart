@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -32,7 +33,6 @@ import 'package:ngcomponents/model/selection/selection_model.dart';
 import 'package:ngcomponents/model/ui/highlighted_text_model.dart';
 import 'package:ngcomponents/utils/disposer/disposer.dart';
 import 'package:ngcomponents/utils/id_generator/id_generator.dart';
-import 'package:quiver/core.dart' as qc show Optional;
 
 /// Renders list of menu items.
 @Component(
@@ -181,7 +181,7 @@ class MenuItemGroupsComponent
   /// If absent, then no item should be focused initially. This is used when
   /// opening a sub-menu by keyboard shortcut, and the first menu item of the
   /// sub-menu should be selected.
-  qc.Optional<String> _autoFocusItemId = const qc.Optional.absent();
+  String? _autoFocusItemId;
 
   bool isKeyboardOpenedSubmenu = false;
 
@@ -366,12 +366,12 @@ class MenuItemGroupsComponent
   }
 
   MenuItem? _itemForTarget(EventTarget? target) {
-    if (target is! Element) return null;
-    Element? element = target;
-    while (element != null) {
-      if (element.attributes['role'] == 'menuitem') {
-        var dataGroupIndex = element.attributes['data-group-index'];
-        var dataItemIndex = element.attributes['data-item-index'];
+    if (!target.isA<Element>()) return null;
+    Element element = target as Element;
+    while (element.isA<Element>()) {
+      if (element.getAttribute('role') == 'menuitem') {
+        var dataGroupIndex = element.getAttribute('data-group-index');
+        var dataItemIndex = element.getAttribute('data-item-index');
 
         if (dataGroupIndex == null || dataItemIndex == null) return null;
 
@@ -379,7 +379,7 @@ class MenuItemGroupsComponent
         MenuItem item = group[int.parse(dataItemIndex)];
         return item;
       }
-      element = element.parent;
+      element = element.parentElement as Element;
     }
     return null;
   }
@@ -402,7 +402,7 @@ class MenuItemGroupsComponent
     if (!item.enabled) return;
 
     if (item.hasSubMenu) {
-      _openSubMenu(item, isOpenedByKeyboard: event is KeyboardEvent);
+      _openSubMenu(item, isOpenedByKeyboard: event.isA<KeyboardEvent>());
     } else {
       select(event, item, group);
     }
@@ -471,8 +471,9 @@ class MenuItemGroupsComponent
 
   /// Returns true if the current item with ID [itemId] should be auto-focused
   /// on menu open.
-  bool hasAutoFocus(String? itemId) =>
-      _autoFocusItemId.transform((id) => id == itemId).or(false);
+  bool hasAutoFocus(String? itemId) {
+    return _autoFocusItemId != null ? _autoFocusItemId == itemId : false;
+  }
 
   /// Whether the subMenu of [item] is visible.
   bool isSubMenuVisible(MenuItem item) => item == _submenuParent;
@@ -510,7 +511,7 @@ class MenuItemGroupsComponent
   void _createActiveMenuModelIfNone() {
     if (_idGenerator != null) {
       activeModel = ActiveMenuItemModel(
-        _idGenerator!,
+        _idGenerator,
         menu: menu,
         filterOutUnselectableItems: true,
       );
@@ -530,9 +531,7 @@ class MenuItemGroupsComponent
     // Set auto-focus to the currently selected list item if this menu is
     // a sub-menu and was opened via keyboard shortcut.
     if (activeModel?.activeItem != null) {
-      _autoFocusItemId = qc.Optional.of(
-        activeModel!.id(activeModel!.activeItem),
-      );
+      _autoFocusItemId = activeModel!.id(activeModel!.activeItem);
     }
   }
 

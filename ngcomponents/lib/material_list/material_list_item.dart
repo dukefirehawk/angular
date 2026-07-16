@@ -2,13 +2,12 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:html' as dom;
-
 import 'package:ngdart/angular.dart';
 import 'package:ngcomponents/button_decorator/button_decorator.dart';
 import 'package:ngcomponents/interfaces/has_disabled.dart';
 import 'package:ngcomponents/mixins/material_dropdown_base.dart';
 import 'package:ngcomponents/utils/disposer/disposer.dart';
+import 'package:web/web.dart' as dom;
 
 /// Material List Item is a block element intended for user interaction; it has
 /// `:hover` styling and emits and `trigger` event when the user clicks or
@@ -37,12 +36,15 @@ class MaterialListItemComponent extends ButtonDirective implements OnDestroy {
   @override
   final String hostTabIndex;
 
-  dom.HtmlElement element;
+  dom.HTMLElement element;
 
-  MaterialListItemComponent(this.element, @Optional() this._dropdown,
-      @Attribute('tabindex') String? tabIndex, @Attribute('role') String? role)
-      : hostTabIndex = tabIndex ?? '0',
-        super(element, role ?? 'listitem') {
+  MaterialListItemComponent(
+    this.element,
+    @Optional() this._dropdown,
+    @Attribute('tabindex') String? tabIndex,
+    @Attribute('role') String? role,
+  ) : hostTabIndex = tabIndex ?? '0',
+      super(element, role ?? 'listitem') {
     if (_dropdown != null) {
       _disposer.addDisposable(trigger.listen(handleActivate));
     }
