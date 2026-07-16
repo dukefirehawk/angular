@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -129,7 +130,7 @@ class BaseMaterialInput extends FocusableMixin
   ///
   /// This text will not be displayed if there is an error message on the input.
   @Input()
-  set hintText(value) {
+  set hintText(String? value) {
     _hintText = value;
     updateBottomPanelState();
   }
@@ -430,20 +431,20 @@ class BaseMaterialInput extends FocusableMixin
   /// may be building new functionality that all ACX users could benefit
   /// from! If that's the case, please consider contributing your changes
   /// back upstream. Feel free to contact acx-widgets@ for more guidance.
-  HtmlElement? get inputRef => null;
+  HTMLElement? get inputRef => null;
 
   @override
   void ngOnDestroy() {
     _disposer.dispose();
   }
 
-  void inputFocusAction(event) {
+  void inputFocusAction(FocusEvent event) {
     focused = true;
     handleFocus(event);
     updateBottomPanelState();
   }
 
-  void inputBlurAction(event, valid, validationMessage) {
+  void inputBlurAction(FocusEvent event, valid, validationMessage) {
     _validate(valid, validationMessage);
     _pristine = false;
     focused = false;
@@ -451,25 +452,27 @@ class BaseMaterialInput extends FocusableMixin
     updateBottomPanelState();
   }
 
-  void inputChange(newValue, valid, validationMessage) {
+  void inputChange(String? newValue, valid, validationMessage) {
     _validate(valid, validationMessage);
     _pristine = false;
-    inputText = newValue;
+    inputText = newValue ?? '';
     _changeController.add(newValue);
     updateBottomPanelState();
   }
 
-  void inputKeypress(newValue, valid, validationMessage) {
+  void inputKeypress(String? newValue, valid, validationMessage) {
     _validate(valid, validationMessage);
     _pristine = false;
     inputText = newValue;
-    _keypressController.add(newValue);
+    if (newValue != null) {
+      _keypressController.add(newValue);
+    }
     // If this update is removed, ensure that the test logic of 'error message
     // updated with input change' works manually.
     updateBottomPanelState();
   }
 
-  void _validate(valid, validationMessage) {
+  void _validate(bool valid, validationMessage) {
     _invalid = !valid;
     _validationMessage = validationMessage;
   }
@@ -498,8 +501,8 @@ class BaseMaterialInput extends FocusableMixin
   void selectAll() {
     if (inputRef != null) {
       var el = inputRef!;
-      if (el is InputElement) {
-        el.select();
+      if (el.isA<HTMLInputElement>()) {
+        (el as HTMLInputElement).select();
       }
     }
     //inputRef!.va.nativeElement.select();
@@ -574,7 +577,7 @@ class BaseSingleLineInputComponent extends BaseMaterialInput
   final ChangeDetectorRef _changeDetector;
 
   @ViewChild('inputEl')
-  HtmlElement? inputEl;
+  HTMLElement? inputEl;
 
   @ViewChild('popupSourceEl')
   Element? popupSourceEl;
@@ -590,7 +593,7 @@ class BaseSingleLineInputComponent extends BaseMaterialInput
   /// from! If that's the case, please consider contributing your changes
   /// back upstream. Feel free to contact acx-widgets@ for more guidance.
   @override
-  HtmlElement? get inputRef => inputEl;
+  HTMLElement? get inputRef => inputEl;
 
   /// Type of input.
   ///
@@ -756,7 +759,7 @@ class BaseSingleLineInputComponent extends BaseMaterialInput
   }
 
   @visibleForTemplate
-  void handleChange(Event? event, InputElement? element) {
+  void handleChange(Event? event, HTMLInputElement? element) {
     if (element != null) {
       inputChange(
         element.value,

@@ -59,7 +59,7 @@ class MaterialMultilineInputComponent extends BaseMaterialInput
   StreamSubscription? _subscription;
 
   @ViewChild('textareaEl')
-  HtmlElement? textareaEl;
+  HTMLElement? textareaEl;
 
   /// The underlying <textarea> element.
   ///
@@ -68,7 +68,7 @@ class MaterialMultilineInputComponent extends BaseMaterialInput
   /// from! If that's the case, please consider contributing your changes
   /// back upstream. Feel free to contact acx-widgets@ for more guidance.
   @override
-  HtmlElement? get inputRef => textareaEl;
+  HTMLElement? get inputRef => textareaEl;
 
   /// The initial/minimum number of rows for multiline input.
   /// Default value is 1.
@@ -168,10 +168,10 @@ class MaterialMultilineInputComponent extends BaseMaterialInput
   int get inputTabIndex => disabled ? -1 : 0;
 
   @visibleForTemplate
-  void handleChange(Event event, TextAreaElement element) {
+  void handleChange(Event event, HTMLTextAreaElement element) {
     inputChange(
       element.value,
-      element.validity?.valid,
+      element.validity.valid,
       element.validationMessage,
     );
     event.stopPropagation();

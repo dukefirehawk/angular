@@ -3,7 +3,6 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:html' as html;
 
 import 'package:ngdart/angular.dart';
 import 'package:collection/collection.dart';
@@ -44,11 +43,12 @@ import 'package:ngcomponents/utils/async/async.dart';
 import 'package:ngcomponents/utils/id_generator/id_generator.dart';
 import 'package:ngforms/ngforms.dart';
 import 'package:meta/meta.dart';
+import 'package:web/web.dart' as html;
 
 import 'material_input.dart';
 
-typedef InputChangeCallback = dynamic Function(Object inputText,
-    {String rawValue});
+typedef InputChangeCallback =
+    dynamic Function(Object inputText, {String rawValue});
 
 /// See material_auto_suggest_input.md for an overview of the component.
 /// See examples for usage.
@@ -91,7 +91,7 @@ typedef InputChangeCallback = dynamic Function(Object inputText,
   templateUrl: 'material_auto_suggest_input.html',
   styleUrls: [
     'material_auto_suggest_input.scss.css',
-    'material_input_wrapper.scss.css'
+    'material_input_wrapper.scss.css',
   ],
   // TODO(google): Change to `Visibility.local` to reduce code size.
   visibility: Visibility.all,
@@ -120,7 +120,7 @@ class MaterialAutoSuggestInputComponent<T> extends MaterialSelectBase<T>
     RelativePosition.AdjacentBottomLeft,
     RelativePosition.AdjacentBottomRight,
     RelativePosition.AdjacentTopLeft,
-    RelativePosition.AdjacentTopRight
+    RelativePosition.AdjacentTopRight,
   ];
 
   final String popupId;
@@ -218,7 +218,7 @@ class MaterialAutoSuggestInputComponent<T> extends MaterialSelectBase<T>
   ///   text changes caused by [shouldClearInputOnSelection] or when the
   ///   suggestions list opens.
   ///   Justification - The W3 listbox spec (see above for link) says that
-  ///                   <Space> "changes the selection state of the focused
+  ///                   `<Space>` "changes the selection state of the focused
   ///                   option" for multi-select listboxes.
   ///                   This means that a user cannot type a space into the
   ///                   textbox with an option focused, the space would be
@@ -345,22 +345,25 @@ class MaterialAutoSuggestInputComponent<T> extends MaterialSelectBase<T>
   // Use a factory as a layer of indirection, in order to resolve a default
   // IdGenerator if there is none bound.
   factory MaterialAutoSuggestInputComponent(
-          @Optional() @Self() NgControl? cd,
-          @Optional() IdGenerator? idGenerator,
-          ChangeDetectorRef changeDetector,
-          @Optional() @SkipSelf() PopupSizeProvider? popupSizeDelegate) =>
-      MaterialAutoSuggestInputComponent.protected(
-          cd,
-          idGenerator ?? SequentialIdGenerator.fromUUID(),
-          changeDetector,
-          popupSizeDelegate);
+    @Optional() @Self() NgControl? cd,
+    @Optional() IdGenerator? idGenerator,
+    ChangeDetectorRef changeDetector,
+    @Optional() @SkipSelf() PopupSizeProvider? popupSizeDelegate,
+  ) => MaterialAutoSuggestInputComponent.protected(
+    cd,
+    idGenerator ?? SequentialIdGenerator.fromUUID(),
+    changeDetector,
+    popupSizeDelegate,
+  );
 
   MaterialAutoSuggestInputComponent.protected(
-      this._cd, IdGenerator idGenerator, this._changeDetector,
-      [this._popupSizeDelegate])
-      : activeModel = ActiveItemModel(idGenerator, loop: true),
-        popupId = idGenerator.nextId(),
-        inputId = idGenerator.nextId() {
+    this._cd,
+    IdGenerator idGenerator,
+    this._changeDetector, [
+    this._popupSizeDelegate,
+  ]) : activeModel = ActiveItemModel(idGenerator, loop: true),
+       popupId = idGenerator.nextId(),
+       inputId = idGenerator.nextId() {
     if (_cd != null) {
       _cd?.valueAccessor = this;
     }
@@ -381,8 +384,9 @@ class MaterialAutoSuggestInputComponent<T> extends MaterialSelectBase<T>
     if (err != null) {
       Map<String, dynamic> errorMap = err;
       var stringValue = errorMap.values.firstWhere(
-          ((v) => (v is String) && v.isNotEmpty),
-          orElse: () => null);
+        ((v) => (v is String) && v.isNotEmpty),
+        orElse: () => null,
+      );
       if (stringValue != null) return stringValue as String;
     }
     return null;
@@ -401,7 +405,7 @@ class MaterialAutoSuggestInputComponent<T> extends MaterialSelectBase<T>
     super.selection = localSelection;
     activeModel.activateFirstItemByDefault =
         (isSingleSelect && accessibleItemActivation) ||
-            (isMultiSelect && !accessibleItemActivation);
+        (isMultiSelect && !accessibleItemActivation);
 
     if (isSingleSelect && localSelection.selectedValues.isNotEmpty) {
       _lastSelectedItem = localSelection.selectedValues.first;
@@ -523,9 +527,9 @@ class MaterialAutoSuggestInputComponent<T> extends MaterialSelectBase<T>
   @override
   FactoryRenderer<RendersValue, T>? get factoryRenderer =>
       highlightOptions && super.factoryRenderer == null
-          // && super.componentRenderer == null
-          ? highlightFactoryRenderer
-          : super.factoryRenderer;
+      // && super.componentRenderer == null
+      ? highlightFactoryRenderer
+      : super.factoryRenderer;
 
   final _showPopupController = StreamController<bool>.broadcast(sync: true);
 
@@ -687,12 +691,16 @@ class MaterialAutoSuggestInputComponent<T> extends MaterialSelectBase<T>
       return;
     }
     _lastFilterFuture?.dispose();
-    _lastFilterFuture =
-        (options as Filterable).filter(_inputText, limit: _limit);
+    _lastFilterFuture = (options as Filterable).filter(
+      _inputText,
+      limit: _limit,
+    );
   }
 
-  void _updateItemActivation(
-      {bool textChanging = false, bool popupOpening = false}) {
+  void _updateItemActivation({
+    bool textChanging = false,
+    bool popupOpening = false,
+  }) {
     if (!showPopup) return;
 
     if (selection.isEmpty) {
@@ -703,8 +711,9 @@ class MaterialAutoSuggestInputComponent<T> extends MaterialSelectBase<T>
         // first option in the suggestions list.
         T? firstSelection = selection.selectedValues.isEmpty
             ? null
-            : options.optionsList
-                .firstWhereOrNull((opt) => selection.isSelected(opt));
+            : options.optionsList.firstWhereOrNull(
+                (opt) => selection.isSelected(opt),
+              );
         if (firstSelection == null) {
           activeModel.activateFirst();
         } else {
@@ -773,7 +782,7 @@ class MaterialAutoSuggestInputComponent<T> extends MaterialSelectBase<T>
   bool get deselectOnActivate => isMultiSelect;
 
   @protected
-  void onListItemSelected(item) {
+  void onListItemSelected(dynamic item) {
     if (isSingleSelect) {
       showPopup = false;
     }
@@ -828,7 +837,7 @@ class MaterialAutoSuggestInputComponent<T> extends MaterialSelectBase<T>
 
   /// Act as a validator.
   /// TODO(google): Please don't add validation support this way.
-  call(_) {
+  Null call(_) {
     // material-auto-suggest-input doesn't support validation yet
     return null;
   }

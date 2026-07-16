@@ -180,7 +180,7 @@ class MaterialInt64ValueAccessor
       // If using formatting, we must firsrt parse back to a non-formatted
       // String representation as Int64 cannot handle commas.
       if (_numberFormat != null) {
-        input = _numberFormat!.parse(input).toString();
+        input = _numberFormat.parse(input).toString();
       }
 
       return Int64.parseInt(input);

@@ -240,7 +240,8 @@ abstract class BoundaryAwareKeyDirective implements OnDestroy {
     @Optional() KeyUpBoundaryDirective? boundary,
   ) {
     final stream =
-        boundary?.keyPressStream ?? Element.keyPressEvent.forElement(element);
+        boundary?.keyPressStream ??
+        (element as HTMLElement).onKeyDown.asBroadcastStream();
     _subscription = stream.where(_isKeyMatching).listen(_onMatchingKey);
   }
 
@@ -249,7 +250,8 @@ abstract class BoundaryAwareKeyDirective implements OnDestroy {
     @Optional() KeyUpBoundaryDirective? boundary,
   ) {
     final stream =
-        boundary?.keyUpStream ?? Element.keyUpEvent.forElement(element);
+        boundary?.keyUpStream ??
+        (element as HTMLElement).onKeyUp.asBroadcastStream();
     _subscription = stream.where(_isKeyMatching).listen(_onMatchingKey);
   }
 
@@ -276,7 +278,7 @@ abstract class BoundaryAwareKeyDirective implements OnDestroy {
   visibility: Visibility.all,
 )
 class KeyUpBoundaryDirective {
-  final HtmlElement _element;
+  final HTMLElement _element;
   Stream<KeyboardEvent>? _keyUpStream;
   Stream<KeyboardEvent>? _keyPressStream;
 
@@ -287,11 +289,11 @@ class KeyUpBoundaryDirective {
   /// Use this stream when the KeyDirective you are creating cannot use a
   /// keyPress event such as for modifier keys and Esc.
   Stream<KeyboardEvent> get keyUpStream =>
-      _keyUpStream ??= Element.keyUpEvent.forElement(_element);
+      _keyUpStream ??= _element.onKeyUp.asBroadcastStream();
 
   /// Stream of keyPress events.
   Stream<KeyboardEvent> get keyPressStream =>
-      _keyPressStream ??= Element.keyPressEvent.forElement(_element);
+      _keyPressStream ??= _element.onKeyDown.asBroadcastStream();
 }
 
 /// If attached to the yes-no buttons it will listen for escape `keyup` event
