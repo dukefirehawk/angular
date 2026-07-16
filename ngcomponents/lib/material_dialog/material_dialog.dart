@@ -44,7 +44,7 @@ class MaterialDialogComponent
   @HostBinding('attr.aria-labelledby')
   String? get headerId => shouldShowHeader ? _uid : null;
 
-  final HtmlElement _rootElement;
+  final HTMLElement _rootElement;
   final DomService _domService;
   final ChangeDetectorRef _changeDetector;
   final NgZone _ngZone;
@@ -52,7 +52,7 @@ class MaterialDialogComponent
   final _disposer = Disposer.oneShot();
   final _uid = SequentialIdGenerator.fromUUID().nextId();
 
-  HtmlElement? _mainElement;
+  HTMLElement? _mainElement;
   bool _shouldShowHeader = true;
   bool _shouldShowFooter = true;
   bool shouldShowTopScrollStroke = false;
@@ -72,8 +72,8 @@ class MaterialDialogComponent
     escapeHandler = _defaultEscapeHandler;
   }
 
-  @ViewChild('main', read: HtmlElement)
-  set main(HtmlElement? element) {
+  @ViewChild('main', read: HTMLElement)
+  set main(HTMLElement? element) {
     _mainElement = element;
     if (_mainElement != null) {
       _disposer.addStreamSubscription(
@@ -86,7 +86,7 @@ class MaterialDialogComponent
       return;
     }
     _disposer.addStreamSubscription(
-      _modal!.onOpen.listen((_) {
+      _modal.onOpen.listen((_) {
         _setHeaderFooterScrollBorder();
       }),
     );
@@ -158,7 +158,7 @@ class MaterialDialogComponent
 
     _shouldListenForFullscreenChanges = shouldListenForFullscreenChanges;
     _disposer.addStreamSubscription(
-      window.onResize.listen((_) {
+      EventStreamProviders.resizeEvent.forTarget(window).listen((_) {
         _listenForFullscreenChanges();
       }),
     );
@@ -196,7 +196,7 @@ class MaterialDialogComponent
   void _defaultEscapeHandler(KeyboardEvent event) {
     if (_modal != null) {
       event.preventDefault();
-      _modal?.close();
+      _modal.close();
     }
   }
 

@@ -39,8 +39,11 @@ class MaterialTreeNode<T> {
   /// Actual implementation of how to retrieve nested items is provided.
   ///
   /// May specify a custom [isExpandable].
-  MaterialTreeNode(this._root, this._changeDetector,
-      {IsExpandable<T>? isExpandable}) {
+  MaterialTreeNode(
+    this._root,
+    this._changeDetector, {
+    IsExpandable<T>? isExpandable,
+  }) {
     _group = _EMPTY_OPTION_GROUP;
 
     if (!_root.supportsHierarchy) {
@@ -89,14 +92,16 @@ class MaterialTreeNode<T> {
       if (key is MaterialTreeExpandState) {
         manualExpand = key.expanded;
         // When we receive an expansion state change event, update the option
-        _disposer?.addStreamSubscription(key.expandEvents.listen((bool newVal) {
-          if (newVal == _expandedNodes.containsKey(key)) return;
-          if (newVal) {
-            expandOption(key);
-          } else {
-            closeOption(key);
-          }
-        }));
+        _disposer?.addStreamSubscription(
+          key.expandEvents.listen((bool newVal) {
+            if (newVal == _expandedNodes.containsKey(key)) return;
+            if (newVal) {
+              expandOption(key);
+            } else {
+              closeOption(key);
+            }
+          }),
+        );
       }
       if (expandAll || manualExpand) {
         expandOption(key);
@@ -158,7 +163,7 @@ class MaterialTreeNode<T> {
       (!isMultiSelect && allowParentSingleSelection);
 
   /// Whether a disabled checkbox should be rendered for this option.
-  bool showDisabledCheckbox(option) =>
+  bool showDisabledCheckbox(dynamic option) =>
       _selectable.getSelectable(option) == SelectableOption.Disabled &&
       !hasChildren(option);
 
@@ -166,7 +171,7 @@ class MaterialTreeNode<T> {
   bool isSelected(T option) => _root.selection.isSelected(option);
 
   /// Returns any child groups of [option] that are loaded.
-  Iterable<OptionGroup<T>> getChildGroups(option) =>
+  Iterable<OptionGroup<T>> getChildGroups(dynamic option) =>
       _expandedNodes[option] ?? [];
 
   /// Expands the given [option].
@@ -231,7 +236,10 @@ class MaterialTreeNode<T> {
 
   /// Selects or deselects two nodes and all the siblings in between.
   void toggleSelectionRangeInclusive(
-      T firstNode, T lastNode, bool isSelection) {
+    T firstNode,
+    T lastNode,
+    bool isSelection,
+  ) {
     // Only proceeds if both nodes are siblings of the same group.
     if (!group.contains(firstNode) || !group.contains(lastNode)) return;
 
@@ -273,7 +281,7 @@ class MaterialTreeNode<T> {
   bool get showSelectionState => isMultiSelect || !_root.optimizeForDropdown;
 
   /// Converts [T] into a component factory (requires [factoryRenderer]).
-  ComponentFactory? getComponentFactory(option) =>
+  ComponentFactory? getComponentFactory(dynamic option) =>
       _root.factoryRenderer != null ? _root.factoryRenderer!(option) : null;
 
   /// Converts [T] into a text equivalent (requires [useItemRenderer]).

@@ -28,7 +28,7 @@ class MaterialExpansionPanelAutoDismiss implements OnDestroy {
   ///
   /// E.g. modal, dialog, popups.
   final Element? _overlayContainerToken;
-  final HtmlElement _element;
+  final HTMLElement _element;
 
   late StreamController<Event> _clicksOutsideController;
   StreamSubscription<Event>? _clicksOutsideSubscription;
@@ -42,7 +42,9 @@ class MaterialExpansionPanelAutoDismiss implements OnDestroy {
     _clicksOutsideController = StreamController.broadcast(
       sync: true,
       onListen: () {
-        _mouseUpListener = document.onMouseUp.listen(_onMouseUp);
+        _mouseUpListener = EventStreamProviders.mouseUpEvent
+            .forTarget(document)
+            .listen(_onMouseUp);
       },
       onCancel: () {
         _mouseUpListener?.cancel();
@@ -91,7 +93,7 @@ class MaterialExpansionPanelAutoDismiss implements OnDestroy {
         // Excludes any clickable elements.
         return;
       }
-      node = node.parent;
+      node = node.parentElement;
     }
     // Treats clicks on dangling elements as inside the panel.
     //

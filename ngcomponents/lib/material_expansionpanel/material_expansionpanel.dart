@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 import 'dart:math';
 
@@ -107,7 +108,7 @@ class MaterialExpansionPanel
   ///
   /// Unfortunately, this only selects the first [AutoFocusDirective] in the
   /// contents of the expansion panel, which means that if there is another
-  /// [AutoFocusDirective] in an <ng-content> that is not the .content, that
+  /// [AutoFocusDirective] in an `<ng-content>` that is not the .content, that
   /// will get focused instead of the [AutoFocusDirective] inside the .content.
   @visibleForTemplate
   @ContentChild(AutoFocusDirective)
@@ -122,10 +123,10 @@ class MaterialExpansionPanel
     // TODO: Need further investigation on why ElementRef is received instead of Element
     if (element is Focusable) {
       _focusOnOpenChild = element;
-    } else if (element is Element) {
-      _focusOnOpenChild = RootFocusable(element);
-    } else if (element is ElementRef) {
-      _focusOnOpenChild = RootFocusable(element.nativeElement);
+    } else if (element.isA<Element>()) {
+      _focusOnOpenChild = RootFocusable(element as HTMLElement);
+      //} else if (element is ElementRef) {
+      //  _focusOnOpenChild = RootFocusable(element.nativeElement);
     } else {
       assert(
         element == null,
@@ -135,9 +136,9 @@ class MaterialExpansionPanel
     }
   }
 
-  HtmlElement? _mainPanel;
+  HTMLElement? _mainPanel;
   @ViewChild('mainPanel')
-  set mainPanel(HtmlElement? mainPanel) {
+  set mainPanel(HTMLElement? mainPanel) {
     _mainPanel = mainPanel;
     _ngZone.runOutsideAngular(() {
       if (_mainPanel != null) {
@@ -174,9 +175,9 @@ class MaterialExpansionPanel
     _disposer.addDisposable(transitionCheck);
   }
 
-  HtmlElement? _headerPanel;
+  HTMLElement? _headerPanel;
   @ViewChild('headerPanel')
-  set headerPanel(HtmlElement? headerPanel) {
+  set headerPanel(HTMLElement? headerPanel) {
     _headerPanel = headerPanel;
     if (_headerPanel != null) {
       _ngZone.runOutsideAngular(() {
@@ -192,9 +193,9 @@ class MaterialExpansionPanel
     }
   }
 
-  HtmlElement? _mainContent;
+  HTMLElement? _mainContent;
   @ViewChild('mainContent')
-  set mainContent(HtmlElement? mainContent) {
+  set mainContent(HTMLElement? mainContent) {
     _mainContent = mainContent;
     if (_mainContent == null) return;
     _completeExpandedPanelHeightReadsIfPossible();
@@ -211,19 +212,19 @@ class MaterialExpansionPanel
     }
   }
 
-  HtmlElement? _headerContent;
+  HTMLElement? _headerContent;
   @ViewChild('headerContent')
-  set headerContent(HtmlElement? headerContent) =>
+  set headerContent(HTMLElement? headerContent) =>
       _headerContent = headerContent;
 
-  HtmlElement? _actionContent;
+  HTMLElement? _actionContent;
   @ViewChild('action')
-  set actionContent(HtmlElement? headerContent) =>
+  set actionContent(HTMLElement? headerContent) =>
       _actionContent = headerContent;
 
-  HtmlElement? _contentWrapper;
+  HTMLElement? _contentWrapper;
   @ViewChild('contentWrapper')
-  set contentWrapper(HtmlElement? contentWrapper) {
+  set contentWrapper(HTMLElement? contentWrapper) {
     _contentWrapper = contentWrapper;
     _completeExpandedPanelHeightReadsIfPossible();
   }
@@ -574,7 +575,7 @@ class MaterialExpansionPanel
   }
 
   /// Changes the state of the panel either to expanded or not. Returns a
-  /// Future<bool> that indicates whether the operation was successful. For
+  /// `Future<bool>` that indicates whether the operation was successful. For
   /// example, trying to close a panel with unsaved changes may fail because
   /// the user has cancelled the operation.
   Future<bool> changeState(
@@ -676,16 +677,16 @@ class MaterialExpansionPanel
     if (hasHeightTransition) {
       // If the content-wrapper has a top margin, it is not reflected in the
       // scroll height.
-      final topMargin = _contentWrapper!.getComputedStyle().marginTop;
+      final topMargin = window.getComputedStyle(_contentWrapper!).marginTop;
       expandedPanelHeight = 'calc(${contentHeight}px + ${topMargin})';
     }
     return expandedPanelHeight;
   }
 
   bool get _mainPanelHasHeightTransition {
-    final mainPanelStyle = _mainPanel?.getComputedStyle();
+    final mainPanelStyle = window.getComputedStyle(_mainPanel!);
     // Do our best to make sure that onTransitionEnd will fire later.
-    return mainPanelStyle?.transition.contains('height') ?? false;
+    return mainPanelStyle.transition.contains('height');
   }
 
   /// Reads the DOM state to calculate the height of the header in its
@@ -702,11 +703,11 @@ class MaterialExpansionPanel
       );
       var expandedHeaderHeight = '';
 
-      final headerPanelStyle = _headerPanel?.getComputedStyle();
+      final headerPanelStyle = window.getComputedStyle(_headerPanel!);
       // Do our best to make sure that onTransitionEnd will fire later.
       final hasHeightTransition =
           contentHeight > 0 &&
-          headerPanelStyle?.transition.contains('height') == true;
+          headerPanelStyle.transition.contains('height') == true;
 
       if (hasHeightTransition) expandedHeaderHeight = '${contentHeight}px';
 
