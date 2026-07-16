@@ -23,13 +23,12 @@ import 'package:ngcomponents/material_tab/tab_mixin.dart';
   directives: [MaterialRippleComponent],
 )
 class TabButtonComponent extends MaterialButtonBase with TabMixin {
-  final Element _nativeElement;
+  final HTMLElement _nativeElement;
 
-  TabButtonComponent(this._nativeElement)
-    : super(_nativeElement as HtmlElement, 'tab');
+  TabButtonComponent(this._nativeElement) : super(_nativeElement, 'tab');
 
   @override
-  Element get nativeElement => _nativeElement;
+  HTMLElement get nativeElement => _nativeElement;
 
   /// Whether the tab represented by this button is currently active.
   @Input('active')

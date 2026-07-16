@@ -34,7 +34,7 @@ class MaterialToggleComponent
   static const hostClass = 'themeable';
 
   @ViewChild('toggle')
-  HtmlElement? toggleElement;
+  HTMLElement? toggleElement;
 
   @override
   void ngAfterViewInit() {
@@ -140,7 +140,7 @@ class MaterialToggleComponent
 
   void _syncAriaPressed() {
     if (toggleElement == null) return;
-    toggleElement!.attributes['aria-pressed'] = '$checked';
+    toggleElement!.setAttribute('aria-pressed', '$checked');
   }
 
   @override

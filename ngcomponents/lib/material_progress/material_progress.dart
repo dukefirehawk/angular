@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -27,7 +28,7 @@ const Map<String, double> _indeterminateTiming = {
 )
 class MaterialProgressComponent implements AfterViewInit, OnDestroy {
   final ChangeDetectorRef _changeDetector;
-  final HtmlElement _element;
+  final HTMLElement _element;
   bool _useFancyAnimation;
 
   /// The current progress value.
@@ -115,20 +116,20 @@ class MaterialProgressComponent implements AfterViewInit, OnDestroy {
 
   double _calcRatio(int value) => (value.clamp(min, max) - min) / (max - min);
 
-  @ViewChild('primary', read: HtmlElement)
-  set primary(HtmlElement? value) {
-    _primaryIndicator = value as DivElement?;
+  @ViewChild('primary', read: HTMLElement)
+  set primary(HTMLElement? value) {
+    _primaryIndicator = value as HTMLDivElement?;
   }
 
-  DivElement? _primaryIndicator;
+  HTMLDivElement? _primaryIndicator;
   Animation? _primaryAnimation;
 
-  @ViewChild('secondary', read: HtmlElement)
-  set secondary(HtmlElement? value) {
-    _secondaryIndicator = value as DivElement?;
+  @ViewChild('secondary', read: HTMLElement)
+  set secondary(HTMLElement? value) {
+    _secondaryIndicator = value as HTMLDivElement?;
   }
 
-  DivElement? _secondaryIndicator;
+  HTMLDivElement? _secondaryIndicator;
   Animation? _secondaryAnimation;
 
   MaterialProgressComponent(
@@ -158,8 +159,9 @@ class MaterialProgressComponent implements AfterViewInit, OnDestroy {
     if (!indeterminate ||
         !_useFancyAnimation ||
         !_isInitialized ||
-        !supportsAnimationApi)
+        !supportsAnimationApi) {
       return;
+    }
 
     final width = _element.getBoundingClientRect().width;
     if (width == 0) {
@@ -192,12 +194,12 @@ class MaterialProgressComponent implements AfterViewInit, OnDestroy {
       {'transform': 'translateX(${width}px) scaleX(0.1)'},
     ];
     _primaryAnimation = _primaryIndicator!.animate(
-      primaryKeyframes,
-      _indeterminateTiming,
+      primaryKeyframes.jsify() as JSObject,
+      _indeterminateTiming.jsify()!,
     );
     _secondaryAnimation = _secondaryIndicator!.animate(
-      secondaryKeyframes,
-      _indeterminateTiming,
+      secondaryKeyframes.jsify() as JSObject,
+      _indeterminateTiming.jsify()!,
     );
   }
 }

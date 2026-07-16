@@ -12,7 +12,7 @@ abstract mixin class TabMixin {
   int _textWidth = 0;
 
   /// The host element.
-  Element get nativeElement;
+  HTMLElement get nativeElement;
 
   /// The tab label.
   ///

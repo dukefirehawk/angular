@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 import 'dart:math';
 
@@ -461,7 +462,7 @@ class MaterialPopupComponent extends Object
     _updatePopupMinMaxSize();
 
     _visibleDisposer.addStreamSubscription(
-      window.onResize
+      EventStreamProviders.resizeEvent.forTarget(window)
           .transform(
             throttleStream(_resizeThrottleDuration, guaranteeLast: true),
           )
@@ -664,7 +665,7 @@ class MaterialPopupComponent extends Object
 
   void _startRepositionLoop() {
     _ngZone.runOutsideAngular(() {
-      _repositionLoopId = window.requestAnimationFrame(_reposition);
+      _repositionLoopId = window.requestAnimationFrame(_reposition.toJS);
     });
   }
 
@@ -690,7 +691,7 @@ class MaterialPopupComponent extends Object
   }
 
   void _reposition(_) {
-    _repositionLoopId = window.requestAnimationFrame(_reposition);
+    _repositionLoopId = window.requestAnimationFrame(_reposition.toJS);
 
     var sourceDimensions = _sourceDimensions;
     if (sourceDimensions == null) return;
@@ -707,7 +708,13 @@ class MaterialPopupComponent extends Object
 
     if (state.constrainToViewport) {
       // If necessary, move the popup to fit within the viewport.
-      var popupRect = _overlayRef!.overlayElement.getBoundingClientRect();
+      var domRect = _overlayRef!.overlayElement.getBoundingClientRect();
+      var popupRect = Rectangle<num>(
+        domRect.left,
+        domRect.top,
+        domRect.width,
+        domRect.height,
+      );
       popupRect = _shiftRectangle(
         popupRect,
         left: scrollShiftX,
@@ -730,8 +737,8 @@ class MaterialPopupComponent extends Object
   }
 
   void _updateViewportSize() {
-    _viewportRect.width = window.innerWidth!;
-    _viewportRect.height = window.innerHeight!;
+    _viewportRect.width = window.innerWidth;
+    _viewportRect.height = window.innerHeight;
   }
 
   void _updatePopupMinMaxSize() {
