@@ -2,8 +2,9 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-@TestOn('vm')
 @Tags(['presubmit-only'])
+library;
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -17,8 +18,10 @@ void main() {
     var pkgRoot = _runProc('git', ['rev-parse', '--show-toplevel']);
     var currentDir = Directory.current.resolveSymbolicLinksSync();
     if (!p.equals(p.join(pkgRoot, 'angular_components'), currentDir)) {
-      throw StateError('Expected the git root ($pkgRoot/angular_components) '
-          'to match the current directory ($currentDir).');
+      throw StateError(
+        'Expected the git root ($pkgRoot/angular_components) '
+        'to match the current directory ($currentDir).',
+      );
     }
 
     // By default try to run from a pre-determined location for Travis.
@@ -38,20 +41,22 @@ void main() {
     _runProc(protocPath, [
       '--proto_path=$datepickerProtoPath',
       '--dart_out=$datepickerProtoPath',
-      '$datepickerProtoPath/date.proto'
+      '$datepickerProtoPath/date.proto',
     ]);
     _runProc(protocPath, [
       '--proto_path=$datepickerProtoPath',
       '--dart_out=$datepickerProtoPath',
-      '$datepickerProtoPath/date_range.proto'
+      '$datepickerProtoPath/date_range.proto',
     ]);
     _runProc('dart', ['format', datepickerProtoPath]);
     // 3 - get a list of modified `.pb.dart` files - should still be empty
 
     printOnFailure(
-        _runProc('git', ['diff', '$datepickerProtoPath/date.pb.dart']));
+      _runProc('git', ['diff', '$datepickerProtoPath/date.pb.dart']),
+    );
     printOnFailure(
-        _runProc('git', ['diff', '$datepickerProtoPath/date_range.pb.dart']));
+      _runProc('git', ['diff', '$datepickerProtoPath/date_range.pb.dart']),
+    );
 
     expect(_changedGeneratedFiles(), isEmpty);
     // Print diffs to make it easier to find the problem if one exists.
@@ -72,7 +77,11 @@ String _runProc(String proc, List<String> args) {
   var result = Process.runSync(proc, args);
   if (result.exitCode != 0) {
     throw ProcessException(
-        proc, args, result.stderr as String? ?? '', result.exitCode);
+      proc,
+      args,
+      result.stderr as String? ?? '',
+      result.exitCode,
+    );
   }
   return (result.stdout as String?)?.trim() ?? '';
 }

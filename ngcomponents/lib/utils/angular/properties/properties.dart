@@ -11,7 +11,7 @@
 ///
 /// **NOTE**: If [strValue] is an empty string (''), it is always true. This is
 /// because when you declare something like:
-///     <material-button disabled></material-button>
+///     `<material-button disabled></material-button>`
 ///
 /// ... The value of "disabled" is ''.
 bool _parseBool(String strValue) {
@@ -24,10 +24,11 @@ bool _parseBool(String strValue) {
       return false;
     default:
       throw ArgumentError.value(
-          strValue,
-          'strValue',
-          'Only "", "true", and "false" are acceptable values for parseBool. '
-              'Found: ');
+        strValue,
+        'strValue',
+        'Only "", "true", and "false" are acceptable values for parseBool. '
+            'Found: ',
+      );
   }
 }
 
@@ -63,9 +64,9 @@ bool _parseBool(String strValue) {
 ///
 /// NOTE: no attribute is not the same as no value for attribute:
 ///
-/// * <my-component foo> - foo attribute is present but has no value, which
+/// * `<my-component foo>` - foo attribute is present but has no value, which
 ///                        is parsed to *true*.
-/// * <my-component> - no attribute is present, parsed to [defaultValue].
+/// * `<my-component>` - no attribute is present, parsed to [defaultValue].
 bool attributeToBool(String? inputValue, {bool defaultValue = false}) {
   if (inputValue == null) return defaultValue;
   return _parseBool(inputValue);

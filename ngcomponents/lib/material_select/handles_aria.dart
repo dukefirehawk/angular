@@ -6,7 +6,7 @@
 /// handle aria related tasks by itself.
 ///
 /// If a custom widget implements this interface, then the parent
-/// <material-dropdown-list-item> will no longer generate a custom id attribute
+/// `<material-dropdown-list-item>` will no longer generate a custom id attribute
 /// or set the aria role = "option".  Instead, the custom component is expected
 /// to handle the following tasks by itself:
 ///   - set role = "option"

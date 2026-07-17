@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-library angular_components.model.selection.selection_model;
+library;
 
 import 'dart:async';
 import 'dart:collection';
@@ -32,7 +32,7 @@ Object? _defaultKeyProvider(Object? o) => o;
 
 /// A mixin that provides the implementation of [castIterable].
 mixin class CastIterable<T> {
-  /// Casts [values] into an Iterable<T>.
+  // Casts [values] into an Iterable<T>.
   Iterable<T> castIterable(Iterable values) => values.cast<T>();
 }
 
@@ -65,9 +65,10 @@ abstract class SelectionModel<T> extends Object
   /// [keyProvider] is used for equality checking. For example, [select] will
   /// only alter the set of selected values if the key of the new value is not
   /// among the keys of the already selected values.
-  factory SelectionModel.multi(
-      {List<T> selectedValues,
-      KeyProvider<T>? keyProvider}) = MultiSelectionModel<T>;
+  factory SelectionModel.multi({
+    List<T> selectedValues,
+    KeyProvider<T>? keyProvider,
+  }) = MultiSelectionModel<T>;
 
   /*
   @Deprecated('Use SelectionModel.single or SelectionModel.multi instead.')
@@ -114,7 +115,7 @@ abstract class SelectionModel<T> extends Object
   /// Returns ordered list of selected values.
   Iterable<T> get selectedValues;
 
-  /// Casts [values] into an Iterable<T>.
+  // Casts [values] into an Iterable<T>.
   Iterable<T> castIterable(Iterable values);
 }
 
@@ -124,20 +125,25 @@ abstract class NullSelectionModel<T> extends SingleSelectionModel<T> {
 
 abstract class SingleSelectionModel<T> extends SelectionModel<T> {
   factory SingleSelectionModel({T? selected, KeyProvider<T>? keyProvider}) =>
-//      _SingleSelectionModelImpl<T?>(
-//          selected, keyProvider ?? _defaultKeyProvider) as SingleSelectionModel<T>;
+      //      _SingleSelectionModelImpl<T?>(
+      //          selected, keyProvider ?? _defaultKeyProvider) as SingleSelectionModel<T>;
       _SingleSelectionModelImpl<T>(
-          selected, keyProvider ?? _defaultKeyProvider);
+        selected,
+        keyProvider ?? _defaultKeyProvider,
+      );
 
   /// The selected value, or `null` if no value has been selected.
   T? get selectedValue;
 }
 
 abstract class MultiSelectionModel<T> extends SelectionModel<T> {
-  factory MultiSelectionModel(
-          {List<T> selectedValues = const [], KeyProvider<T>? keyProvider}) =>
-      _MultiSelectionModelImpl<T>(
-          selectedValues, keyProvider ?? _defaultKeyProvider);
+  factory MultiSelectionModel({
+    List<T> selectedValues = const [],
+    KeyProvider<T>? keyProvider,
+  }) => _MultiSelectionModelImpl<T>(
+    selectedValues,
+    keyProvider ?? _defaultKeyProvider,
+  );
 
   /// Adds all [values] to the list of selected items that were not previously
   /// selected. Will only emit a [changes] event for values that were actually

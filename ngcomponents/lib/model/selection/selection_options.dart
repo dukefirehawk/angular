@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-library angular_components.model.selection.selection_options;
+library;
 
 import 'dart:async';
 
@@ -29,15 +29,17 @@ class OptionGroup<T> extends LabeledList<T> {
 
   OptionGroup(super.items, [super.labelFcn]);
 
-  OptionGroup.withLabelFunction(super.items,
-      [super.labelFcn, this._emptyLabelFcn])
-      : super.withLabelFunction();
+  OptionGroup.withLabelFunction(
+    super.items, [
+    super.labelFcn,
+    this._emptyLabelFcn,
+  ]) : super.withLabelFunction();
 
   /// An option group with a label is recommended when multiple option groups
   /// exist in a selection list.
   OptionGroup.withLabel(super.items, [super.label, String? emptyLabel])
-      : _emptyLabelFcn = emptyLabel != null ? (() => emptyLabel) : null,
-        super.withLabel();
+    : _emptyLabelFcn = emptyLabel != null ? (() => emptyLabel) : null,
+      super.withLabel();
 
   /// Creates a new option group with options from [start] inclusive to [end]
   /// exclusive, other properties stay the same.
@@ -45,7 +47,10 @@ class OptionGroup<T> extends LabeledList<T> {
     List<T> subListItems = this.sublist(start, end);
 
     return OptionGroup.withLabelFunction(
-        subListItems, hasLabel ? null : () => uiDisplayName, _emptyLabelFcn);
+      subListItems,
+      hasLabel ? null : () => uiDisplayName,
+      _emptyLabelFcn,
+    );
   }
 }
 
@@ -81,8 +86,9 @@ abstract class GroupedOptions<T> implements Disposable {
 /// [OptionGroup]s changed.
 class SelectionOptions<T> extends GroupedOptions<T>
     implements ObserveAware<List<OptionGroup<T>>> {
-  final _controller =
-      StreamController<List<OptionGroup<T>>>.broadcast(sync: true);
+  final _controller = StreamController<List<OptionGroup<T>>>.broadcast(
+    sync: true,
+  );
 
   List<T> _flattenedList = [];
   List<OptionGroup<T>> _optionGroups = [];
@@ -95,16 +101,16 @@ class SelectionOptions<T> extends GroupedOptions<T>
   /// Creates an instance from a list of options.
   // TODO(google): Rename this to withOptions.
   SelectionOptions.fromList(List<T> options, {String? label})
-      : this(<OptionGroup<T>>[OptionGroup<T>.withLabel(options, label)]);
+    : this(<OptionGroup<T>>[OptionGroup<T>.withLabel(options, label)]);
 
   /// Creates an instance with the given option groups.
   SelectionOptions.withOptionGroups(List<OptionGroup<T>> optionGroups)
-      : this(optionGroups);
+    : this(optionGroups);
 
   /// Creates an instance with options resolved from the provided `Future`.
   factory SelectionOptions.fromFuture(
-          Future<List<OptionGroup<T>>> optionGroupListFuture) =>
-      _FutureSelectionOptions<T>(optionGroupListFuture);
+    Future<List<OptionGroup<T>>> optionGroupListFuture,
+  ) => _FutureSelectionOptions<T>(optionGroupListFuture);
 
   /// Creates an instance where the available options are the last data item
   /// from the provided `Stream`.
@@ -112,8 +118,8 @@ class SelectionOptions<T> extends GroupedOptions<T>
   /// Be sure to `dispose` of this instance when done in order to dispose of
   /// the stream listener.
   factory SelectionOptions.fromStream(
-          Stream<List<OptionGroup<T>>> optionGroupListStream) =>
-      _StreamSelectionOptions<T>(optionGroupListStream);
+    Stream<List<OptionGroup<T>>> optionGroupListStream,
+  ) => _StreamSelectionOptions<T>(optionGroupListStream);
 
   /// Provides the stream of options group changes.
   @override

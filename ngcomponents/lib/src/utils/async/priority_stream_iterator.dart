@@ -19,7 +19,7 @@ class PriorityStreamIterator<T extends Comparable<Object>>
 
   /// Create a [PriorityStreamIterator] on [stream] with an optional
   /// [comparison] function. If [comparison] is not provided, [T] must implement
-  /// Comparable<T>.
+  /// `Comparable<T>`.
   PriorityStreamIterator(Stream<T> stream, [int comparison(T a, T b)?])
     : _iterator = StreamIterator(stream),
       _queue = _StablePriorityQueue<T>(comparison) {

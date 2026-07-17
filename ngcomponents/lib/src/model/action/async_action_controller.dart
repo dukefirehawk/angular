@@ -12,7 +12,7 @@ import 'async_action.dart';
 /// The AsyncAction implementation defers to the controller for its state, and
 /// the sequencing of futures to resolve the execution.
 ///
-/// <V> Is the value type returned/resolved by the execution closure.
+/// `<V>` Is the value type returned/resolved by the execution closure.
 class AsyncActionController<V> {
   // The controller uses the indirection of a [Completer] in order to coalesce
   // subscribers to [AsyncAction#onDone] and to provide a [Future] for
@@ -37,13 +37,14 @@ class AsyncActionController<V> {
   AsyncAction<V>? get action {
     if (_action == null) {
       _action = AsyncAction<V>(
-          _executeCompleter.future,
-          _deferCompleter.future,
-          _futureCancellations,
-          _executionDeferrals,
-          () => _locked,
-          () => _cancelled,
-          () => _done);
+        _executeCompleter.future,
+        _deferCompleter.future,
+        _futureCancellations,
+        _executionDeferrals,
+        () => _locked,
+        () => _cancelled,
+        () => _done,
+      );
     }
     return _action;
   }
@@ -55,8 +56,11 @@ class AsyncActionController<V> {
   /// have completed. If [exec] returns a future, its result is piped through to
   /// the [onDone] future, otherwise, the [onDone] future is completed with the
   /// result.
-  Future<void> execute(dynamic Function() exec,
-      {dynamic Function()? onCancel, V? valueOnCancel}) {
+  Future<void> execute(
+    dynamic Function() exec, {
+    dynamic Function()? onCancel,
+    V? valueOnCancel,
+  }) {
     // This function is very time-sensitive.
     // We are using explicit `Future`s to avoid breaking changes when the
     // behavior of `async` changes.
@@ -112,10 +116,11 @@ class AsyncActionController<V> {
     // We are using explicit `Future`s to avoid breaking changes when the
     // behavior of `async` changes.
     return Future.microtask(() {
-      return Future.wait(_futureCancellations)
-          .then((results) => results.any((cancel) {
-                return cancel == true;
-              }));
+      return Future.wait(_futureCancellations).then(
+        (results) => results.any((cancel) {
+          return cancel == true;
+        }),
+      );
     });
   }
 

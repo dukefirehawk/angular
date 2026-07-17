@@ -323,8 +323,11 @@ class SingleDayRange implements DatepickerDateRange {
   final int _ago;
   final RangeTitle _titleFunction;
   SingleDayRange(this._date, this._ago, [this._titleFunction = _defaultTitle]);
-  SingleDayRange.daysAgo(clock, ago, [RangeTitle titleFunction = _defaultTitle])
-    : this(Date.today(clock).add(days: -ago), ago, titleFunction);
+  SingleDayRange.daysAgo(
+    Clock clock,
+    ago, [
+    RangeTitle titleFunction = _defaultTitle,
+  ]) : this(Date.today(clock).add(days: -ago), ago, titleFunction);
 
   String get title => _titleFunction(_ago);
   Date get start => _date;
@@ -416,7 +419,7 @@ class LastNDaysRange extends MultipleDaysRange {
   LastNDaysRange(Date start, int lengthInDays, [String? title])
     : super(start, lengthInDays, title ?? _lastNDaysMsg(lengthInDays));
 
-  LastNDaysRange.beforeToday(clock, lengthInDays, [String? title])
+  LastNDaysRange.beforeToday(Clock clock, int lengthInDays, [String? title])
     : super(
         Date.today(clock).add(days: -lengthInDays),
         lengthInDays,
@@ -448,12 +451,15 @@ class LastNDaysToTodayRange extends MultipleDaysRange {
   LastNDaysToTodayRange(Date start, int lengthInDays, [String? title])
     : super(start, lengthInDays, title ?? _lastNDaysToTodayMsg(lengthInDays));
 
-  LastNDaysToTodayRange.beforeToday(clock, lengthInDays, [String? title])
-    : super(
-        Date.today(clock).add(days: -(lengthInDays - 1)),
-        lengthInDays,
-        title ?? _lastNDaysToTodayMsg(lengthInDays),
-      );
+  LastNDaysToTodayRange.beforeToday(
+    Clock clock,
+    int lengthInDays, [
+    String? title,
+  ]) : super(
+         Date.today(clock).add(days: -(lengthInDays - 1)),
+         lengthInDays,
+         title ?? _lastNDaysToTodayMsg(lengthInDays),
+       );
 
   proto.DatepickerDateRange toProtoBuf() =>
       _makeProtoBuf(this)..lastNDaysToToday = _lengthInDays;
@@ -480,12 +486,15 @@ class NextNDaysFromTodayRange extends MultipleDaysRange {
   NextNDaysFromTodayRange(Date start, int lengthInDays, [String? title])
     : super(start, lengthInDays, title ?? _nextNDaysFromTodayMsg(lengthInDays));
 
-  NextNDaysFromTodayRange.afterToday(clock, lengthInDays, [String? title])
-    : super(
-        Date.today(clock),
-        lengthInDays,
-        title ?? _nextNDaysFromTodayMsg(lengthInDays),
-      );
+  NextNDaysFromTodayRange.afterToday(
+    Clock clock,
+    int lengthInDays, [
+    String? title,
+  ]) : super(
+         Date.today(clock),
+         lengthInDays,
+         title ?? _nextNDaysFromTodayMsg(lengthInDays),
+       );
 
   proto.DatepickerDateRange toProtoBuf() =>
       _makeProtoBuf(this)..nextNDaysFromToday = _lengthInDays;
@@ -528,15 +537,15 @@ class WeekRange implements DatepickerDateRange {
   /// Tuesday, etc. It defaults to the first day of the week specified in the
   /// current locale.
   WeekRange.weeksAgo(
-    clock,
-    ago, {
+    Clock clock,
+    int ago, {
     RangeTitle titleFunction = _defaultTitle,
     int? startWeekday,
   }) : this(
          _weekStart(
            Date.today(clock),
            startWeekday ?? (DateFormat().dateSymbols.FIRSTDAYOFWEEK + 1),
-         ).add(days: -7 * ago as int),
+         ).add(days: -7 * ago),
          ago,
          titleFunction,
          startWeekday,
@@ -767,7 +776,7 @@ class BroadcastMonthRange implements DatepickerDateRange {
       ? _broadcastMonthsAgoMsg(broadcastMonthsAgo)
       : _broadcastMonthsFromNowMsg(-broadcastMonthsAgo);
 
-  static String _broadcastMonthsAgoMsg(broadcastMonthsAgo) => Intl.plural(
+  static String _broadcastMonthsAgoMsg(int broadcastMonthsAgo) => Intl.plural(
     broadcastMonthsAgo,
     zero: 'This broadcast month',
     one: 'Last broadcast month',
@@ -778,7 +787,7 @@ class BroadcastMonthRange implements DatepickerDateRange {
     examples: const {'broadcastMonthsAgo': 2},
   );
 
-  static String _broadcastMonthsFromNowMsg(broadcastMonthsFromNow) =>
+  static String _broadcastMonthsFromNowMsg(int broadcastMonthsFromNow) =>
       Intl.plural(
         broadcastMonthsFromNow,
         zero: 'This broadcast month',
@@ -798,8 +807,11 @@ class YearRange implements DatepickerDateRange {
   final RangeTitle _titleFunction;
   YearRange(Date start, this._ago, [this._titleFunction = _defaultTitle])
     : _start = Date(start.year, 1, 1);
-  YearRange.yearsAgo(clock, ago, [RangeTitle titleFunction = _defaultTitle])
-    : this(Date.today(clock).add(years: -ago), ago, titleFunction);
+  YearRange.yearsAgo(
+    Clock clock,
+    int ago, [
+    RangeTitle titleFunction = _defaultTitle,
+  ]) : this(Date.today(clock).add(years: -ago), ago, titleFunction);
 
   String get title => _titleFunction(_ago);
   Date get start => _start;

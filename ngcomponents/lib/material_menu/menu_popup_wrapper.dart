@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -150,7 +151,7 @@ abstract mixin class MenuPopupTrigger {
   // See the 'Keyboard Interaction' section on this page:
   // https://www.w3.org/TR/wai-aria-practices/#menubutton
   void handlePopupTriggerAction(UIEvent event) {
-    if (event is KeyboardEvent) {
+    if (event.isA<KeyboardEvent>()) {
       _trigger(const ExpandAction.withFirstItemFocused());
     } else {
       _trigger(const ExpandAction.withNoFocus());

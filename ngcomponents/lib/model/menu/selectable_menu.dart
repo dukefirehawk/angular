@@ -4,7 +4,6 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:observable/observable.dart';
-import 'package:quiver/core.dart' show Optional;
 import 'package:quiver/strings.dart';
 import 'package:ngcomponents/model/menu/menu.dart';
 import 'package:ngcomponents/model/selection/select.dart';
@@ -35,17 +34,17 @@ class MenuItemGroupWithSelection<SelectionItemType>
   /// If true, the current menu should be closed when this item is selected.
   final bool shouldCloseMenuOnSelection;
 
-  MenuItemGroupWithSelection(
-      {required List<SelectableMenuItem<SelectionItemType>> items,
-      required this.selectionModel,
-      String? label,
-      bool? shouldCloseMenuOnSelection})
-      : shouldCloseMenuOnSelection = shouldCloseMenuOnSelection ??
-            selectionModel is! MultiSelectionModel,
-        itemsRole = (selectionModel.isSingleSelect)
-            ? 'menuitemradio'
-            : 'menuitemcheckbox',
-        super(items, label);
+  MenuItemGroupWithSelection({
+    required List<SelectableMenuItem<SelectionItemType>> items,
+    required this.selectionModel,
+    String? label,
+    bool? shouldCloseMenuOnSelection,
+  }) : shouldCloseMenuOnSelection =
+           shouldCloseMenuOnSelection ?? selectionModel is! MultiSelectionModel,
+       itemsRole = (selectionModel.isSingleSelect)
+           ? 'menuitemradio'
+           : 'menuitemcheckbox',
+       super(items, label);
 
   /// True if the selection model is multi-select.
   ///
@@ -123,33 +122,37 @@ class SelectableMenuItem<ItemType> extends PropertyChangeNotifier
   ///     convenient way to pass a single item suffix in rather than
   ///     constructing an ObservableList and using [itemSuffixes]. If
   ///     [itemSuffixes] is also passed in, [itemSuffixes] takes precedence.
-  SelectableMenuItem(
-      {required this.value,
-      this.itemRenderer = defaultItemRenderer,
-      Icon? icon,
-      MenuModel? subMenu,
-      this.tooltip = '',
-      this.secondaryLabel = '',
-      this.labelAnnotation = '',
-      Iterable<String>? cssClasses,
-      MenuAction? action,
-      ActionWithContext? actionWithContext,
-      SelectableOption selectableState = SelectableOption.Selectable,
-      bool? shouldSelectOnItemClick,
-      MenuItemAffix? itemSuffix,
-      ObservableList<MenuItemAffix>? itemSuffixes})
-      : _selectableState = selectableState,
-        this.subMenu = subMenu ?? MenuModel([]),
-        this.icon = icon ?? Icon.blank(),
-        shouldSelectOnItemClick = shouldSelectOnItemClick ?? subMenu == null,
-        itemSuffixes = itemSuffixes ??
-            ObservableList<MenuItemAffix>.from(
-                Optional.fromNullable(itemSuffix)),
-        cssClasses = BuiltList<String>((cssClasses ?? const <String>[])) {
-    assert(itemSuffix == null || itemSuffixes == null,
-        'Only one of itemSuffix or itemSuffixes should be provided');
-    assert(action == null || actionWithContext == null,
-        'Only one of action or actionWithContext should be provided');
+  SelectableMenuItem({
+    required this.value,
+    this.itemRenderer = defaultItemRenderer,
+    Icon? icon,
+    MenuModel? subMenu,
+    this.tooltip = '',
+    this.secondaryLabel = '',
+    this.labelAnnotation = '',
+    Iterable<String>? cssClasses,
+    MenuAction? action,
+    ActionWithContext? actionWithContext,
+    SelectableOption selectableState = SelectableOption.Selectable,
+    bool? shouldSelectOnItemClick,
+    MenuItemAffix? itemSuffix,
+    ObservableList<MenuItemAffix>? itemSuffixes,
+  }) : _selectableState = selectableState,
+       this.subMenu = subMenu ?? MenuModel([]),
+       this.icon = icon ?? Icon.blank(),
+       shouldSelectOnItemClick = shouldSelectOnItemClick ?? subMenu == null,
+       itemSuffixes =
+           itemSuffixes ??
+           ObservableList<MenuItemAffix>.from(itemSuffix as Iterable<dynamic>),
+       cssClasses = BuiltList<String>((cssClasses ?? const <String>[])) {
+    assert(
+      itemSuffix == null || itemSuffixes == null,
+      'Only one of itemSuffix or itemSuffixes should be provided',
+    );
+    assert(
+      action == null || actionWithContext == null,
+      'Only one of action or actionWithContext should be provided',
+    );
     if (action != null) {
       _action = action;
       _actionWithContext = (_) => action();
@@ -188,8 +191,9 @@ class SelectableMenuItem<ItemType> extends PropertyChangeNotifier
 
   @override
   set enabled(bool value) {
-    selectableState =
-        value ? SelectableOption.Selectable : SelectableOption.Disabled;
+    selectableState = value
+        ? SelectableOption.Selectable
+        : SelectableOption.Disabled;
   }
 
   MenuAction? get action => _action;

@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:js_interop';
+
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -25,7 +27,7 @@ const materialTreeLeftPaddingToken = OpaqueToken(
 /// It must be rendered as a child of a [MaterialTreeRoot] implementation.
 ///
 /// __Example use__:
-///     <material-tree-group [group]="group"></material-tree-group>
+///     `<material-tree-group [group]="group"></material-tree-group>`
 @Component(
   selector: 'material-tree-group',
   changeDetection: ChangeDetectionStrategy.onPush,
@@ -113,14 +115,14 @@ class MaterialTreeGroupComponent<T> extends MaterialTreeNode<T?>
   @HostBinding('class.material-tree-group')
   final bool isMaterialTreeGroup = true;
 
-  bool showCheckbox(option) =>
+  bool showCheckbox(dynamic option) =>
       showSelectionState &&
       (isSelectable(option) || showDisabledCheckbox(option));
 
   // This returns the item indentation based on it's level.
   // Level 0 means it's the higher parent in the hierarchy, and it gets
   // a constant definition.
-  String getIndent(option) {
+  String getIndent(dynamic option) {
     int padding = 0;
     if (level > 0) {
       padding += (level - 1) * rowIndentationStep;
@@ -161,7 +163,7 @@ class MaterialTreeGroupComponent<T> extends MaterialTreeNode<T?>
       // Handle shift + select behavior for multi-selection.
       if (isMultiSelect &&
           previouslyToggledNode != null &&
-          (e is MouseEvent && e.shiftKey)) {
+          (e.isA<MouseEvent>() && (e as MouseEvent).shiftKey)) {
         toggleSelectionRangeInclusive(
           previouslyToggledNode,
           option as T,

@@ -3,8 +3,8 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async' show Stream, StreamController;
-import 'dart:html'
-    show Element, NodeValidator, NodeValidatorBuilder, UIEvent, UriPolicy;
+import 'dart:js_interop';
+
 
 import 'package:ngdart/angular.dart';
 import 'package:logging/logging.dart' show Logger;
@@ -13,6 +13,7 @@ import 'package:ngcomponents/utils/angular/properties/properties.dart';
 import 'package:ngcomponents/utils/browser/dom_service/dom_service.dart'
     show DomService;
 import 'package:ngcomponents/utils/disposer/disposer.dart' show Disposer;
+import 'package:web/web.dart';
 
 /// Injection token for the URI whitelist. This whitelist defines which URIs
 /// may be valid targets for links.
@@ -78,19 +79,21 @@ class SimpleHtmlComponent extends _SimpleHtmlBase {
   final Element _element;
 
   SimpleHtmlComponent(
-      DomService domService,
-      this._element,
-      @Optional() @Inject(simpleHtmlUriWhitelist) List<Uri>? domainWhitelist,
-      @Attribute('doNotVerifyUrlDestinations') String? externalUrisAllowed)
-      : super(
-            domService,
-            _inlineElementValidatorBuilder(
-                domainWhitelist ?? _defaultUriWhitelist,
-                attributeToBool(externalUrisAllowed)));
+    DomService domService,
+    this._element,
+    @Optional() @Inject(simpleHtmlUriWhitelist) List<Uri>? domainWhitelist,
+    @Attribute('doNotVerifyUrlDestinations') String? externalUrisAllowed,
+  ) : super(
+        domService,
+        _inlineElementValidatorBuilder(
+          domainWhitelist ?? _defaultUriWhitelist,
+          attributeToBool(externalUrisAllowed),
+        ),
+      );
 
   @override
   Element? get targetElement =>
-      _element.children.isEmpty ? null : _element.children.single;
+      _element.children.length == 0 ? null : _element.children.item(0);
 }
 
 @Component(
@@ -103,18 +106,21 @@ class SimpleHtmlBlockComponent extends _SimpleHtmlBase {
   final Element _element;
 
   SimpleHtmlBlockComponent(
-      DomService domService,
-      this._element,
-      @Optional() @Inject(simpleHtmlUriWhitelist) List<Uri>? domainWhitelist,
-      @Attribute('doNotVerifyUrlDestinations') String? externalUrisAllowed)
-      : super(
-            domService,
-            _elementValidator(domainWhitelist ?? _defaultUriWhitelist,
-                attributeToBool(externalUrisAllowed)));
+    DomService domService,
+    this._element,
+    @Optional() @Inject(simpleHtmlUriWhitelist) List<Uri>? domainWhitelist,
+    @Attribute('doNotVerifyUrlDestinations') String? externalUrisAllowed,
+  ) : super(
+        domService,
+        _elementValidator(
+          domainWhitelist ?? _defaultUriWhitelist,
+          attributeToBool(externalUrisAllowed),
+        ),
+      );
 
   @override
   Element? get targetElement =>
-      _element.children.isEmpty ? null : _element.children.single;
+      _element.children.length == 0 ? null : _element.children.item(0);
 }
 
 /// A class implementing the core SimpleHTML behaviour of sanitizing content
@@ -128,13 +134,14 @@ abstract class _SimpleHtmlBase implements OnDestroy {
 
   final DomService _domService;
   Element? _cachedTargetElement;
-  final _triggerStreamController =
-      StreamController<UIEvent>.broadcast(sync: true);
+  final _triggerStreamController = StreamController<UIEvent>.broadcast(
+    sync: true,
+  );
   final _subscriptionDisposer = Disposer.multi();
   final _SimpleHtmlNodeValidator _nodeValidator;
 
   _SimpleHtmlBase(this._domService, NodeValidator baseValidator)
-      : _nodeValidator = _SimpleHtmlNodeValidator(baseValidator);
+    : _nodeValidator = _SimpleHtmlNodeValidator(baseValidator);
 
   /// The element into which the sanitized HTML should be injected.
   ///
@@ -150,44 +157,97 @@ abstract class _SimpleHtmlBase implements OnDestroy {
     _subscriptionDisposer.dispose();
   }
 
+  void _sanitizeAndSetHtml(HTMLElement element, String html, NodeValidator validator) {
+    final template = document.createElement('template') as HTMLTemplateElement;
+    template.innerHTML = html.toJS;
+    
+    void sanitizeNode(Node node) {
+      if (node.nodeType == 1) { // Node.ELEMENT_NODE
+        final elem = node as Element;
+        if (!validator.allowsElement(elem)) {
+          elem.remove();
+          return;
+        }
+        
+        final attrs = elem.attributes;
+        final attrNames = <String>[];
+        for (var i = 0; i < attrs.length; i++) {
+          final attr = attrs.item(i);
+          if (attr != null) attrNames.add(attr.name);
+        }
+        
+        for (final name in attrNames) {
+          final value = elem.getAttribute(name) ?? '';
+          if (!validator.allowsAttribute(elem, name, value)) {
+            elem.removeAttribute(name);
+          }
+        }
+      }
+      
+      var child = node.firstChild;
+      while (child != null) {
+        var next = child.nextSibling;
+        sanitizeNode(child);
+        child = next;
+      }
+    }
+    
+    var child = template.content.firstChild;
+    while (child != null) {
+      var next = child.nextSibling;
+      sanitizeNode(child);
+      child = next;
+    }
+    
+    element.innerHTML = ''.toJS;
+    element.appendChild(template.content);
+  }
+
   /// HTML to display in the component.
   @Input()
   set contents(String value) => _domService.scheduleWrite(() {
-        // Cache the target element, if we haven't done so already.
-        _cachedTargetElement ??= targetElement;
+    // Cache the target element, if we haven't done so already.
+    _cachedTargetElement ??= targetElement;
 
-        // If there are existing listeners, dispose of them now.
-        _subscriptionDisposer.dispose();
+    // If there are existing listeners, dispose of them now.
+    _subscriptionDisposer.dispose();
 
-        // If there is no target element, there is nothing else to do.
-        if (_cachedTargetElement == null) return;
+    // If there is no target element, there is nothing else to do.
+    if (_cachedTargetElement == null) return;
 
-        // Update the DOM.
-        try {
-          _cachedTargetElement!.setInnerHtml(value, validator: _nodeValidator);
-        } catch (e) {
-          if (e is _UnsafeUriError) {
-            _logger.shout('simple-html used untrusted URI: $e', e);
-          } else if (e is _MalformedElementError) {
-            _logger.shout('simple-html used malformed element: $e', e);
-          } else {
-            rethrow;
-          }
-        }
+    // Update the DOM.
+    try {
+      _sanitizeAndSetHtml(_cachedTargetElement as HTMLElement, value, _nodeValidator);
+    } catch (e) {
+      if (e is _UnsafeUriError) {
+        _logger.shout('simple-html used untrusted URI: $e', e);
+      } else if (e is _MalformedElementError) {
+        _logger.shout('simple-html used malformed element: $e', e);
+      } else {
+        rethrow;
+      }
+    }
 
-        // Register new click listeners if necessary. Do this through a
-        // scheduled read to ensure the above setInnerHtml has fully resolved
-        // before probing the DOM again.
-        _domService.scheduleRead(() {
-          // Instruct each trigger element to send its events to
-          // _triggerStreamController and register that subscription for later
-          // clean-up (e.g. when this component is destroyed).
-          _cachedTargetElement!
-              .querySelectorAll(_triggerSelector)
-              .map((link) => link.onClick.listen(_triggerStreamController.add))
-              .forEach(_subscriptionDisposer.addStreamSubscription);
+    // Register new click listeners if necessary. Do this through a
+    // scheduled read to ensure the above setInnerHtml has fully resolved
+    // before probing the DOM again.
+    _domService.scheduleRead(() {
+      // Instruct each trigger element to send its events to
+      // _triggerStreamController and register that subscription for later
+      // clean-up (e.g. when this component is destroyed).
+      final triggers = _cachedTargetElement!.querySelectorAll(_triggerSelector);
+      for (var i = 0; i < triggers.length; i++) {
+        final link = triggers.item(i) as HTMLElement;
+        final callback = ((Event event) {
+          _triggerStreamController.add(event as UIEvent);
+        }).toJS;
+        link.addEventListener('click', callback);
+        _subscriptionDisposer.addFunction(() {
+          link.removeEventListener('click', callback);
         });
-      });
+      }
+    });
+  });
 
   /// Propagates events from internal anchor elements with the class trigger
   /// sending the original angular event.
@@ -195,14 +255,61 @@ abstract class _SimpleHtmlBase implements OnDestroy {
   Stream<UIEvent> get trigger => _triggerStreamController.stream;
 }
 
+abstract class NodeValidator {
+  bool allowsElement(Element element);
+  bool allowsAttribute(Element element, String attributeName, String value);
+}
+
+abstract class UriPolicy {
+  bool allowsUri(String uri);
+}
+
+class _AllowedElement {
+  final Set<String> attributes;
+  final UriPolicy? uriPolicy;
+  _AllowedElement(this.attributes, this.uriPolicy);
+}
+
+class NodeValidatorBuilder implements NodeValidator {
+  final Map<String, _AllowedElement> _allowedElements = {};
+
+  void allowElement(String tagName, {List<String>? attributes, UriPolicy? uriPolicy}) {
+    _allowedElements[tagName.toLowerCase()] = _AllowedElement(
+      attributes?.map((a) => a.toLowerCase()).toSet() ?? {},
+      uriPolicy,
+    );
+  }
+
+  @override
+  bool allowsElement(Element element) {
+    return _allowedElements.containsKey(element.tagName.toLowerCase());
+  }
+
+  @override
+  bool allowsAttribute(Element element, String attributeName, String value) {
+    final tagName = element.tagName.toLowerCase();
+    final allowed = _allowedElements[tagName];
+    if (allowed == null) return false;
+    
+    final attrName = attributeName.toLowerCase();
+    if (!allowed.attributes.contains(attrName)) return false;
+    
+    if (allowed.uriPolicy != null && (attrName == 'href' || attrName == 'src')) {
+      return allowed.uriPolicy!.allowsUri(value);
+    }
+    
+    return true;
+  }
+}
+
 class _UnsafeUriError extends ArgumentError {
   _UnsafeUriError(String uri, String reason)
-      : super('Unsafe URI $uri because $reason');
+    : super('Unsafe URI $uri because $reason');
 }
 
 class _MalformedElementError extends ArgumentError {
   _MalformedElementError(Element element, String description)
-      : super('Element $element was malformed: $description');
+    : super('Element $element was malformed: $description');
 }
 
 /// A [NodeValidator] which allows only a strict subset of HTML. See
@@ -229,20 +336,25 @@ class _SimpleHtmlNodeValidator implements NodeValidator {
     // <a> tags with target="..." are allowed only if rel="noopener" is set.
     // Spec for the rel attribute is here:
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Link_types
+    var elem = element as HTMLElement;
     if (element.tagName.toLowerCase() == 'a' && attributeName == 'target') {
-      if (!element.attributes.containsKey('rel')) {
+      if (!elem.hasAttribute('rel')) {
         throw _MalformedElementError(element, 'did not set rel attribute');
       }
-      final rel = element.attributes['rel']!;
+      final rel = elem.getAttribute('rel') ?? '';
       if (!rel.split(' ').contains('noopener')) {
         throw _MalformedElementError(
-            element, 'did not set link type noopener (only $rel)');
+          element,
+          'did not set link type noopener (only $rel)',
+        );
       }
     }
 
     if (!_baseValidator.allowsAttribute(element, attributeName, value)) {
       throw _MalformedElementError(
-          element, 'prohibited attribute $attributeName with value $value');
+        element,
+        'prohibited attribute $attributeName with value $value',
+      );
     }
 
     return true;
@@ -270,11 +382,15 @@ class _SafeUriPolicy implements UriPolicy {
   final List<Uri> _uriWhitelist;
 
   _SafeUriPolicy(List<Uri> uriWhitelist)
-      : _uriWhitelist = List.unmodifiable(uriWhitelist) {
-    _uriWhitelist.forEach((uri) => checkArgument(
+    : _uriWhitelist = List.unmodifiable(uriWhitelist) {
+    _uriWhitelist.forEach(
+      (uri) => checkArgument(
         uri.path.isEmpty || uri.path.endsWith('/'),
-        message: 'Whitelisted URIs with a path must end with a slash, which '
-            '$uri does not'));
+        message:
+            'Whitelisted URIs with a path must end with a slash, which '
+            '$uri does not',
+      ),
+    );
   }
 
   @override
@@ -305,9 +421,11 @@ class _SafeUriPolicy implements UriPolicy {
   bool _isWhitelistedUri(Uri candidateUri) {
     // Note that whitelistedUri.path may be empty, in which case the prefix
     // check is trivial but still correct.
-    return _uriWhitelist.any((whitelistedUri) =>
-        whitelistedUri.origin == candidateUri.origin &&
-        candidateUri.path.startsWith(whitelistedUri.path));
+    return _uriWhitelist.any(
+      (whitelistedUri) =>
+          whitelistedUri.origin == candidateUri.origin &&
+          candidateUri.path.startsWith(whitelistedUri.path),
+    );
   }
 }
 
@@ -324,7 +442,9 @@ class _ExternalUriAllowedPolicy implements UriPolicy {
     // URI schemes.
     if (!_externalUriAllowedSchemes.contains(resolvedUri.scheme)) {
       throw _UnsafeUriError(
-          rawUri, 'URI scheme ${resolvedUri.scheme} not allowed');
+        rawUri,
+        'URI scheme ${resolvedUri.scheme} not allowed',
+      );
     }
 
     return true;
@@ -337,15 +457,19 @@ class _ExternalUriAllowedPolicy implements UriPolicy {
 /// The returned object is mutable so users should be careful about sharing
 /// them.
 NodeValidatorBuilder _inlineElementValidatorBuilder(
-    List<Uri> domainWhitelist, bool externalUrisAllowed) {
+  List<Uri> domainWhitelist,
+  bool externalUrisAllowed,
+) {
   UriPolicy policy = externalUrisAllowed
       ? _ExternalUriAllowedPolicy()
       : _SafeUriPolicy(domainWhitelist);
 
   return NodeValidatorBuilder()
-    ..allowElement('a',
-        attributes: ['class', 'href', 'rel', 'target', 'title'],
-        uriPolicy: policy)
+    ..allowElement(
+      'a',
+      attributes: ['class', 'href', 'rel', 'target', 'title'],
+      uriPolicy: policy,
+    )
     ..allowElement('b', attributes: ['class'])
     ..allowElement('br', attributes: ['class'])
     ..allowElement('em', attributes: ['class'])
@@ -357,8 +481,9 @@ NodeValidatorBuilder _inlineElementValidatorBuilder(
 /// Returns a new [NodeValidator] which allows all SimpleHtml-permissible
 /// elements (both inline and block level).
 NodeValidator _elementValidator(
-        List<Uri> domainWhitelist, bool externalUrisAllowed) =>
-    _inlineElementValidatorBuilder(domainWhitelist, externalUrisAllowed)
-      ..allowElement('p', attributes: ['class'])
-      ..allowElement('ul', attributes: ['class'])
-      ..allowElement('li', attributes: ['class']);
+  List<Uri> domainWhitelist,
+  bool externalUrisAllowed,
+) => _inlineElementValidatorBuilder(domainWhitelist, externalUrisAllowed)
+  ..allowElement('p', attributes: ['class'])
+  ..allowElement('ul', attributes: ['class'])
+  ..allowElement('li', attributes: ['class']);

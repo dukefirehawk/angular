@@ -34,8 +34,9 @@ class MaterialTabPanelComponent implements AfterContentInit {
   /// changing.
   @Output()
   Stream<TabChangeEvent> get beforeTabChange => _beforeTabChange.stream;
-  final _beforeTabChange =
-      StreamController<TabChangeEvent>.broadcast(sync: true);
+  final _beforeTabChange = StreamController<TabChangeEvent>.broadcast(
+    sync: true,
+  );
 
   /// Stream of [TabChangeEvent] instances, published when the tab has changed.
   @Output()
@@ -52,7 +53,7 @@ class MaterialTabPanelComponent implements AfterContentInit {
   ///
   /// Default is 0.
   @Input()
-  set activeTabIndex(index) {
+  set activeTabIndex(int index) {
     // Tabs are already initialized; this is a programmatic tab change.
     if (_tabs.isNotEmpty) {
       _setActiveTab(index, true);

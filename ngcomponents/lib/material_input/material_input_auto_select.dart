@@ -17,8 +17,8 @@ import 'base_material_input.dart';
 /// ACX team if you have a use case for the same.
 ///
 /// __Example usage:__
-///     <material-input autoSelect ngModel="Auto-selecting input">
-///     </material-input>
+///     `<material-input autoSelect ngModel="Auto-selecting input">`
+///     `</material-input>`
 @Directive(selector: 'material-input[autoSelect]:not([multiline])')
 class MaterialInputAutoSelectDirective implements OnDestroy {
   final _disposer = Disposer.oneShot();
@@ -30,16 +30,18 @@ class MaterialInputAutoSelectDirective implements OnDestroy {
   bool autoSelect = true;
 
   MaterialInputAutoSelectDirective(BaseMaterialInput input) {
-    _disposer.addStreamSubscription(input.onFocus.listen((event) {
-      if (!autoSelect) return;
+    _disposer.addStreamSubscription(
+      input.onFocus.listen((event) {
+        if (!autoSelect) return;
 
-      // Selection of the text needs to be delayed a bit because in some
-      // browsers click event fires after the focus event causing text selection
-      // to be lost.
-      // Please visit go/acx-input-auto-select-directive for more details.
-      _selectionTimer?.cancel();
-      _selectionTimer = Timer(Duration(milliseconds: 30), input.selectAll);
-    }));
+        // Selection of the text needs to be delayed a bit because in some
+        // browsers click event fires after the focus event causing text selection
+        // to be lost.
+        // Please visit go/acx-input-auto-select-directive for more details.
+        _selectionTimer?.cancel();
+        _selectionTimer = Timer(Duration(milliseconds: 30), input.selectAll);
+      }),
+    );
   }
 
   @override

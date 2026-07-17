@@ -50,7 +50,7 @@ class DelayedAction {
     return start();
   }
 
-  void _reset(complete) {
+  void _reset(dynamic complete) {
     _timer?.cancel();
     _timer = null;
     _completer?.complete(complete);

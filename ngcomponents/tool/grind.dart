@@ -4,7 +4,7 @@ import 'package:grinder/grinder.dart';
 
 import 'package:path/path.dart' as p;
 
-main(args) => grind(args);
+void main(List<String> args) => grind(args);
 
 @DefaultTask()
 Future<void> analyze() async {
@@ -26,15 +26,17 @@ Future<void> analyze() async {
       .transform(utf8.decoder)
       .transform(const LineSplitter())
       .forEach((element) {
-    final output = element.split('|');
+        final output = element.split('|');
 
-    if (output[2].contains('DEPRECATED')) {
-      need_migrate.add(output[3]);
-    }
-  });
+        if (output[2].contains('DEPRECATED')) {
+          need_migrate.add(output[3]);
+        }
+      });
 
   log('${((1 - need_migrate.length / count) * 100).round()}% Done!');
-  log('${need_migrate.length} out of $count files are still using deprecated API!\n');
+  log(
+    '${need_migrate.length} out of $count files are still using deprecated API!\n',
+  );
 
   need_migrate.forEach((element) {
     print('- [ ] ${p.relative(element, from: 'lib')}');

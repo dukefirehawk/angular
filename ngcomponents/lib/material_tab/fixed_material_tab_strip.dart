@@ -135,7 +135,7 @@ class FixedMaterialTabStripComponent implements AfterViewInit {
 
   @visibleForTemplate
   @ViewChild('navibar')
-  HtmlElement? naviBar;
+  HTMLElement? naviBar;
 
   @HostListener('focusout')
   void focusOutHandler(FocusEvent e) {

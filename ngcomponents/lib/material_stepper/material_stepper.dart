@@ -208,7 +208,7 @@ class MaterialStepperComponent {
   /// This is helpful for ensuring that animations don't go above or behind
   /// the stepper.
   @ViewChild('stepper')
-  HtmlElement? stepperNativeElement;
+  HTMLElement? stepperNativeElement;
 
   /// Because of the button decorator enclosing the inline portal eats up
   /// SPACE and ENTER key-presses (by preventing the default on them),

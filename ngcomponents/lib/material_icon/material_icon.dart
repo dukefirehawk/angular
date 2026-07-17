@@ -75,7 +75,7 @@ class MaterialIconComponent {
   /// The icon identifier.
   String get iconName => _icon is Icon ? _icon.name : _icon;
 
-  final HtmlElement _element;
+  final HTMLElement _element;
 
   MaterialIconComponent(this._element);
 }

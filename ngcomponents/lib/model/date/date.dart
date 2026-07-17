@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-/// Contains date-related models.
+// Contains date-related models.
 
 import 'dart:async';
 
@@ -17,7 +17,7 @@ class Date extends Comparators<Date?> {
   final DateTime _time;
 
   Date(int year, [int month = 1, int day = 1])
-      : _time = DateTime.utc(year, month, day);
+    : _time = DateTime.utc(year, month, day);
 
   /// Extracts the [Date] from the given time.
   ///
@@ -57,8 +57,10 @@ class Date extends Comparators<Date?> {
   factory Date.today([Clock? clock]) {
     var now = (clock ?? const Clock()).now();
     if (now.timeZoneOffset.inMicroseconds.isNaN) {
-      throw StateError('Clock $clock returned a time with a NaN timezone '
-          'offset: $now');
+      throw StateError(
+        'Clock $clock returned a time with a NaN timezone '
+        'offset: $now',
+      );
     }
     return Date.fromTime(now);
   }
@@ -112,6 +114,12 @@ class Date extends Comparators<Date?> {
   @override
   String toString() =>
       '${asUtcTime().year}-${asUtcTime().month}-${asUtcTime().day}';
+
+  @override
+  bool operator ==(Object other) {
+    // TODO: implement ==
+    return super == other;
+  }
 }
 
 /// The number of days spanned by the range defined by the two dates. Defaults
@@ -205,9 +213,11 @@ bool rangeContains(DateRange range, Date? date) =>
 /// Inclusive, and treats a null [range.start], [range.end], [subrange.start],
 /// [subrange.end] as unbounded.
 bool rangeContainsRange(DateRange range, DateRange subrange) {
-  final containsStart = (range.start == null && subrange.start == null) ||
+  final containsStart =
+      (range.start == null && subrange.start == null) ||
       (subrange.start != null && rangeContains(range, subrange.start));
-  final containsEnd = (range.end == null && subrange.end == null) ||
+  final containsEnd =
+      (range.end == null && subrange.end == null) ||
       (subrange.end != null && rangeContains(range, subrange.end));
   return containsStart && containsEnd;
 }
@@ -233,7 +243,8 @@ Iterable<Date> enumerateRange(DateRange? range) {
   }
   if (range.start == null || range.end == null) {
     throw ArgumentError(
-        'Cannot call enumerateRange with a range with a null start or end.');
+      'Cannot call enumerateRange with a range with a null start or end.',
+    );
   }
   return enumerateDates(range.start!, range.end);
 }
@@ -261,7 +272,7 @@ class DatepickerSelection extends ObservableViewMixin<DateRangeComparison?> {
   /// [ObservableReference] but doesn't give you any way of disposing of its
   /// streams, so it'd result in memory leaks in prod.
   DatepickerSelection.test([DateRangeComparison? initialValue])
-      : _ref = ObservableReference(initialValue);
+    : _ref = ObservableReference(initialValue);
 
   @override
   DateRangeComparison? get value => _ref.value;

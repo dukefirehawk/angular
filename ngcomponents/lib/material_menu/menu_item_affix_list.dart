@@ -10,7 +10,6 @@ import 'package:ngcomponents/interfaces/has_disabled.dart';
 import 'package:ngcomponents/material_menu/affix/base_affix.dart';
 import 'package:ngcomponents/model/menu/menu_item_affix.dart';
 import 'package:observable/observable.dart';
-import 'package:quiver/core.dart' as qc;
 
 /// Renders the list of menu item affixes.
 ///
@@ -74,8 +73,10 @@ class MenuItemAffixListComponent implements HasDisabled, OnDestroy {
 
   void _clearChildren() {
     viewRef?.clear();
-    for (final ref in _affixComponentRefs.expand((ref) => ref.componentRef)) {
-      ref.destroy();
+    for (final ref in _affixComponentRefs) {
+      if (ref.componentRef != null) {
+        ref.componentRef!.destroy();
+      }
     }
     _affixComponentRefs.clear();
   }
@@ -90,8 +91,8 @@ class MenuItemAffixListComponent implements HasDisabled, OnDestroy {
         final removed = _affixComponentRefs.sublist(start, end);
 
         for (final toRemove in removed) {
-          if (toRemove.componentRef.isPresent) {
-            toRemove.componentRef.value.destroy();
+          if (toRemove.componentRef != null) {
+            toRemove.componentRef!.destroy();
           }
         }
 
@@ -122,8 +123,8 @@ class MenuItemAffixListComponent implements HasDisabled, OnDestroy {
 
   void _updateItemProperties() {
     for (final ref in _affixComponentRefs) {
-      if (ref.componentRef.isPresent) {
-        ref.componentRef.value.instance.disabled = disabled;
+      if (ref.componentRef != null) {
+        ref.componentRef!.instance.disabled = disabled;
       }
     }
   }
@@ -146,9 +147,8 @@ class MenuItemAffixListComponent implements HasDisabled, OnDestroy {
 
 class _AffixRef {
   final BaseMenuItemAffixModel affix;
-  final qc.Optional<ComponentRef<BaseAffixComponent>> componentRef;
+  final ComponentRef<BaseAffixComponent>? componentRef;
 
-  _AffixRef(this.affix, ComponentRef<BaseAffixComponent> componentRef)
-    : componentRef = qc.Optional.of(componentRef);
-  _AffixRef.hidden(this.affix) : componentRef = qc.Optional.absent();
+  _AffixRef(this.affix, this.componentRef);
+  _AffixRef.hidden(this.affix) : componentRef = null;
 }

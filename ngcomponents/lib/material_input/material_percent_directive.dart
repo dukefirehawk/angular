@@ -21,7 +21,7 @@ export 'package:ngcomponents/material_input/material_number_accessor.dart'
 class MaterialPercentInputDirective {
   MaterialPercentInputDirective(
     MaterialInputComponent input,
-    HtmlElement element,
+    HTMLElement element,
   ) {
     // 'percent' is an invalid 'type' attribute value for the 'input' element.
     // Use value 'text' instead.

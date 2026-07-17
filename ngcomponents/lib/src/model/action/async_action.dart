@@ -65,7 +65,7 @@ import 'dart:async';
 ///       }
 ///     }
 ///
-/// <V> is the value type returned/resolved by the execution closure.
+/// `<V>` is the value type returned/resolved by the execution closure.
 class AsyncAction<V> {
   final Future<V> _onDone;
   final Future<bool> _onDefer;
@@ -79,13 +79,14 @@ class AsyncAction<V> {
   bool? get _waitingForDone => _lockedGetter();
 
   AsyncAction(
-      this._onDone,
-      this._onDefer,
-      this._futureCancellations,
-      this._executionDeferrals,
-      this._lockedGetter,
-      this._cancelledGetter,
-      this._doneGetter);
+    this._onDone,
+    this._onDefer,
+    this._futureCancellations,
+    this._executionDeferrals,
+    this._lockedGetter,
+    this._cancelledGetter,
+    this._doneGetter,
+  );
 
   /// Indicates whether the action has been cancelled.
   bool get cancelled => _syncCancelled || _cancelledGetter();

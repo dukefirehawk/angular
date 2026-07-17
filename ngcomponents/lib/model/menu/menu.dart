@@ -6,7 +6,6 @@ import 'dart:async';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:observable/observable.dart';
-import 'package:quiver/core.dart' show Optional;
 import 'package:quiver/strings.dart' show isNotEmpty;
 import 'package:ngcomponents/model/a11y/active_item.dart';
 import 'package:ngcomponents/model/collection/combined_list.dart';
@@ -35,15 +34,16 @@ class MenuItemGroup<T> extends LabeledList<T> {
   /// should be `menuitem`. https://www.w3.org/TR/wai-aria-1.1/#menuitem
   final itemsRole = 'menuitem';
 
-  MenuItemGroup(List<T> items,
-      [String? label,
-      bool hasSeparator = true,
-      bool isCollapsible = false,
-      bool isExpanded = true])
-      : _hasSeparator = ObservableReference(hasSeparator),
-        _isCollapsible = ObservableReference(isCollapsible),
-        _isExpanded = ObservableReference(isExpanded),
-        super.withLabel(List<T>.unmodifiable(items), label);
+  MenuItemGroup(
+    List<T> items, [
+    String? label,
+    bool hasSeparator = true,
+    bool isCollapsible = false,
+    bool isExpanded = true,
+  ]) : _hasSeparator = ObservableReference(hasSeparator),
+       _isCollapsible = ObservableReference(isCollapsible),
+       _isExpanded = ObservableReference(isExpanded),
+       super.withLabel(List<T>.unmodifiable(items), label);
 
   /// True when this component explicitly specifies a separator.
   bool get hasSeparator => _hasSeparator.value ?? false;
@@ -101,15 +101,18 @@ class MenuModel<T> implements HasIcon, AcceptsWidth {
   /// Creates a menu model with the given menu groups list.
   ///
   /// If [icon] is given, it will appear on the button that opens the menu.
-  MenuModel(List<MenuItemGroup<T>> itemGroups,
-      {this.icon, int? width, this.tooltipText = ''})
-      : itemGroups = List<MenuItemGroup<T>>.unmodifiable(itemGroups) {
+  MenuModel(
+    List<MenuItemGroup<T>> itemGroups, {
+    this.icon,
+    int? width,
+    this.tooltipText = '',
+  }) : itemGroups = List<MenuItemGroup<T>>.unmodifiable(itemGroups) {
     this.width = width;
   }
 
   /// Creates a simple menu model that contains no sub-menus.
   MenuModel.flat(List<T> items, {this.icon, width, this.tooltipText = ''})
-      : itemGroups = [MenuItemGroup<T>(items)] {
+    : itemGroups = [MenuItemGroup<T>(items)] {
     this.width = width;
   }
 
@@ -186,38 +189,41 @@ class MenuItem<T> with MenuItemMixin implements HasUIDisplayName, HasIcon {
   ///     convenient way to pass a single item suffix in rather than
   ///     constructing an ObservableList and using [itemSuffixes]. If
   ///     [itemSuffixes] is also passed in, [itemSuffixes] takes precedence.
-  MenuItem(this.label,
-      {this.enabled = true,
-      this.tooltip = '',
-      //@Deprecated('Use ActionWithContext') MenuAction? action,
-      this.actionWithContext,
-      this.icon,
-      this.labelAnnotation = '',
-      Iterable<String>? cssClasses,
-      MenuItemAffix? itemSuffix,
-      ObservableList<MenuItemAffix>? itemSuffixes,
-      MenuModel<T>? subMenu,
-      this.secondaryLabel = '',
-      String? ariaLabel})
-      : itemSuffixes = itemSuffixes ??
-            ObservableList<MenuItemAffix>.from(
-                Optional.fromNullable(itemSuffix)),
-        cssClasses = BuiltList<String>((cssClasses ?? const <String>[])),
-        this.subMenu = subMenu ?? MenuModel([]),
-        ariaLabel = ariaLabel ?? label {
-    assert(itemSuffix == null || itemSuffixes == null,
-        'Only one of itemSuffix or itemSuffixes should be provided');
+  MenuItem(
+    this.label, {
+    this.enabled = true,
+    this.tooltip = '',
+    //@Deprecated('Use ActionWithContext') MenuAction? action,
+    this.actionWithContext,
+    this.icon,
+    this.labelAnnotation = '',
+    Iterable<String>? cssClasses,
+    MenuItemAffix? itemSuffix,
+    ObservableList<MenuItemAffix>? itemSuffixes,
+    MenuModel<T>? subMenu,
+    this.secondaryLabel = '',
+    String? ariaLabel,
+  }) : itemSuffixes =
+           itemSuffixes ??
+           ObservableList<MenuItemAffix>.from(itemSuffix as Iterable<dynamic>),
+       cssClasses = BuiltList<String>((cssClasses ?? const <String>[])),
+       this.subMenu = subMenu ?? MenuModel([]),
+       ariaLabel = ariaLabel ?? label {
+    assert(
+      itemSuffix == null || itemSuffixes == null,
+      'Only one of itemSuffix or itemSuffixes should be provided',
+    );
   }
 
   @override
   String toString() => {
-        'label': label,
-        'secondaryLabel': secondaryLabel,
-        'labelAnnotation': labelAnnotation,
-        'enabled': enabled,
-        'icon': icon,
-        'suffixes': itemSuffixes.map((affix) => '$affix').join(','),
-      }.toString();
+    'label': label,
+    'secondaryLabel': secondaryLabel,
+    'labelAnnotation': labelAnnotation,
+    'enabled': enabled,
+    'icon': icon,
+    'suffixes': itemSuffixes.map((affix) => '$affix').join(','),
+  }.toString();
 }
 
 /// Required members to use [MenuItemMixin].
@@ -272,34 +278,50 @@ class ActiveMenuItemModel<T> extends ActiveItemModel<T> {
   /// This means the active item model will skip over any non-enabled items.
   final bool _filterOutUnselectableItems;
 
-  ActiveMenuItemModel(IdGenerator super.idGenerator,
-      {MenuModel<T>? menu, bool filterOutUnselectableItems = false})
-      : _filterOutUnselectableItems = filterOutUnselectableItems,
-        super(items: _createEnabledItemGroupList(
-                menu?.itemGroups, filterOutUnselectableItems),
-            loop: true);
+  ActiveMenuItemModel(
+    IdGenerator super.idGenerator, {
+    MenuModel<T>? menu,
+    bool filterOutUnselectableItems = false,
+  }) : _filterOutUnselectableItems = filterOutUnselectableItems,
+       super(
+         items: _createEnabledItemGroupList(
+           menu?.itemGroups,
+           filterOutUnselectableItems,
+         ),
+         loop: true,
+       );
 
   set menu(MenuModel<T> menu) {
     super.items = _createEnabledItemGroupList(
-        menu.itemGroups, _filterOutUnselectableItems);
+      menu.itemGroups,
+      _filterOutUnselectableItems,
+    );
   }
 
   @override
   set items(_) {
-    throw UnsupportedError('ActiveMenuItemModel items can only be updated'
-        'by setting #menu');
+    throw UnsupportedError(
+      'ActiveMenuItemModel items can only be updated'
+      'by setting #menu',
+    );
   }
 
   static CombinedList<T> _createEnabledItemGroupList<T>(
-      List<List<T>>? menuGroups, bool filterOutUnselectableItems) {
+    List<List<T>>? menuGroups,
+    bool filterOutUnselectableItems,
+  ) {
     if (menuGroups == null) return CombinedList<T>([]);
 
     if (!filterOutUnselectableItems) return CombinedList<T>(menuGroups);
 
-    return CombinedList<T>(menuGroups
-        .map((group) => group
-            .where((item) => item is MenuItem ? item.enabled : true)
-            .toList())
-        .toList());
+    return CombinedList<T>(
+      menuGroups
+          .map(
+            (group) => group
+                .where((item) => item is MenuItem ? item.enabled : true)
+                .toList(),
+          )
+          .toList(),
+    );
   }
 }

@@ -1,4 +1,4 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: date_range.proto
 //
@@ -138,44 +138,44 @@ class DatepickerDateRange extends $pb.GeneratedMessage {
     $core.int? startWeekday,
     $core.int? nextNDaysFromToday,
   }) {
-    final _result = create();
+    final result = create();
     if (dateRange != null) {
-      _result.dateRange = dateRange;
+      result.dateRange = dateRange;
     }
     if (daysAgo != null) {
-      _result.daysAgo = daysAgo;
+      result.daysAgo = daysAgo;
     }
     if (weeksAgo != null) {
-      _result.weeksAgo = weeksAgo;
+      result.weeksAgo = weeksAgo;
     }
     if (monthsAgo != null) {
-      _result.monthsAgo = monthsAgo;
+      result.monthsAgo = monthsAgo;
     }
     if (yearsAgo != null) {
-      _result.yearsAgo = yearsAgo;
+      result.yearsAgo = yearsAgo;
     }
     if (lastNDays != null) {
-      _result.lastNDays = lastNDays;
+      result.lastNDays = lastNDays;
     }
     if (allTimeRange != null) {
-      _result.allTimeRange = allTimeRange;
+      result.allTimeRange = allTimeRange;
     }
     if (broadcastMonthsAgo != null) {
-      _result.broadcastMonthsAgo = broadcastMonthsAgo;
+      result.broadcastMonthsAgo = broadcastMonthsAgo;
     }
     if (lastNDaysToToday != null) {
-      _result.lastNDaysToToday = lastNDaysToToday;
+      result.lastNDaysToToday = lastNDaysToToday;
     }
     if (quartersAgo != null) {
-      _result.quartersAgo = quartersAgo;
+      result.quartersAgo = quartersAgo;
     }
     if (startWeekday != null) {
-      _result.startWeekday = startWeekday;
+      result.startWeekday = startWeekday;
     }
     if (nextNDaysFromToday != null) {
-      _result.nextNDaysFromToday = nextNDaysFromToday;
+      result.nextNDaysFromToday = nextNDaysFromToday;
     }
-    return _result;
+    return result;
   }
   factory DatepickerDateRange.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
@@ -384,14 +384,14 @@ class DateRange extends $pb.GeneratedMessage {
     $0.Date? start,
     $0.Date? end,
   }) {
-    final _result = create();
+    final result = create();
     if (start != null) {
-      _result.start = start;
+      result.start = start;
     }
     if (end != null) {
-      _result.end = end;
+      result.end = end;
     }
-    return _result;
+    return result;
   }
   factory DateRange.fromBuffer($core.List<$core.int> i,
           [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>

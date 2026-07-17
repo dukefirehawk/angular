@@ -14,7 +14,7 @@ import 'package:ngdart/angular.dart';
 /// Place on an element or component to expose the [Element] as 'ref'.
 ///
 /// Example usage:
-///     <material-button ref #button="ref"></materialButton>
+///     `<material-button ref #button="ref"></materialButton>`
 ///     <!-- You can now use 'button' in this template as a property -->
 @Directive(selector: '[ref]', exportAs: 'ref')
 class ReferenceDirective {

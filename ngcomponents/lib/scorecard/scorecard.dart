@@ -49,7 +49,7 @@ class ScorecardComponent extends KeyboardOnlyFocusIndicatorDirective {
   bool _selectable = false;
 
   final ChangeDetectorRef _changeDetector;
-  final HtmlElement element;
+  final HTMLElement element;
   ScorecardComponent(this._changeDetector, this.element, DomService domService)
     : super(element, domService);
 

@@ -13,7 +13,7 @@
 /// complex domain objects that aren't able to implement [Observable].
 ///
 /// TODO(google): check with jmesserly: how to merge these with package:observe
-library angular_components.model.observable.observable;
+library;
 
 import 'dart:async';
 
@@ -65,11 +65,11 @@ class ChangeNotificationProvider<T> implements ChangeAware<T?>, Disposable {
   T? _next;
 
   ChangeNotificationProvider(
-
-      /// Changes are published synchronously by default. When coalesce is set,
-      /// the changes in the current execution block are collected, and only the
-      /// last value will be published (in an async scheduled microtask).
-      this._coalesce);
+    /// Changes are published synchronously by default. When coalesce is set,
+    /// the changes in the current execution block are collected, and only the
+    /// last value will be published (in an async scheduled microtask).
+    this._coalesce,
+  );
 
   /// Provides a stream of object values when the reference changes.
   @override
@@ -236,10 +236,12 @@ abstract mixin class ObservableViewMixin<T> implements ObservableView<T> {
     // point of even calling `values` in the first place.
 
     late StreamController<T> controller;
-    controller = StreamController(onListen: () {
-      controller.add(value);
-      controller.addStream(stream).then((_) => controller.close());
-    });
+    controller = StreamController(
+      onListen: () {
+        controller.add(value);
+        controller.addStream(stream).then((_) => controller.close());
+      },
+    );
     return controller.stream;
   }
 
@@ -274,7 +276,7 @@ class _MappedView<I, O> extends ObservableViewMixin<O> {
 /// new value is equivalent to the current value, nothing's added to the stream.
 class ObservableReference<T> extends ChangeNotificationProvider<T>
     with ObservableViewMixin<T?> {
-  static bool _defaultEq(a, b) => a == b;
+  static bool _defaultEq(dynamic a, b) => a == b;
 
   final EqualsFn<T?> _equalsFn;
   StreamSubscription? _listenSub;
@@ -285,10 +287,12 @@ class ObservableReference<T> extends ChangeNotificationProvider<T>
   /// Changes are published synchronously by default. When [coalesce] is set,
   /// the changes in the current execution block are collected, and only the
   /// last value will be published (in an async scheduled microtask).
-  ObservableReference(this._value,
-      {EqualsFn<T?> equalsFn = _defaultEq, bool coalesce = false})
-      : _equalsFn = equalsFn,
-        super(coalesce);
+  ObservableReference(
+    this._value, {
+    EqualsFn<T?> equalsFn = _defaultEq,
+    bool coalesce = false,
+  }) : _equalsFn = equalsFn,
+       super(coalesce);
 
   /// The currently-set value.
   T? get value => _value;
@@ -341,12 +345,12 @@ class ObservableComposite<T> extends ChangeNotificationProvider<T> {
   /// Changes are published synchronously by default. When [coalesce] is set,
   /// the changes in the current execution block are collected, and only the
   /// one event with null value will be published (in an async scheduled microtask).
-  ObservableComposite(
-      {bool coalesce = false,
-      List<ObserveAware>? values,
-      bool withStackTrace = false})
-      : _withStackTrace = withStackTrace,
-        super(coalesce) {
+  ObservableComposite({
+    bool coalesce = false,
+    List<ObserveAware>? values,
+    bool withStackTrace = false,
+  }) : _withStackTrace = withStackTrace,
+       super(coalesce) {
     if (values != null) {
       for (var ref in values) {
         register(ref);
@@ -355,12 +359,18 @@ class ObservableComposite<T> extends ChangeNotificationProvider<T> {
   }
 
   /// Starts listening on value changes (if not already doing so).
-  ObserveAware? register(ObserveAware? value,
-      {ObserveAware? replaces, bool initialNotification = true}) {
+  ObserveAware? register(
+    ObserveAware? value, {
+    ObserveAware? replaces,
+    bool initialNotification = true,
+  }) {
     if (value == null) return null;
     Stream? replacesStream = (replaces == null) ? null : replaces.stream;
-    registerStream(value.stream,
-        replaces: replacesStream, initialNotification: initialNotification);
+    registerStream(
+      value.stream,
+      replaces: replacesStream,
+      initialNotification: initialNotification,
+    );
     if (value is Disposable) {
       _disposer.addDisposable(value);
     }
@@ -374,8 +384,11 @@ class ObservableComposite<T> extends ChangeNotificationProvider<T> {
   }
 
   /// Starts listening on value changes (if not already doing so).
-  Stream registerStream(Stream stream,
-      {Stream? replaces, bool initialNotification = true}) {
+  Stream registerStream(
+    Stream stream, {
+    Stream? replaces,
+    bool initialNotification = true,
+  }) {
     if (_subscriptions.containsKey(stream)) {
       // little sanity check
       assert(replaces == null);

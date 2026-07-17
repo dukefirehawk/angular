@@ -276,7 +276,7 @@ class DateRangeEditorComponent implements OnInit, AfterViewInit, Focusable {
 
   DatepickerDateRange _createDaysToTodayRange(int numDays) =>
       relativeDaysToToday
-      ? LastNDaysToTodayRange.beforeToday(_clock, numDays)
+      ? LastNDaysToTodayRange.beforeToday(_clock ?? Clock(), numDays)
       : DatepickerDateRange(
           '$numDays $daysToTodayMsg',
           _today!.add(days: -(numDays - 1)),
@@ -311,7 +311,7 @@ class DateRangeEditorComponent implements OnInit, AfterViewInit, Focusable {
   late DatepickerDateRange daysToYesterdayRange;
 
   DatepickerDateRange _createDaysToYesterdayRange(int numDays) =>
-      LastNDaysRange.beforeToday(_clock, numDays);
+      LastNDaysRange.beforeToday(_clock ?? Clock(), numDays);
 
   // Dart doesn't support arbitrarily large DateTimes.
   static const int _maxDaysInputLength = 4;
@@ -384,11 +384,12 @@ class DateRangeEditorComponent implements OnInit, AfterViewInit, Focusable {
     // triggered for a long time (since the main calendar init takes 100+ ms,
     // requestAnimationFrame() tries to render at 10 fps).
     if (_elementRef.querySelector('.preset-list') != null) {
-      (_elementRef
-          .querySelector('.preset-list material-select-item.selected') as HTMLElement?)
+      (_elementRef.querySelector('.preset-list material-select-item.selected')
+              as HTMLElement?)
           ?.focus();
     } else {
-      (_elementRef.querySelector('material-input.active input') as HTMLElement?)?.focus();
+      (_elementRef.querySelector('material-input.active input') as HTMLElement?)
+          ?.focus();
     }
   }
 

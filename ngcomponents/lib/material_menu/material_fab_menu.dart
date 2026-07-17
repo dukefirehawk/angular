@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -165,7 +166,8 @@ class MaterialFabMenuComponent extends Object
   void trigger(Event event) {
     _trigger(
       event,
-      activateFirstItem: event is KeyboardEvent || _isLikelyScreenReader(event),
+      activateFirstItem:
+          event.isA<KeyboardEvent>() || _isLikelyScreenReader(event),
     );
   }
 
@@ -198,7 +200,9 @@ class MaterialFabMenuComponent extends Object
   /// that's dispatched may be a MouseEvent. This method tries to see if the
   /// mouse event was triggered by the accessibility api.
   bool _isLikelyScreenReader(Event event) {
-    return event is MouseEvent && event.client.x == 0 && event.client.y == 0;
+    return event.isA<MouseEvent>() &&
+        (event as MouseEvent).clientX == 0 &&
+        event.clientY == 0;
   }
 
   final tooltipPositions = const <RelativePosition>[

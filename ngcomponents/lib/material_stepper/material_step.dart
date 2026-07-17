@@ -14,19 +14,19 @@ import 'package:ngcomponents/model/action/async_action.dart';
 /// @ViewChild(ren) queries for content inside of a step or summary template
 /// will not work in the original component.
 ///
-@Directive(
-  selector: '[step]',
-  exportAs: 'step',
-)
+@Directive(selector: '[step]', exportAs: 'step')
 class StepDirective extends TemplatePortal {
-  final _continueController =
-      StreamController<AsyncAction<bool>>.broadcast(sync: true);
+  final _continueController = StreamController<AsyncAction<bool>>.broadcast(
+    sync: true,
+  );
 
-  final _cancelController =
-      StreamController<AsyncAction<bool>>.broadcast(sync: true);
+  final _cancelController = StreamController<AsyncAction<bool>>.broadcast(
+    sync: true,
+  );
 
-  final _jumpController =
-      StreamController<AsyncAction<bool>>.broadcast(sync: true);
+  final _jumpController = StreamController<AsyncAction<bool>>.broadcast(
+    sync: true,
+  );
 
   /// Name shown as the title.
   @Input()
@@ -132,8 +132,10 @@ class StepDirective extends TemplatePortal {
 
   bool get shouldShowSummary => !active && complete;
 
-  void _requestStepAction(AsyncAction<bool> action,
-      StreamController<AsyncAction<bool>> controller) {
+  void _requestStepAction(
+    AsyncAction<bool> action,
+    StreamController<AsyncAction<bool>> controller,
+  ) {
     busy = true;
     controller.add(action);
     action.onDone.then((_) {
@@ -149,19 +151,17 @@ class StepDirective extends TemplatePortal {
 ///
 /// __Example usage:__
 ///
-/// <material-stepper orientation="vertical">
+/// `<material-stepper orientation="vertical">`
 ///   <template step name="A" #stepA="step">Step</template>
 ///   <template [summary]="stepA"><h3>Summary A</h3></template>
-/// </material-stepper>
+/// `</material-stepper>`
 ///
 ///
 /// Warning: content is reparented to the stepper component itself so any
 /// @ViewChild(ren) queries for content inside of a step or summary template
 /// will not work in the original component.
 ///
-@Directive(
-  selector: '[summary]',
-)
+@Directive(selector: '[summary]')
 class SummaryDirective extends TemplatePortal {
   /// The [StepDirective] associated with this summary.
   @Input()
