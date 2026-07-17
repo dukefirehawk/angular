@@ -42,6 +42,7 @@ export 'src/meta/lifecycle_hooks.dart';
 export 'src/meta/typed.dart';
 export 'src/meta/view.dart';
 export 'src/meta/visibility.dart';
+export 'src/meta/visible_for_template.dart';
 
 // export 'src/meta.dart'
 //     show
