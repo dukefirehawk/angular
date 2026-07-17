@@ -94,7 +94,7 @@ class TemplatePortal extends Portal<Map<String, dynamic>> {
     //assert(viewContainer != null);
   }
 
-  get origin => viewContainer;
+  ViewContainerRef get origin => viewContainer;
 
   @override
   TemplatePortal clone() => TemplatePortal(template, viewContainer);
@@ -297,7 +297,7 @@ class PortalHostDirective extends BasePortalHost {
 /// An implementation of [PortalHost] that has an arbitrary DOM node as its
 /// container.
 class DomPortalHost extends BasePortalHost {
-  final HtmlElement _hostElement;
+  final HTMLElement _hostElement;
   final AcxImperativeViewUtils _imperativeViewUtils;
 
   DomPortalHost(this._hostElement, this._imperativeViewUtils);

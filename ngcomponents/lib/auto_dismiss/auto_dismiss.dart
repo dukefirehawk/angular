@@ -34,7 +34,7 @@ class AutoDismissDirective {
   final Stream _dismissEvents;
   final NgZone _zone;
 
-  AutoDismissDirective(HtmlElement element, this._zone)
+  AutoDismissDirective(HTMLElement element, this._zone)
     : _dismissEvents = triggersOutside(element);
 
   bool _ignoreEvents = false;

@@ -119,9 +119,9 @@ abstract class Modal {
 ///
 /// __Example usage:__
 ///     <!-- With aggressive content -->
-///     <modal [preventInteraction]="isModal" ([visible])="showDialog">
+///     `<modal [preventInteraction]="isModal" ([visible])="showDialog">`
 ///       Hello World!
-///     </modal>
+///     `</modal>`
 ///
 ///     <!-- Or, with deferred content -->
 ///     <modal ([visible])="showDialog">

@@ -46,7 +46,7 @@ class MaterialButtonBase extends ButtonDirective {
       _isMouseDown || _focused ? mediumElevation : lowElevation;
 
   MaterialButtonBase(
-    HtmlElement super.element,
+    HTMLElement super.element,
     super.role, {
     super.handleSpacePresses,
   });

@@ -113,7 +113,7 @@ class MaterialChipComponent<T> extends RootFocusable implements HasRenderer<T> {
   Stream get remove => _remove.stream;
   final _remove = StreamController<dynamic>(sync: true);
 
-  void removeChip(/* MouseEvent | KeyboardEvent */ event) {
+  void removeChip(/* MouseEvent | KeyboardEvent */ Event event) {
     selectionModel.deselect(value);
     _remove.add(value);
     event.preventDefault();

@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:js_interop';
+
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -77,7 +79,7 @@ class KeyboardOnlyFocusIndicatorDirective {
   /// <some-focusable-element
   ///     keyboardOnlyFocusIndicator
   ///     #focusTarget="keyboardOnlyFocusIndicator">
-  /// </some-focusable-element>
+  /// `</some-focusable-element>`
   /// ...
   /// <button (trigger)="focusTarget.focus($event)">Focus!</button>
   ///
@@ -89,7 +91,7 @@ class KeyboardOnlyFocusIndicatorDirective {
     _domService.scheduleWrite(() {
       _element.focus();
     });
-    if (event is MouseEvent) {
+    if (event.isA<MouseEvent>()) {
       hideOutline();
     } else {
       resetOutline();

@@ -3,9 +3,10 @@
 // BSD-style license that can be found in the LICENSE file.
 
 @JS()
-library angular_components.framework_stabilizers.framework_stabilizers;
+library;
 
-import 'package:js/js.dart';
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
 
 /// Function provided by a framework to register an [IsStableCallback] that is
 /// invoked by the framework when it reaches a stable state.
@@ -19,21 +20,40 @@ typedef IsStableCallback = void Function(bool didWork, String name);
 // frameworkStabilizers is a property of the window object.
 @JS('frameworkStabilizers')
 // ignore: unused_element
-external List get _frameworkStabilizersJs;
+external JSArray? get _frameworkStabilizersJs;
 
 @JS('frameworkStabilizers')
 // ignore: unused_element
-external set _frameworkStabilizersJs(List values);
+external set _frameworkStabilizersJs(JSArray? values);
+
+extension type _FrameworkStabilizersArray(JSArray _) implements JSArray {
+  @JS('push')
+  external void add(JSFunction fn);
+
+  @JS('splice')
+  external void splice(int index, int deleteCount);
+
+  @JS('length')
+  external int get length;
+
+  @JS('length')
+  external set length(int value);
+}
 
 /// Provides a set of helper functions for frameworks to register and deregister
 /// stabilizing functions. These functions will be called by tests, whenever
 /// they require the page to be stable before they can perform the next action.
 class FrameworkStabilizers {
-  static final Map<int, dynamic> _idToFrameworkStabilizer = {};
+  static final Map<int, JSFunction> _idToFrameworkStabilizer = {};
   static int _nextId = 0;
 
-  static List get _frameworkStabilizers {
-    return _frameworkStabilizersJs;
+  static _FrameworkStabilizersArray get _frameworkStabilizers {
+    var stabilizers = _frameworkStabilizersJs;
+    if (stabilizers == null) {
+      stabilizers = JSArray();
+      _frameworkStabilizersJs = stabilizers;
+    }
+    return stabilizers as _FrameworkStabilizersArray;
   }
 
   /// Add a stabilize function for a framework.
@@ -53,7 +73,13 @@ class FrameworkStabilizers {
   /// The id returned by [add] can be used to remove the [FrameworkStabilizer]
   /// with [remove].
   static int add(FrameworkStabilizer fn) {
-    var wrappedFn = allowInterop(fn);
+    var wrappedFn = ((JSFunction jsCallback) {
+      void dartCallback(bool didWork, String name) {
+        jsCallback.callAsFunction(null, didWork.toJS, name.toJS);
+      }
+
+      fn(dartCallback);
+    }).toJS;
     var id = _nextId++;
     _idToFrameworkStabilizer[id] = wrappedFn;
     _frameworkStabilizers.add(wrappedFn);
@@ -63,11 +89,20 @@ class FrameworkStabilizers {
   /// Removes the [FrameworkStabilizer] identified by [id].
   static bool remove(int id) {
     var wrappedFn = _idToFrameworkStabilizer.remove(id);
-    return wrappedFn == null ? false : _frameworkStabilizers.remove(wrappedFn);
+    if (wrappedFn == null) return false;
+
+    var stabilizers = _frameworkStabilizers;
+    for (var i = 0; i < stabilizers.length; i++) {
+      if (stabilizers.getProperty(i.toJS) == wrappedFn) {
+        stabilizers.splice(i, 1);
+        return true;
+      }
+    }
+    return false;
   }
 
   static void removeAll() {
     _idToFrameworkStabilizer.clear();
-    _frameworkStabilizers.clear();
+    _frameworkStabilizers.length = 0;
   }
 }

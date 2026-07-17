@@ -2,13 +2,12 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'dart:html' show Event;
-
 import 'package:ngdart/angular.dart';
 import 'package:intl/intl.dart';
 import 'package:ngcomponents/src/material_datepicker/sequential.dart';
 import 'package:ngcomponents/material_icon/material_icon.dart';
 import 'package:ngcomponents/utils/disposer/disposer.dart';
+import 'package:web/web.dart';
 
 export 'package:ngcomponents/src/material_datepicker/sequential.dart';
 
@@ -72,14 +71,18 @@ class NextPrevComponent implements OnDestroy {
 
     //if (newModel != null) {
     _modelListeners
-      ..addStreamSubscription(newModel.hasNext.stream.listen((newValue) {
-        _hasNext = newValue;
-        _changeDetector.markForCheck();
-      }))
-      ..addStreamSubscription(newModel.hasPrev.stream.listen((newValue) {
-        _hasPrev = newValue;
-        _changeDetector.markForCheck();
-      }));
+      ..addStreamSubscription(
+        newModel.hasNext.stream.listen((newValue) {
+          _hasNext = newValue;
+          _changeDetector.markForCheck();
+        }),
+      )
+      ..addStreamSubscription(
+        newModel.hasPrev.stream.listen((newValue) {
+          _hasPrev = newValue;
+          _changeDetector.markForCheck();
+        }),
+      );
     //}
   }
 
@@ -114,15 +117,19 @@ class NextPrevComponent implements OnDestroy {
   /// Whether the next button is disabled.
   bool get isNextDisabled => disabled || !hasNext!;
 
-  static final _genericNextMsg = Intl.message('Next',
-      name: '_genericNextMsg',
-      meaning: 'For a button which moves to the next item',
-      desc: 'Label for a button to move to the next item of some series.');
+  static final _genericNextMsg = Intl.message(
+    'Next',
+    name: '_genericNextMsg',
+    meaning: 'For a button which moves to the next item',
+    desc: 'Label for a button to move to the next item of some series.',
+  );
 
-  static final _genericPrevMsg = Intl.message('Previous',
-      name: '_genericPrevMsg',
-      meaning: 'For a button which moves to the previous item',
-      desc: 'Label for a button to move to the previous item of some series.');
+  static final _genericPrevMsg = Intl.message(
+    'Previous',
+    name: '_genericPrevMsg',
+    meaning: 'For a button which moves to the previous item',
+    desc: 'Label for a button to move to the previous item of some series.',
+  );
 
   @override
   void ngOnDestroy() {

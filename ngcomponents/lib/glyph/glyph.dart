@@ -69,7 +69,7 @@ class GlyphComponent {
   }
 
   dynamic get icon => _icon;
-  var _icon;
+  dynamic _icon;
 
   bool get _isIconModel => icon is Icon;
 

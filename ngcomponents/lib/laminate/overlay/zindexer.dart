@@ -3,10 +3,11 @@
 // BSD-style license that can be found in the LICENSE file.
 
 @JS()
-library angular_components.css.acux.zindexer;
+library;
+
+import 'dart:js_interop';
 
 import 'package:ngdart/angular.dart';
-import 'package:js/js.dart';
 
 @JS('acxZIndex')
 external int? get _currentZIndex;

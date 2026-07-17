@@ -2,23 +2,20 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-@JS()
-library angular_components.framework_stabilizers.testability;
+library;
 
 import 'dart:async';
 
-import 'package:js/js.dart';
+import 'package:web/web.dart';
 
 import 'framework_stabilizers.dart';
 
 export 'framework_stabilizers.dart' show FrameworkStabilizer, IsStableCallback;
 
-// We are getting the URL from JS land because Dart's URI.base is more expensive
-@JS('window.location.href')
-external String get _url;
-
 /// Check if the enableTestabilities URL parameter is set to true.
-final bool testabilitiesEnabled = _url.contains('enableTestabilities');
+// We are getting the URL from JS land because Dart's URI.base is more expensive
+final bool testabilitiesEnabled =
+    window.location.href.contains('enableTestabilities');
 
 /// Interface for Testabilities that frameworks can provide for tests to wait
 /// on the framework to be stable.

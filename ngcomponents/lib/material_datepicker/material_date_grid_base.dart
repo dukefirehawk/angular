@@ -279,7 +279,7 @@ abstract class MaterialDateGridBase
   int _totalHeight(int paddingTop, int paddingBottom) =>
       paddingTop + paddingBottom + (rowsToRender * rowHeightPx);
 
-  int? rowFromPos(heightPx) => (heightPx / rowHeightPx).floor();
+  int? rowFromPos(int heightPx) => (heightPx / rowHeightPx).floor();
 }
 
 abstract class ForcedScrollDirectiveHost {
@@ -291,7 +291,7 @@ abstract class ForcedScrollDirectiveHost {
 /// detection cycle. (It's a bit of a hack)
 @Directive(selector: '[imperativelyScrollable]')
 class ForcedScrollDirective {
-  final HtmlElement _element;
+  final HTMLElement _element;
   final DomService _domService;
 
   ForcedScrollDirective(
