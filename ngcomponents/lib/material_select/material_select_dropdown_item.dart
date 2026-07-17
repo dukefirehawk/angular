@@ -59,7 +59,7 @@ class MaterialSelectDropdownItemComponent<T>
   bool _customAriaHandling = false;
 
   MaterialSelectDropdownItemComponent(
-    HtmlElement element,
+    HTMLElement element,
     @Attribute('role') String? role,
     @Optional() DropdownHandle? dropdown,
     @Optional() ActivationHandler? activationHandler,

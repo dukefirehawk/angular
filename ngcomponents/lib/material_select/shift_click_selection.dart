@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:js_interop';
+
 import 'package:web/web.dart';
 import 'dart:math';
 
@@ -55,10 +57,12 @@ abstract mixin class ShiftClickSelectionMixin<T>
   /// does handle mouse events even if shift is not held down.
   @override
   bool handle(UIEvent event, dynamic activatedValue) {
-    if (selection is! MultiSelectionModel || event is! MouseEvent) return false;
+    if (selection is! MultiSelectionModel || !event.isA<MouseEvent>()) {
+      return false;
+    }
     // The deselect label is never shown with a MultiSelectionModel, so it's
     // safe to assume activatedValue is of type T at this point.
-    _handleClick(event, activatedValue as T);
+    _handleClick(event as MouseEvent, activatedValue as T);
     return true;
   }
 }

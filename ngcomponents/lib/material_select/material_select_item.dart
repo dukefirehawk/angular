@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -54,7 +55,7 @@ class MaterialSelectItemComponent<T> extends ButtonDirective
   final ChangeDetectorRef _cdRef;
   final DropdownHandle? _dropdown;
 
-  final HtmlElement element;
+  final HTMLElement element;
 
   StreamSubscription? _selectionChangeStreamSub;
 
@@ -225,13 +226,13 @@ class MaterialSelectItemComponent<T> extends ButtonDirective
     var hasCheckbox = supportsMultiSelect && !hideCheckbox;
     if (closeOnActivate && !hasCheckbox) {
       _dropdown?.close();
-      if (e is KeyboardEvent) {
+      if (e.isA<KeyboardEvent>()) {
         e.stopPropagation();
       }
     }
 
     if (_activationHandler != null) {
-      if (_activationHandler!.handle(e, value)) {
+      if (_activationHandler.handle(e, value)) {
         return;
       }
     }

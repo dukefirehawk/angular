@@ -2,8 +2,10 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:web/web.dart';
+import 'dart:js_interop';
 import 'dart:math';
+
+import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
 import 'package:ngcomponents/utils/browser/events/events.dart';
@@ -31,8 +33,8 @@ int _rippleIndex = 0;
 
 // If these were initialized here (and final), dart2js would wait to initialize
 // them until the first mousedown event, increasing latency.
-List<DivElement?>? _ripplePool;
-DivElement? _rippleTemplate;
+List<HTMLDivElement?>? _ripplePool;
+HTMLDivElement? _rippleTemplate;
 Map<String, double>? _opacityTiming;
 List<Map<String, double>>? _opacityKeyframes;
 Map<String, dynamic>? _transformTiming;
@@ -42,16 +44,16 @@ Map<String, dynamic>? _transformTiming;
 void _createRipple(
   int clientX,
   int clientY,
-  HtmlElement container,
+  HTMLElement container,
   bool center,
 ) {
   // All of the DOM reads occur before the DOM writes.
   final rect = container.getBoundingClientRect();
 
   // Create a ripple or grab one from the pool.
-  DivElement? ripple;
+  HTMLDivElement? ripple;
   if (_numRipples < _maxRipples) {
-    ripple = _rippleTemplate!.clone(false) as DivElement;
+    ripple = _rippleTemplate!.cloneNode(false) as HTMLDivElement;
     _ripplePool![_rippleIndex] = ripple;
     _numRipples++;
   } else {
@@ -64,16 +66,26 @@ void _createRipple(
   // Apply the animation and append the ripple to the container.
   // The applyAnimation functions are inlined by dart2js.
   if (supportsAnimationApi) {
-    _applyAnimation(ripple, center, rect, clientX, clientY);
+    _applyAnimation(ripple, center, _convertRect(rect), clientX, clientY);
   } else {
-    _applyFallbackAnimation(ripple, center, rect, clientX, clientY);
+    _applyFallbackAnimation(
+      ripple,
+      center,
+      _convertRect(rect),
+      clientX,
+      clientY,
+    );
   }
   container.append(ripple);
 }
 
+Rectangle _convertRect(DOMRect rect) {
+  return Rectangle(rect.left, rect.top, rect.width, rect.height);
+}
+
 /// Dynamically generate and apply the ripple animation.
 void _applyAnimation(
-  DivElement ripple,
+  HTMLDivElement ripple,
   bool center,
   Rectangle rect,
   int clientX,
@@ -121,14 +133,20 @@ void _applyAnimation(
   ];
 
   ripple.style.cssText = 'top: $top; left: $left; transform: $finalTransform';
-  ripple.animate(_opacityKeyframes!, _opacityTiming);
-  ripple.animate(transformKeyframes, _transformTiming);
+  ripple.animate(
+    _opacityKeyframes!.jsify() as JSObject,
+    _opacityTiming!.jsify()!,
+  );
+  ripple.animate(
+    transformKeyframes.jsify() as JSObject,
+    _transformTiming!.jsify()!,
+  );
 }
 
 /// Apply a static fallback animation for browsers that don't support the
 /// Web Animations API.
 void _applyFallbackAnimation(
-  DivElement ripple,
+  HTMLDivElement ripple,
   bool center,
   Rectangle rect,
   int clientX,
@@ -167,14 +185,14 @@ void _applyFallbackAnimation(
   changeDetection: ChangeDetectionStrategy.onPush,
 )
 class MaterialRippleComponent implements OnDestroy {
-  final HtmlElement _element;
+  final HTMLElement _element;
   EventListener? _onMouseDown;
   EventListener? _onKeyDown;
 
   MaterialRippleComponent(this._element) {
     // These are initialized here instead of when they're declared because
     // dart2js would otherwise wait to initialize them until they are used.
-    _ripplePool ??= List<DivElement?>.filled(
+    _ripplePool ??= List<HTMLDivElement?>.filled(
       _maxRipples,
       null,
       growable: false,
@@ -196,25 +214,28 @@ class MaterialRippleComponent implements OnDestroy {
       final className = (supportsAnimationApi)
           ? '__acx-ripple'
           : '__acx-ripple fallback';
-      _rippleTemplate = DivElement()..className = className;
+      _rippleTemplate = document.createElement('div') as HTMLDivElement
+        ..className = className;
     }
 
     // This is necessary because if _onMouseDown was a method, a new closure
     // would be created each time it was referenced. That means that
     // _onMouseDown in removeEventListener would point to a different listener,
     // so the listener would not be removed.
-    _onMouseDown = (e) {
+    _onMouseDown = ((Event e) {
+      final mouseEvent = e as MouseEvent;
       // This is inlined by dart2js so we aren't incurring an additional
       // function call here.
-      final clientX = (e as MouseEvent).client.x;
-      final clientY = e.client.y;
-      _createRipple(clientX as int, clientY as int, _element, center);
-    };
-    _onKeyDown = (e) {
+      final clientX = mouseEvent.clientX;
+      final clientY = mouseEvent.clientY;
+      _createRipple(clientX.toInt(), clientY.toInt(), _element, center);
+    }).toJS;
+
+    _onKeyDown = ((Event e) {
       if (!isKeyboardTrigger(e as KeyboardEvent)) return;
       // Ripples created by a keypress are always centered.
       _createRipple(0, 0, _element, true);
-    };
+    }).toJS;
     // This is about 5x faster than _element.onMouseDown.listen or Angular
     // (mousedown) because this compiles directly to addEventListener, whereas
     // the streams approach adds several layers of slow indirection.
@@ -235,7 +256,7 @@ class MaterialRippleComponent implements OnDestroy {
     _element.removeEventListener('mousedown', _onMouseDown);
     _element.removeEventListener('keydown', _onKeyDown);
     _ripplePool!.forEach((ripple) {
-      if (ripple?.parent == _element) {
+      if (ripple?.parentElement == _element) {
         ripple!.remove();
       }
     });

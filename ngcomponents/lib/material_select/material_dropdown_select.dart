@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:js_interop';
 import 'package:web/web.dart';
 
 import 'package:ngdart/angular.dart';
@@ -202,9 +203,9 @@ class MaterialDropdownSelectComponent<T> extends MaterialSelectBase<T>
     @Attribute('popupClass') String? popupClass,
     @Attribute('buttonAriaRole') this.buttonAriaRole,
     this._changeDetector,
-    HtmlElement element,
+    HTMLElement element,
   ) : activeModel = ActiveItemModel(idGenerator),
-      popupClassName = constructEncapsulatedCss(popupClass, element.classes),
+      popupClassName = constructEncapsulatedCss(popupClass, element.classList),
       listId = (idGenerator ?? SequentialIdGenerator.fromUUID()).nextId() {
     isRtl = rtl;
     preferredPositions = RelativePosition.overlapAlignments;
@@ -461,7 +462,7 @@ class MaterialDropdownSelectComponent<T> extends MaterialSelectBase<T>
 
   void handleClick(UIEvent event) {
     // Ignore keyboard events caught by button decorator.
-    if (event is! MouseEvent) return;
+    if (!event.isA<MouseEvent>()) return;
     if (!disabled) toggle();
   }
 
@@ -505,7 +506,7 @@ class MaterialDropdownSelectComponent<T> extends MaterialSelectBase<T>
   @override
   num getMaxHeight(num positionY, num viewportHeight) {
     if (_popupSizeDelegate != null) {
-      return _popupSizeDelegate?.getMaxHeight(positionY, viewportHeight) ?? 400;
+      return _popupSizeDelegate.getMaxHeight(positionY, viewportHeight) ?? 400;
     } else {
       // The default max height for dropdown select's popup.
       return 400;
@@ -515,7 +516,7 @@ class MaterialDropdownSelectComponent<T> extends MaterialSelectBase<T>
   @override
   num getMaxWidth(num positionX, num viewportWidth) {
     if (_popupSizeDelegate != null) {
-      return _popupSizeDelegate?.getMaxWidth(positionX, viewportWidth) ?? 448;
+      return _popupSizeDelegate.getMaxWidth(positionX, viewportWidth) ?? 448;
     } else {
       // The default max width for dropdown select's popup. This was previously
       // max width for material list.

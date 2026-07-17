@@ -256,14 +256,19 @@ class MaterialSliderComponent implements AfterChanges, HasDisabled {
     if (disabled) return;
     if (event.button != 0) return;
     event.preventDefault();
-    _setValueToMousePosition(event.page.x as int);
+    _setValueToMousePosition(event.pageX as int);
     isDragging = true;
     _changeDetector.markForCheck();
-    final mouseMoveSubscription = document.onMouseMove.listen((event) {
+    final mouseMoveSubscription = EventStreamProviders.mouseMoveEvent
+        .forTarget(document)
+        .listen((event) {
       event.preventDefault();
-      _setValueToMousePosition(event.page.x as int);
+      _setValueToMousePosition(event.pageX as int);
     });
-    document.onMouseUp.take(1).listen((event) {
+    EventStreamProviders.mouseUpEvent
+        .forTarget(document)
+        .take(1)
+        .listen((event) {
       event.preventDefault();
       mouseMoveSubscription.cancel();
       isLeftKnobSelected = false;
@@ -277,16 +282,21 @@ class MaterialSliderComponent implements AfterChanges, HasDisabled {
   void touchStart(TouchEvent event) {
     if (disabled) return;
     event.preventDefault();
-    final touch = event.targetTouches!.first;
-    _setValueToMousePosition(touch.page.x as int);
+    final touch = event.targetTouches.item(0)!;
+    _setValueToMousePosition(touch.pageX as int);
     isDragging = true;
     _changeDetector.markForCheck();
-    final touchMoveSubscription = document.onTouchMove.listen((event) {
+    final touchMoveSubscription = EventStreamProviders.touchMoveEvent
+        .forTarget(document)
+        .listen((event) {
       event.preventDefault();
-      final touch = event.targetTouches!.first;
-      _setValueToMousePosition(touch.page.x as int);
+      final touch = event.targetTouches.item(0)!;
+      _setValueToMousePosition(touch.pageX as int);
     });
-    document.onTouchEnd.take(1).listen((event) {
+    EventStreamProviders.touchEndEvent
+        .forTarget(document)
+        .take(1)
+        .listen((event) {
       event.preventDefault();
       touchMoveSubscription.cancel();
       isLeftKnobSelected = false;
