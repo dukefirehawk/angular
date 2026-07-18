@@ -401,10 +401,8 @@ class _AngularSubsetVisitor extends GeneralizingAstVisitor<ast.AST> {
         .toList();
     final callNamed = namedArgs
         .map(
-          (a) => ast.NamedExpr(
-            a.name.stringValue!,
-            a.argumentExpression.accept(this),
-          ),
+          (a) =>
+              ast.NamedExpr(a.name.lexeme, a.argumentExpression.accept(this)),
         )
         .toList();
     if (methodName != null) {
