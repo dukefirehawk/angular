@@ -78,9 +78,7 @@ class NgTestBed<T extends Object> {
 
   static Injector _defaultRootInjector(Injector parent) => parent;
 
-  static NgTestStabilizer _alwaysStable(
-    Injector _,
-  ) =>
+  static NgTestStabilizer _alwaysStable(Injector _) =>
       NgTestStabilizer.alwaysStable;
 
   static NgTestStabilizer _defaultStabilizers(
@@ -143,25 +141,23 @@ class NgTestBed<T extends Object> {
   }
 
   NgTestBed._({
-    Element? host,
+    this._host,
     required NgTestStabilizerFactory stabilizer,
     InjectorFactory? rootInjector,
     required ComponentFactory<T> component,
-  })  : _host = host,
-        _createStabilizer = stabilizer,
-        _rootInjector = rootInjector ?? _defaultRootInjector,
-        _componentFactory = component;
+  }) : _createStabilizer = stabilizer,
+       _rootInjector = rootInjector ?? _defaultRootInjector,
+       _componentFactory = component;
 
   NgTestBed._useComponentFactory({
-    Element? host,
+    this._host,
     required ComponentFactory<T> component,
-    required InjectorFactory rootInjector,
+    required this._rootInjector,
     required bool watchAngularLifecycle,
-  })  : _host = host,
-        _createStabilizer =
-            watchAngularLifecycle ? _defaultStabilizers : _alwaysStable,
-        _rootInjector = rootInjector,
-        _componentFactory = component;
+  }) : _createStabilizer = watchAngularLifecycle
+           ? _defaultStabilizers
+           : _alwaysStable,
+       _componentFactory = component;
 
   /// Returns a new instance of [NgTestBed] with the root injector wrapped.
   ///

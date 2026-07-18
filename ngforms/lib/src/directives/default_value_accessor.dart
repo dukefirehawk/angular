@@ -48,10 +48,12 @@ class DefaultValueAccessor extends Object
     if (e == null) return;
 
     // TODO: Fix this type checking
-    if (e is HTMLInputElement) {
-      e.value = normalizedValue.toString();
-    } else if (e is HTMLTextAreaElement) {
-      e.value = normalizedValue.toString();
+    if (e.isA<HTMLInputElement>()) {
+      (e as HTMLInputElement).value = normalizedValue.toString();
+    } else if (e.isA<HTMLTextAreaElement>()) {
+      (e as HTMLTextAreaElement).value = normalizedValue.toString();
+    } else if (e.isA<HTMLSelectElement>()) {
+      (e as HTMLSelectElement).value = normalizedValue.toString();
     } else {
       e.setProperty('value'.toJS, normalizedValue.toString().toJS);
     }
