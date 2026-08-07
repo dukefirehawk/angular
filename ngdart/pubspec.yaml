@@ -18,7 +18,6 @@ dependencies:
   build_web_compilers: ^4.6.0
   built_value: ^8.4.3
   collection: ^1.17.0
-  sanitize_html: ^2.1.0
   intl: ^0.20.0
   meta: ^1.8.0
   ngast: ^4.0.0-dev.1

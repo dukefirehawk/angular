@@ -70,15 +70,17 @@ void main() {
     await testFixture.update((component) {
       component.html = 'also <img src="x" onerror="evil()"> evil';
     });
-    expect((div?.innerHTML as JSString?)?.toDart, 'also <img src="x"> evil');
+    // The whole `<img>` goes, not just its `onerror`: it is absent from the
+    // browser sanitizer's default allow-list.
+    expect((div?.innerHTML as JSString?)?.toDart, 'also  evil');
     await testFixture.update((component) {
       final srcdoc = '<div></div><script></script>';
       component.html = 'also <iframe srcdoc="$srcdoc"> content</iframe>';
     });
-    expect(
-      (div?.innerHTML as JSString?)?.toDart,
-      'also <iframe> content</iframe>',
-    );
+    // As with `<img>`, `<iframe>` is not on the default allow-list, so the
+    // element is removed outright rather than kept with `srcdoc` stripped --
+    // and its content goes with it.
+    expect((div?.innerHTML as JSString?)?.toDart, 'also ');
   });
 }
 
