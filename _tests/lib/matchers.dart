@@ -41,56 +41,50 @@ class _HasTextContent extends Matcher {
 }
 
 String? _elementText(Object? n) {
-  // TODO: Migrate to 3.6 (Need review)
-  /*
-  if (n is Iterable) {
-    return n.map(_elementText).join('');
-  } else if (n is Node) {
-
-    if (n is ContentElement) {
-      return _elementText(n.getDistributedNodes());
-    }
-
-    if (n is Element && n.shadowRoot != null) {
-      return _elementText(n.shadowRoot!.childNodes);
-    }
-
-    if (n.childNodes.isDefinedAndNotNull) {
-      return _elementText(n.childNodes);
-    }
-
-    return n.textContent;
-  } else {
-    return '$n';
-  }
-  */
-
   if (n == null) {
     return '';
   }
 
   if (n is Iterable) {
     return n.map(_elementText).join('');
-  } else if (n == Node) {
-    var node = n as Node;
-
-    //if (node is ContentElement) {
-    //  return _elementText(n.getDistributedNodes());
-    //}
-
-    if (node.isA<Element>()) {
-      var el = n as Element;
-      if (el.shadowRoot != null) {
-        return _elementText(el.shadowRoot!.childNodes);
-      }
-    }
-
-    if (node.childNodes.isDefinedAndNotNull) {
-      return _elementText(node.childNodes);
-    }
-
-    return n.textContent;
-  } else {
-    return '$n';
   }
+
+  // The DOM types from `package:web` are extension types over `JSObject`, so
+  // `is` erases to the representation type and cannot distinguish them. Runtime
+  // checks have to go through `isA`.
+  if (n is JSObject) {
+    if (n.isA<NodeList>()) {
+      final nodes = n as NodeList;
+      final text = StringBuffer();
+      for (var i = 0; i < nodes.length; i++) {
+        text.write(_elementText(nodes.item(i)));
+      }
+      return text.toString();
+    }
+
+    // Comments contribute no text. Angular anchors `*ngIf`/`*ngFor` with them,
+    // so they are on the child list of nearly every structural directive.
+    if (n.isA<Comment>()) {
+      return '';
+    }
+
+    if (n.isA<Node>()) {
+      final node = n as Node;
+
+      if (n.isA<Element>()) {
+        final el = n as Element;
+        if (el.shadowRoot != null) {
+          return _elementText(el.shadowRoot!.childNodes);
+        }
+      }
+
+      if (node.childNodes.length > 0) {
+        return _elementText(node.childNodes);
+      }
+
+      return node.textContent;
+    }
+  }
+
+  return '$n';
 }
