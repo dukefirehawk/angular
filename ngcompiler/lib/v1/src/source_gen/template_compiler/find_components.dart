@@ -573,7 +573,15 @@ class _ComponentVisitor
     DartType? propertyType,
   ) {
     final value = annotationInfo.constantValue;
-    final readType = getField(value, 'read')?.toTypeValue();
+    // Un-erased: `read:` is matched by identity against the tokens an element
+    // publishes, which include `package:web`'s `Element` and `HTMLElement`.
+    // Those are extension types, so the erased `toTypeValue()` yields `JSObject`
+    // from `dart:_interceptors`, which matches nothing and silently drops the
+    // query. See [unerasedTypeValueOf].
+    final readField = getField(value, 'read');
+    final readType = readField == null
+        ? null
+        : unerasedTypeValueOf(readField) ?? readField.toTypeValue();
     CompileTokenMetadata? readMetadata;
 
     if (readType != null) {
