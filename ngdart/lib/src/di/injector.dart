@@ -269,8 +269,11 @@ abstract class Injector {
   /// }
   /// ```
   @nonVirtual
-  T provideTokenOptional<T extends Object>(OpaqueToken<T> token) {
-    return unsafeCast(get(token));
+  T? provideTokenOptional<T extends Object>(OpaqueToken<T> token) {
+    // As in provideTypeOptional: passing `null` as the not-found value is what
+    // makes this the *optional* variant; without it `get` throws, which is what
+    // provideToken does.
+    return unsafeCast(get(token, null));
   }
 }
 
