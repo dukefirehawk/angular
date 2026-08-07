@@ -12,7 +12,7 @@ workspace:
   - ngrouter
   - goldens
   - examples/hello_world
-  #- _tests
+  - _tests
 
 dev_dependencies:
   melos: ^8.0.0
