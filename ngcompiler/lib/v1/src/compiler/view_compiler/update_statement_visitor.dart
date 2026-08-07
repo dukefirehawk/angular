@@ -211,13 +211,20 @@ class _UpdateStatementsVisitor
       }
     }
     // Call Element.style.setProperty(propName, value);
-    o.Expression updateStyleExpr = renderNode!
-        .toReadExpr()
-        .prop('style')
-        .callMethod('setProperty', [
-          o.literal(styleBinding.name),
-          styleValueExpr,
-        ]);
+    //
+    // `style` is declared by `HTMLElement`, `SVGElement` and `MathMLElement`
+    // rather than by their shared `Element` supertype, so a node that isn't
+    // statically known to be an HTMLElement has to be cast. These are extension
+    // types over `JSObject`, so the cast is erased at runtime and stays correct
+    // for the SVG and MathML nodes that declare `style` themselves.
+    var node = renderNode!.toReadExpr();
+    if (!isHtmlElement) {
+      node = node.cast(o.importType(Identifiers.htmlElement)!);
+    }
+    o.Expression updateStyleExpr = node.prop('style').callMethod('setProperty', [
+      o.literal(styleBinding.name),
+      styleValueExpr,
+    ]);
     return updateStyleExpr.toStmt();
   }
 
