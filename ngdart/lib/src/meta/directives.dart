@@ -206,7 +206,7 @@ class Component {
   ///     )
   ///     class Example {}
   ///
-  final List<Object> exports;
+  final List<Object?> exports;
 
   final String? templateUrl;
   final String? template;
