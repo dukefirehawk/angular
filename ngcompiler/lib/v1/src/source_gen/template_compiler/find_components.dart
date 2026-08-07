@@ -342,15 +342,23 @@ class _ComponentVisitor
           if (setter == null) {
             return;
           }
-          //DartType propertyType = setter.parameters.first.type;
-          final dynamicType = setter.library.typeProvider.dynamicType;
-          var propertyType = setter.formalParameters.first.library?.typeSystem;
+          final propertyType = setter.formalParameters.first.type;
 
           // Resolves unspecified or bounded generic type parameters.
-          // TODO: Migration to 3.6 (Need review)
-          //print('=== ResolveToBound(propertyType) ===');
-          //final resolvedType = propertyType.resolveToBound(dynamicType);
-          final resolvedType = propertyType?.resolveToBound(dynamicType);
+          //
+          // `resolveToBound` moved from `DartType` to `TypeSystem`, and now
+          // takes the type to resolve rather than the bound to fall back to.
+          // An unbounded type parameter resolves to `Object?` there, so keep
+          // falling back to `dynamic` to preserve the original behaviour.
+          final DartType resolvedType;
+          if (propertyType is TypeParameterType &&
+              propertyType.element.bound == null) {
+            resolvedType = setter.library.typeProvider.dynamicType;
+          } else {
+            resolvedType = setter.library.typeSystem.resolveToBound(
+              propertyType,
+            );
+          }
 
           final typeName = getTypeName(resolvedType);
           _addPropertyBindingTo(
