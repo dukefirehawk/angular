@@ -542,7 +542,12 @@ class _ComponentVisitor
           .map((s) => CompileTokenMetadata(value: s))
           .toList();
     }
-    var selectorType = selector!.toTypeValue();
+    // Un-erased, as for `read:` below: a query selector is matched by identity
+    // against what the element publishes, and the erased `toTypeValue()` would
+    // report `package:web`'s extension types as `dart:_interceptors`' `JSObject`
+    // -- which matches nothing, and drags a private SDK library into the
+    // generated template. See [unerasedTypeValueOf].
+    var selectorType = unerasedTypeValueOf(selector!) ?? selector.toTypeValue();
     if (selectorType == null) {
       // NOTE(deboer): This code is untested and probably unreachable.
       _exceptionHandler.handle(
