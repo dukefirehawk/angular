@@ -163,7 +163,8 @@ class _NormalizedComponentVisitor extends RecursiveElementVisitor2<void> {
       final annotationImpl = annotation as ElementAnnotationImpl;
       for (final Argument argument
           in annotationImpl.annotationAst.arguments!.arguments) {
-        if (argument is NamedArgument && argument.name.stringValue == field) {
+        // `lexeme`, not `stringValue` -- see the note in `_extractExports`.
+        if (argument is NamedArgument && argument.name.lexeme == field) {
           if (argument.argumentExpression is! ListLiteral) {
             // Something like
             //   directives: 'Ha Ha!'
@@ -905,7 +906,8 @@ class _ComponentVisitor
                 .firstWhereOrNull(
                   (Argument argument) =>
                       argument is NamedArgument &&
-                      argument.name.stringValue == 'template',
+                      // `lexeme` -- see the note in `_extractExports`.
+                      argument.name.lexeme == 'template',
                 )
             as NamedArgument?;
     if (templateExpression != null) {
@@ -973,15 +975,69 @@ class _ComponentVisitor
 
     var arguments = annotation.annotationAst.arguments!.arguments;
     var exportsArg = arguments.whereType<NamedArgument>().firstWhereOrNull(
-      (arg) => arg.name.stringValue == 'exports',
+      // `lexeme`, not `stringValue`: `NamedArgument.name` is a `Token`, and
+      // `Token.stringValue` is the token *type's* canonical lexeme -- null for
+      // identifier tokens by design. `stringValue` type-checks here but never
+      // matches, so every `exports:` entry was silently dropped and templates
+      // fell back to resolving the name against the component instance.
+      (arg) => arg.name.lexeme == 'exports',
     );
     if (exportsArg == null || exportsArg.argumentExpression is! ListLiteral) {
       return exports;
     }
 
     var staticNames = (exportsArg.argumentExpression as ListLiteral).elements;
+
+    final unresolvedExports = <AstNode>[];
     for (var staticName in staticNames) {
-      if (staticName is! Identifier) {
+      String name;
+      String? prefix;
+      Element? staticElement;
+
+      if (staticName is TypeLiteral) {
+        // A bare type name in an expression position resolves to a
+        // `TypeLiteral` wrapping a `NamedType`, not to a `SimpleIdentifier`, so
+        // `exports: [SomeClass]` lands here. Enums and classes are the common
+        // case; the `Identifier` branch below still covers exported top-level
+        // functions and constants.
+        final namedType = staticName.type;
+        name = namedType.name.lexeme;
+        final importPrefix = namedType.importPrefix;
+        if (importPrefix != null) {
+          // We only allow prefixed identifiers to have library prefixes.
+          if (importPrefix.element is! PrefixElement) {
+            _exceptionHandler.handle(
+              ErrorMessageForAnnotation(
+                annotationInfo,
+                'Item $staticName in the "exports" field must be either a '
+                'simple identifier or an identifier with a library prefix',
+              ),
+            );
+            return exports;
+          }
+          prefix = importPrefix.name.lexeme;
+        }
+        staticElement = namedType.element;
+      } else if (staticName is Identifier) {
+        if (staticName is PrefixedIdentifier) {
+          // We only allow prefixed identifiers to have library prefixes.
+          if (staticName.prefix.element is! PrefixElement) {
+            _exceptionHandler.handle(
+              ErrorMessageForAnnotation(
+                annotationInfo,
+                'Item $staticName in the "exports" field must be either a '
+                'simple identifier or an identifier with a library prefix',
+              ),
+            );
+            return exports;
+          }
+          name = staticName.identifier.name;
+          prefix = staticName.prefix.name;
+        } else {
+          name = staticName.name;
+        }
+        staticElement = staticName.element;
+      } else {
         _exceptionHandler.handle(
           ErrorMessageForAnnotation(
             annotationInfo,
@@ -990,37 +1046,12 @@ class _ComponentVisitor
         );
         return exports;
       }
-    }
 
-    final unresolvedExports = <Identifier>[];
-    for (var staticName in staticNames) {
-      var id = staticName as Identifier;
-      String name;
-      String? prefix;
       AnalyzedClass? analyzedClass;
-      if (id is PrefixedIdentifier) {
-        // We only allow prefixed identifiers to have library prefixes.
-        if (id.prefix.element is! PrefixElement) {
-          _exceptionHandler.handle(
-            ErrorMessageForAnnotation(
-              annotationInfo,
-              'Item $id in the "exports" field must be either a simple '
-              'identifier or an identifier with a library prefix',
-            ),
-          );
-          return exports;
-        }
-        name = id.identifier.name;
-        prefix = id.prefix.name;
-      } else {
-        name = id.name;
-      }
-
-      final staticElement = id.element;
       if (staticElement is ClassElement) {
         analyzedClass = AnalyzedClass(staticElement);
       } else if (staticElement == null) {
-        unresolvedExports.add(id);
+        unresolvedExports.add(staticName);
         continue;
       }
 
