@@ -1,5 +1,6 @@
 import 'package:web/web.dart';
 
+import 'package:_tests/matchers.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 import 'package:test/test.dart';
@@ -88,16 +89,16 @@ void main() {
       );
       final fixture = await testBed.create();
       final element = fixture.rootElement;
-      expect(element.attributes, isNot(contains('disabled')));
-      expect(element.attributes, isNot(contains('aria-disabled')));
+      expect(element.attributeMap, isNot(contains('disabled')));
+      expect(element.attributeMap, isNot(contains('aria-disabled')));
 
       await fixture.update((c) => c.disabledBackingValue = true);
-      expect(element.attributes, contains('disabled'));
-      expect(element.attributes, contains('aria-disabled'));
+      expect(element.attributeMap, contains('disabled'));
+      expect(element.attributeMap, contains('aria-disabled'));
 
       await fixture.update((c) => c.disabledBackingValue = false);
-      expect(element.attributes, isNot(contains('disabled')));
-      expect(element.attributes, isNot(contains('aria-disabled')));
+      expect(element.attributeMap, isNot(contains('disabled')));
+      expect(element.attributeMap, isNot(contains('aria-disabled')));
     });
 
     test('should support conditional attributes on static members', () async {
@@ -106,8 +107,8 @@ void main() {
       );
       final fixture = await testBed.create();
       final element = fixture.rootElement;
-      expect(element.attributes, contains('disabled'));
-      expect(element.attributes, contains('aria-disabled'));
+      expect(element.attributeMap, contains('disabled'));
+      expect(element.attributeMap, contains('aria-disabled'));
     });
 
     test('should support conditional classes', () async {
@@ -116,13 +117,13 @@ void main() {
       );
       final fixture = await testBed.create();
       final element = fixture.rootElement;
-      expect(element.classList, isNot(contains('fancy')));
+      expect(element.cssClasses, isNot(contains('fancy')));
 
       await fixture.update((c) => c.fancy = true);
-      expect(element.classList, contains('fancy'));
+      expect(element.cssClasses, contains('fancy'));
 
       await fixture.update((c) => c.fancy = false);
-      expect(element.classList, isNot(contains('fancy')));
+      expect(element.cssClasses, isNot(contains('fancy')));
     });
 
     test('should support multiple annotations on a single field', () async {

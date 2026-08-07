@@ -13,6 +13,28 @@ Matcher hasTextContent(String expected) => _HasTextContent(expected);
 final throwsNoProviderError = throwsA(_isNoProviderError);
 final _isNoProviderError = const TypeMatcher<NoProviderError>();
 
+/// Dart views over the DOM collections that `dart:html` exposed as `Map` and
+/// `Iterable`, and that `package:web` exposes as their underlying interfaces.
+///
+/// `NamedNodeMap` and `DOMTokenList` are neither, so matchers such as
+/// `contains` and `containsPair` cannot be applied to them directly.
+extension DomCollections on Element {
+  /// The element's attributes, keyed by qualified name.
+  Map<String, String> get attributeMap {
+    final result = <String, String>{};
+    for (var i = 0; i < attributes.length; i++) {
+      final attribute = attributes.item(i)!;
+      result[attribute.name] = attribute.value;
+    }
+    return result;
+  }
+
+  /// The element's classes.
+  List<String> get cssClasses => [
+    for (var i = 0; i < classList.length; i++) classList.item(i)!,
+  ];
+}
+
 class _HasTextContent extends Matcher {
   final String expectedText;
 

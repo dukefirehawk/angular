@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:web/web.dart';
 
+import 'package:_tests/matchers.dart';
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
@@ -38,7 +39,7 @@ void main() {
           ng.createTestDerivedComponentFactory());
       final testFixture = await testBed.create();
       final hostElement = testFixture.rootElement.querySelector('derived')!;
-      expect(hostElement.attributes, containsPair('title', 'inherited'));
+      expect(hostElement.attributeMap, containsPair('title', 'inherited'));
     });
 
     test('implementation should be overriden', () async {
@@ -46,7 +47,7 @@ void main() {
           ng.createTestOverrideComponentFactory());
       final testFixture = await testBed.create();
       final hostElement = testFixture.rootElement.querySelector('override')!;
-      expect(hostElement.attributes, containsPair('title', 'overridden'));
+      expect(hostElement.attributeMap, containsPair('title', 'overridden'));
     });
 
     test('should allow multiple bindings to inherited property', () async {
@@ -55,8 +56,8 @@ void main() {
       final testFixture = await testBed.create();
       final hostElement =
           testFixture.rootElement.querySelector('annotated-derived')!;
-      expect(hostElement.attributes, containsPair('title', 'inherited'));
-      expect(hostElement.attributes, containsPair('id', 'inherited'));
+      expect(hostElement.attributeMap, containsPair('title', 'inherited'));
+      expect(hostElement.attributeMap, containsPair('id', 'inherited'));
     });
   });
 
@@ -215,9 +216,9 @@ void main() {
       });
       final element =
           testFixture.rootElement.querySelector('multiple-supertypes')!;
-      expect(element.attributes, containsPair('foo', '1'));
-      expect(element.attributes, containsPair('bar', '2'));
-      expect(element.attributes, containsPair('baz', '3'));
+      expect(element.attributeMap, containsPair('foo', '1'));
+      expect(element.attributeMap, containsPair('bar', '2'));
+      expect(element.attributeMap, containsPair('baz', '3'));
     });
 
     test('from most derived binding', () async {
@@ -229,8 +230,8 @@ void main() {
           ..value = '1'
           ..fooValue = '2';
       });
-      expect(testFixture.rootElement.attributes, containsPair('foo', '2'));
-      expect(testFixture.rootElement.attributes, containsPair('bar', '1'));
+      expect(testFixture.rootElement.attributeMap, containsPair('foo', '2'));
+      expect(testFixture.rootElement.attributeMap, containsPair('bar', '1'));
     });
   });
 
