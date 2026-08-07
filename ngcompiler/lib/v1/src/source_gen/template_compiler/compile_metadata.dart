@@ -151,13 +151,12 @@ class CompileTypeMetadataVisitor
     }
     if (type.isExplicitlyNonNullable) {
       // Must *NOT* be @Optional()
-      // TODO: Check why is is not working as expected.
-      // if (isOptional) {
-      //   throw BuildError.forElement(
-      //     element,
-      //     messages.optionalDependenciesNullable,
-      //   );
-      // }
+      if (isOptional) {
+        throw BuildError.forElement(
+          element,
+          messages.optionalDependenciesNullable,
+        );
+      }
     } else if (type.isExplicitlyNullable) {
       // Must *BE* @Optional()
       if (!isOptional) {
@@ -333,7 +332,8 @@ class CompileTypeMetadataVisitor
     final parameterInfo = ParameterInfo(p, _exceptionHandler);
     try {
       // TODO(b/170257539): Resolve inconsistencies with other compiler parts.
-      final isOptional = parameterInfo.isOptional || parameterInfo.isPositional;
+      final isOptional =
+          parameterInfo.isOptional || parameterInfo.isOptionalPositional;
       final isAttribute = parameterInfo.isAttribute;
       if (!isAttribute) {
         _checkForOptionalAndNullable(p, p.type, isOptional: isOptional);
@@ -344,7 +344,7 @@ class CompileTypeMetadataVisitor
         isSelf: parameterInfo.isSelf,
         isHost: parameterInfo.isHost,
         isSkipSelf: parameterInfo.isSkipSelf,
-        isOptional: parameterInfo.isOptional || parameterInfo.isPositional,
+        isOptional: isOptional,
       );
     } on ArgumentError catch (_) {
       // Handle cases where something is annotated with @Injectable() but does
@@ -757,9 +757,14 @@ class ParameterInfo {
   DartObject? opaqueToken;
   bool get isOpaqueToken => opaqueToken != null;
 
-  bool get isPositional =>
-      // ignore: deprecated_member_use, no migration path
-      _parameter.isPositional;
+  /// Whether this is declared as `[Foo foo]`, which DI treats as `@Optional()`.
+  ///
+  /// Note this is deliberately *not* `_parameter.isPositional`, which is also
+  /// true for required positional parameters -- the overwhelming majority of
+  /// injected dependencies. Marking those optional silently swaps the
+  /// `injectorGet` that reports a missing provider for the `injectorGetOptional`
+  /// that returns `null` for one.
+  bool get isOptionalPositional => _parameter.isOptionalPositional;
 
   DartType get type => _parameter.type;
   String get libraryIdentifier => _parameter.library!.identifier;
