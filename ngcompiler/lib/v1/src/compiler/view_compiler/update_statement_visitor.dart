@@ -180,17 +180,21 @@ class _UpdateStatementsVisitor
   @override
   o.Statement visitStyleBinding(ir.StyleBinding styleBinding, [_]) {
     o.Expression styleValueExpr;
+    // setProperty() takes a non-nullable String, so an absent value has to be
+    // passed as the empty string. That is what an absent value has always meant
+    // here: dart:html's setProperty() coerced a null value to '' internally, and
+    // '' removes the property.
     if (styleBinding.unit != null) {
       // Append the unit to the bound expression if not null. For example:
       //
-      //    ctx.width == null ? null : ctx.width.toString() + 'px'
+      //    ctx.width == null ? '' : ctx.width.toString() + 'px'
       //
       final styleString = bindingSource.isString
           ? currValExpr
           : currValExpr.callMethod('toString', []);
       final styleWithUnit = styleString.plus(o.literal(styleBinding.unit));
       styleValueExpr = currValExpr.isBlank().conditional(
-        o.nullExpr,
+        o.literal(''),
         styleWithUnit,
       );
     } else {
@@ -202,6 +206,9 @@ class _UpdateStatementsVisitor
               // Use null check to bind null instead of string "null".
               checked: bindingSource.isNullable,
             );
+      if (bindingSource.isNullable) {
+        styleValueExpr = styleValueExpr.ifNull(o.literal(''));
+      }
     }
     // Call Element.style.setProperty(propName, value);
     o.Expression updateStyleExpr = renderNode!
