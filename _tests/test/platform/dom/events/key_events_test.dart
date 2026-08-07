@@ -210,19 +210,19 @@ Event createKeyboardEvent(
   bool metaKey = false,
 }) {
   if (globalContext
-      .getProperty(CREATE_KEYBOARD_EVENT_NAME)
+      .getProperty(CREATE_KEYBOARD_EVENT_NAME.toJS)
       .isDefinedAndNotNull) {
     var script = document.createElement('script')
       ..setAttribute('type', 'text/javascript')
       ..text = CREATE_KEYBOARD_EVENT_SCRIPT;
     document.body!.append(script);
   }
-  return globalContext.callMethod(CREATE_KEYBOARD_EVENT_NAME, [
-    type,
-    keyCode,
-    ctrlKey,
-    altKey,
-    shiftKey,
-    metaKey,
+  return globalContext.callMethodVarArgs(CREATE_KEYBOARD_EVENT_NAME.toJS, [
+    type.toJS,
+    keyCode.toJS,
+    ctrlKey.toJS,
+    altKey.toJS,
+    shiftKey.toJS,
+    metaKey.toJS,
   ]) as Event;
 }

@@ -7,6 +7,7 @@ import 'package:web/web.dart';
 
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
+import 'package:ngdart/src/testability/js_api.dart' show JsTestability;
 
 import 'run_app_test.template.dart' as ng;
 
@@ -39,15 +40,15 @@ void main() {
   void verifyTestability() {
     expect(component.injector.get(Testability), isNotNull);
     var jsTestability = getAngularTestability(
-      rootDomContainer.children.item(0),
+      rootDomContainer.children.item(0)!,
     );
-    expect(getAllAngularTestabilities(), isNot(hasLength(0)));
+    expect(getAllAngularTestabilities().toDart, isNot(hasLength(0)));
     expect(jsTestability.isStable(), isTrue, reason: 'Expected stability');
     jsTestability.whenStable(expectAsync0(() {
       Future(expectAsync0(() {
         verifyDomAndStyles(innerText: 'Hello Universe!');
       }));
-    }));
+    }).toJS);
     runInApp(() => HelloWorldComponent.doAsyncTaskAndThenRename('Universe'));
   }
 
@@ -167,10 +168,4 @@ class StubExceptionHandler implements ExceptionHandler {
 external JsTestability getAngularTestability(Element e);
 
 @JS()
-external List<JsTestability> getAllAngularTestabilities();
-
-@JS()
-abstract class JsTestability {
-  external bool isStable();
-  external void whenStable(void Function() fn);
-}
+external JSArray<JsTestability> getAllAngularTestabilities();

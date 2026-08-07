@@ -684,15 +684,15 @@ extension _SumCssClasses on Element {
   Iterable<String> get allCssClasses {
     // TODO: Migrate to dart 3.6 (Need to review)
     //return querySelectorAll('*').map((e) => e.classList).expand((c) => c);
-    var classList = [];
+    var classList = <DOMTokenList>[];
     var all = querySelectorAll('*');
     for (var i = 0; i < all.length; i++) {
       classList.add((all.item(i) as HTMLElement).classList);
     }
     return classList.expand((DOMTokenList c) {
       var result = <String>[];
-      for (var i = 0; i > c.length; i++) {
-        result.add(c.item(i));
+      for (var i = 0; i < c.length; i++) {
+        result.add(c.item(i)!);
       }
       return result;
     });

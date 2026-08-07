@@ -1,6 +1,8 @@
 @TestOn('browser')
 library;
 
+import 'dart:js_interop';
+
 import 'package:web/web.dart';
 
 import 'package:ngtest/angular_test.dart';
@@ -56,24 +58,24 @@ void main() {
     final testBed = NgTestBed(ng.createUnsafeHtmlComponentFactory());
     final testFixture = await testBed.create();
     final div = testFixture.rootElement.querySelector('div');
-    expect(div?.innerHTML, 'some <p>text</p>');
+    expect((div?.innerHTML as JSString?)?.toDart, 'some <p>text</p>');
     await testFixture.update((component) {
       var c = component as HTMLElement;
-      c.innerHTML = 'ha <script>evil()</script>';
+      c.innerHTML = 'ha <script>evil()</script>'.toJS;
     });
-    expect(div?.innerHTML, 'ha ');
+    expect((div?.innerHTML as JSString?)?.toDart, 'ha ');
     await testFixture.update((component) {
       var c = component as HTMLElement;
-      c.innerHTML = 'also <img src="x" onerror="evil()"> evil';
+      c.innerHTML = 'also <img src="x" onerror="evil()"> evil'.toJS;
     });
-    expect(div?.innerHTML, 'also <img src="x"> evil');
+    expect((div?.innerHTML as JSString?)?.toDart, 'also <img src="x"> evil');
     await testFixture.update((component) {
       final srcdoc = '<div></div><script></script>';
       var c = component as HTMLElement;
-      c.innerHTML = 'also <iframe srcdoc="$srcdoc"> content</iframe>';
+      c.innerHTML = 'also <iframe srcdoc="$srcdoc"> content</iframe>'.toJS;
     });
     expect(
-      div?.innerHTML,
+      (div?.innerHTML as JSString?)?.toDart,
       'also <iframe> content</iframe>',
     );
   });
