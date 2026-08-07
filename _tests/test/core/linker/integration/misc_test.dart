@@ -1,3 +1,4 @@
+import 'package:_tests/matchers.dart';
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
@@ -20,7 +21,7 @@ void main() {
         ng.createHostAttributeFromDirectiveComponentFactory());
     final testFixture = await testBed.create();
     final div = testFixture.rootElement.children.item(0) as HTMLDivElement;
-    expect(div.attributes, containsPair('role', 'button'));
+    expect(div.attributeMap, containsPair('role', 'button'));
   });
 
   test('should support updating host element via host properties', () async {
