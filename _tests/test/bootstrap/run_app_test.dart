@@ -30,8 +30,10 @@ void main() {
   void verifyDomAndStyles({String innerText = 'Hello World!'}) {
     expect(rootDomContainer.textContent, innerText);
     final h1 = rootDomContainer.querySelector('h1') as HTMLHeadingElement;
-    //expect(h1.getComputedStyle().height, '100px');
-    expect(h1.style.height, '100px');
+    // The height comes from the component's `styles:` block, so it is only
+    // visible on the computed style -- `h1.style` holds inline styles, of
+    // which there are none.
+    expect(window.getComputedStyle(h1).height, '100px');
   }
 
   /// Verify the `Testability` interface is working for this application.

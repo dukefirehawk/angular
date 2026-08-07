@@ -369,7 +369,7 @@ class CaptureInjectInjector extends HierarchicalInjector implements Injector {
   ]) {
     lastToken = token;
     lastOrElse = orElse;
-    return orElse;
+    return null;
   }
 }
 

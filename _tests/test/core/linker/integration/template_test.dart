@@ -15,7 +15,7 @@ void main() {
     final testFixture = await testBed.create();
     // 1 template + 2 copies.
     expect(testFixture.rootElement.childNodes, hasLength(3));
-    expect(testFixture.rootElement.childNodes.item(0)?.textContent, 'hello');
+    expect(testFixture.rootElement.childNodes.item(1)?.textContent, 'hello');
     expect(testFixture.rootElement.childNodes.item(2)?.textContent, 'again');
   });
 

@@ -209,7 +209,10 @@ Event createKeyboardEvent(
   bool shiftKey = false,
   bool metaKey = false,
 }) {
-  if (globalContext
+  // Inject the helper when it is *absent*. Testing the other way round meant
+  // the script was only ever added once the function it defines already
+  // existed, so the first call always found it undefined.
+  if (!globalContext
       .getProperty(CREATE_KEYBOARD_EVENT_NAME.toJS)
       .isDefinedAndNotNull) {
     var script = document.createElement('script')
