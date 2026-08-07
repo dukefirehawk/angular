@@ -20,7 +20,12 @@ DartType? inferProviderType(DartObject provider, DartObject token) {
   //    case.
   //
   // Check for MultiToken<T>.
-  final tokenType = token.type;
+  //
+  // These read the un-erased types: the `<T>` recovered here becomes the type of
+  // the generated provider field, so an extension type such as `package:web`'s
+  // `HTMLElement` must not collapse to `dart:_interceptors`' `JSObject`.
+  // See [unerasedTypeOf].
+  final tokenType = unerasedTypeOf(token);
   if (tokenType != null && $MultiToken.isAssignableFromType(tokenType)) {
     if (tokenType is InterfaceType && $MultiToken.isExactlyType(tokenType)) {
       return tokenType.typeArguments.first;
@@ -45,7 +50,7 @@ DartType? inferProviderType(DartObject provider, DartObject token) {
     }
   }
   // Lookup Inferred Type (i.e. the <T> recorded for Provider<T>).
-  var providerType = provider.type;
+  var providerType = unerasedTypeOf(provider);
   if (providerType is InterfaceType) {
     final providerOfTArgs = providerType.typeArguments;
     if (providerOfTArgs.isNotEmpty) {

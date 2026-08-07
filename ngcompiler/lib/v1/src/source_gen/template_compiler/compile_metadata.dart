@@ -112,9 +112,12 @@ class CompileTypeMetadataVisitor
       return null;
     }
     final providerType = inferProviderType(provider, token);
+    // No `as ClassElement` here: `inferProviderType` returns un-erased types, so
+    // this can legitimately be an extension type (`ExtensionTypeElement`), e.g.
+    // `OpaqueToken<HTMLElement>` from `package:web`.
     final providerTypeArgument = providerType is InterfaceType
         ? _getCompileTypeMetadata(
-            providerType.element as ClassElement,
+            providerType.element,
             typeArguments: providerType.typeArguments,
           )
         : null;
@@ -252,8 +255,12 @@ class CompileTypeMetadataVisitor
   /// piece of metadata.
   ///
   /// See https://github.com/angulardart/angular/issues/906 for details.
+  // Takes an [InterfaceElement], not a [ClassElement], so that extension types
+  // can be described. Only the `enforceClassCanBeCreated` path needs a real
+  // class (to look up a constructor), and every caller passing that flag comes
+  // from a `toTypeValue()` that is still erased, so a class is guaranteed there.
   CompileTypeMetadata _getCompileTypeMetadata(
-    ClassElement element, {
+    InterfaceElement element, {
     bool enforceClassCanBeCreated = false,
     List<DartType> typeArguments = const [],
   }) {
@@ -271,7 +278,7 @@ class CompileTypeMetadataVisitor
       name: element.displayName,
       diDeps: _getCompileDiDependencyMetadata(
         enforceClassCanBeCreated
-            ? unnamedConstructor(element)?.formalParameters ?? []
+            ? unnamedConstructor(element as ClassElement)?.formalParameters ?? []
             : [],
         element,
       ),
@@ -425,7 +432,9 @@ class CompileTypeMetadataVisitor
     } else if (token.toDoubleValue() != null) {
       return CompileTokenMetadata(value: token.toDoubleValue());
     } else if (token.toTypeValue() != null) {
-      return _tokenForType(token.toTypeValue()!);
+      // Un-erased: a `Type` token that is an extension type must be emitted as
+      // itself, not as its representation type. See [unerasedTypeValueOf].
+      return _tokenForType(unerasedTypeValueOf(token) ?? token.toTypeValue()!);
     } else if (token.type is InterfaceType) {
       // TODO(het): allow this to be any const invocation
       var invocation =
@@ -544,7 +553,10 @@ class CompileTypeMetadataVisitor
         o.MapType(null, [o.TypeModifier.constModifier]),
       );
     } else if (token.toTypeValue() != null) {
-      return o.importExpr(_idFor(token.toTypeValue()!));
+      // Un-erased, as in `_token` above. See [unerasedTypeValueOf].
+      return o.importExpr(
+        _idFor(unerasedTypeValueOf(token) ?? token.toTypeValue()!),
+      );
     } else if (_isEnum(token.type)) {
       return _expressionForEnum(token);
     } else if (_isProtobufEnum(token.type)) {
