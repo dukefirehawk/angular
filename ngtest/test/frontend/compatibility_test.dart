@@ -134,11 +134,11 @@ void main() {
 
 @Component(selector: 'test', template: '{{value}}')
 class AngularInjector {
-  final TestService? _testService;
+  final TestService _testService;
 
   AngularInjector(this._testService);
 
-  String? get value => _testService?.value;
+  String? get value => _testService.value;
 }
 
 @Injectable()

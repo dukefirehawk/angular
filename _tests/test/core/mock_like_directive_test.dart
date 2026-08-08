@@ -38,7 +38,7 @@ class NotifierComponent {
 )
 class MockNotifierComponent implements NotifierComponent {
   @override
-  Object noSuchMethod(Invocation invocation) => null;
+  dynamic noSuchMethod(Invocation invocation) => null;
 }
 
 @Component(
@@ -57,8 +57,10 @@ class TestMockNotificationComponent {
   template: '',
 )
 class FakeNotifierComponent extends NotifierComponent {
+  // Deliberately returns null despite the non-nullable return type: the test
+  // asserts that a null @Output on a non-mock-like directive throws.
   @override
-  Stream<String> get notifications => null;
+  Stream<String> get notifications => null as dynamic;
 }
 
 @Component(

@@ -58,20 +58,28 @@ void main() {
       String expected = 'Hello, World';
       expect(sanitizeHtmlInternal(testInput), expected);
     });
-    test('supports non-element, non-attribute nodes', () {
+    test('drops non-element, non-attribute nodes', () {
+      // The browser's default sanitizer configuration strips comments; the
+      // `NodeTreeSanitizer` this replaced kept them. Restoring them would mean
+      // calling `setComments(true)` on an explicit `Sanitizer`, which is a
+      // relaxation of the default and so a deliberate security decision.
       String testInput = '<!-- comments? -->no.';
-      String expected = '<!-- comments? -->no.';
+      String expected = 'no.';
       expect(sanitizeHtmlInternal(testInput), expected);
       testInput = '<?pi nodes?>no.';
-      expected = '<!--?pi nodes?-->no.';
+      expected = '<?pi nodes?>no.';
       expect(sanitizeHtmlInternal(testInput), expected);
     });
     test('escaped entities', () {
       String testInput = '<p>Hello &lt; World</p>';
       String expected = '<p>Hello &lt; World</p>';
       expect(sanitizeHtmlInternal(testInput), expected);
+      // `<img>` is not on the browser's default allow-list -- it is the classic
+      // `onerror` vector -- so it is dropped along with its attributes. Trusted
+      // markup that needs images goes through `[safeInnerHtml]`, which does not
+      // sanitize.
       testInput = '<img alt="% &amp; &quot; !">Hello';
-      expected = '<img alt="% &amp; &quot; !">Hello';
+      expected = 'Hello';
       expect(sanitizeHtmlInternal(testInput), expected);
     });
     group('should strip dangerous', () {

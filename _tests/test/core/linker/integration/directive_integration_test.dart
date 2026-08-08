@@ -203,8 +203,8 @@ class UnboundDirectiveInputComponent {}
   selector: '[no-duplicate]',
 )
 class DuplicateDir {
-  DuplicateDir(HtmlElement element) {
-    element.text = '${element.textContent}noduplicate';
+  DuplicateDir(HTMLElement element) {
+    element.textContent = '${element.textContent}noduplicate';
   }
 }
 

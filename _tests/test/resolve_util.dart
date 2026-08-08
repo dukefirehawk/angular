@@ -11,13 +11,19 @@ import 'package:ngcompiler/v1/src/compiler/template_compiler.dart';
 import 'package:ngcompiler/v1/src/source_gen/template_compiler/component_visitor_exceptions.dart';
 import 'package:ngcompiler/v1/src/source_gen/template_compiler/find_components.dart';
 
-// Use custom package config for angular sources if specified
-final _packageConfigFuture = Platform
-            .environment['ANGULAR_PACKAGE_CONFIG_PATH'] !=
-        null
-    ? loadPackageConfigUri(
-        Uri.base.resolve(Platform.environment['ANGULAR_PACKAGE_CONFIG_PATH']))
-    : Isolate.packageConfig.then(loadPackageConfigUri);
+// Use custom package config for angular sources if specified.
+//
+// Read into a local first: an index expression is not promoted by a null check,
+// so `Platform.environment[...]` stays `String?` at the use site.
+final _customPackageConfigPath =
+    Platform.environment['ANGULAR_PACKAGE_CONFIG_PATH'];
+
+final _packageConfigFuture = _customPackageConfigPath != null
+    ? loadPackageConfigUri(Uri.base.resolve(_customPackageConfigPath))
+    // `Isolate.packageConfig` is a `Future<Uri?>`, and `loadPackageConfigUri`
+    // takes a non-null `Uri` plus optional named parameters, so it can no
+    // longer be torn off directly as a `Function(Uri?)`.
+    : Isolate.packageConfig.then((uri) => loadPackageConfigUri(uri!));
 
 Future<LibraryElement> resolve(String source,
     [PackageConfig? packageConfig]) async {

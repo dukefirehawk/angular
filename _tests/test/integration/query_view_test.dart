@@ -2,8 +2,7 @@ import 'dart:async';
 import 'package:web/web.dart';
 
 import 'package:test/test.dart';
-// ignore: avoid_relative_lib_imports
-import '../../lib/query_tests.dart';
+import 'package:_tests/query_tests.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 

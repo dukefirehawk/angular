@@ -112,9 +112,12 @@ class CompileTypeMetadataVisitor
       return null;
     }
     final providerType = inferProviderType(provider, token);
+    // No `as ClassElement` here: `inferProviderType` returns un-erased types, so
+    // this can legitimately be an extension type (`ExtensionTypeElement`), e.g.
+    // `OpaqueToken<HTMLElement>` from `package:web`.
     final providerTypeArgument = providerType is InterfaceType
         ? _getCompileTypeMetadata(
-            providerType.element as ClassElement,
+            providerType.element,
             typeArguments: providerType.typeArguments,
           )
         : null;
@@ -148,13 +151,12 @@ class CompileTypeMetadataVisitor
     }
     if (type.isExplicitlyNonNullable) {
       // Must *NOT* be @Optional()
-      // TODO: Check why is is not working as expected.
-      // if (isOptional) {
-      //   throw BuildError.forElement(
-      //     element,
-      //     messages.optionalDependenciesNullable,
-      //   );
-      // }
+      if (isOptional) {
+        throw BuildError.forElement(
+          element,
+          messages.optionalDependenciesNullable,
+        );
+      }
     } else if (type.isExplicitlyNullable) {
       // Must *BE* @Optional()
       if (!isOptional) {
@@ -252,8 +254,12 @@ class CompileTypeMetadataVisitor
   /// piece of metadata.
   ///
   /// See https://github.com/angulardart/angular/issues/906 for details.
+  // Takes an [InterfaceElement], not a [ClassElement], so that extension types
+  // can be described. Only the `enforceClassCanBeCreated` path needs a real
+  // class (to look up a constructor), and every caller passing that flag comes
+  // from a `toTypeValue()` that is still erased, so a class is guaranteed there.
   CompileTypeMetadata _getCompileTypeMetadata(
-    ClassElement element, {
+    InterfaceElement element, {
     bool enforceClassCanBeCreated = false,
     List<DartType> typeArguments = const [],
   }) {
@@ -271,7 +277,7 @@ class CompileTypeMetadataVisitor
       name: element.displayName,
       diDeps: _getCompileDiDependencyMetadata(
         enforceClassCanBeCreated
-            ? unnamedConstructor(element)?.formalParameters ?? []
+            ? unnamedConstructor(element as ClassElement)?.formalParameters ?? []
             : [],
         element,
       ),
@@ -326,7 +332,8 @@ class CompileTypeMetadataVisitor
     final parameterInfo = ParameterInfo(p, _exceptionHandler);
     try {
       // TODO(b/170257539): Resolve inconsistencies with other compiler parts.
-      final isOptional = parameterInfo.isOptional || parameterInfo.isPositional;
+      final isOptional =
+          parameterInfo.isOptional || parameterInfo.isOptionalPositional;
       final isAttribute = parameterInfo.isAttribute;
       if (!isAttribute) {
         _checkForOptionalAndNullable(p, p.type, isOptional: isOptional);
@@ -337,7 +344,7 @@ class CompileTypeMetadataVisitor
         isSelf: parameterInfo.isSelf,
         isHost: parameterInfo.isHost,
         isSkipSelf: parameterInfo.isSkipSelf,
-        isOptional: parameterInfo.isOptional || parameterInfo.isPositional,
+        isOptional: isOptional,
       );
     } on ArgumentError catch (_) {
       // Handle cases where something is annotated with @Injectable() but does
@@ -425,7 +432,9 @@ class CompileTypeMetadataVisitor
     } else if (token.toDoubleValue() != null) {
       return CompileTokenMetadata(value: token.toDoubleValue());
     } else if (token.toTypeValue() != null) {
-      return _tokenForType(token.toTypeValue()!);
+      // Un-erased: a `Type` token that is an extension type must be emitted as
+      // itself, not as its representation type. See [unerasedTypeValueOf].
+      return _tokenForType(unerasedTypeValueOf(token) ?? token.toTypeValue()!);
     } else if (token.type is InterfaceType) {
       // TODO(het): allow this to be any const invocation
       var invocation =
@@ -544,7 +553,10 @@ class CompileTypeMetadataVisitor
         o.MapType(null, [o.TypeModifier.constModifier]),
       );
     } else if (token.toTypeValue() != null) {
-      return o.importExpr(_idFor(token.toTypeValue()!));
+      // Un-erased, as in `_token` above. See [unerasedTypeValueOf].
+      return o.importExpr(
+        _idFor(unerasedTypeValueOf(token) ?? token.toTypeValue()!),
+      );
     } else if (_isEnum(token.type)) {
       return _expressionForEnum(token);
     } else if (_isProtobufEnum(token.type)) {
@@ -745,9 +757,14 @@ class ParameterInfo {
   DartObject? opaqueToken;
   bool get isOpaqueToken => opaqueToken != null;
 
-  bool get isPositional =>
-      // ignore: deprecated_member_use, no migration path
-      _parameter.isPositional;
+  /// Whether this is declared as `[Foo foo]`, which DI treats as `@Optional()`.
+  ///
+  /// Note this is deliberately *not* `_parameter.isPositional`, which is also
+  /// true for required positional parameters -- the overwhelming majority of
+  /// injected dependencies. Marking those optional silently swaps the
+  /// `injectorGet` that reports a missing provider for the `injectorGetOptional`
+  /// that returns `null` for one.
+  bool get isOptionalPositional => _parameter.isOptionalPositional;
 
   DartType get type => _parameter.type;
   String get libraryIdentifier => _parameter.library!.identifier;

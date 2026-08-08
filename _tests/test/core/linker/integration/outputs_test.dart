@@ -62,7 +62,7 @@ void main() {
         testFixture.rootElement.children.item(0) as HTMLInputElement;
     final inputNoPrevent =
         testFixture.rootElement.children.item(1) as HTMLInputElement;
-    final clickPrevent = MouseEvent('click');
+    final clickPrevent = MouseEvent('click', MouseEventInit(cancelable: true));
     final clickNoPrevent = MouseEvent('click');
     inputPrevent.dispatchEvent(clickPrevent);
     inputNoPrevent.dispatchEvent(clickNoPrevent);

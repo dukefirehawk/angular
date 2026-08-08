@@ -1,0 +1,1585 @@
+  0s mockito:mockBuilder on 43 inputs; test/directives/router_link_active_directive_test.dart
+  0s ngdart (lazy); lib/src/directives/router_link_directive.dart
+  0s mockito:mockBuilder on 43 inputs: 43 skipped
+  0s build_test:test_bootstrap on 45 inputs; $package$
+  0s build_test:test_bootstrap on 45 inputs: 45 skipped
+  0s build_web_compilers:entrypoint on 22 inputs; test/directives/router_link_active_directive_test.dart.browser_test.dart
+  0s build_web_compilers:entrypoint on 22 inputs: 22 skipped
+  Built with build_runner/aot in 3s; wrote 0 outputs.
+Running tests...
+
+00:00 +0: loading test/directives/router_link_active_directive_test.dart
+00:00 +0: test/directives/router_link_active_directive_test.dart: should add/remove a CSS class as a route is activated
+00:00 +0 -1: test/directives/router_link_directive_test.dart: should attempt to navigate to the provided link
+00:00 +0 -1: test/directives/router_link_active_directive_test.dart: should add/remove a CSS class as a route is activated [E]
+  No provider found for JSObject:
+    RouterLink ->
+    JSObject.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                              throw_
+  package:ngdart/src/di/injector.dart 187:7                      get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28     injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  router_link_active_directive_test.template.dart 51:206         <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  router_link_active_directive_test.template.dart 50:22          build
+  package:ngdart/src/core/linker/views/component_view.dart 96:5  createAndProject
+  package:ngdart/src/core/linker/views/host_view.dart 84:5       create
+  package:ngdart/src/core/linker/component_factory.dart 147:20   create
+  package:ngtest/src/bootstrap.dart 80:40                        _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                         <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26      <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18               <fn>
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18               [_run]
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23               run
+  package:ngdart/src/core/application_ref.dart 135:52            runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5       run
+  package:ngtest/src/bootstrap.dart 42:16                        <fn>
+  
+00:00 +0 -2: test/directives/router_link_directive_test.dart: should attempt to navigate to the provided link [E]
+  No provider found for JSObject:
+    RouterLink ->
+    JSObject.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                              throw_
+  package:ngdart/src/di/injector.dart 187:7                      get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28     injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  router_link_directive_test.template.dart 48:206                <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  router_link_directive_test.template.dart 47:21                 build
+  package:ngdart/src/core/linker/views/component_view.dart 96:5  createAndProject
+  package:ngdart/src/core/linker/views/host_view.dart 84:5       create
+  package:ngdart/src/core/linker/component_factory.dart 147:20   create
+  package:ngtest/src/bootstrap.dart 80:40                        _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                         <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26      <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18               <fn>
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18               [_run]
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23               run
+  package:ngdart/src/core/application_ref.dart 135:52            runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5       run
+  package:ngtest/src/bootstrap.dart 42:16                        <fn>
+  
+00:00 +0 -2: test/directives/router_link_active_directive_test.dart: should validate queryParams and fragment
+00:00 +0 -3: test/directives/router_link_directive_test.dart: should attempt to navigate on Enter key press
+00:00 +0 -3: test/directives/router_link_active_directive_test.dart: should validate queryParams and fragment [E]
+  No provider found for JSObject:
+    RouterLink ->
+    JSObject.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                              throw_
+  package:ngdart/src/di/injector.dart 187:7                      get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28     injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  router_link_active_directive_test.template.dart 51:206         <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  router_link_active_directive_test.template.dart 50:22          build
+  package:ngdart/src/core/linker/views/component_view.dart 96:5  createAndProject
+  package:ngdart/src/core/linker/views/host_view.dart 84:5       create
+  package:ngdart/src/core/linker/component_factory.dart 147:20   create
+  package:ngtest/src/bootstrap.dart 80:40                        _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                         <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26      <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18               <fn>
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18               [_run]
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23               run
+  package:ngdart/src/core/application_ref.dart 135:52            runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5       run
+  package:ngtest/src/bootstrap.dart 42:16                        <fn>
+  
+00:00 +0 -4: test/directives/router_link_directive_test.dart: should attempt to navigate on Enter key press [E]
+  No provider found for JSObject:
+    RouterLink ->
+    JSObject.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                              throw_
+  package:ngdart/src/di/injector.dart 187:7                      get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28     injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  router_link_directive_test.template.dart 141:206               <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  router_link_directive_test.template.dart 140:21                build
+  package:ngdart/src/core/linker/views/component_view.dart 96:5  createAndProject
+  package:ngdart/src/core/linker/views/host_view.dart 84:5       create
+  package:ngdart/src/core/linker/component_factory.dart 147:20   create
+  package:ngtest/src/bootstrap.dart 80:40                        _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                         <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26      <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18               <fn>
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18               [_run]
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23               run
+  package:ngdart/src/core/application_ref.dart 135:52            runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5       run
+  package:ngtest/src/bootstrap.dart 42:16                        <fn>
+  
+00:00 +0 -4: test/directives/router_link_active_directive_test.dart: should ignore the current urls queryParams and fragment if not specified in the routerLinks
+00:00 +0 -5: test/directives/router_link_directive_test.dart: should parse out query params and fragment
+00:00 +0 -5: test/directives/router_link_active_directive_test.dart: should ignore the current urls queryParams and fragment if not specified in the routerLinks [E]
+  No provider found for JSObject:
+    RouterLink ->
+    JSObject.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                              throw_
+  package:ngdart/src/di/injector.dart 187:7                      get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28     injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  router_link_active_directive_test.template.dart 51:206         <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  router_link_active_directive_test.template.dart 50:22          build
+  package:ngdart/src/core/linker/views/component_view.dart 96:5  createAndProject
+  package:ngdart/src/core/linker/views/host_view.dart 84:5       create
+  package:ngdart/src/core/linker/component_factory.dart 147:20   create
+  package:ngtest/src/bootstrap.dart 80:40                        _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                         <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26      <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18               <fn>
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18               [_run]
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23               run
+  package:ngdart/src/core/application_ref.dart 135:52            runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5       run
+  package:ngtest/src/bootstrap.dart 42:16                        <fn>
+  
+00:00 +0 -6: test/directives/router_link_directive_test.dart: should parse out query params and fragment [E]
+  No provider found for JSObject:
+    RouterLink ->
+    JSObject.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                              throw_
+  package:ngdart/src/di/injector.dart 187:7                      get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28     injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  router_link_directive_test.template.dart 48:206                <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  router_link_directive_test.template.dart 47:21                 build
+  package:ngdart/src/core/linker/views/component_view.dart 96:5  createAndProject
+  package:ngdart/src/core/linker/views/host_view.dart 84:5       create
+  package:ngdart/src/core/linker/component_factory.dart 147:20   create
+  package:ngtest/src/bootstrap.dart 80:40                        _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                         <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26      <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18               <fn>
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18               [_run]
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23               run
+  package:ngdart/src/core/application_ref.dart 135:52            runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5       run
+  package:ngtest/src/bootstrap.dart 42:16                        <fn>
+  
+00:00 +0 -6: loading test/regression/empty_active_link_test.dart
+00:00 +0 -6: test/directives/router_link_directive_test.dart: should not use the router when the target is not _self
+00:00 +0 -7: test/directives/router_link_directive_test.dart: should not use the router when the target is not _self [E]
+  No provider found for JSObject:
+    RouterLink ->
+    JSObject.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                              throw_
+  package:ngdart/src/di/injector.dart 187:7                      get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28     injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  router_link_directive_test.template.dart 235:211               <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  router_link_directive_test.template.dart 234:21                build
+  package:ngdart/src/core/linker/views/component_view.dart 96:5  createAndProject
+  package:ngdart/src/core/linker/views/host_view.dart 84:5       create
+  package:ngdart/src/core/linker/component_factory.dart 147:20   create
+  package:ngtest/src/bootstrap.dart 80:40                        _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                         <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26      <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18               <fn>
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18               [_run]
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23               run
+  package:ngdart/src/core/application_ref.dart 135:52            runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5       run
+  package:ngtest/src/bootstrap.dart 42:16                        <fn>
+  
+00:02 +0 -7: test/regression/empty_active_link_test.dart: router link with empty path should be marked active
+00:02 +0 -8: test/regression/empty_hash_test.dart: empty URL doesn't overwrite query parameters on push
+00:02 +0 -8: test/regression/empty_active_link_test.dart: router link with empty path should be marked active [E]
+  Unexpected null value.
+  dart:sdk_internal                                              nullCheck
+  package:ngdart/src/di/injector.dart 79:54                      provideUntyped
+  empty_active_link_test.template.dart 244:71                    [_getRouterImpl$0]
+  empty_active_link_test.template.dart 257:14                    injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                      provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28     injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  empty_active_link_test.template.dart 121:48                    <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  empty_active_link_test.template.dart 120:22                    build
+  package:ngdart/src/core/linker/views/component_view.dart 96:5  createAndProject
+  package:ngdart/src/core/linker/views/host_view.dart 84:5       create
+  package:ngdart/src/core/linker/component_factory.dart 147:20   create
+  package:ngtest/src/bootstrap.dart 80:40                        _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                         <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26      <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18               <fn>
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18               [_run]
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23               run
+  package:ngdart/src/core/application_ref.dart 135:52            runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5       run
+  package:ngtest/src/bootstrap.dart 42:16                        <fn>
+  
+00:02 +0 -9: test/regression/empty_hash_test.dart: empty URL doesn't overwrite query parameters on push [E]
+  TypeError: null: type 'Null' is not a subtype of type 'String'
+  dart:sdk_internal           _asString
+  empty_hash_test.dart 24:29  <fn>
+  
+00:02 +0 -9: loading test/regression/empty_path_test.dart
+00:02 +0 -9: test/regression/empty_hash_test.dart: empty URL doesn't overwrite query parameters on replace
+00:02 +0 -10: test/regression/empty_hash_test.dart: empty URL doesn't overwrite query parameters on replace [E]
+  Bad state: Cannot call `when` within a stub response
+  dart:sdk_internal                     throw_
+  package:mockito/src/mock.dart 1303:5  get when
+  empty_hash_test.dart 24:11            <fn>
+  
+00:03 +0 -10: test/regression/empty_path_test.dart: navigation to empty path should fail
+00:03 +0 -11: test/regression/empty_path_test.dart: navigation to empty path should fail [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  empty_path_test.template.dart 79:65                           <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  empty_path_test.template.dart 78:20                           build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:03 +0 -11: test/regression/hash_location_strategy_test.dart: browser location should match clicked href
+00:03 +0 -12: test/regression/hash_location_strategy_test.dart: browser location should match clicked href [E]
+  Unexpected null value.
+  dart:sdk_internal                                              nullCheck
+  package:ngdart/src/di/injector.dart 79:54                      provideUntyped
+  hash_location_strategy_test.template.dart 234:71               [_getRouterImpl$1]
+  hash_location_strategy_test.template.dart 248:14               injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                      provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28     injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  hash_location_strategy_test.template.dart 65:48                <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  hash_location_strategy_test.template.dart 64:22                build
+  package:ngdart/src/core/linker/views/component_view.dart 96:5  createAndProject
+  package:ngdart/src/core/linker/views/host_view.dart 84:5       create
+  package:ngdart/src/core/linker/component_factory.dart 147:20   create
+  package:ngtest/src/bootstrap.dart 80:40                        _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                         <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26      <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18               <fn>
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18               [_run]
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23               run
+  package:ngdart/src/core/application_ref.dart 135:52            runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5       run
+  package:ngtest/src/bootstrap.dart 42:16                        <fn>
+  
+00:04 +0 -12: test/regression/redirect_test.dart: redirect should push new state
+00:04 +0 -13: test/regression/redirect_test.dart: redirect should push new state [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  redirect_test.template.dart 299:71                            [_getRouterImpl$0]
+  redirect_test.template.dart 312:14                            injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  redirect_test.template.dart 178:126                           <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  redirect_test.template.dart 177:20                            build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:04 +0 -13: test/regression/redirect_test.dart: redirect should replace state
+00:04 +0 -14: test/regression/redirect_test.dart: redirect should replace state [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  redirect_test.template.dart 299:71                            [_getRouterImpl$0]
+  redirect_test.template.dart 312:14                            injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  redirect_test.template.dart 178:126                           <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  redirect_test.template.dart 177:20                            build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:04 +0 -14: test/regression/redirect_test.dart: redirect shouldn't update URL
+00:04 +0 -15: test/regression/routing_state_crash_test.dart: should not crash entire app when a routed component throws
+00:04 +0 -15: test/regression/redirect_test.dart: redirect shouldn't update URL [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  redirect_test.template.dart 299:71                            [_getRouterImpl$0]
+  redirect_test.template.dart 312:14                            injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  redirect_test.template.dart 178:126                           <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  redirect_test.template.dart 177:20                            build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:04 +0 -16: test/regression/redirect_test.dart: redirect on outlet registration should replace URL
+00:04 +0 -16: test/regression/routing_state_crash_test.dart: should not crash entire app when a routed component throws [E]
+  No provider found for RouterHook:
+    RouterLink ->
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                              throw_
+  package:ngdart/src/di/injector.dart 187:7                      get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28     injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  routing_state_crash_test.template.dart 221:63                  <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  routing_state_crash_test.template.dart 220:18                  get [_Router_0_8]
+  routing_state_crash_test.template.dart 249:21                  injectorGetInternal
+  package:ngdart/src/core/linker/views/view.dart 207:16          inject
+  package:ngdart/src/core/linker/views/view.dart 176:20          injectorGetOptional
+  routing_state_crash_test.template.dart 82:48                   <fn>
+  package:ngdart/src/di/errors.dart 40:22                        debugInjectorWrap
+  routing_state_crash_test.template.dart 81:22                   build
+  package:ngdart/src/core/linker/views/component_view.dart 96:5  createAndProject
+  package:ngdart/src/core/linker/views/host_view.dart 84:5       create
+  package:ngdart/src/core/linker/component_factory.dart 147:20   create
+  package:ngdart/src/core/application_ref.dart 59:43             <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26      <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18               <fn>
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18               [_run]
+  dart:sdk_internal                                              run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23               run
+  package:ngdart/src/core/application_ref.dart 135:52            runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5       run
+  package:ngdart/src/core/application_ref.dart 58:7              bootstrap
+  package:ngdart/src/bootstrap/run.dart 161:16                   runApp
+  routing_state_crash_test.dart 15:26                            <fn>
+  dart:sdk_internal                                              _asyncStartSync
+  routing_state_crash_test.dart 55:49                            <fn>
+  
+00:04 +0 -17: test/regression/redirect_test.dart: redirect on outlet registration should replace URL [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  redirect_test.template.dart 299:71                            [_getRouterImpl$0]
+  redirect_test.template.dart 312:14                            injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  redirect_test.template.dart 276:133                           <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  redirect_test.template.dart 275:20                            build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +0 -17: test/lifecycle_test.dart: navigate to and from a sibling
+00:05 +0 -18: test/mock_location_strategy_test.dart: MockLocationStrategy back after multiple replace
+00:05 +0 -18: test/lifecycle_test.dart: navigate to and from a sibling [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 993:143                          <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 992:19                           build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +1 -18: test/lifecycle_test.dart: navigate from a reusable component to a sibling and back
+00:05 +1 -19: test/mock_location_strategy_test.dart: MockLocationStrategy back to replaced url
+00:05 +1 -19: test/lifecycle_test.dart: navigate from a reusable component to a sibling and back [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 1092:160                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 1091:19                          build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +2 -19: test/lifecycle_test.dart: navigate to a nested sibling and back
+00:05 +2 -20: test/mock_location_strategy_test.dart: MockLocationStrategy back after exclusively pushes
+00:05 +2 -20: test/lifecycle_test.dart: navigate to a nested sibling and back [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 1191:149                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 1190:19                          build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +3 -20: test/lifecycle_test.dart: navigate to a nested sibling with a reusable parent
+00:05 +3 -21: test/lifecycle_test.dart: navigate to a nested sibling with a reusable parent [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 1290:165                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 1289:19                          build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +3 -21: test/lifecycle_test.dart: navigate between nested routes
+00:05 +3 -22: test/lifecycle_test.dart: navigate between nested routes [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 1389:153                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 1388:19                          build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +3 -22: test/lifecycle_test.dart: navigate between nested routes with a reusable parent
+00:05 +3 -23: test/lifecycle_test.dart: navigate between nested routes with a reusable parent [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 1488:171                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 1487:19                          build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +3 -23: test/lifecycle_test.dart: navigate between nested routes with the same reusable parent
+00:05 +3 -24: test/lifecycle_test.dart: navigate between nested routes with the same reusable parent [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 1587:175                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 1586:19                          build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +3 -24: test/lifecycle_test.dart: navigate to the same route should do nothing
+00:05 +3 -25: test/lifecycle_test.dart: navigate to the same route should do nothing [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 993:143                          <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 992:19                           build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +3 -25: test/lifecycle_test.dart: reload the same route
+00:05 +3 -26: test/lifecycle_test.dart: reload the same route [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 993:143                          <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 992:19                           build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +3 -26: test/lifecycle_test.dart: prevent navigation before other lifecycle callbacks
+00:05 +3 -27: test/navigate_by_url_test.dart: navigateByUrl invokes navigate
+00:05 +3 -27: test/lifecycle_test.dart: prevent navigation before other lifecycle callbacks [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 1686:143                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 1685:19                          build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +3 -28: test/lifecycle_test.dart: redirect to a sibling
+00:05 +3 -28: test/navigate_by_url_test.dart: navigateByUrl invokes navigate [E]
+  TypeError: null: type 'Null' is not a subtype of type 'Future<NavigationResult>'
+  dart:sdk_internal                                    _installSpecializedAsCheck
+  navigate_by_url_test.dart 102:17                     navigate
+  package:ngrouter/src/router/router_impl.dart 137:12  navigateByUrl
+  navigate_by_url_test.dart 21:7                       <fn>
+  
+00:05 +3 -29: test/navigate_by_url_test.dart: navigateByUrl invokes navigate with query parameters
+00:05 +3 -29: test/lifecycle_test.dart: redirect to a sibling [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  lifecycle_test.template.dart 1816:71                          [_getRouterImpl$2]
+  lifecycle_test.template.dart 1835:14                          injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  lifecycle_test.template.dart 1785:143                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  lifecycle_test.template.dart 1784:19                          build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:05 +3 -30: test/navigate_by_url_test.dart: navigateByUrl invokes navigate with query parameters [E]
+  TypeError: null: type 'Null' is not a subtype of type 'Future<NavigationResult>'
+  dart:sdk_internal                                    _generalAsCheckImplementation
+  navigate_by_url_test.dart 102:17                     navigate
+  package:ngrouter/src/router/router_impl.dart 137:12  navigateByUrl
+  navigate_by_url_test.dart 32:7                       <fn>
+  
+00:05 +3 -30: test/navigate_by_url_test.dart: navigateByUrl invokes navigate with fragment identifier
+00:05 +3 -31: test/navigate_by_url_test.dart: navigateByUrl invokes navigate with fragment identifier [E]
+  TypeError: null: type 'Null' is not a subtype of type 'Future<NavigationResult>'
+  dart:sdk_internal                                    _generalAsCheckImplementation
+  navigate_by_url_test.dart 102:17                     navigate
+  package:ngrouter/src/router/router_impl.dart 137:12  navigateByUrl
+  navigate_by_url_test.dart 46:7                       <fn>
+  
+00:05 +3 -31: test/navigate_by_url_test.dart: navigateByUrl invokes navigate with reload
+00:05 +3 -32: test/navigate_by_url_test.dart: navigateByUrl invokes navigate with reload [E]
+  TypeError: null: type 'Null' is not a subtype of type 'Future<NavigationResult>'
+  dart:sdk_internal                                    _generalAsCheckImplementation
+  navigate_by_url_test.dart 102:17                     navigate
+  package:ngrouter/src/router/router_impl.dart 137:12  navigateByUrl
+  navigate_by_url_test.dart 60:7                       <fn>
+  
+00:05 +3 -32: test/navigate_by_url_test.dart: navigateByUrl invokes navigate with replace
+00:05 +3 -33: test/navigate_by_url_test.dart: navigateByUrl invokes navigate with replace [E]
+  TypeError: null: type 'Null' is not a subtype of type 'Future<NavigationResult>'
+  dart:sdk_internal                                    _generalAsCheckImplementation
+  navigate_by_url_test.dart 102:17                     navigate
+  package:ngrouter/src/router/router_impl.dart 137:12  navigateByUrl
+  navigate_by_url_test.dart 74:7                       <fn>
+  
+00:06 +3 -33: test/navigation_queue_test.dart: navigation should complete in requested order
+00:06 +3 -34: test/navigation_queue_test.dart: navigation should complete in requested order [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  navigation_queue_test.template.dart 125:65                    <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  navigation_queue_test.template.dart 124:20                    build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:06 +3 -34: test/on_navigation_start_test.dart: Router.onNavigationStart fires on navigation
+00:06 +3 -35: test/on_navigation_start_test.dart: Router.onNavigationStart fires on navigation [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  on_navigation_start_test.template.dart 244:65                 <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  on_navigation_start_test.template.dart 243:19                 build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:06 +3 -35: test/on_navigation_start_test.dart: Router.onNavigationStart doesn't fire when navigation is prohibited
+00:06 +3 -36: test/on_navigation_start_test.dart: Router.onNavigationStart doesn't fire when navigation is prohibited [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  on_navigation_start_test.template.dart 244:65                 <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  on_navigation_start_test.template.dart 243:19                 build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:06 +3 -36: test/on_navigation_start_test.dart: Router.onNavigationStart fires when deactivation is prohibited
+00:06 +3 -37: test/on_navigation_start_test.dart: Router.onNavigationStart fires when deactivation is prohibited [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  on_navigation_start_test.template.dart 244:65                 <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  on_navigation_start_test.template.dart 243:19                 build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:06 +3 -37: test/on_navigation_start_test.dart: Router.onNavigationStart fires only once on redirect
+00:07 +3 -38: test/on_navigation_start_test.dart: Router.onNavigationStart fires only once on redirect [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  on_navigation_start_test.template.dart 244:65                 <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  on_navigation_start_test.template.dart 243:19                 build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:07 +3 -38: test/on_route_resolved_test.dart: Router.onRouteResolved fires on navigation
+00:07 +3 -39: test/on_route_resolved_test.dart: Router.onRouteResolved fires on navigation [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  on_route_resolved_test.template.dart 244:65                   <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  on_route_resolved_test.template.dart 243:19                   build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:07 +3 -39: test/on_route_resolved_test.dart: Router.onRouteResolved doesn't fire when navigation is prohibited
+00:07 +3 -40: test/on_route_resolved_test.dart: Router.onRouteResolved doesn't fire when navigation is prohibited [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  on_route_resolved_test.template.dart 244:65                   <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  on_route_resolved_test.template.dart 243:19                   build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:07 +3 -40: test/on_route_resolved_test.dart: Router.onRouteResolved fires when deactivation is prohibited
+00:07 +3 -41: test/on_route_resolved_test.dart: Router.onRouteResolved fires when deactivation is prohibited [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  on_route_resolved_test.template.dart 244:65                   <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  on_route_resolved_test.template.dart 243:19                   build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:07 +3 -41: test/on_route_resolved_test.dart: Router.onRouteResolved fires on popstate
+00:07 +3 -42: test/on_route_resolved_test.dart: Router.onRouteResolved fires on popstate [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  on_route_resolved_test.template.dart 244:65                   <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  on_route_resolved_test.template.dart 243:19                   build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:07 +3 -42: test/on_route_resolved_test.dart: Router.onRouteResolved fires only once on redirect
+00:07 +3 -43: test/on_route_resolved_test.dart: Router.onRouteResolved fires only once on redirect [E]
+  No provider found for RouterHook:
+    Router ->
+    RouterHook.
+  **NOTE**: This path is not exhaustive, and nodes may be missing in between the "->" delimiters. There is ongoing work to improve this error message and include all the nodes where possible. 
+  dart:sdk_internal                                             throw_
+  package:ngdart/src/di/injector.dart 187:7                     get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  on_route_resolved_test.template.dart 244:65                   <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  on_route_resolved_test.template.dart 243:19                   build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:07 +3 -43: test/redirect_parameters_navigation_test.dart: redirect should preserve parameters
+00:07 +3 -44: test/redirect_parameters_navigation_test.dart: redirect should preserve parameters [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  redirect_parameters_navigation_test.template.dart 201:71      [_getRouterImpl$0]
+  redirect_parameters_navigation_test.template.dart 214:14      injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  redirect_parameters_navigation_test.template.dart 178:126     <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  redirect_parameters_navigation_test.template.dart 177:20      build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:07 +3 -44: test/redirect_parameters_navigation_test.dart: redirect should discard extra parameters
+00:07 +3 -45: test/redirect_parameters_navigation_test.dart: redirect should discard extra parameters [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  redirect_parameters_navigation_test.template.dart 201:71      [_getRouterImpl$0]
+  redirect_parameters_navigation_test.template.dart 214:14      injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  redirect_parameters_navigation_test.template.dart 178:126     <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  redirect_parameters_navigation_test.template.dart 177:20      build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:08 +3 -45: test/revert_popstate_test.dart: preventing back should preserve previous history
+00:08 +3 -46: test/route_definition_test.dart: RouteDefinition :ComponentRouteDefinition should create a route to an `@Component` type
+00:08 +3 -46: test/revert_popstate_test.dart: preventing back should preserve previous history [E]
+  Unexpected null value.
+  dart:sdk_internal                                 nullCheck
+  package:ngdart/src/di/injector.dart 79:54         provideUntyped
+  revert_popstate_test.template.dart 206:65         [_getLocation$2]
+  revert_popstate_test.template.dart 223:14         injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18         provideUntyped
+  package:ngdart/src/di/injector.dart 185:20        get
+  package:ngdart/src/di/injector.dart 210:23        provideType
+  revert_popstate_test.dart 26:28                   <fn>
+  package:ngtest/src/frontend/bed.dart 239:41       <fn>
+  dart:sdk_internal                                 _asyncStartSync
+  package:ngtest/src/frontend/bed.dart 238:11       <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18  <fn>
+  dart:sdk_internal                                 run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18  [_run]
+  dart:sdk_internal                                 runGuarded
+  package:ngdart/src/core/zone/ng_zone.dart 282:23  runGuarded
+  package:ngtest/src/frontend/bed.dart 237:24       <fn>
+  dart:sdk_internal                                 _asyncStartSync
+  package:ngtest/src/frontend/bed.dart 245:9        createStabilizersAndRunUserHook
+  package:ngtest/src/bootstrap.dart 37:33           <fn>
+  dart:sdk_internal                                 _asyncStartSync
+  package:ngtest/src/bootstrap.dart 19:25           bootstrapForTest
+  package:ngtest/src/frontend/bed.dart 255:9        <fn>
+  dart:sdk_internal                                 sync
+  package:ngtest/src/frontend/bed.dart 206:12       create
+  revert_popstate_test.dart 24:32                   <fn>
+  dart:sdk_internal                                 _asyncStartSync
+  revert_popstate_test.dart 24:5                    <fn>
+  
+00:08 +4 -46: loading test/route_path_test.dart
+00:08 +4 -46: test/route_definition_test.dart: RouteDefinition :ComponentRouteDefinition should fail "assertValid" with a null component factory
+00:08 +5 -46: test/route_definition_test.dart: RouteDefinition :DeferredRouteDefinition should create a route to lazy-load a component type
+00:08 +6 -46: test/route_definition_test.dart: RouteDefinition :RedirectRouteDefinition should create a route to redirect to another definition
+00:08 +7 -46: test/route_definition_test.dart: RouteDefinition :RedirectRouteDefinition should fail "assertValid" with unknown parameters
+00:08 +8 -46: test/route_definition_test.dart: RouteDefinition toRepExp() should prefix match to only strings with same start
+00:08 +9 -46: test/route_definition_test.dart: RouteDefinition toRepExp() should match url params
+00:08 +10 -46: test/route_definition_test.dart: RouteDefinition toRepExp() should not match url params that are invalid url encodings
+00:08 +11 -46: test/route_path_test.dart: RoutePath should set all properties
+00:08 +12 -46: test/route_definition_test.dart: RouteDefinition toUrl() should return the path when there are no params
+00:08 +13 -46: test/route_path_test.dart: RoutePath fromRoutes should set all properties from routes
+00:09 +14 -46: test/route_definition_test.dart: RouteDefinition toUrl() should populate url params
+00:09 +15 -46: test/route_path_test.dart: RoutePath fromRoutes should take properties from last route
+00:09 +16 -46: test/route_path_test.dart: RoutePath fromRoutes should construct with an empty list
+00:09 +17 -46: test/route_path_test.dart: RoutePath fromRoutes should chain libraries
+00:09 +18 -46: test/route_path_test.dart: RoutePath path should return a slash-trimmed version of the path
+00:09 +19 -46: test/route_path_test.dart: RoutePath toUrl() (setUpAll)
+00:09 +19 -46: test/route_path_test.dart: RoutePath toUrl() should join the parent paths and the last path
+00:09 +20 -46: test/route_path_test.dart: RoutePath toUrl() should replace parameters
+00:09 +21 -46: test/route_path_test.dart: RoutePath toUrl() should append queryParameters and fragment
+00:09 +22 -46: test/route_path_test.dart: RoutePath toUrl() should url encode parameters
+00:09 +23 -46: test/route_path_test.dart: RoutePath toUrl() should url encode queryParameters
+00:09 +24 -46: test/route_prefetcher_test.dart: should call prefetcher before route is initialized
+00:09 +24 -47: test/route_path_test.dart: RoutePath toUrl() (tearDownAll)
+00:09 +24 -47: test/route_prefetcher_test.dart: should call prefetcher before route is initialized [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  route_prefetcher_test.template.dart 391:71                    [_getRouterImpl$0]
+  route_prefetcher_test.template.dart 404:14                    injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  route_prefetcher_test.template.dart 120:46                    <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  route_prefetcher_test.template.dart 119:20                    build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:09 +24 -47: test/route_path_test.dart: RoutePath toUrl() should handle empty parent path
+00:09 +25 -47: loading test/router_hook_test.dart
+00:10 +25 -47: test/router_hook_test.dart: RouterHook canActivate should block navigation
+00:10 +25 -48: test/router_hook_test.dart: RouterHook canActivate should block navigation [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  router_hook_test.template.dart 277:71                         [_getRouterImpl$1]
+  router_hook_test.template.dart 293:14                         injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  router_hook_test.template.dart 120:50                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  router_hook_test.template.dart 119:20                         build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:10 +25 -48: test/router_hook_test.dart: RouterHook canDeactivate should block navigation
+00:10 +25 -49: test/router_hook_test.dart: RouterHook canDeactivate should block navigation [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  router_hook_test.template.dart 277:71                         [_getRouterImpl$1]
+  router_hook_test.template.dart 293:14                         injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  router_hook_test.template.dart 120:50                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  router_hook_test.template.dart 119:20                         build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:10 +25 -49: test/router_hook_test.dart: RouterHook canNavigate should block navigation
+00:10 +25 -50: test/router_hook_test.dart: RouterHook canNavigate should block navigation [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  router_hook_test.template.dart 277:71                         [_getRouterImpl$1]
+  router_hook_test.template.dart 293:14                         injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  router_hook_test.template.dart 120:50                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  router_hook_test.template.dart 119:20                         build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:10 +25 -50: test/router_hook_test.dart: RouterHook canReuse should allow reuse
+00:10 +25 -51: test/router_hook_test.dart: RouterHook canReuse should allow reuse [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  router_hook_test.template.dart 277:71                         [_getRouterImpl$1]
+  router_hook_test.template.dart 293:14                         injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  router_hook_test.template.dart 120:50                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  router_hook_test.template.dart 119:20                         build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:10 +25 -51: test/router_hook_test.dart: can support cyclic dependency with lazy injection
+00:10 +25 -52: test/router_hook_test.dart: can support cyclic dependency with lazy injection [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  router_hook_test.template.dart 326:71                         [_getRouterImpl$1]
+  router_hook_test.template.dart 342:14                         injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  router_hook_test.template.dart 120:50                         <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  router_hook_test.template.dart 119:20                         build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:10 +25 -52: loading test/update_location_on_popstate_test.dart
+00:10 +25 -52: test/update_location_on_popstate_test.dart: redirect triggered by "popstate" should update location
+00:10 +25 -53: test/update_location_on_popstate_test.dart: redirect triggered by "popstate" should update location [E]
+  Unexpected null value.
+  dart:sdk_internal                                      nullCheck
+  package:ngdart/src/di/injector.dart 79:54              provideUntyped
+  update_location_on_popstate_test.template.dart 204:65  [_getLocation$2]
+  update_location_on_popstate_test.template.dart 221:14  injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18              provideUntyped
+  package:ngdart/src/di/injector.dart 185:20             get
+  package:ngdart/src/di/injector.dart 210:23             provideType
+  update_location_on_popstate_test.dart 20:26            <fn>
+  package:ngtest/src/frontend/bed.dart 239:41            <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  package:ngtest/src/frontend/bed.dart 238:11            <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18       <fn>
+  dart:sdk_internal                                      run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18       [_run]
+  dart:sdk_internal                                      runGuarded
+  package:ngdart/src/core/zone/ng_zone.dart 282:23       runGuarded
+  package:ngtest/src/frontend/bed.dart 237:24            <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  package:ngtest/src/frontend/bed.dart 245:9             createStabilizersAndRunUserHook
+  package:ngtest/src/bootstrap.dart 37:33                <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  package:ngtest/src/bootstrap.dart 19:25                bootstrapForTest
+  package:ngtest/src/frontend/bed.dart 255:9             <fn>
+  dart:sdk_internal                                      sync
+  package:ngtest/src/frontend/bed.dart 206:12            create
+  update_location_on_popstate_test.dart 19:32            <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  update_location_on_popstate_test.dart 19:5             <fn>
+  
+00:10 +25 -53: test/update_location_on_popstate_test.dart: redirect to current location triggered by "popstate" should update location
+00:10 +25 -54: test/update_location_on_popstate_test.dart: redirect to current location triggered by "popstate" should update location [E]
+  Unexpected null value.
+  dart:sdk_internal                                      nullCheck
+  package:ngdart/src/di/injector.dart 79:54              provideUntyped
+  update_location_on_popstate_test.template.dart 204:65  [_getLocation$2]
+  update_location_on_popstate_test.template.dart 221:14  injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18              provideUntyped
+  package:ngdart/src/di/injector.dart 185:20             get
+  package:ngdart/src/di/injector.dart 210:23             provideType
+  update_location_on_popstate_test.dart 20:26            <fn>
+  package:ngtest/src/frontend/bed.dart 239:41            <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  package:ngtest/src/frontend/bed.dart 238:11            <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18       <fn>
+  dart:sdk_internal                                      run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18       [_run]
+  dart:sdk_internal                                      runGuarded
+  package:ngdart/src/core/zone/ng_zone.dart 282:23       runGuarded
+  package:ngtest/src/frontend/bed.dart 237:24            <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  package:ngtest/src/frontend/bed.dart 245:9             createStabilizersAndRunUserHook
+  package:ngtest/src/bootstrap.dart 37:33                <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  package:ngtest/src/bootstrap.dart 19:25                bootstrapForTest
+  package:ngtest/src/frontend/bed.dart 255:9             <fn>
+  dart:sdk_internal                                      sync
+  package:ngtest/src/frontend/bed.dart 206:12            create
+  update_location_on_popstate_test.dart 19:32            <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  update_location_on_popstate_test.dart 19:5             <fn>
+  
+00:10 +25 -54: test/update_location_on_popstate_test.dart: router hook triggered by "popstate" should update location
+00:11 +25 -55: test/update_location_on_popstate_test.dart: router hook triggered by "popstate" should update location [E]
+  Unexpected null value.
+  dart:sdk_internal                                      nullCheck
+  package:ngdart/src/di/injector.dart 79:54              provideUntyped
+  update_location_on_popstate_test.template.dart 204:65  [_getLocation$2]
+  update_location_on_popstate_test.template.dart 221:14  injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18              provideUntyped
+  package:ngdart/src/di/injector.dart 185:20             get
+  package:ngdart/src/di/injector.dart 210:23             provideType
+  update_location_on_popstate_test.dart 20:26            <fn>
+  package:ngtest/src/frontend/bed.dart 239:41            <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  package:ngtest/src/frontend/bed.dart 238:11            <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18       <fn>
+  dart:sdk_internal                                      run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18       [_run]
+  dart:sdk_internal                                      runGuarded
+  package:ngdart/src/core/zone/ng_zone.dart 282:23       runGuarded
+  package:ngtest/src/frontend/bed.dart 237:24            <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  package:ngtest/src/frontend/bed.dart 245:9             createStabilizersAndRunUserHook
+  package:ngtest/src/bootstrap.dart 37:33                <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  package:ngtest/src/bootstrap.dart 19:25                bootstrapForTest
+  package:ngtest/src/frontend/bed.dart 255:9             <fn>
+  dart:sdk_internal                                      sync
+  package:ngtest/src/frontend/bed.dart 206:12            create
+  update_location_on_popstate_test.dart 19:32            <fn>
+  dart:sdk_internal                                      _asyncStartSync
+  update_location_on_popstate_test.dart 19:5             <fn>
+  
+00:11 +25 -55: loading test/url_test.dart
+00:11 +25 -55: test/url_test.dart: Url parse (setUpAll)
+00:11 +25 -55: test/url_test.dart: Url parse should parse the path
+00:11 +26 -55: test/url_test.dart: Url parse should parse the fragment
+00:11 +27 -55: test/url_test.dart: Url parse should parse the queryParameters
+00:11 +28 -55: test/url_test.dart: Url parse (tearDownAll)
+00:11 +28 -55: test/url_test.dart: Url toUrl should return a Url string
+00:39 +29 -55: test/route_prefetcher_test.dart: should call prefetcher before route is initialized [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:sdk_internal  internalCallback
+  
+00:39 +29 -55: test/route_prefetcher_test.dart: should await prefetcher before route is initialized
+00:39 +29 -56: test/route_prefetcher_test.dart: should await prefetcher before route is initialized [E]
+  Unexpected null value.
+  dart:sdk_internal                                             nullCheck
+  package:ngdart/src/di/injector.dart 79:54                     provideUntyped
+  route_prefetcher_test.template.dart 391:71                    [_getRouterImpl$0]
+  route_prefetcher_test.template.dart 404:14                    injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18                     provideUntyped
+  package:ngdart/src/di/injector.dart 185:20                    get
+  package:ngdart/src/core/linker/views/host_view.dart 215:28    injectFromAncestry
+  package:ngdart/src/core/linker/views/view.dart 212:16         inject
+  package:ngdart/src/core/linker/views/view.dart 176:20         injectorGetOptional
+  route_prefetcher_test.template.dart 120:46                    <fn>
+  package:ngdart/src/di/errors.dart 40:22                       debugInjectorWrap
+  route_prefetcher_test.template.dart 119:20                    build
+  package:ngdart/src/core/linker/views/host_view.dart 83:5      create
+  package:ngdart/src/core/linker/component_factory.dart 147:20  create
+  package:ngtest/src/bootstrap.dart 80:40                       _runAndLoadComponent
+  package:ngtest/src/bootstrap.dart 49:7                        <fn>
+  package:ngdart/src/core/change_detection/host.dart 204:26     <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18              <fn>
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18              [_run]
+  dart:sdk_internal                                             run
+  package:ngdart/src/core/zone/ng_zone.dart 273:23              run
+  package:ngdart/src/core/application_ref.dart 135:52           runInZone
+  package:ngdart/src/core/change_detection/host.dart 202:5      run
+  package:ngtest/src/bootstrap.dart 42:16                       <fn>
+  
+00:39 +29 -56: test/route_prefetcher_test.dart: should pass partial RouterState to prefetcher
+00:39 +29 -57: test/route_prefetcher_test.dart: should pass partial RouterState to prefetcher [E]
+  Unexpected null value.
+  dart:sdk_internal                                 nullCheck
+  package:ngdart/src/di/injector.dart 79:54         provideUntyped
+  route_prefetcher_test.template.dart 393:65        [_getLocation$1]
+  route_prefetcher_test.template.dart 407:14        injectFromSelfOptional
+  package:ngdart/src/di/injector.dart 79:18         provideUntyped
+  package:ngdart/src/di/injector.dart 185:20        get
+  package:ngdart/src/di/injector.dart 210:23        provideType
+  route_prefetcher_test.dart 98:17                  <fn>
+  package:ngtest/src/frontend/bed.dart 239:41       <fn>
+  dart:sdk_internal                                 _asyncStartSync
+  package:ngtest/src/frontend/bed.dart 238:11       <fn>
+  package:ngdart/src/core/zone/ng_zone.dart 105:18  <fn>
+  dart:sdk_internal                                 run
+  package:ngdart/src/core/zone/ng_zone.dart 102:18  [_run]
+  dart:sdk_internal                                 runGuarded
+  package:ngdart/src/core/zone/ng_zone.dart 282:23  runGuarded
+  package:ngtest/src/frontend/bed.dart 237:24       <fn>
+  dart:sdk_internal                                 _asyncStartSync
+  package:ngtest/src/frontend/bed.dart 245:9        createStabilizersAndRunUserHook
+  package:ngtest/src/bootstrap.dart 37:33           <fn>
+  dart:sdk_internal                                 _asyncStartSync
+  package:ngtest/src/bootstrap.dart 19:25           bootstrapForTest
+  package:ngtest/src/frontend/bed.dart 255:9        <fn>
+  dart:sdk_internal                                 sync
+  package:ngtest/src/frontend/bed.dart 206:12       create
+  route_prefetcher_test.dart 96:20                  <fn>
+  
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:sdk_internal  internalCallback
+  
+01:09 +29 -57: Some tests failed.
+
+Failing tests:
+  test/directives/router_link_active_directive_test.dart: should add/remove a CSS class as a route is activated
+  test/directives/router_link_active_directive_test.dart: should ignore the current urls queryParams and fragment if not specified in the routerLinks
+  test/directives/router_link_active_directive_test.dart: should validate queryParams and fragment
+  test/directives/router_link_directive_test.dart: should attempt to navigate on Enter key press
+  ... and 53 more
+
+Consider enabling the flag chain-stack-traces to receive more detailed exceptions.
+For example, 'dart test --chain-stack-traces'.

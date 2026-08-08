@@ -1,3 +1,4 @@
+import 'package:_tests/matchers.dart';
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
@@ -41,9 +42,9 @@ void main() {
         ng.createBoundAriaAttributeComponentFactory());
     final testFixture = await testBed.create();
     final div = testFixture.rootElement.querySelector('div')!;
-    expect(div.attributes, containsPair('aria-label', 'Initial label'));
+    expect(div.attributeMap, containsPair('aria-label', 'Initial label'));
     await testFixture.update((component) => component.label = 'New label');
-    expect(div.attributes, containsPair('aria-label', 'New label'));
+    expect(div.attributeMap, containsPair('aria-label', 'New label'));
   });
 
   test('should remove attribute when bound expression is null', () async {
@@ -51,9 +52,9 @@ void main() {
         ng.createBoundAttributeComponentFactory());
     final testFixture = await testBed.create();
     final div = testFixture.rootElement.querySelector('div')!;
-    expect(div.attributes, containsPair('foo', 'Initial value'));
+    expect(div.attributeMap, containsPair('foo', 'Initial value'));
     await testFixture.update((component) => component.value = null);
-    expect(div.attributes, isNot(contains('foo')));
+    expect(div.attributeMap, isNot(contains('foo')));
   });
 
   test('should remove style when bound expression is null', () async {
@@ -102,9 +103,9 @@ void main() {
         NgTestBed<BoundClassNameAlias>(ng.createBoundClassNameAliasFactory());
     final testFixture = await testBed.create();
     final div = testFixture.rootElement.querySelector('div')! as HTMLDivElement;
-    expect(div.classList, contains('foo'));
-    expect(div.classList, contains('bar'));
-    expect(div.classList, isNot(contains('initial')));
+    expect(div.cssClasses, contains('foo'));
+    expect(div.cssClasses, contains('bar'));
+    expect(div.cssClasses, isNot(contains('initial')));
   });
 }
 

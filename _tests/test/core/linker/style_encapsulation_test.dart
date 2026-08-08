@@ -11,9 +11,8 @@ void main() {
     // TODO: Migrate to dart 3.6 (Need to review)
     //document.head!.querySelectorAll('style').forEach((e) => e.remove());
     var el = document.head!.querySelectorAll('style');
-    for (var i = el.length; i > 0; i--) {
-      var item = el.item(i) as HTMLElement;
-      item.remove();
+    for (var i = el.length - 1; i >= 0; i--) {
+      (el.item(i) as HTMLElement).remove();
     }
 
     return disposeAnyRunningTest();
@@ -51,16 +50,8 @@ void main() {
         ng.createTestSetClassAttributeFactory());
     final fixture = await testBed.create();
     final element = fixture.rootElement.querySelector('div') as HTMLDivElement;
-    /*
     expect(
-      element.getComputedStyle().position,
-      'absolute',
-      reason: failureReason(element),
-    );
-    */
-
-    expect(
-      element.style.backgroundPosition,
+      window.getComputedStyle(element).position,
       'absolute',
       reason: failureReason(element),
     );

@@ -67,7 +67,7 @@ class NgControlGroup extends ControlContainer<AbstractControlGroup>
   bool _disabledChanged = false;
 
   NgControlGroup(
-    @SkipSelf() this._parent,
+    @Optional() @SkipSelf() this._parent,
     @Optional() @Self() @Inject(ngValidators) List<dynamic>? validators,
   ) : validator = composeValidators(validators);
 
