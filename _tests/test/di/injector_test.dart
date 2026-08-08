@@ -6,8 +6,7 @@ import 'package:ngdart/experimental.dart';
 import 'package:ngdart/src/di/injector.dart';
 import 'package:ngtest/angular_test.dart';
 
-// ignore: avoid_relative_lib_imports
-import '../../lib/matchers.dart';
+import 'package:_tests/matchers.dart';
 import 'injector_test.template.dart' as ng;
 
 void main() {
@@ -370,7 +369,7 @@ class CaptureInjectInjector extends HierarchicalInjector implements Injector {
   ]) {
     lastToken = token;
     lastOrElse = orElse;
-    return orElse;
+    return null;
   }
 }
 

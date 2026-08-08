@@ -7,6 +7,7 @@ import 'package:web/web.dart';
 
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
+import 'package:ngdart/src/testability/js_api.dart' show JsTestability;
 
 import 'run_app_test.template.dart' as ng;
 
@@ -29,8 +30,10 @@ void main() {
   void verifyDomAndStyles({String innerText = 'Hello World!'}) {
     expect(rootDomContainer.textContent, innerText);
     final h1 = rootDomContainer.querySelector('h1') as HTMLHeadingElement;
-    //expect(h1.getComputedStyle().height, '100px');
-    expect(h1.style.height, '100px');
+    // The height comes from the component's `styles:` block, so it is only
+    // visible on the computed style -- `h1.style` holds inline styles, of
+    // which there are none.
+    expect(window.getComputedStyle(h1).height, '100px');
   }
 
   /// Verify the `Testability` interface is working for this application.
@@ -39,15 +42,15 @@ void main() {
   void verifyTestability() {
     expect(component.injector.get(Testability), isNotNull);
     var jsTestability = getAngularTestability(
-      rootDomContainer.children.item(0),
+      rootDomContainer.children.item(0)!,
     );
-    expect(getAllAngularTestabilities(), isNot(hasLength(0)));
+    expect(getAllAngularTestabilities().toDart, isNot(hasLength(0)));
     expect(jsTestability.isStable(), isTrue, reason: 'Expected stability');
     jsTestability.whenStable(expectAsync0(() {
       Future(expectAsync0(() {
         verifyDomAndStyles(innerText: 'Hello Universe!');
       }));
-    }));
+    }).toJS);
     runInApp(() => HelloWorldComponent.doAsyncTaskAndThenRename('Universe'));
   }
 
@@ -167,10 +170,4 @@ class StubExceptionHandler implements ExceptionHandler {
 external JsTestability getAngularTestability(Element e);
 
 @JS()
-external List<JsTestability> getAllAngularTestabilities();
-
-@JS()
-abstract class JsTestability {
-  external bool isStable();
-  external void whenStable(void Function() fn);
-}
+external JSArray<JsTestability> getAllAngularTestabilities();

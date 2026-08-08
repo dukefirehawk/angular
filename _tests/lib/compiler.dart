@@ -5,20 +5,19 @@ import 'package:build/experiments.dart';
 import 'package:build_test/build_test.dart';
 import 'package:glob/glob.dart';
 import 'package:logging/logging.dart';
-import 'package:ngcompiler/v1/src/compiler/stylesheet_compiler/builder.dart';
-import 'package:ngcompiler/v1/src/compiler/template_compiler.dart';
+import 'package:ngdart/src/build.dart';
 import 'package:test/test.dart';
 import 'package:ngcompiler/v2/context.dart';
 
 /// A 'test' build process (similar to the normal one).
-final Builder _testAngularBuilder = TemplateCompiler(
-  BuilderOptions({}),
-  null,
-  null,
-  null,
-);
-
-final Builder _testAngularBuilder2 = StylesheetCompiler(BuilderOptions({}));
+///
+/// These are the same builder factories `build.yaml` registers. They used to be
+/// composed with a `MultiplexingBuilder`, which no longer exists in `build` 4;
+/// `testBuilders` takes the list directly instead.
+final List<Builder> _testAngularBuilders = [
+  templateCompiler(BuilderOptions({})),
+  stylesheetCompiler(BuilderOptions({})),
+];
 
 // Here to be configurable.
 //
@@ -54,79 +53,55 @@ const ngCompiler = 'ngcompiler';
 const ngImport = 'package:$ngPackage/angular.dart';
 final _ngFiles = Glob('lib/**.dart');
 
-/// Modeled after `package:build_test/build_test.dart#testBuilder`.
+/// Modeled after `package:build_test/build_test.dart#testBuilders`.
 Future<void> _testBuilder(
-  Builder builder,
+  List<Builder> builders,
   Map<String, String> sourceAssets, {
   List<AssetId>? runBuilderOn,
   required void Function(LogRecord) onLog,
   String? rootPackage,
 }) async {
-  // Setup the readers/writers for assets.
-  final sources = TestReaderWriter(rootPackage: rootPackage);
+  // Sanity check that the framework itself is readable.
   final packages = await _packageAssets;
-
-  final reader = PackageAssetReader.forPackages([sources, packages]);
-  //final reader = MultiAssetReader([sources, packages]);
-
-  // Sanity check.
-  if (!await reader.canRead(AssetId(ngPackage, 'lib/angular.dart'))) {
+  if (!await packages.canRead(AssetId(ngPackage, 'lib/angular.dart'))) {
     throw StateError('Unable to read "$ngImport".');
   }
 
-  // Load user sources.
-  final writer = TestReaderWriter();
-  final inputIds = runBuilderOn ?? [];
-  sourceAssets.forEach((serializedId, contents) {
-    final id = makeAssetId(serializedId);
-    //sources.cacheStringAsset(id, contents);
-    sources.writeAsString(id, contents);
-    if (runBuilderOn == null) {
-      inputIds.add(id);
-    }
-  });
-
-  if (inputIds.isEmpty) {
+  if (sourceAssets.isEmpty) {
     throw ArgumentError.value(sourceAssets, 'No inputs', 'sourceAssets');
   }
 
-  // Load framework sources.
+  final generateFor = runBuilderOn?.map((id) => id.toString()).toSet();
+
+  // The framework has to be readable so the analyzer can resolve
+  // `package:ngdart` -- without it every annotation fails to resolve instead of
+  // producing the diagnostic under test -- but it must not be *built*.
+  // `testBuilders` derives the packages it builds from `sourceAssets` and reads
+  // everything else from `readerWriter`, so the framework goes in the latter.
   // TODO: Can we cache and re-use this once per test suite?
-  final framework = packages.findAssets(_ngFiles, package: ngPackage);
-  await for (final file in framework) {
-    //sources.cacheStringAsset(file, await packages.readAsString(file));
-    await sources.writeAsString(file, await packages.readAsString(file));
+  final readerWriter = TestReaderWriter(rootPackage: rootPackage);
+  await for (final file in packages.findAssets(_ngFiles, package: ngPackage)) {
+    readerWriter.testing.writeString(file, await packages.readAsString(file));
   }
 
-  final logger = Logger('_testBuilder');
-  final logSub = logger.onRecord.listen(onLog);
   await runWithContext(
     // This is test-only code (just not in "test/").
     // ignore: invalid_use_of_visible_for_testing_member
     CompileContext.forTesting(),
     () {
       return withEnabledExperiments(
-        () => testBuilder(
-          builder,
-          inputIds,
+        () => testBuilders(
+          builders,
+          sourceAssets,
           rootPackage: rootPackage,
-          readerWriter: writer,
-          //resolvers: AnalyzerResolvers(),
-          onLog: logger,
+          generateFor: generateFor,
+          readerWriter: readerWriter,
+          onLog: onLog,
         ),
-        // () => runBuilder(
-        //   builder,
-        //   inputIds,
-        //   reader,
-        //   writer,
-        //   AnalyzerResolvers(),
-        //   logger: logger,
-        // ),
         ['non-nullable'],
       );
     },
   );
-  await logSub.cancel();
 }
 
 /// Returns a future that completes, asserting potential end states.
@@ -168,7 +143,7 @@ Future<void> compilesExpecting(
   // Run the builder.
   final records = <Level, List<LogRecord>>{};
   await _testBuilder(
-    _testAngularBuilder,
+    _testAngularBuilders,
     sources,
     runBuilderOn: runBuilderOn?.toList(),
     onLog: (record) {

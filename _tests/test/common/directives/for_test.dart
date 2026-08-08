@@ -6,8 +6,7 @@ import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 
-// ignore: avoid_relative_lib_imports
-import '../../../lib/matchers.dart';
+import 'package:_tests/matchers.dart';
 import 'for_test.template.dart' as ng;
 
 void main() {

@@ -1,8 +1,7 @@
 import 'package:web/web.dart';
 
 import 'package:test/test.dart';
-// ignore: avoid_relative_lib_imports
-import '../../../lib/matchers.dart';
+import 'package:_tests/matchers.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
 
@@ -78,7 +77,7 @@ void main() {
       );
       var testFixture = await testBed.create();
       var mainEl = testFixture.rootElement;
-      var div1 = mainEl.children.item(0);
+      var div1 = mainEl.children.item(0)!;
       var div2 = document.createElement('div');
       div2.className = 'redStyle';
       mainEl.append(div2);
@@ -92,7 +91,7 @@ void main() {
       );
       var testFixture = await testBed.create();
       var mainEl = testFixture.rootElement;
-      var div1 = mainEl.children.item(0);
+      var div1 = mainEl.children.item(0)!;
       var div2 = document.createElement('div');
       div2.className = 'blueStyle';
       mainEl.append(div2);
@@ -113,7 +112,7 @@ void main() {
         ng.createSelectExactAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
+      final select = (String s) => testFixture.rootElement.querySelector(s);
       expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
         select('.rejected')!.textContent!.trim(),
@@ -126,7 +125,7 @@ void main() {
         ng.createSelectHyphenAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
+      final select = (String s) => testFixture.rootElement.querySelector(s);
       expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
         select('.rejected')!.textContent!.trim(),
@@ -139,7 +138,7 @@ void main() {
         ng.createSelectListAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
+      final select = (String s) => testFixture.rootElement.querySelector(s);
       expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
         select('.rejected')!.textContent!.trim(),
@@ -152,7 +151,7 @@ void main() {
         ng.createSelectPrefixAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
+      final select = (String s) => testFixture.rootElement.querySelector(s);
       expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
         select('.rejected')!.textContent!.trim(),
@@ -165,7 +164,7 @@ void main() {
         ng.createSelectSetAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
+      final select = (String s) => testFixture.rootElement.querySelector(s);
       expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
         select('.rejected')!.textContent!.trim(),
@@ -178,7 +177,7 @@ void main() {
         ng.createSelectSubstringAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
+      final select = (String s) => testFixture.rootElement.querySelector(s);
       expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
         select('.rejected')!.textContent!.trim(),
@@ -191,7 +190,7 @@ void main() {
         ng.createSelectSuffixAttributeTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
+      final select = (String s) => testFixture.rootElement.querySelector(s);
       expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
         select('.rejected')!.textContent!.trim(),
@@ -204,7 +203,7 @@ void main() {
         ng.createNgProjectAsTestComponentFactory(),
       );
       final testFixture = await testBed.create();
-      final select = testFixture.rootElement.querySelector;
+      final select = (String s) => testFixture.rootElement.querySelector(s);
       expect(select('.selected')!.textContent!.trim(), 'Should be selected.');
       expect(
         select('.rejected')!.textContent!.trim(),

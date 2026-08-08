@@ -368,7 +368,7 @@ void main() {
               as ComponentFactory<TestExternalContentRoots>);
       final testFixture = await testBed.create();
       final childContainer = html.HTMLDivElement();
-      final parentContainer = testFixture.rootElement.parentNode!
+      final parentContainer = testFixture.rootElement.parentNode! as html.Element
         ..append(childContainer);
       registerContentRoot(childContainer);
       registerContentRoot(parentContainer);
@@ -743,7 +743,7 @@ void main() {
               as ComponentFactory<TestExternalContentRoots>);
       final testFixture = await testBed.create();
       final childContainer = html.HTMLDivElement();
-      final parentContainer = testFixture.rootElement.parentNode!
+      final parentContainer = testFixture.rootElement.parentNode! as html.Element
         ..append(childContainer);
       registerContentRoot(childContainer);
       registerContentRoot(parentContainer);

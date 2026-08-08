@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:web/web.dart';
 
+import 'package:_tests/matchers.dart';
 import 'package:test/test.dart';
 import 'package:ngdart/angular.dart';
 import 'package:ngtest/angular_test.dart';
@@ -85,7 +86,7 @@ void main() {
         component.directive!.myAttr = 'bar';
       });
       final directiveElement = testFixture.rootElement.children.item(0);
-      expect(directiveElement?.attributes, containsPair('my-attr', 'bar'));
+      expect(directiveElement?.attributeMap, containsPair('my-attr', 'bar'));
     });
 
     test('should support @Output', () async {

@@ -1,6 +1,8 @@
 @TestOn('browser')
 library;
 
+import 'dart:js_interop';
+
 import 'package:web/web.dart';
 
 import 'package:ngtest/angular_test.dart';
@@ -15,12 +17,15 @@ void main() {
 
   test('should escape unsafe attributes', () async {
     const unsafeUrl = 'javascript:alert(1)';
-    final testBed = NgTestBed(ng.createUnsafeAttributeComponentFactory());
+    final testBed = NgTestBed<UnsafeAttributeComponent>(
+      ng.createUnsafeAttributeComponentFactory(),
+    );
     final testFixture = await testBed.create();
     final a = testFixture.rootElement.querySelector('a') as HTMLAnchorElement;
     expect(a.href, matches(r'.*/hello$'));
+    // `update` hands back the component instance, not the host element.
     await testFixture.update((component) {
-      (component as HTMLAnchorElement).href = unsafeUrl;
+      component.href = unsafeUrl;
     });
     expect(a.href, equals('unsafe:$unsafeUrl'));
   });
@@ -38,44 +43,44 @@ void main() {
   });
 
   test('should escape unsafe styles', () async {
-    final testBed = NgTestBed(ng.createUnsafeStyleComponentFactory());
+    final testBed = NgTestBed<UnsafeStyleComponent>(
+      ng.createUnsafeStyleComponentFactory(),
+    );
     final testFixture = await testBed.create();
     final div = testFixture.rootElement.querySelector('div') as HTMLDivElement;
     expect(div.style.background, matches('red'));
 
-    // TODO: Migrate to 3.6 (need review)
     await testFixture.update((component) {
-      //component.backgroundStyle = 'url(javascript:evil())';
-      var c = component as HTMLElement;
-      c.style.background = 'url(javascript:evil())';
+      component.backgroundStyle = 'url(javascript:evil())';
     });
     expect(div.style.background, isNot(contains('javascript')));
   });
 
   test('should escape unsafe HTML', () async {
-    final testBed = NgTestBed(ng.createUnsafeHtmlComponentFactory());
+    final testBed = NgTestBed<UnsafeHtmlComponent>(
+      ng.createUnsafeHtmlComponentFactory(),
+    );
     final testFixture = await testBed.create();
     final div = testFixture.rootElement.querySelector('div');
-    expect(div?.innerHTML, 'some <p>text</p>');
+    expect((div?.innerHTML as JSString?)?.toDart, 'some <p>text</p>');
     await testFixture.update((component) {
-      var c = component as HTMLElement;
-      c.innerHTML = 'ha <script>evil()</script>';
+      component.html = 'ha <script>evil()</script>';
     });
-    expect(div?.innerHTML, 'ha ');
+    expect((div?.innerHTML as JSString?)?.toDart, 'ha ');
     await testFixture.update((component) {
-      var c = component as HTMLElement;
-      c.innerHTML = 'also <img src="x" onerror="evil()"> evil';
+      component.html = 'also <img src="x" onerror="evil()"> evil';
     });
-    expect(div?.innerHTML, 'also <img src="x"> evil');
+    // The whole `<img>` goes, not just its `onerror`: it is absent from the
+    // browser sanitizer's default allow-list.
+    expect((div?.innerHTML as JSString?)?.toDart, 'also  evil');
     await testFixture.update((component) {
       final srcdoc = '<div></div><script></script>';
-      var c = component as HTMLElement;
-      c.innerHTML = 'also <iframe srcdoc="$srcdoc"> content</iframe>';
+      component.html = 'also <iframe srcdoc="$srcdoc"> content</iframe>';
     });
-    expect(
-      div?.innerHTML,
-      'also <iframe> content</iframe>',
-    );
+    // As with `<img>`, `<iframe>` is not on the default allow-list, so the
+    // element is removed outright rather than kept with `srcdoc` stripped --
+    // and its content goes with it.
+    expect((div?.innerHTML as JSString?)?.toDart, 'also ');
   });
 }
 
